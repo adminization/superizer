@@ -60,9 +60,15 @@ find . -path '*/build/test-results/*' -name '*.xml' -not -path "./$out/*" -exec 
 say "  ($(ls "$out/junit" 2>/dev/null | wc -l) result files)"
 
 step "3. Unit tests (wasm)"
-# Karma needs a browser. Playwright's Chromium is the one this workspace has; without it the wasm
-# tests are skipped by name rather than by a green build that ran nothing.
-chromium=$(ls -d "$HOME"/.cache/ms-playwright/chromium_headless_shell-*/chrome-linux/headless_shell 2>/dev/null | head -1)
+# Karma and the smoke test both need a browser binary. Playwright's if it is installed, the
+# system's otherwise; and if there is neither, both steps are skipped *by name* rather than by a
+# green build that quietly ran nothing.
+chromium=$(
+  ls -d "$HOME"/.cache/ms-playwright/chromium-*/chrome-linux*/chrome \
+        "$HOME"/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux*/chrome-headless-shell \
+        2>/dev/null | head -1
+)
+[ -z "$chromium" ] && chromium=$(command -v chromium chromium-browser google-chrome 2>/dev/null | head -1)
 if [ -n "$chromium" ]; then
   if CHROME_BIN="$chromium" ./gradlew --quiet wasmJsTest > "$out/wasm-test.log" 2>&1; then
     ok "wasm tests (catches java.* and ServiceLoader, which the JVM forgives)"
@@ -79,10 +85,18 @@ if ./gradlew --quiet :fixture:wasmJsBrowserDistribution > "$out/web-build.log" 2
   ok "fixture wasm bundle"
   dist=fixture/build/dist/wasmJs/productionExecutable
   if [ -n "$chromium" ] && [ -d "$dist" ]; then
-    if node scripts/web-smoke.mjs "$dist" "$out/web" >> "$out/web-build.log" 2>&1; then
-      ok "web smoke test — see $out/web/"
+    # Playwright drives the browser. It is a devDependency of the script rather than of the build,
+    # so a checkout that has never run `npm i` in scripts/ skips this instead of failing.
+    # Resolved from scripts/, which is where its node_modules lives — Node looks upward from the
+    # working directory, and the repository root has none.
+    if (cd scripts && node -e "require('playwright')") > /dev/null 2>&1; then
+      if CHROME_BIN="$chromium" node scripts/web-smoke.mjs "$dist" "$out/web" >> "$out/web-build.log" 2>&1; then
+        ok "web smoke test — see $out/web/"
+      else
+        bad "web smoke test — see $out/web-build.log"
+      fi
     else
-      bad "web smoke test — see $out/web-build.log"
+      skip "web smoke test: playwright is not installed (cd scripts && npm i)"
     fi
   else
     skip "web smoke test: no Chromium or no bundle"

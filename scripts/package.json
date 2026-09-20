@@ -1,0 +1,9 @@
+{
+  "name": "superizer-scripts",
+  "private": true,
+  "description": "Playwright, for the web smoke test. Kept out of the Gradle build on purpose: a checkout that never runs this still builds.",
+  "devDependencies": {
+    "playwright": "^1.49.0",
+    "pngjs": "^7.0.0"
+  }
+}

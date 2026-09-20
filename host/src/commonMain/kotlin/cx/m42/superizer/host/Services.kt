@@ -24,8 +24,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-/** Epoch milliseconds from whatever the platform calls a clock (D30). */
-public expect object SystemClock : Clock
+/**
+ * Epoch milliseconds from whatever the platform calls a clock (D30).
+ *
+ * The member is declared here as well as in each `actual`: a platform compilation is satisfied by
+ * the actual alone, but the common metadata compilation is not, and that is the one that decides
+ * whether the library publishes.
+ */
+public expect object SystemClock : Clock {
+    override fun now(): Long
+}
 
 /**
  * A ring buffer of everything that was logged, at every level, for the Service Menu to show (D33).
@@ -147,16 +155,19 @@ public class AppLocaleService(
         _langTag.value = resolve()
     }
 
-    private fun resolve(): String {
-        val stored = SafePrefs.get(HostKeys.LANGUAGE)?.takeIf { supports(it) }
-        if (stored != null) return stored
-        val device = deviceLanguageTag().takeIf { supports(it) }
-        return device ?: fallback
-    }
+    /**
+     * The stored choice, then the device, then the fallback — and always answered as the *supported*
+     * language's own tag.
+     *
+     * `en-US` and `en` are the same answer here, and returning the device's regional spelling would
+     * make every comparison downstream have to know that.
+     */
+    private fun resolve(): String =
+        matched(SafePrefs.get(HostKeys.LANGUAGE)) ?: matched(deviceLanguageTag()) ?: fallback
 
-    private fun supports(tag: String): Boolean {
-        val primary = tag.substringBefore('-').substringBefore('_').lowercase()
-        return supported.any { it.tag == primary }
+    private fun matched(tag: String?): String? {
+        val primary = tag?.substringBefore('-')?.substringBefore('_')?.lowercase() ?: return null
+        return supported.firstOrNull { it.tag == primary }?.tag
     }
 }
 
@@ -188,7 +199,7 @@ public class RegistryView(
     private val handler: () -> AppHandler?,
     private val unlocked: StateFlow<Set<AppId>>,
 ) : AppsService {
-    override fun list(): List<AppSummary> = registry.all().map { summary(it.id) !! }
+    override fun list(): List<AppSummary> = registry.all().mapNotNull { summary(it.id) }
 
     override fun get(id: AppId): AppSummary? = summary(id)
 

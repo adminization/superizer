@@ -14,8 +14,7 @@ import cx.m42.superizer.host.storage.PrefsStorage
 import cx.m42.superizer.runtime.HostInfo
 import cx.m42.superizer.runtime.InstanceRuntime
 import cx.m42.superizer.runtime.Platform
-import java.io.File
-import java.util.concurrent.atomic.AtomicInteger
+import java.nio.file.Files
 import kotlinx.serialization.Serializable
 
 /** The smallest registrable app, for tests that are about the host and not about any app. */
@@ -63,16 +62,13 @@ internal fun testHostInfo(debug: Boolean = true) = HostInfo(
 )
 
 /**
- * Each test gets its own preferences directory.
+ * Each test gets its own preferences directory, and a *new* one on every run.
  *
- * `PrefsStorage` is a process-wide object by design — every platform's store is — so a suite that
- * did not do this would have each test reading whatever the one before it wrote, and the failures
- * would depend on execution order.
+ * `PrefsStorage` is a process-wide object by design — every platform's store is — so without this
+ * each test reads whatever the one before it wrote. A numbered name is not enough: the directories
+ * outlive the JVM, so run two would inherit run one's unlocked apps and its haptics switch, and the
+ * failures would depend on what happened yesterday.
  */
 internal fun isolatePrefs() {
-    PrefsStorage.useDirectory(
-        File(System.getProperty("java.io.tmpdir"), "superizer-host-test-${counter.incrementAndGet()}"),
-    )
+    PrefsStorage.useDirectory(Files.createTempDirectory("superizer-host-test").toFile())
 }
-
-private val counter = AtomicInteger(0)

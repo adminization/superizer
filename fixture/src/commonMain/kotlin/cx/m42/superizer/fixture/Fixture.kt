@@ -79,7 +79,9 @@ public class ProbeApp : SuperizerApp<ProbeConfig>() {
         version = "1.0.0",
         metadata = AppMetadata(
             title = localized("en" to "Probe", "ru" to "Проба"),
-            icon = AppIcon.Path("M4 4h16v16H4V4zm7 7h2v2h-2v-2z"),
+            // The inner square is wound the other way on purpose: SVG fills by the non-zero rule,
+            // so a hole is only a hole when its outline runs opposite to the shape around it.
+            icon = AppIcon.Path("M4 4h16v16H4V4zM11 11v2h2v-2z"),
             category = "Tools",
         ),
     )

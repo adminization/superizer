@@ -4,3 +4,7 @@ build/
 local.properties
 *.hprof
 node_modules/
+
+# Yarn's lock for the wasm toolchain is generated per-build here; the library does not ship a
+# browser bundle, so there is nothing for it to pin.
+kotlin-js-store/

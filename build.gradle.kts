@@ -26,56 +26,67 @@ val allowedProjectDependencies = mapOf(
     ":fixture" to setOf(":core", ":ui-theme", ":ui", ":host", ":testing", ":apps:test-app"),
 )
 
-/**
- * Test source sets are out of scope.
- *
- * The rule is "an app must not *ship* host code", not "a test may not use a fake": `host`'s own
- * tests legitimately reach for `testing`, and a check that forbade it would be a check people
- * work around rather than one they keep.
- */
-fun mainDependenciesOf(script: String): String {
-    val out = StringBuilder()
-    var depth = 0
-    var skipping = false
-    script.lineSequence().forEach { line ->
-        if (!skipping && Regex("""[Tt]est\.dependencies\s*\{""").containsMatchIn(line)) {
-            skipping = true
-            depth = 0
-        }
-        if (skipping) {
-            depth += line.count { it == '{' } - line.count { it == '}' }
-            if (depth <= 0) skipping = false
-            return@forEach
-        }
-        out.appendLine(line)
-    }
-    return out.toString()
-}
-
 val checkDependencyRules by tasks.registering {
     group = "verification"
     description = "Fails on a module dependency the layering of 02 forbids."
 
-    val scripts = subprojects.associate { it.path to it.buildFile }
+    // Only projects that actually have a build file: `:apps` is a container with nothing in it,
+    // and declaring a non-existent file as an input fails the task before it runs.
+    val scripts = subprojects.filter { it.buildFile.exists() }.associate { it.path to it.buildFile }
     scripts.values.forEach { inputs.file(it).withPathSensitivity(PathSensitivity.RELATIVE) }
-    // A task with no output is never up to date; a stamp file keeps repeat runs free.
+    // Captured here rather than read from the script at execution time: with the configuration
+    // cache the script object is long gone by then, and a task that reaches for it fails with a
+    // null that names nothing.
+    val allowed = allowedProjectDependencies
     val stamp = layout.buildDirectory.file("dependency-rules.ok")
     outputs.file(stamp)
 
     doLast {
         val declaration = Regex("""project\("(:[A-Za-z0-9:_-]+)"\)""")
+        val testBlock = Regex("""[Tt]est\.dependencies\s*\{""")
+
+        /**
+         * Test source sets are out of scope.
+         *
+         * The rule is "an app must not *ship* host code", not "a test may not use a fake": `host`'s
+         * own tests legitimately reach for `testing`, and a check that forbade that is a check
+         * people work around rather than one they keep.
+         */
+        fun mainDependenciesOf(script: String): String {
+            val out = StringBuilder()
+            var depth = 0
+            var skipping = false
+            // Comments go first. The KDoc on a module says in words what this task says in code,
+            // and a check that matched its own documentation could only be satisfied by deleting
+            // the explanation.
+            script.lineSequence().map { it.substringBefore("//") }.filterNot {
+                it.trimStart().startsWith("*") || it.trimStart().startsWith("/*")
+            }.forEach { line ->
+                if (!skipping && testBlock.containsMatchIn(line)) {
+                    skipping = true
+                    depth = 0
+                }
+                if (skipping) {
+                    depth += line.count { it == '{' } - line.count { it == '}' }
+                    if (depth <= 0) skipping = false
+                    return@forEach
+                }
+                out.appendLine(line)
+            }
+            return out.toString()
+        }
+
         val violations = buildList {
             scripts.forEach { (path, file) ->
-                if (!file.exists()) return@forEach
-                val allowed = allowedProjectDependencies[path]
+                val permitted = allowed[path]
                 val used = declaration.findAll(mainDependenciesOf(file.readText()))
                     .map { it.groupValues[1] }
                     .toSet()
-                if (allowed == null) {
+                if (permitted == null) {
                     if (used.isNotEmpty()) add("$path is not in the layering table but depends on $used")
                     return@forEach
                 }
-                (used - allowed).forEach { add("$path must not depend on $it (allowed: $allowed)") }
+                (used - permitted).forEach { add("$path must not depend on $it (allowed: $permitted)") }
             }
         }
         check(violations.isEmpty()) {

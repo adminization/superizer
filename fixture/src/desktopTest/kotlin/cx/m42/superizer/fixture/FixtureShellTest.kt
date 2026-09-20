@@ -10,8 +10,7 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import cx.m42.apps.testapp.TestApp
 import cx.m42.superizer.Superizer
 import cx.m42.superizer.host.storage.PrefsStorage
-import java.io.File
-import java.util.concurrent.atomic.AtomicInteger
+import java.nio.file.Files
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlinx.coroutines.CoroutineScope
@@ -29,11 +28,13 @@ import kotlinx.coroutines.SupervisorJob
 @OptIn(ExperimentalTestApi::class)
 class FixtureShellTest {
 
+    /**
+     * A new directory on every test *and* on every run: the host stores unlocked apps and the
+     * language, and a reused name would let one run's activation decide the next one's result.
+     */
     @BeforeTest
     fun isolateStorage() {
-        PrefsStorage.useDirectory(
-            File(System.getProperty("java.io.tmpdir"), "superizer-fixture-test-${counter.incrementAndGet()}"),
-        )
+        PrefsStorage.useDirectory(Files.createTempDirectory("superizer-fixture-test").toFile())
     }
 
     private fun fixture(): Superizer =
@@ -78,9 +79,14 @@ class FixtureShellTest {
         waitForIdle()
 
         onNodeWithTag("test-app:root").assertIsDisplayed()
-        // §22: every runtime service has a card, and the config card has no "opened by" line.
-        listOf("identity", "config", "lifecycle", "state", "storage", "network", "navigation", "push", "veto")
-            .forEach { card -> onNodeWithTag("test-app:section-$card").assertIsDisplayed() }
+        // §22: every runtime service has a card. `assertExists` rather than `assertIsDisplayed`,
+        // because the page is taller than a phone — most of these are below the fold, and a test
+        // that scrolled to each one would be testing the scroll.
+        listOf(
+            "identity", "config", "lifecycle", "state", "storage", "network",
+            "analytics", "navigation", "services", "locale", "haptics", "push", "auth", "veto",
+        ).forEach { card -> onNodeWithTag("test-app:section-$card").assertExists() }
+        onNodeWithTag("test-app:section-identity").assertIsDisplayed()
     }
 
     @Test
@@ -110,9 +116,5 @@ class FixtureShellTest {
         waitForIdle()
 
         onNodeWithTag("probe:root").assertIsDisplayed()
-    }
-
-    private companion object {
-        val counter = AtomicInteger(0)
     }
 }

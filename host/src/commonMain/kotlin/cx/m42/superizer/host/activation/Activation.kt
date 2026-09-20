@@ -92,9 +92,14 @@ public class QrPayloadParser(
     }
 }
 
-/** A `JsonPrimitive` that is not a string is not an app id; asking for `.content` would throw. */
+/**
+ * A `JsonPrimitive` that is not a *string* is not an app id.
+ *
+ * `.content` on the number 7 answers "7", which is valid kebab-case and would turn a malformed
+ * payload into an `UnknownApp` rejection — the wrong reason, shown to the wrong person.
+ */
 private fun kotlinx.serialization.json.JsonPrimitive.contentOrNullSafe(): String? =
-    runCatching { content }.getOrNull()
+    if (isString) content else null
 
 /** `k=v&k2=v2`, percent-decoded. Repeated keys keep the first, as every URL library does. */
 internal fun queryOf(query: String): Map<String, String> = query
@@ -216,7 +221,10 @@ public class ActivationService(
      */
     override suspend fun fromDeepLink(url: String): ActivationResult {
         val trimmed = url.trim()
-        if (!trimmed.startsWith("$scheme://")) return ActivationResult.Rejected(ActivationResult.Reason.Malformed)
+        // Not a URL at all — so it is a QR payload, arriving through the same door. The browser's
+        // `?activate=` carries one of these and `?link=` carries the other, and neither the shell
+        // nor the app should have to know which it was holding.
+        if (!trimmed.startsWith("$scheme://")) return parser.parse(trimmed)
         val rest = trimmed.removePrefix("$scheme://")
         val path = rest.substringBefore('?')
         val params = queryOf(rest.substringAfter('?', ""))

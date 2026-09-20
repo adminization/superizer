@@ -20,7 +20,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.TestResult
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -108,8 +111,7 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
     }
 
     @Test
-    public fun launchingIsCheapAndTouchesNoNetworkBeforeTheFirstFrame(): TestResult = runTest {
-        val runtime = fakeRuntime(this)
+    public fun launchingIsCheapAndTouchesNoNetworkBeforeTheFirstFrame(): TestResult = appTest { runtime ->
         val instance = create(runtime)
         val started = currentTimeMillisVirtual()
         instance.onLaunch()
@@ -125,15 +127,14 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
     }
 
     @Test
-    public fun aSnapshotSurvivesARoundTrip(): TestResult = runTest {
-        val runtime = fakeRuntime(this)
+    public fun aSnapshotSurvivesARoundTrip(): TestResult = appTest { runtime ->
         val instance = create(runtime)
         instance.onLaunch()
         val snapshot = instance.saveState()
         if (snapshot != null) {
             // Restoring into a *fresh* instance, because that is the only case that ever happens:
             // the process died and this object is new.
-            val restored = create(fakeRuntime(this))
+            val restored = create(fakeRuntime(runtime.scope))
             restored.onLaunch()
             restored.restore(snapshot)
             assertEquals(snapshot, restored.saveState(), "saveState → restore → saveState is not stable")
@@ -143,9 +144,9 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
     }
 
     @Test
-    public fun everyStateFixtureCanStillBeRestored(): TestResult = runTest {
+    public fun everyStateFixtureCanStillBeRestored(): TestResult = appTest { runtime ->
         stateFixtures.forEach { raw ->
-            val instance = create(fakeRuntime(this))
+            val instance = create(fakeRuntime(runtime.scope))
             instance.onLaunch()
             // Must not throw: a snapshot may predate the update that is reading it (03).
             instance.restore(Json.parseToJsonElement(raw) as JsonObject)
@@ -154,8 +155,8 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
     }
 
     @Test
-    public fun closingIsAllowedByDefaultAndDisposeIsIdempotent(): TestResult = runTest {
-        val instance = create(fakeRuntime(this))
+    public fun closingIsAllowedByDefaultAndDisposeIsIdempotent(): TestResult = appTest { runtime ->
+        val instance = create(runtime)
         instance.onLaunch()
         instance.onClose()
         instance.dispose()
@@ -184,6 +185,23 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
     }
 
     // ------------------------------------------------------------------ helpers
+
+    /**
+     * A fake runtime on a scope that is **not** the test's own.
+     *
+     * `runTest` waits for every child of its scope before it finishes, and `onLaunch` is exactly
+     * where an app is supposed to start long-lived work — collecting pushes, watching events. Hung
+     * off the test coroutine those would make every app's TCK run time out after a minute, which is
+     * a failure about the harness rather than about the app.
+     */
+    private fun appTest(body: suspend TestScope.(FakeAppRuntime) -> Unit): TestResult = runTest {
+        val scope = CoroutineScope(SupervisorJob() + UnconfinedTestDispatcher(testScheduler))
+        try {
+            body(fakeRuntime(scope))
+        } finally {
+            scope.cancel()
+        }
+    }
 
     private fun fakeRuntime(scope: CoroutineScope): FakeAppRuntime = FakeAppRuntime(
         appId = app.id,

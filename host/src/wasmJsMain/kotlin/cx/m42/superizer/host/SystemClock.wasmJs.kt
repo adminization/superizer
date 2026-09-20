@@ -7,7 +7,7 @@ package cx.m42.superizer.host
  * have. Milliseconds since the epoch, as a Double, because that is what the platform returns.
  */
 public actual object SystemClock : cx.m42.superizer.runtime.Clock {
-    override fun now(): Long = dateNow().toLong()
+    actual override fun now(): Long = dateNow().toLong()
 }
 
 private fun dateNow(): Double = js("Date.now()")
