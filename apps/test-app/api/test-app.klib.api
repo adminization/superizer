@@ -1,0 +1,63 @@
+// Klib ABI Dump
+// Targets: [wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <cx.m42.superizer.apps:test-app>
+final class cx.m42.apps.testapp/TestApp : cx.m42.superizer.app/SuperizerApp<cx.m42.apps.testapp/TestConfig> { // cx.m42.apps.testapp/TestApp|null[0]
+    constructor <init>() // cx.m42.apps.testapp/TestApp.<init>|<init>(){}[0]
+
+    final val configSpec // cx.m42.apps.testapp/TestApp.configSpec|{}configSpec[0]
+        final fun <get-configSpec>(): cx.m42.superizer.app/AppConfigSpec<cx.m42.apps.testapp/TestConfig> // cx.m42.apps.testapp/TestApp.configSpec.<get-configSpec>|<get-configSpec>(){}[0]
+    final val manifest // cx.m42.apps.testapp/TestApp.manifest|{}manifest[0]
+        final fun <get-manifest>(): cx.m42.superizer.app/AppManifest // cx.m42.apps.testapp/TestApp.manifest.<get-manifest>|<get-manifest>(){}[0]
+
+    final fun launch(cx.m42.superizer.runtime/InstanceRuntime, cx.m42.apps.testapp/TestConfig): cx.m42.superizer.app/AppInstance // cx.m42.apps.testapp/TestApp.launch|launch(cx.m42.superizer.runtime.InstanceRuntime;cx.m42.apps.testapp.TestConfig){}[0]
+    final fun setup(cx.m42.superizer.app/AppSetupContext) // cx.m42.apps.testapp/TestApp.setup|setup(cx.m42.superizer.app.AppSetupContext){}[0]
+
+    final object Companion { // cx.m42.apps.testapp/TestApp.Companion|null[0]
+        final val PROMO_CODE // cx.m42.apps.testapp/TestApp.Companion.PROMO_CODE|{}PROMO_CODE[0]
+            final fun <get-PROMO_CODE>(): kotlin/String // cx.m42.apps.testapp/TestApp.Companion.PROMO_CODE.<get-PROMO_CODE>|<get-PROMO_CODE>(){}[0]
+
+        final fun promoConfig(): cx.m42.superizer.app/AppConfig // cx.m42.apps.testapp/TestApp.Companion.promoConfig|promoConfig(){}[0]
+    }
+}
+
+final class cx.m42.apps.testapp/TestConfig { // cx.m42.apps.testapp/TestConfig|null[0]
+    constructor <init>(kotlin/String = ..., kotlin/String? = ...) // cx.m42.apps.testapp/TestConfig.<init>|<init>(kotlin.String;kotlin.String?){}[0]
+
+    final val label // cx.m42.apps.testapp/TestConfig.label|{}label[0]
+        final fun <get-label>(): kotlin/String? // cx.m42.apps.testapp/TestConfig.label.<get-label>|<get-label>(){}[0]
+    final val mode // cx.m42.apps.testapp/TestConfig.mode|{}mode[0]
+        final fun <get-mode>(): kotlin/String // cx.m42.apps.testapp/TestConfig.mode.<get-mode>|<get-mode>(){}[0]
+
+    final fun component1(): kotlin/String // cx.m42.apps.testapp/TestConfig.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // cx.m42.apps.testapp/TestConfig.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String? = ...): cx.m42.apps.testapp/TestConfig // cx.m42.apps.testapp/TestConfig.copy|copy(kotlin.String;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.apps.testapp/TestConfig.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.apps.testapp/TestConfig.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.apps.testapp/TestConfig.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.apps.testapp/TestConfig> { // cx.m42.apps.testapp/TestConfig.$serializer|null[0]
+        final val descriptor // cx.m42.apps.testapp/TestConfig.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.apps.testapp/TestConfig.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.apps.testapp/TestConfig.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.apps.testapp/TestConfig // cx.m42.apps.testapp/TestConfig.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.apps.testapp/TestConfig) // cx.m42.apps.testapp/TestConfig.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.apps.testapp.TestConfig){}[0]
+    }
+
+    final object Companion { // cx.m42.apps.testapp/TestConfig.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.apps.testapp/TestConfig> // cx.m42.apps.testapp/TestConfig.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final val cx.m42.apps.testapp/cx_m42_apps_testapp_TestApp$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_TestApp$stableprop|#static{}cx_m42_apps_testapp_TestApp$stableprop[0]
+final val cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig$stableprop|#static{}cx_m42_apps_testapp_TestConfig$stableprop[0]
+final val cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig_$serializer$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig_$serializer$stableprop|#static{}cx_m42_apps_testapp_TestConfig_$serializer$stableprop[0]
+
+final fun cx.m42.apps.testapp/cx_m42_apps_testapp_TestApp$stableprop_getter(): kotlin/Int // cx.m42.apps.testapp/cx_m42_apps_testapp_TestApp$stableprop_getter|cx_m42_apps_testapp_TestApp$stableprop_getter(){}[0]
+final fun cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig$stableprop_getter(): kotlin/Int // cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig$stableprop_getter|cx_m42_apps_testapp_TestConfig$stableprop_getter(){}[0]
+final fun cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig_$serializer$stableprop_getter(): kotlin/Int // cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig_$serializer$stableprop_getter|cx_m42_apps_testapp_TestConfig_$serializer$stableprop_getter(){}[0]

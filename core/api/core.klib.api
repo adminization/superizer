@@ -1,0 +1,1562 @@
+// Klib ABI Dump
+// Targets: [wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <cx.m42.superizer:core>
+final enum class cx.m42.superizer.registry/AppState : kotlin/Enum<cx.m42.superizer.registry/AppState> { // cx.m42.superizer.registry/AppState|null[0]
+    enum entry Active // cx.m42.superizer.registry/AppState.Active|null[0]
+    enum entry Closing // cx.m42.superizer.registry/AppState.Closing|null[0]
+    enum entry Creating // cx.m42.superizer.registry/AppState.Creating|null[0]
+    enum entry Disposed // cx.m42.superizer.registry/AppState.Disposed|null[0]
+    enum entry Enabled // cx.m42.superizer.registry/AppState.Enabled|null[0]
+    enum entry Failed // cx.m42.superizer.registry/AppState.Failed|null[0]
+    enum entry Launching // cx.m42.superizer.registry/AppState.Launching|null[0]
+    enum entry Registered // cx.m42.superizer.registry/AppState.Registered|null[0]
+
+    final val entries // cx.m42.superizer.registry/AppState.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer.registry/AppState> // cx.m42.superizer.registry/AppState.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): cx.m42.superizer.registry/AppState // cx.m42.superizer.registry/AppState.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<cx.m42.superizer.registry/AppState> // cx.m42.superizer.registry/AppState.values|values#static(){}[0]
+}
+
+final enum class cx.m42.superizer.runtime/HostLifecycle : kotlin/Enum<cx.m42.superizer.runtime/HostLifecycle> { // cx.m42.superizer.runtime/HostLifecycle|null[0]
+    enum entry Background // cx.m42.superizer.runtime/HostLifecycle.Background|null[0]
+    enum entry Foreground // cx.m42.superizer.runtime/HostLifecycle.Foreground|null[0]
+
+    final val entries // cx.m42.superizer.runtime/HostLifecycle.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer.runtime/HostLifecycle> // cx.m42.superizer.runtime/HostLifecycle.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): cx.m42.superizer.runtime/HostLifecycle // cx.m42.superizer.runtime/HostLifecycle.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<cx.m42.superizer.runtime/HostLifecycle> // cx.m42.superizer.runtime/HostLifecycle.values|values#static(){}[0]
+}
+
+final enum class cx.m42.superizer.runtime/Platform : kotlin/Enum<cx.m42.superizer.runtime/Platform> { // cx.m42.superizer.runtime/Platform|null[0]
+    enum entry Android // cx.m42.superizer.runtime/Platform.Android|null[0]
+    enum entry Desktop // cx.m42.superizer.runtime/Platform.Desktop|null[0]
+    enum entry Web // cx.m42.superizer.runtime/Platform.Web|null[0]
+
+    final val entries // cx.m42.superizer.runtime/Platform.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer.runtime/Platform> // cx.m42.superizer.runtime/Platform.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): cx.m42.superizer.runtime/Platform // cx.m42.superizer.runtime/Platform.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<cx.m42.superizer.runtime/Platform> // cx.m42.superizer.runtime/Platform.values|values#static(){}[0]
+}
+
+abstract fun interface cx.m42.superizer.app/Disposable { // cx.m42.superizer.app/Disposable|null[0]
+    abstract fun dispose() // cx.m42.superizer.app/Disposable.dispose|dispose(){}[0]
+}
+
+abstract fun interface cx.m42.superizer.runtime/Clock { // cx.m42.superizer.runtime/Clock|null[0]
+    abstract fun now(): kotlin/Long // cx.m42.superizer.runtime/Clock.now|now(){}[0]
+}
+
+abstract fun interface cx.m42.superizer.runtime/HapticsService { // cx.m42.superizer.runtime/HapticsService|null[0]
+    abstract fun tick() // cx.m42.superizer.runtime/HapticsService.tick|tick(){}[0]
+}
+
+abstract interface cx.m42.superizer.app/AppSetupContext { // cx.m42.superizer.app/AppSetupContext|null[0]
+    abstract val runtime // cx.m42.superizer.app/AppSetupContext.runtime|{}runtime[0]
+        abstract fun <get-runtime>(): cx.m42.superizer.runtime/AppRuntime // cx.m42.superizer.app/AppSetupContext.runtime.<get-runtime>|<get-runtime>(){}[0]
+
+    abstract fun deepLink(kotlin/String, kotlin/Function1<kotlin.collections/Map<kotlin/String, kotlin/String>, cx.m42.superizer.app/AppConfig>) // cx.m42.superizer.app/AppSetupContext.deepLink|deepLink(kotlin.String;kotlin.Function1<kotlin.collections.Map<kotlin.String,kotlin.String>,cx.m42.superizer.app.AppConfig>){}[0]
+    abstract fun listener(kotlin.coroutines/SuspendFunction1<cx.m42.superizer.event/SuperizerEvent, kotlin/Unit>) // cx.m42.superizer.app/AppSetupContext.listener|listener(kotlin.coroutines.SuspendFunction1<cx.m42.superizer.event.SuperizerEvent,kotlin.Unit>){}[0]
+    abstract fun settingsSection(kotlin/Function3<cx.m42.superizer.runtime/AppRuntime, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>) // cx.m42.superizer.app/AppSetupContext.settingsSection|settingsSection(kotlin.Function3<cx.m42.superizer.runtime.AppRuntime,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>){}[0]
+}
+
+abstract interface cx.m42.superizer.registry/SnapshotStore { // cx.m42.superizer.registry/SnapshotStore|null[0]
+    abstract suspend fun clear() // cx.m42.superizer.registry/SnapshotStore.clear|clear(){}[0]
+    abstract suspend fun load(): cx.m42.superizer.registry/SessionSnapshot? // cx.m42.superizer.registry/SnapshotStore.load|load(){}[0]
+    abstract suspend fun save(cx.m42.superizer.registry/SessionSnapshot) // cx.m42.superizer.registry/SnapshotStore.save|save(cx.m42.superizer.registry.SessionSnapshot){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/AnalyticsService { // cx.m42.superizer.runtime/AnalyticsService|null[0]
+    abstract fun event(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // cx.m42.superizer.runtime/AnalyticsService.event|event(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    abstract fun screen(kotlin/String) // cx.m42.superizer.runtime/AnalyticsService.screen|screen(kotlin.String){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/AppRuntime { // cx.m42.superizer.runtime/AppRuntime|null[0]
+    abstract val analytics // cx.m42.superizer.runtime/AppRuntime.analytics|{}analytics[0]
+        abstract fun <get-analytics>(): cx.m42.superizer.runtime/AnalyticsService // cx.m42.superizer.runtime/AppRuntime.analytics.<get-analytics>|<get-analytics>(){}[0]
+    abstract val appId // cx.m42.superizer.runtime/AppRuntime.appId|{}appId[0]
+        abstract fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.runtime/AppRuntime.appId.<get-appId>|<get-appId>(){}[0]
+    abstract val apps // cx.m42.superizer.runtime/AppRuntime.apps|{}apps[0]
+        abstract fun <get-apps>(): cx.m42.superizer.runtime/AppsService // cx.m42.superizer.runtime/AppRuntime.apps.<get-apps>|<get-apps>(){}[0]
+    abstract val auth // cx.m42.superizer.runtime/AppRuntime.auth|{}auth[0]
+        abstract fun <get-auth>(): cx.m42.superizer.runtime/AuthService // cx.m42.superizer.runtime/AppRuntime.auth.<get-auth>|<get-auth>(){}[0]
+    abstract val clock // cx.m42.superizer.runtime/AppRuntime.clock|{}clock[0]
+        abstract fun <get-clock>(): cx.m42.superizer.runtime/Clock // cx.m42.superizer.runtime/AppRuntime.clock.<get-clock>|<get-clock>(){}[0]
+    abstract val events // cx.m42.superizer.runtime/AppRuntime.events|{}events[0]
+        abstract fun <get-events>(): kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer.event/SuperizerEvent> // cx.m42.superizer.runtime/AppRuntime.events.<get-events>|<get-events>(){}[0]
+    abstract val haptics // cx.m42.superizer.runtime/AppRuntime.haptics|{}haptics[0]
+        abstract fun <get-haptics>(): cx.m42.superizer.runtime/HapticsService // cx.m42.superizer.runtime/AppRuntime.haptics.<get-haptics>|<get-haptics>(){}[0]
+    abstract val host // cx.m42.superizer.runtime/AppRuntime.host|{}host[0]
+        abstract fun <get-host>(): cx.m42.superizer.runtime/HostInfo // cx.m42.superizer.runtime/AppRuntime.host.<get-host>|<get-host>(){}[0]
+    abstract val lifecycle // cx.m42.superizer.runtime/AppRuntime.lifecycle|{}lifecycle[0]
+        abstract fun <get-lifecycle>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle> // cx.m42.superizer.runtime/AppRuntime.lifecycle.<get-lifecycle>|<get-lifecycle>(){}[0]
+    abstract val locale // cx.m42.superizer.runtime/AppRuntime.locale|{}locale[0]
+        abstract fun <get-locale>(): cx.m42.superizer.runtime/LocaleService // cx.m42.superizer.runtime/AppRuntime.locale.<get-locale>|<get-locale>(){}[0]
+    abstract val logger // cx.m42.superizer.runtime/AppRuntime.logger|{}logger[0]
+        abstract fun <get-logger>(): cx.m42.superizer.runtime/Logger // cx.m42.superizer.runtime/AppRuntime.logger.<get-logger>|<get-logger>(){}[0]
+    abstract val network // cx.m42.superizer.runtime/AppRuntime.network|{}network[0]
+        abstract fun <get-network>(): cx.m42.superizer.runtime/NetworkService // cx.m42.superizer.runtime/AppRuntime.network.<get-network>|<get-network>(){}[0]
+    abstract val push // cx.m42.superizer.runtime/AppRuntime.push|{}push[0]
+        abstract fun <get-push>(): cx.m42.superizer.runtime/PushService // cx.m42.superizer.runtime/AppRuntime.push.<get-push>|<get-push>(){}[0]
+    abstract val scope // cx.m42.superizer.runtime/AppRuntime.scope|{}scope[0]
+        abstract fun <get-scope>(): kotlinx.coroutines/CoroutineScope // cx.m42.superizer.runtime/AppRuntime.scope.<get-scope>|<get-scope>(){}[0]
+    abstract val storage // cx.m42.superizer.runtime/AppRuntime.storage|{}storage[0]
+        abstract fun <get-storage>(): cx.m42.superizer.runtime/StorageService // cx.m42.superizer.runtime/AppRuntime.storage.<get-storage>|<get-storage>(){}[0]
+
+    abstract fun <#A1: kotlin/Any> service(cx.m42.superizer.runtime/ServiceKey<#A1>): #A1? // cx.m42.superizer.runtime/AppRuntime.service|service(cx.m42.superizer.runtime.ServiceKey<0:0>){0§<kotlin.Any>}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/AppsService { // cx.m42.superizer.runtime/AppsService|null[0]
+    abstract fun get(cx.m42.superizer.app/AppId): cx.m42.superizer.runtime/AppSummary? // cx.m42.superizer.runtime/AppsService.get|get(cx.m42.superizer.app.AppId){}[0]
+    abstract fun list(): kotlin.collections/List<cx.m42.superizer.runtime/AppSummary> // cx.m42.superizer.runtime/AppsService.list|list(){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/AuthService { // cx.m42.superizer.runtime/AuthService|null[0]
+    abstract val session // cx.m42.superizer.runtime/AuthService.session|{}session[0]
+        abstract fun <get-session>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/AuthSession?> // cx.m42.superizer.runtime/AuthService.session.<get-session>|<get-session>(){}[0]
+
+    abstract suspend fun signIn(): cx.m42.superizer.runtime/AuthSession? // cx.m42.superizer.runtime/AuthService.signIn|signIn(){}[0]
+    abstract suspend fun signOut() // cx.m42.superizer.runtime/AuthService.signOut|signOut(){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/HostRuntimeFactory { // cx.m42.superizer.runtime/HostRuntimeFactory|null[0]
+    abstract fun createApp(cx.m42.superizer.app/AppId, kotlinx.coroutines/CoroutineScope): cx.m42.superizer.runtime/AppRuntime // cx.m42.superizer.runtime/HostRuntimeFactory.createApp|createApp(cx.m42.superizer.app.AppId;kotlinx.coroutines.CoroutineScope){}[0]
+    abstract fun createInstance(cx.m42.superizer.runtime/AppRuntime, kotlinx.coroutines/CoroutineScope): cx.m42.superizer.runtime/InstanceRuntime // cx.m42.superizer.runtime/HostRuntimeFactory.createInstance|createInstance(cx.m42.superizer.runtime.AppRuntime;kotlinx.coroutines.CoroutineScope){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/InstanceRuntime : cx.m42.superizer.runtime/AppRuntime { // cx.m42.superizer.runtime/InstanceRuntime|null[0]
+    abstract val navigation // cx.m42.superizer.runtime/InstanceRuntime.navigation|{}navigation[0]
+        abstract fun <get-navigation>(): cx.m42.superizer.runtime/NavigationService // cx.m42.superizer.runtime/InstanceRuntime.navigation.<get-navigation>|<get-navigation>(){}[0]
+    abstract val scope // cx.m42.superizer.runtime/InstanceRuntime.scope|{}scope[0]
+        abstract fun <get-scope>(): kotlinx.coroutines/CoroutineScope // cx.m42.superizer.runtime/InstanceRuntime.scope.<get-scope>|<get-scope>(){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/LocaleService { // cx.m42.superizer.runtime/LocaleService|null[0]
+    abstract val langTag // cx.m42.superizer.runtime/LocaleService.langTag|{}langTag[0]
+        abstract fun <get-langTag>(): kotlinx.coroutines.flow/StateFlow<kotlin/String> // cx.m42.superizer.runtime/LocaleService.langTag.<get-langTag>|<get-langTag>(){}[0]
+
+    abstract fun <#A1: kotlin/Any?> pick(kotlin.collections/Map<kotlin/String, #A1>, #A1): #A1 // cx.m42.superizer.runtime/LocaleService.pick|pick(kotlin.collections.Map<kotlin.String,0:0>;0:0){0§<kotlin.Any?>}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/Logger { // cx.m42.superizer.runtime/Logger|null[0]
+    abstract fun debug(kotlin/String, kotlin/Throwable? = ...) // cx.m42.superizer.runtime/Logger.debug|debug(kotlin.String;kotlin.Throwable?){}[0]
+    abstract fun error(kotlin/String, kotlin/Throwable? = ...) // cx.m42.superizer.runtime/Logger.error|error(kotlin.String;kotlin.Throwable?){}[0]
+    abstract fun info(kotlin/String, kotlin/Throwable? = ...) // cx.m42.superizer.runtime/Logger.info|info(kotlin.String;kotlin.Throwable?){}[0]
+    abstract fun warn(kotlin/String, kotlin/Throwable? = ...) // cx.m42.superizer.runtime/Logger.warn|warn(kotlin.String;kotlin.Throwable?){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/NavigationService { // cx.m42.superizer.runtime/NavigationService|null[0]
+    abstract fun openSettings() // cx.m42.superizer.runtime/NavigationService.openSettings|openSettings(){}[0]
+    abstract fun openUrl(kotlin/String): kotlin/Boolean // cx.m42.superizer.runtime/NavigationService.openUrl|openUrl(kotlin.String){}[0]
+    abstract suspend fun close() // cx.m42.superizer.runtime/NavigationService.close|close(){}[0]
+    abstract suspend fun openApp(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig = ...): kotlin/Result<cx.m42.superizer.runtime/AppResult> // cx.m42.superizer.runtime/NavigationService.openApp|openApp(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/NetworkService { // cx.m42.superizer.runtime/NetworkService|null[0]
+    abstract val online // cx.m42.superizer.runtime/NetworkService.online|{}online[0]
+        abstract fun <get-online>(): kotlinx.coroutines.flow/StateFlow<kotlin/Boolean> // cx.m42.superizer.runtime/NetworkService.online.<get-online>|<get-online>(){}[0]
+
+    abstract suspend fun request(cx.m42.superizer.runtime/NetworkRequest): cx.m42.superizer.runtime/NetworkResponse // cx.m42.superizer.runtime/NetworkService.request|request(cx.m42.superizer.runtime.NetworkRequest){}[0]
+    open suspend fun get(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...): cx.m42.superizer.runtime/NetworkResponse // cx.m42.superizer.runtime/NetworkService.get|get(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    open suspend fun post(kotlin/String, kotlin/String, kotlin/String = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...): cx.m42.superizer.runtime/NetworkResponse // cx.m42.superizer.runtime/NetworkService.post|post(kotlin.String;kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/PushService { // cx.m42.superizer.runtime/PushService|null[0]
+    abstract val enabled // cx.m42.superizer.runtime/PushService.enabled|{}enabled[0]
+        abstract fun <get-enabled>(): kotlinx.coroutines.flow/StateFlow<kotlin/Boolean> // cx.m42.superizer.runtime/PushService.enabled.<get-enabled>|<get-enabled>(){}[0]
+    abstract val messages // cx.m42.superizer.runtime/PushService.messages|{}messages[0]
+        abstract fun <get-messages>(): kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer.runtime/PushMessage> // cx.m42.superizer.runtime/PushService.messages.<get-messages>|<get-messages>(){}[0]
+    abstract val subscriptions // cx.m42.superizer.runtime/PushService.subscriptions|{}subscriptions[0]
+        abstract fun <get-subscriptions>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Set<kotlin/String>> // cx.m42.superizer.runtime/PushService.subscriptions.<get-subscriptions>|<get-subscriptions>(){}[0]
+
+    abstract suspend fun requestPermission(): kotlin/Boolean // cx.m42.superizer.runtime/PushService.requestPermission|requestPermission(){}[0]
+    abstract suspend fun subscribe(kotlin/String) // cx.m42.superizer.runtime/PushService.subscribe|subscribe(kotlin.String){}[0]
+    abstract suspend fun unsubscribe(kotlin/String) // cx.m42.superizer.runtime/PushService.unsubscribe|unsubscribe(kotlin.String){}[0]
+}
+
+abstract interface cx.m42.superizer.runtime/StorageService { // cx.m42.superizer.runtime/StorageService|null[0]
+    abstract suspend fun get(kotlin/String): kotlin/String? // cx.m42.superizer.runtime/StorageService.get|get(kotlin.String){}[0]
+    abstract suspend fun keys(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.runtime/StorageService.keys|keys(){}[0]
+    abstract suspend fun remove(kotlin/String) // cx.m42.superizer.runtime/StorageService.remove|remove(kotlin.String){}[0]
+    abstract suspend fun set(kotlin/String, kotlin/String) // cx.m42.superizer.runtime/StorageService.set|set(kotlin.String;kotlin.String){}[0]
+}
+
+abstract interface cx.m42.superizer/ActivationPort { // cx.m42.superizer/ActivationPort|null[0]
+    abstract suspend fun apply(cx.m42.superizer.activation/Activation, kotlin/String): kotlin/Result<cx.m42.superizer.registry/AppSession> // cx.m42.superizer/ActivationPort.apply|apply(cx.m42.superizer.activation.Activation;kotlin.String){}[0]
+    abstract suspend fun fromDeepLink(kotlin/String): cx.m42.superizer.activation/ActivationResult // cx.m42.superizer/ActivationPort.fromDeepLink|fromDeepLink(kotlin.String){}[0]
+    abstract suspend fun fromPromo(kotlin/String): cx.m42.superizer.activation/ActivationResult // cx.m42.superizer/ActivationPort.fromPromo|fromPromo(kotlin.String){}[0]
+    abstract suspend fun fromQr(kotlin/String): cx.m42.superizer.activation/ActivationResult // cx.m42.superizer/ActivationPort.fromQr|fromQr(kotlin.String){}[0]
+}
+
+abstract interface cx.m42.superizer/DiagnosticsPort { // cx.m42.superizer/DiagnosticsPort|null[0]
+    abstract val log // cx.m42.superizer/DiagnosticsPort.log|{}log[0]
+        abstract fun <get-log>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<kotlin/String>> // cx.m42.superizer/DiagnosticsPort.log.<get-log>|<get-log>(){}[0]
+    abstract val recentEvents // cx.m42.superizer/DiagnosticsPort.recentEvents|{}recentEvents[0]
+        abstract fun <get-recentEvents>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer.event/SuperizerEvent>> // cx.m42.superizer/DiagnosticsPort.recentEvents.<get-recentEvents>|<get-recentEvents>(){}[0]
+
+    abstract suspend fun lock(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.lock|lock(cx.m42.superizer.app.AppId){}[0]
+    abstract suspend fun reset(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.reset|reset(cx.m42.superizer.app.AppId){}[0]
+    abstract suspend fun simulatePush(kotlin.collections/Map<kotlin/String, kotlin/String>) // cx.m42.superizer/DiagnosticsPort.simulatePush|simulatePush(kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    abstract suspend fun unlock(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.unlock|unlock(cx.m42.superizer.app.AppId){}[0]
+}
+
+abstract interface cx.m42.superizer/HostSettingsPort { // cx.m42.superizer/HostSettingsPort|null[0]
+    abstract val haptics // cx.m42.superizer/HostSettingsPort.haptics|{}haptics[0]
+        abstract fun <get-haptics>(): kotlinx.coroutines.flow/StateFlow<kotlin/Boolean> // cx.m42.superizer/HostSettingsPort.haptics.<get-haptics>|<get-haptics>(){}[0]
+    abstract val langTag // cx.m42.superizer/HostSettingsPort.langTag|{}langTag[0]
+        abstract fun <get-langTag>(): kotlinx.coroutines.flow/StateFlow<kotlin/String> // cx.m42.superizer/HostSettingsPort.langTag.<get-langTag>|<get-langTag>(){}[0]
+    abstract val languages // cx.m42.superizer/HostSettingsPort.languages|{}languages[0]
+        abstract fun <get-languages>(): kotlin.collections/List<cx.m42.superizer/LanguageOption> // cx.m42.superizer/HostSettingsPort.languages.<get-languages>|<get-languages>(){}[0]
+
+    abstract fun chooseLanguage(kotlin/String) // cx.m42.superizer/HostSettingsPort.chooseLanguage|chooseLanguage(kotlin.String){}[0]
+    abstract fun setHaptics(kotlin/Boolean) // cx.m42.superizer/HostSettingsPort.setHaptics|setHaptics(kotlin.Boolean){}[0]
+}
+
+abstract interface cx.m42.superizer/RoutePort { // cx.m42.superizer/RoutePort|null[0]
+    abstract val route // cx.m42.superizer/RoutePort.route|{}route[0]
+        abstract fun <get-route>(): kotlinx.coroutines.flow/StateFlow<kotlin/String?> // cx.m42.superizer/RoutePort.route.<get-route>|<get-route>(){}[0]
+
+    abstract fun consume(): kotlin/String? // cx.m42.superizer/RoutePort.consume|consume(){}[0]
+    abstract fun deliver(kotlin/String) // cx.m42.superizer/RoutePort.deliver|deliver(kotlin.String){}[0]
+    abstract fun discard() // cx.m42.superizer/RoutePort.discard|discard(){}[0]
+}
+
+abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|null[0]
+    abstract val activation // cx.m42.superizer/Superizer.activation|{}activation[0]
+        abstract fun <get-activation>(): cx.m42.superizer/ActivationPort // cx.m42.superizer/Superizer.activation.<get-activation>|<get-activation>(){}[0]
+    abstract val commands // cx.m42.superizer/Superizer.commands|{}commands[0]
+        abstract fun <get-commands>(): kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer/ShellCommand> // cx.m42.superizer/Superizer.commands.<get-commands>|<get-commands>(){}[0]
+    abstract val diagnostics // cx.m42.superizer/Superizer.diagnostics|{}diagnostics[0]
+        abstract fun <get-diagnostics>(): cx.m42.superizer/DiagnosticsPort // cx.m42.superizer/Superizer.diagnostics.<get-diagnostics>|<get-diagnostics>(){}[0]
+    abstract val events // cx.m42.superizer/Superizer.events|{}events[0]
+        abstract fun <get-events>(): kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer.event/SuperizerEvent> // cx.m42.superizer/Superizer.events.<get-events>|<get-events>(){}[0]
+    abstract val handler // cx.m42.superizer/Superizer.handler|{}handler[0]
+        abstract fun <get-handler>(): cx.m42.superizer.registry/AppHandler // cx.m42.superizer/Superizer.handler.<get-handler>|<get-handler>(){}[0]
+    abstract val haptics // cx.m42.superizer/Superizer.haptics|{}haptics[0]
+        abstract fun <get-haptics>(): cx.m42.superizer.runtime/HapticsService // cx.m42.superizer/Superizer.haptics.<get-haptics>|<get-haptics>(){}[0]
+    abstract val hostInfo // cx.m42.superizer/Superizer.hostInfo|{}hostInfo[0]
+        abstract fun <get-hostInfo>(): cx.m42.superizer.runtime/HostInfo // cx.m42.superizer/Superizer.hostInfo.<get-hostInfo>|<get-hostInfo>(){}[0]
+    abstract val registry // cx.m42.superizer/Superizer.registry|{}registry[0]
+        abstract fun <get-registry>(): cx.m42.superizer.registry/AppRegistry // cx.m42.superizer/Superizer.registry.<get-registry>|<get-registry>(){}[0]
+    abstract val route // cx.m42.superizer/Superizer.route|{}route[0]
+        abstract fun <get-route>(): cx.m42.superizer/RoutePort // cx.m42.superizer/Superizer.route.<get-route>|<get-route>(){}[0]
+    abstract val settings // cx.m42.superizer/Superizer.settings|{}settings[0]
+        abstract fun <get-settings>(): cx.m42.superizer/HostSettingsPort // cx.m42.superizer/Superizer.settings.<get-settings>|<get-settings>(){}[0]
+    abstract val unlocked // cx.m42.superizer/Superizer.unlocked|{}unlocked[0]
+        abstract fun <get-unlocked>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Set<cx.m42.superizer.app/AppId>> // cx.m42.superizer/Superizer.unlocked.<get-unlocked>|<get-unlocked>(){}[0]
+
+    final object Companion // cx.m42.superizer/Superizer.Companion|null[0]
+}
+
+sealed interface cx.m42.superizer.activation/ActivationResult { // cx.m42.superizer.activation/ActivationResult|null[0]
+    final enum class Command : kotlin/Enum<cx.m42.superizer.activation/ActivationResult.Command> { // cx.m42.superizer.activation/ActivationResult.Command|null[0]
+        enum entry OpenServiceMenu // cx.m42.superizer.activation/ActivationResult.Command.OpenServiceMenu|null[0]
+
+        final val entries // cx.m42.superizer.activation/ActivationResult.Command.entries|#static{}entries[0]
+            final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer.activation/ActivationResult.Command> // cx.m42.superizer.activation/ActivationResult.Command.entries.<get-entries>|<get-entries>#static(){}[0]
+
+        final fun valueOf(kotlin/String): cx.m42.superizer.activation/ActivationResult.Command // cx.m42.superizer.activation/ActivationResult.Command.valueOf|valueOf#static(kotlin.String){}[0]
+        final fun values(): kotlin/Array<cx.m42.superizer.activation/ActivationResult.Command> // cx.m42.superizer.activation/ActivationResult.Command.values|values#static(){}[0]
+    }
+
+    final enum class Reason : kotlin/Enum<cx.m42.superizer.activation/ActivationResult.Reason> { // cx.m42.superizer.activation/ActivationResult.Reason|null[0]
+        enum entry Expired // cx.m42.superizer.activation/ActivationResult.Reason.Expired|null[0]
+        enum entry Malformed // cx.m42.superizer.activation/ActivationResult.Reason.Malformed|null[0]
+        enum entry UnknownApp // cx.m42.superizer.activation/ActivationResult.Reason.UnknownApp|null[0]
+        enum entry UnknownCode // cx.m42.superizer.activation/ActivationResult.Reason.UnknownCode|null[0]
+        enum entry UnsupportedSchema // cx.m42.superizer.activation/ActivationResult.Reason.UnsupportedSchema|null[0]
+
+        final val entries // cx.m42.superizer.activation/ActivationResult.Reason.entries|#static{}entries[0]
+            final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer.activation/ActivationResult.Reason> // cx.m42.superizer.activation/ActivationResult.Reason.entries.<get-entries>|<get-entries>#static(){}[0]
+
+        final fun valueOf(kotlin/String): cx.m42.superizer.activation/ActivationResult.Reason // cx.m42.superizer.activation/ActivationResult.Reason.valueOf|valueOf#static(kotlin.String){}[0]
+        final fun values(): kotlin/Array<cx.m42.superizer.activation/ActivationResult.Reason> // cx.m42.superizer.activation/ActivationResult.Reason.values|values#static(){}[0]
+    }
+
+    final class HostCommand : cx.m42.superizer.activation/ActivationResult { // cx.m42.superizer.activation/ActivationResult.HostCommand|null[0]
+        constructor <init>(cx.m42.superizer.activation/ActivationResult.Command) // cx.m42.superizer.activation/ActivationResult.HostCommand.<init>|<init>(cx.m42.superizer.activation.ActivationResult.Command){}[0]
+
+        final val command // cx.m42.superizer.activation/ActivationResult.HostCommand.command|{}command[0]
+            final fun <get-command>(): cx.m42.superizer.activation/ActivationResult.Command // cx.m42.superizer.activation/ActivationResult.HostCommand.command.<get-command>|<get-command>(){}[0]
+
+        final fun component1(): cx.m42.superizer.activation/ActivationResult.Command // cx.m42.superizer.activation/ActivationResult.HostCommand.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.activation/ActivationResult.Command = ...): cx.m42.superizer.activation/ActivationResult.HostCommand // cx.m42.superizer.activation/ActivationResult.HostCommand.copy|copy(cx.m42.superizer.activation.ActivationResult.Command){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.activation/ActivationResult.HostCommand.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.activation/ActivationResult.HostCommand.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.activation/ActivationResult.HostCommand.toString|toString(){}[0]
+    }
+
+    final class Rejected : cx.m42.superizer.activation/ActivationResult { // cx.m42.superizer.activation/ActivationResult.Rejected|null[0]
+        constructor <init>(cx.m42.superizer.activation/ActivationResult.Reason) // cx.m42.superizer.activation/ActivationResult.Rejected.<init>|<init>(cx.m42.superizer.activation.ActivationResult.Reason){}[0]
+
+        final val reason // cx.m42.superizer.activation/ActivationResult.Rejected.reason|{}reason[0]
+            final fun <get-reason>(): cx.m42.superizer.activation/ActivationResult.Reason // cx.m42.superizer.activation/ActivationResult.Rejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): cx.m42.superizer.activation/ActivationResult.Reason // cx.m42.superizer.activation/ActivationResult.Rejected.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.activation/ActivationResult.Reason = ...): cx.m42.superizer.activation/ActivationResult.Rejected // cx.m42.superizer.activation/ActivationResult.Rejected.copy|copy(cx.m42.superizer.activation.ActivationResult.Reason){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.activation/ActivationResult.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.activation/ActivationResult.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.activation/ActivationResult.Rejected.toString|toString(){}[0]
+    }
+
+    final class Success : cx.m42.superizer.activation/ActivationResult { // cx.m42.superizer.activation/ActivationResult.Success|null[0]
+        constructor <init>(cx.m42.superizer.activation/Activation) // cx.m42.superizer.activation/ActivationResult.Success.<init>|<init>(cx.m42.superizer.activation.Activation){}[0]
+
+        final val activation // cx.m42.superizer.activation/ActivationResult.Success.activation|{}activation[0]
+            final fun <get-activation>(): cx.m42.superizer.activation/Activation // cx.m42.superizer.activation/ActivationResult.Success.activation.<get-activation>|<get-activation>(){}[0]
+
+        final fun component1(): cx.m42.superizer.activation/Activation // cx.m42.superizer.activation/ActivationResult.Success.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.activation/Activation = ...): cx.m42.superizer.activation/ActivationResult.Success // cx.m42.superizer.activation/ActivationResult.Success.copy|copy(cx.m42.superizer.activation.Activation){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.activation/ActivationResult.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.activation/ActivationResult.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.activation/ActivationResult.Success.toString|toString(){}[0]
+    }
+}
+
+sealed interface cx.m42.superizer.app/AppIcon { // cx.m42.superizer.app/AppIcon|null[0]
+    final class Letter : cx.m42.superizer.app/AppIcon { // cx.m42.superizer.app/AppIcon.Letter|null[0]
+        constructor <init>(kotlin/Char) // cx.m42.superizer.app/AppIcon.Letter.<init>|<init>(kotlin.Char){}[0]
+
+        final val char // cx.m42.superizer.app/AppIcon.Letter.char|{}char[0]
+            final fun <get-char>(): kotlin/Char // cx.m42.superizer.app/AppIcon.Letter.char.<get-char>|<get-char>(){}[0]
+
+        final fun component1(): kotlin/Char // cx.m42.superizer.app/AppIcon.Letter.component1|component1(){}[0]
+        final fun copy(kotlin/Char = ...): cx.m42.superizer.app/AppIcon.Letter // cx.m42.superizer.app/AppIcon.Letter.copy|copy(kotlin.Char){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppIcon.Letter.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppIcon.Letter.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.app/AppIcon.Letter.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/AppIcon.Letter> { // cx.m42.superizer.app/AppIcon.Letter.$serializer|null[0]
+            final val descriptor // cx.m42.superizer.app/AppIcon.Letter.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/AppIcon.Letter.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/AppIcon.Letter.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/AppIcon.Letter // cx.m42.superizer.app/AppIcon.Letter.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/AppIcon.Letter) // cx.m42.superizer.app/AppIcon.Letter.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.AppIcon.Letter){}[0]
+        }
+
+        final object Companion { // cx.m42.superizer.app/AppIcon.Letter.Companion|null[0]
+            final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppIcon.Letter> // cx.m42.superizer.app/AppIcon.Letter.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final class Named : cx.m42.superizer.app/AppIcon { // cx.m42.superizer.app/AppIcon.Named|null[0]
+        constructor <init>(kotlin/String) // cx.m42.superizer.app/AppIcon.Named.<init>|<init>(kotlin.String){}[0]
+
+        final val name // cx.m42.superizer.app/AppIcon.Named.name|{}name[0]
+            final fun <get-name>(): kotlin/String // cx.m42.superizer.app/AppIcon.Named.name.<get-name>|<get-name>(){}[0]
+
+        final fun component1(): kotlin/String // cx.m42.superizer.app/AppIcon.Named.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): cx.m42.superizer.app/AppIcon.Named // cx.m42.superizer.app/AppIcon.Named.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppIcon.Named.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppIcon.Named.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.app/AppIcon.Named.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/AppIcon.Named> { // cx.m42.superizer.app/AppIcon.Named.$serializer|null[0]
+            final val descriptor // cx.m42.superizer.app/AppIcon.Named.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/AppIcon.Named.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/AppIcon.Named.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/AppIcon.Named // cx.m42.superizer.app/AppIcon.Named.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/AppIcon.Named) // cx.m42.superizer.app/AppIcon.Named.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.AppIcon.Named){}[0]
+        }
+
+        final object Companion { // cx.m42.superizer.app/AppIcon.Named.Companion|null[0]
+            final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppIcon.Named> // cx.m42.superizer.app/AppIcon.Named.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final class Path : cx.m42.superizer.app/AppIcon { // cx.m42.superizer.app/AppIcon.Path|null[0]
+        constructor <init>(kotlin/String) // cx.m42.superizer.app/AppIcon.Path.<init>|<init>(kotlin.String){}[0]
+
+        final val svgPath // cx.m42.superizer.app/AppIcon.Path.svgPath|{}svgPath[0]
+            final fun <get-svgPath>(): kotlin/String // cx.m42.superizer.app/AppIcon.Path.svgPath.<get-svgPath>|<get-svgPath>(){}[0]
+
+        final fun component1(): kotlin/String // cx.m42.superizer.app/AppIcon.Path.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): cx.m42.superizer.app/AppIcon.Path // cx.m42.superizer.app/AppIcon.Path.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppIcon.Path.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppIcon.Path.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.app/AppIcon.Path.toString|toString(){}[0]
+
+        final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/AppIcon.Path> { // cx.m42.superizer.app/AppIcon.Path.$serializer|null[0]
+            final val descriptor // cx.m42.superizer.app/AppIcon.Path.$serializer.descriptor|{}descriptor[0]
+                final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/AppIcon.Path.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+            final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/AppIcon.Path.$serializer.childSerializers|childSerializers(){}[0]
+            final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/AppIcon.Path // cx.m42.superizer.app/AppIcon.Path.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+            final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/AppIcon.Path) // cx.m42.superizer.app/AppIcon.Path.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.AppIcon.Path){}[0]
+        }
+
+        final object Companion { // cx.m42.superizer.app/AppIcon.Path.Companion|null[0]
+            final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppIcon.Path> // cx.m42.superizer.app/AppIcon.Path.Companion.serializer|serializer(){}[0]
+        }
+    }
+
+    final object Companion : kotlinx.serialization.internal/SerializerFactory { // cx.m42.superizer.app/AppIcon.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppIcon> // cx.m42.superizer.app/AppIcon.Companion.serializer|serializer(){}[0]
+        final fun serializer(kotlin/Array<out kotlinx.serialization/KSerializer<*>>...): kotlinx.serialization/KSerializer<*> // cx.m42.superizer.app/AppIcon.Companion.serializer|serializer(kotlin.Array<out|kotlinx.serialization.KSerializer<*>>...){}[0]
+    }
+}
+
+sealed interface cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent|null[0]
+    abstract val appId // cx.m42.superizer.event/SuperizerEvent.appId|{}appId[0]
+        abstract fun <get-appId>(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.appId.<get-appId>|<get-appId>(){}[0]
+
+    final class Activated : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Activated|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.Activated.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Activated.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Activated.appId.<get-appId>|<get-appId>(){}[0]
+        final val source // cx.m42.superizer.event/SuperizerEvent.Activated.source|{}source[0]
+            final fun <get-source>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Activated.source.<get-source>|<get-source>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Activated.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Activated.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.Activated // cx.m42.superizer.event/SuperizerEvent.Activated.copy|copy(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Activated.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Activated.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Activated.toString|toString(){}[0]
+    }
+
+    final class Active : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Active|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Active.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Active.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Active.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Active.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Active // cx.m42.superizer.event/SuperizerEvent.Active.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Active.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Active.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Active.toString|toString(){}[0]
+    }
+
+    final class Background : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Background|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId?) // cx.m42.superizer.event/SuperizerEvent.Background.<init>|<init>(cx.m42.superizer.app.AppId?){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Background.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.Background.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.Background.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId? = ...): cx.m42.superizer.event/SuperizerEvent.Background // cx.m42.superizer.event/SuperizerEvent.Background.copy|copy(cx.m42.superizer.app.AppId?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Background.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Background.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Background.toString|toString(){}[0]
+    }
+
+    final class Closed : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Closed|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Closed.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Closed.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Closed.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Closed.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Closed // cx.m42.superizer.event/SuperizerEvent.Closed.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Closed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Closed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Closed.toString|toString(){}[0]
+    }
+
+    final class ConfigRejected : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.ConfigRejected|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.<init>|<init>(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.appId.<get-appId>|<get-appId>(){}[0]
+        final val config // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.config|{}config[0]
+            final fun <get-config>(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.config.<get-config>|<get-config>(){}[0]
+        final val reason // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.reason|{}reason[0]
+            final fun <get-reason>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.component1|component1(){}[0]
+        final fun component2(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.component2|component2(){}[0]
+        final fun component3(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.component3|component3(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., cx.m42.superizer.app/AppConfig = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.ConfigRejected // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.copy|copy(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.ConfigRejected.toString|toString(){}[0]
+    }
+
+    final class Configured : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Configured|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig) // cx.m42.superizer.event/SuperizerEvent.Configured.<init>|<init>(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Configured.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Configured.appId.<get-appId>|<get-appId>(){}[0]
+        final val config // cx.m42.superizer.event/SuperizerEvent.Configured.config|{}config[0]
+            final fun <get-config>(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.event/SuperizerEvent.Configured.config.<get-config>|<get-config>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Configured.component1|component1(){}[0]
+        final fun component2(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.event/SuperizerEvent.Configured.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., cx.m42.superizer.app/AppConfig = ...): cx.m42.superizer.event/SuperizerEvent.Configured // cx.m42.superizer.event/SuperizerEvent.Configured.copy|copy(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Configured.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Configured.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Configured.toString|toString(){}[0]
+    }
+
+    final class Crashed : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Crashed|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/Throwable) // cx.m42.superizer.event/SuperizerEvent.Crashed.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.Throwable){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Crashed.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Crashed.appId.<get-appId>|<get-appId>(){}[0]
+        final val cause // cx.m42.superizer.event/SuperizerEvent.Crashed.cause|{}cause[0]
+            final fun <get-cause>(): kotlin/Throwable // cx.m42.superizer.event/SuperizerEvent.Crashed.cause.<get-cause>|<get-cause>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Crashed.component1|component1(){}[0]
+        final fun component2(): kotlin/Throwable // cx.m42.superizer.event/SuperizerEvent.Crashed.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/Throwable = ...): cx.m42.superizer.event/SuperizerEvent.Crashed // cx.m42.superizer.event/SuperizerEvent.Crashed.copy|copy(cx.m42.superizer.app.AppId;kotlin.Throwable){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Crashed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Crashed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Crashed.toString|toString(){}[0]
+    }
+
+    final class Created : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Created|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Created.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Created.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Created.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Created.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Created // cx.m42.superizer.event/SuperizerEvent.Created.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Created.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Created.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Created.toString|toString(){}[0]
+    }
+
+    final class DeepLinkUnmatched : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.appId.<get-appId>|<get-appId>(){}[0]
+        final val path // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.path|{}path[0]
+            final fun <get-path>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.path.<get-path>|<get-path>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.copy|copy(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.DeepLinkUnmatched.toString|toString(){}[0]
+    }
+
+    final class Disabled : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Disabled|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Disabled.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Disabled.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Disabled.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Disabled.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Disabled // cx.m42.superizer.event/SuperizerEvent.Disabled.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Disabled.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Disabled.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Disabled.toString|toString(){}[0]
+    }
+
+    final class Disposed : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Disposed|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Disposed.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Disposed.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Disposed.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Disposed.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Disposed // cx.m42.superizer.event/SuperizerEvent.Disposed.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Disposed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Disposed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Disposed.toString|toString(){}[0]
+    }
+
+    final class Enabled : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Enabled|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Enabled.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Enabled.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Enabled.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Enabled.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Enabled // cx.m42.superizer.event/SuperizerEvent.Enabled.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Enabled.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Enabled.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Enabled.toString|toString(){}[0]
+    }
+
+    final class Foreground : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Foreground|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId?) // cx.m42.superizer.event/SuperizerEvent.Foreground.<init>|<init>(cx.m42.superizer.app.AppId?){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Foreground.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.Foreground.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.Foreground.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId? = ...): cx.m42.superizer.event/SuperizerEvent.Foreground // cx.m42.superizer.event/SuperizerEvent.Foreground.copy|copy(cx.m42.superizer.app.AppId?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Foreground.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Foreground.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Foreground.toString|toString(){}[0]
+    }
+
+    final class LaunchFailed : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.LaunchFailed|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId?, kotlin/String, kotlin/Throwable? = ...) // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.<init>|<init>(cx.m42.superizer.app.AppId?;kotlin.String;kotlin.Throwable?){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.appId.<get-appId>|<get-appId>(){}[0]
+        final val cause // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.cause|{}cause[0]
+            final fun <get-cause>(): kotlin/Throwable? // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.cause.<get-cause>|<get-cause>(){}[0]
+        final val reason // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.reason|{}reason[0]
+            final fun <get-reason>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.component2|component2(){}[0]
+        final fun component3(): kotlin/Throwable? // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.component3|component3(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId? = ..., kotlin/String = ..., kotlin/Throwable? = ...): cx.m42.superizer.event/SuperizerEvent.LaunchFailed // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.copy|copy(cx.m42.superizer.app.AppId?;kotlin.String;kotlin.Throwable?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.LaunchFailed.toString|toString(){}[0]
+    }
+
+    final class Launched : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Launched|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Launched.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Launched.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Launched.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Launched.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Launched // cx.m42.superizer.event/SuperizerEvent.Launched.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Launched.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Launched.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Launched.toString|toString(){}[0]
+    }
+
+    final class PushDropped : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.PushDropped|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId?, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.PushDropped.<init>|<init>(cx.m42.superizer.app.AppId?;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.PushDropped.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.PushDropped.appId.<get-appId>|<get-appId>(){}[0]
+        final val reason // cx.m42.superizer.event/SuperizerEvent.PushDropped.reason|{}reason[0]
+            final fun <get-reason>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.PushDropped.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId? // cx.m42.superizer.event/SuperizerEvent.PushDropped.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.PushDropped.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId? = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.PushDropped // cx.m42.superizer.event/SuperizerEvent.PushDropped.copy|copy(cx.m42.superizer.app.AppId?;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.PushDropped.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.PushDropped.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.PushDropped.toString|toString(){}[0]
+    }
+
+    final class PushReceived : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.PushReceived|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/String?) // cx.m42.superizer.event/SuperizerEvent.PushReceived.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String?){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.PushReceived.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.PushReceived.appId.<get-appId>|<get-appId>(){}[0]
+        final val topic // cx.m42.superizer.event/SuperizerEvent.PushReceived.topic|{}topic[0]
+            final fun <get-topic>(): kotlin/String? // cx.m42.superizer.event/SuperizerEvent.PushReceived.topic.<get-topic>|<get-topic>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.PushReceived.component1|component1(){}[0]
+        final fun component2(): kotlin/String? // cx.m42.superizer.event/SuperizerEvent.PushReceived.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String? = ...): cx.m42.superizer.event/SuperizerEvent.PushReceived // cx.m42.superizer.event/SuperizerEvent.PushReceived.copy|copy(cx.m42.superizer.app.AppId;kotlin.String?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.PushReceived.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.PushReceived.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.PushReceived.toString|toString(){}[0]
+    }
+
+    final class Registered : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Registered|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.Registered.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Registered.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Registered.appId.<get-appId>|<get-appId>(){}[0]
+        final val version // cx.m42.superizer.event/SuperizerEvent.Registered.version|{}version[0]
+            final fun <get-version>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Registered.version.<get-version>|<get-version>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Registered.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Registered.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.Registered // cx.m42.superizer.event/SuperizerEvent.Registered.copy|copy(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Registered.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Registered.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Registered.toString|toString(){}[0]
+    }
+
+    final class RegistrationRejected : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.appId.<get-appId>|<get-appId>(){}[0]
+        final val reason // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.reason|{}reason[0]
+            final fun <get-reason>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.RegistrationRejected // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.copy|copy(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.toString|toString(){}[0]
+    }
+
+    final class Reset : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Reset|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Reset.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Reset.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Reset.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Reset.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Reset // cx.m42.superizer.event/SuperizerEvent.Reset.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Reset.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Reset.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Reset.toString|toString(){}[0]
+    }
+
+    final class Restored : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Restored|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Restored.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Restored.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Restored.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Restored.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Restored // cx.m42.superizer.event/SuperizerEvent.Restored.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Restored.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Restored.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Restored.toString|toString(){}[0]
+    }
+
+    final class RouteDiscarded : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.appId.<get-appId>|<get-appId>(){}[0]
+        final val link // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.link|{}link[0]
+            final fun <get-link>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.link.<get-link>|<get-link>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.RouteDiscarded // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.copy|copy(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RouteDiscarded.toString|toString(){}[0]
+    }
+
+    final class RuntimeCreated : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.RuntimeCreated // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RuntimeCreated.toString|toString(){}[0]
+    }
+
+    final class SetupMismatch : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.SetupMismatch|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.appId.<get-appId>|<get-appId>(){}[0]
+        final val what // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.what|{}what[0]
+            final fun <get-what>(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.what.<get-what>|<get-what>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.component1|component1(){}[0]
+        final fun component2(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ...): cx.m42.superizer.event/SuperizerEvent.SetupMismatch // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.copy|copy(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.SetupMismatch.toString|toString(){}[0]
+    }
+
+    final class Unlocked : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Unlocked|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Unlocked.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Unlocked.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Unlocked.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Unlocked.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Unlocked // cx.m42.superizer.event/SuperizerEvent.Unlocked.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Unlocked.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Unlocked.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Unlocked.toString|toString(){}[0]
+    }
+}
+
+sealed interface cx.m42.superizer.registry/RegistrationOutcome { // cx.m42.superizer.registry/RegistrationOutcome|null[0]
+    final class Rejected : cx.m42.superizer.registry/RegistrationOutcome { // cx.m42.superizer.registry/RegistrationOutcome.Rejected|null[0]
+        constructor <init>(kotlin/String) // cx.m42.superizer.registry/RegistrationOutcome.Rejected.<init>|<init>(kotlin.String){}[0]
+
+        final val reason // cx.m42.superizer.registry/RegistrationOutcome.Rejected.reason|{}reason[0]
+            final fun <get-reason>(): kotlin/String // cx.m42.superizer.registry/RegistrationOutcome.Rejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): kotlin/String // cx.m42.superizer.registry/RegistrationOutcome.Rejected.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): cx.m42.superizer.registry/RegistrationOutcome.Rejected // cx.m42.superizer.registry/RegistrationOutcome.Rejected.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.registry/RegistrationOutcome.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.registry/RegistrationOutcome.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.registry/RegistrationOutcome.Rejected.toString|toString(){}[0]
+    }
+
+    final object Accepted : cx.m42.superizer.registry/RegistrationOutcome { // cx.m42.superizer.registry/RegistrationOutcome.Accepted|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.registry/RegistrationOutcome.Accepted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.registry/RegistrationOutcome.Accepted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.registry/RegistrationOutcome.Accepted.toString|toString(){}[0]
+    }
+}
+
+sealed interface cx.m42.superizer/ShellCommand { // cx.m42.superizer/ShellCommand|null[0]
+    final class OpenApp : cx.m42.superizer/ShellCommand { // cx.m42.superizer/ShellCommand.OpenApp|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer/ShellCommand.OpenApp.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val id // cx.m42.superizer/ShellCommand.OpenApp.id|{}id[0]
+            final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer/ShellCommand.OpenApp.id.<get-id>|<get-id>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer/ShellCommand.OpenApp.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer/ShellCommand.OpenApp // cx.m42.superizer/ShellCommand.OpenApp.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer/ShellCommand.OpenApp.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer/ShellCommand.OpenApp.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer/ShellCommand.OpenApp.toString|toString(){}[0]
+    }
+
+    final object Close : cx.m42.superizer/ShellCommand { // cx.m42.superizer/ShellCommand.Close|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer/ShellCommand.Close.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer/ShellCommand.Close.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer/ShellCommand.Close.toString|toString(){}[0]
+    }
+
+    final object OpenSettings : cx.m42.superizer/ShellCommand { // cx.m42.superizer/ShellCommand.OpenSettings|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer/ShellCommand.OpenSettings.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer/ShellCommand.OpenSettings.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer/ShellCommand.OpenSettings.toString|toString(){}[0]
+    }
+}
+
+abstract class <#A: kotlin/Any> cx.m42.superizer.app/SuperizerApp { // cx.m42.superizer.app/SuperizerApp|null[0]
+    constructor <init>() // cx.m42.superizer.app/SuperizerApp.<init>|<init>(){}[0]
+
+    abstract val configSpec // cx.m42.superizer.app/SuperizerApp.configSpec|{}configSpec[0]
+        abstract fun <get-configSpec>(): cx.m42.superizer.app/AppConfigSpec<#A> // cx.m42.superizer.app/SuperizerApp.configSpec.<get-configSpec>|<get-configSpec>(){}[0]
+    abstract val manifest // cx.m42.superizer.app/SuperizerApp.manifest|{}manifest[0]
+        abstract fun <get-manifest>(): cx.m42.superizer.app/AppManifest // cx.m42.superizer.app/SuperizerApp.manifest.<get-manifest>|<get-manifest>(){}[0]
+    final val id // cx.m42.superizer.app/SuperizerApp.id|{}id[0]
+        final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer.app/SuperizerApp.id.<get-id>|<get-id>(){}[0]
+    final val metadata // cx.m42.superizer.app/SuperizerApp.metadata|{}metadata[0]
+        final fun <get-metadata>(): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.app/SuperizerApp.metadata.<get-metadata>|<get-metadata>(){}[0]
+    final val version // cx.m42.superizer.app/SuperizerApp.version|{}version[0]
+        final fun <get-version>(): kotlin/String // cx.m42.superizer.app/SuperizerApp.version.<get-version>|<get-version>(){}[0]
+
+    abstract fun launch(cx.m42.superizer.runtime/InstanceRuntime, #A): cx.m42.superizer.app/AppInstance // cx.m42.superizer.app/SuperizerApp.launch|launch(cx.m42.superizer.runtime.InstanceRuntime;1:0){}[0]
+    open fun setup(cx.m42.superizer.app/AppSetupContext) // cx.m42.superizer.app/SuperizerApp.setup|setup(cx.m42.superizer.app.AppSetupContext){}[0]
+}
+
+abstract class cx.m42.superizer.app/AppInstance { // cx.m42.superizer.app/AppInstance|null[0]
+    constructor <init>() // cx.m42.superizer.app/AppInstance.<init>|<init>(){}[0]
+
+    open val chrome // cx.m42.superizer.app/AppInstance.chrome|{}chrome[0]
+        open fun <get-chrome>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.app/AppChrome> // cx.m42.superizer.app/AppInstance.chrome.<get-chrome>|<get-chrome>(){}[0]
+
+    abstract fun Content(androidx.compose.runtime/Composer?, kotlin/Int) // cx.m42.superizer.app/AppInstance.Content|Content(androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    open fun dispose() // cx.m42.superizer.app/AppInstance.dispose|dispose(){}[0]
+    open fun onBackground() // cx.m42.superizer.app/AppInstance.onBackground|onBackground(){}[0]
+    open fun onClose() // cx.m42.superizer.app/AppInstance.onClose|onClose(){}[0]
+    open fun onForeground() // cx.m42.superizer.app/AppInstance.onForeground|onForeground(){}[0]
+    open fun restore(kotlinx.serialization.json/JsonObject) // cx.m42.superizer.app/AppInstance.restore|restore(kotlinx.serialization.json.JsonObject){}[0]
+    open fun saveState(): kotlinx.serialization.json/JsonObject? // cx.m42.superizer.app/AppInstance.saveState|saveState(){}[0]
+    open suspend fun onCloseRequested(): kotlin/Boolean // cx.m42.superizer.app/AppInstance.onCloseRequested|onCloseRequested(){}[0]
+    open suspend fun onLaunch() // cx.m42.superizer.app/AppInstance.onLaunch|onLaunch(){}[0]
+}
+
+final class <#A: kotlin/Any> cx.m42.superizer.app/AppConfigSpec { // cx.m42.superizer.app/AppConfigSpec|null[0]
+    constructor <init>(kotlinx.serialization/KSerializer<#A>, #A, kotlin/Int = ..., kotlin/Boolean = ..., kotlin/Function2<kotlin/Int, kotlinx.serialization.json/JsonObject, kotlinx.serialization.json/JsonObject> = ..., kotlinx.serialization.json/Json = ...) // cx.m42.superizer.app/AppConfigSpec.<init>|<init>(kotlinx.serialization.KSerializer<1:0>;1:0;kotlin.Int;kotlin.Boolean;kotlin.Function2<kotlin.Int,kotlinx.serialization.json.JsonObject,kotlinx.serialization.json.JsonObject>;kotlinx.serialization.json.Json){}[0]
+
+    final val default // cx.m42.superizer.app/AppConfigSpec.default|{}default[0]
+        final fun <get-default>(): #A // cx.m42.superizer.app/AppConfigSpec.default.<get-default>|<get-default>(){}[0]
+    final val fallbackToDefault // cx.m42.superizer.app/AppConfigSpec.fallbackToDefault|{}fallbackToDefault[0]
+        final fun <get-fallbackToDefault>(): kotlin/Boolean // cx.m42.superizer.app/AppConfigSpec.fallbackToDefault.<get-fallbackToDefault>|<get-fallbackToDefault>(){}[0]
+    final val schemaVersion // cx.m42.superizer.app/AppConfigSpec.schemaVersion|{}schemaVersion[0]
+        final fun <get-schemaVersion>(): kotlin/Int // cx.m42.superizer.app/AppConfigSpec.schemaVersion.<get-schemaVersion>|<get-schemaVersion>(){}[0]
+    final val serializer // cx.m42.superizer.app/AppConfigSpec.serializer|{}serializer[0]
+        final fun <get-serializer>(): kotlinx.serialization/KSerializer<#A> // cx.m42.superizer.app/AppConfigSpec.serializer.<get-serializer>|<get-serializer>(){}[0]
+
+    final fun decode(cx.m42.superizer.app/AppConfig): kotlin/Result<#A> // cx.m42.superizer.app/AppConfigSpec.decode|decode(cx.m42.superizer.app.AppConfig){}[0]
+    final fun encode(#A): cx.m42.superizer.app/AppConfig // cx.m42.superizer.app/AppConfigSpec.encode|encode(1:0){}[0]
+
+    final object Companion { // cx.m42.superizer.app/AppConfigSpec.Companion|null[0]
+        final const val SCHEMA_VERSION // cx.m42.superizer.app/AppConfigSpec.Companion.SCHEMA_VERSION|{}SCHEMA_VERSION[0]
+            final fun <get-SCHEMA_VERSION>(): kotlin/String // cx.m42.superizer.app/AppConfigSpec.Companion.SCHEMA_VERSION.<get-SCHEMA_VERSION>|<get-SCHEMA_VERSION>(){}[0]
+
+        final val DefaultJson // cx.m42.superizer.app/AppConfigSpec.Companion.DefaultJson|{}DefaultJson[0]
+            final fun <get-DefaultJson>(): kotlinx.serialization.json/Json // cx.m42.superizer.app/AppConfigSpec.Companion.DefaultJson.<get-DefaultJson>|<get-DefaultJson>(){}[0]
+        final val None // cx.m42.superizer.app/AppConfigSpec.Companion.None|{}None[0]
+            final fun <get-None>(): cx.m42.superizer.app/AppConfigSpec<kotlin/Unit> // cx.m42.superizer.app/AppConfigSpec.Companion.None.<get-None>|<get-None>(){}[0]
+    }
+}
+
+final class <#A: kotlin/Any> cx.m42.superizer.runtime/ServiceKey { // cx.m42.superizer.runtime/ServiceKey|null[0]
+    constructor <init>(kotlin/String) // cx.m42.superizer.runtime/ServiceKey.<init>|<init>(kotlin.String){}[0]
+
+    final val name // cx.m42.superizer.runtime/ServiceKey.name|{}name[0]
+        final fun <get-name>(): kotlin/String // cx.m42.superizer.runtime/ServiceKey.name.<get-name>|<get-name>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/ServiceKey.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/ServiceKey.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/ServiceKey.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.activation/Activation { // cx.m42.superizer.activation/Activation|null[0]
+    constructor <init>(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig = ..., kotlin/Boolean = ...) // cx.m42.superizer.activation/Activation.<init>|<init>(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig;kotlin.Boolean){}[0]
+
+    final val appId // cx.m42.superizer.activation/Activation.appId|{}appId[0]
+        final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.activation/Activation.appId.<get-appId>|<get-appId>(){}[0]
+    final val config // cx.m42.superizer.activation/Activation.config|{}config[0]
+        final fun <get-config>(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.activation/Activation.config.<get-config>|<get-config>(){}[0]
+    final val unlock // cx.m42.superizer.activation/Activation.unlock|{}unlock[0]
+        final fun <get-unlock>(): kotlin/Boolean // cx.m42.superizer.activation/Activation.unlock.<get-unlock>|<get-unlock>(){}[0]
+
+    final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.activation/Activation.component1|component1(){}[0]
+    final fun component2(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.activation/Activation.component2|component2(){}[0]
+    final fun component3(): kotlin/Boolean // cx.m42.superizer.activation/Activation.component3|component3(){}[0]
+    final fun copy(cx.m42.superizer.app/AppId = ..., cx.m42.superizer.app/AppConfig = ..., kotlin/Boolean = ...): cx.m42.superizer.activation/Activation // cx.m42.superizer.activation/Activation.copy|copy(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.activation/Activation.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.activation/Activation.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.activation/Activation.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.app/AppChrome { // cx.m42.superizer.app/AppChrome|null[0]
+    constructor <init>(kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...) // cx.m42.superizer.app/AppChrome.<init>|<init>(kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+
+    final val canGoBack // cx.m42.superizer.app/AppChrome.canGoBack|{}canGoBack[0]
+        final fun <get-canGoBack>(): kotlin/Boolean // cx.m42.superizer.app/AppChrome.canGoBack.<get-canGoBack>|<get-canGoBack>(){}[0]
+    final val subtitle // cx.m42.superizer.app/AppChrome.subtitle|{}subtitle[0]
+        final fun <get-subtitle>(): kotlin/String? // cx.m42.superizer.app/AppChrome.subtitle.<get-subtitle>|<get-subtitle>(){}[0]
+    final val title // cx.m42.superizer.app/AppChrome.title|{}title[0]
+        final fun <get-title>(): kotlin/String? // cx.m42.superizer.app/AppChrome.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String? // cx.m42.superizer.app/AppChrome.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // cx.m42.superizer.app/AppChrome.component2|component2(){}[0]
+    final fun component3(): kotlin/Boolean // cx.m42.superizer.app/AppChrome.component3|component3(){}[0]
+    final fun copy(kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...): cx.m42.superizer.app/AppChrome // cx.m42.superizer.app/AppChrome.copy|copy(kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppChrome.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppChrome.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.app/AppChrome.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.app/AppManifest { // cx.m42.superizer.app/AppManifest|null[0]
+    constructor <init>(cx.m42.superizer.app/AppId, kotlin/String, kotlin/Int = ..., cx.m42.superizer.app/AppMetadata, kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Set<kotlin/String> = ...) // cx.m42.superizer.app/AppManifest.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String;kotlin.Int;cx.m42.superizer.app.AppMetadata;kotlin.collections.Set<cx.m42.superizer.runtime.ServiceKey<*>>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Set<kotlin.String>){}[0]
+
+    final val deepLinks // cx.m42.superizer.app/AppManifest.deepLinks|{}deepLinks[0]
+        final fun <get-deepLinks>(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.app/AppManifest.deepLinks.<get-deepLinks>|<get-deepLinks>(){}[0]
+    final val id // cx.m42.superizer.app/AppManifest.id|{}id[0]
+        final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer.app/AppManifest.id.<get-id>|<get-id>(){}[0]
+    final val metadata // cx.m42.superizer.app/AppManifest.metadata|{}metadata[0]
+        final fun <get-metadata>(): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.app/AppManifest.metadata.<get-metadata>|<get-metadata>(){}[0]
+    final val minHostContract // cx.m42.superizer.app/AppManifest.minHostContract|{}minHostContract[0]
+        final fun <get-minHostContract>(): kotlin/Int // cx.m42.superizer.app/AppManifest.minHostContract.<get-minHostContract>|<get-minHostContract>(){}[0]
+    final val networkHosts // cx.m42.superizer.app/AppManifest.networkHosts|{}networkHosts[0]
+        final fun <get-networkHosts>(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.app/AppManifest.networkHosts.<get-networkHosts>|<get-networkHosts>(){}[0]
+    final val pushTopics // cx.m42.superizer.app/AppManifest.pushTopics|{}pushTopics[0]
+        final fun <get-pushTopics>(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.app/AppManifest.pushTopics.<get-pushTopics>|<get-pushTopics>(){}[0]
+    final val requires // cx.m42.superizer.app/AppManifest.requires|{}requires[0]
+        final fun <get-requires>(): kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> // cx.m42.superizer.app/AppManifest.requires.<get-requires>|<get-requires>(){}[0]
+    final val version // cx.m42.superizer.app/AppManifest.version|{}version[0]
+        final fun <get-version>(): kotlin/String // cx.m42.superizer.app/AppManifest.version.<get-version>|<get-version>(){}[0]
+
+    final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.app/AppManifest.component1|component1(){}[0]
+    final fun component2(): kotlin/String // cx.m42.superizer.app/AppManifest.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // cx.m42.superizer.app/AppManifest.component3|component3(){}[0]
+    final fun component4(): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.app/AppManifest.component4|component4(){}[0]
+    final fun component5(): kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> // cx.m42.superizer.app/AppManifest.component5|component5(){}[0]
+    final fun component6(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.app/AppManifest.component6|component6(){}[0]
+    final fun component7(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.app/AppManifest.component7|component7(){}[0]
+    final fun component8(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.app/AppManifest.component8|component8(){}[0]
+    final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ..., kotlin/Int = ..., cx.m42.superizer.app/AppMetadata = ..., kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Set<kotlin/String> = ..., kotlin.collections/Set<kotlin/String> = ...): cx.m42.superizer.app/AppManifest // cx.m42.superizer.app/AppManifest.copy|copy(cx.m42.superizer.app.AppId;kotlin.String;kotlin.Int;cx.m42.superizer.app.AppMetadata;kotlin.collections.Set<cx.m42.superizer.runtime.ServiceKey<*>>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Set<kotlin.String>;kotlin.collections.Set<kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppManifest.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppManifest.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.app/AppManifest.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/AppManifest> { // cx.m42.superizer.app/AppManifest.$serializer|null[0]
+        final val descriptor // cx.m42.superizer.app/AppManifest.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/AppManifest.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/AppManifest.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/AppManifest // cx.m42.superizer.app/AppManifest.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/AppManifest) // cx.m42.superizer.app/AppManifest.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.AppManifest){}[0]
+    }
+
+    final object Companion { // cx.m42.superizer.app/AppManifest.Companion|null[0]
+        final val $childSerializers // cx.m42.superizer.app/AppManifest.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppManifest> // cx.m42.superizer.app/AppManifest.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class cx.m42.superizer.app/AppMetadata { // cx.m42.superizer.app/AppMetadata|null[0]
+    constructor <init>(cx.m42.superizer.app/Localized, cx.m42.superizer.app/Localized? = ..., cx.m42.superizer.app/AppIcon = ..., kotlin/Boolean = ..., kotlin/String? = ...) // cx.m42.superizer.app/AppMetadata.<init>|<init>(cx.m42.superizer.app.Localized;cx.m42.superizer.app.Localized?;cx.m42.superizer.app.AppIcon;kotlin.Boolean;kotlin.String?){}[0]
+
+    final val category // cx.m42.superizer.app/AppMetadata.category|{}category[0]
+        final fun <get-category>(): kotlin/String? // cx.m42.superizer.app/AppMetadata.category.<get-category>|<get-category>(){}[0]
+    final val description // cx.m42.superizer.app/AppMetadata.description|{}description[0]
+        final fun <get-description>(): cx.m42.superizer.app/Localized? // cx.m42.superizer.app/AppMetadata.description.<get-description>|<get-description>(){}[0]
+    final val hidden // cx.m42.superizer.app/AppMetadata.hidden|{}hidden[0]
+        final fun <get-hidden>(): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.hidden.<get-hidden>|<get-hidden>(){}[0]
+    final val icon // cx.m42.superizer.app/AppMetadata.icon|{}icon[0]
+        final fun <get-icon>(): cx.m42.superizer.app/AppIcon // cx.m42.superizer.app/AppMetadata.icon.<get-icon>|<get-icon>(){}[0]
+    final val title // cx.m42.superizer.app/AppMetadata.title|{}title[0]
+        final fun <get-title>(): cx.m42.superizer.app/Localized // cx.m42.superizer.app/AppMetadata.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): cx.m42.superizer.app/Localized // cx.m42.superizer.app/AppMetadata.component1|component1(){}[0]
+    final fun component2(): cx.m42.superizer.app/Localized? // cx.m42.superizer.app/AppMetadata.component2|component2(){}[0]
+    final fun component3(): cx.m42.superizer.app/AppIcon // cx.m42.superizer.app/AppMetadata.component3|component3(){}[0]
+    final fun component4(): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // cx.m42.superizer.app/AppMetadata.component5|component5(){}[0]
+    final fun copy(cx.m42.superizer.app/Localized = ..., cx.m42.superizer.app/Localized? = ..., cx.m42.superizer.app/AppIcon = ..., kotlin/Boolean = ..., kotlin/String? = ...): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.app/AppMetadata.copy|copy(cx.m42.superizer.app.Localized;cx.m42.superizer.app.Localized?;cx.m42.superizer.app.AppIcon;kotlin.Boolean;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppMetadata.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.app/AppMetadata.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/AppMetadata> { // cx.m42.superizer.app/AppMetadata.$serializer|null[0]
+        final val descriptor // cx.m42.superizer.app/AppMetadata.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/AppMetadata.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/AppMetadata.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.app/AppMetadata.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/AppMetadata) // cx.m42.superizer.app/AppMetadata.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.AppMetadata){}[0]
+    }
+
+    final object Companion { // cx.m42.superizer.app/AppMetadata.Companion|null[0]
+        final val $childSerializers // cx.m42.superizer.app/AppMetadata.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppMetadata> // cx.m42.superizer.app/AppMetadata.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class cx.m42.superizer.app/Localized { // cx.m42.superizer.app/Localized|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin/String, kotlin/String>, kotlin/String) // cx.m42.superizer.app/Localized.<init>|<init>(kotlin.collections.Map<kotlin.String,kotlin.String>;kotlin.String){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/Localized.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.app/Localized.hashCode|hashCode(){}[0]
+    final fun resolve(kotlin/String): kotlin/String // cx.m42.superizer.app/Localized.resolve|resolve(kotlin.String){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.app/Localized.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/Localized> { // cx.m42.superizer.app/Localized.$serializer|null[0]
+        final val descriptor // cx.m42.superizer.app/Localized.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/Localized.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/Localized.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/Localized // cx.m42.superizer.app/Localized.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/Localized) // cx.m42.superizer.app/Localized.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.Localized){}[0]
+    }
+
+    final object Companion { // cx.m42.superizer.app/Localized.Companion|null[0]
+        final val $childSerializers // cx.m42.superizer.app/Localized.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/Localized> // cx.m42.superizer.app/Localized.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class cx.m42.superizer.registry/AppHandler { // cx.m42.superizer.registry/AppHandler|null[0]
+    constructor <init>(cx.m42.superizer.registry/AppRegistry, cx.m42.superizer.runtime/HostRuntimeFactory, kotlinx.coroutines.flow/MutableSharedFlow<cx.m42.superizer.event/SuperizerEvent>, kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle>, cx.m42.superizer.registry/SnapshotStore, cx.m42.superizer.runtime/Clock, kotlinx.coroutines/CoroutineScope, kotlin/Function0<kotlin.collections/Set<cx.m42.superizer.app/AppId>> = ...) // cx.m42.superizer.registry/AppHandler.<init>|<init>(cx.m42.superizer.registry.AppRegistry;cx.m42.superizer.runtime.HostRuntimeFactory;kotlinx.coroutines.flow.MutableSharedFlow<cx.m42.superizer.event.SuperizerEvent>;kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>;cx.m42.superizer.registry.SnapshotStore;cx.m42.superizer.runtime.Clock;kotlinx.coroutines.CoroutineScope;kotlin.Function0<kotlin.collections.Set<cx.m42.superizer.app.AppId>>){}[0]
+
+    final val current // cx.m42.superizer.registry/AppHandler.current|{}current[0]
+        final fun <get-current>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.registry/AppSession?> // cx.m42.superizer.registry/AppHandler.current.<get-current>|<get-current>(){}[0]
+    final val settingsSections // cx.m42.superizer.registry/AppHandler.settingsSections|{}settingsSections[0]
+        final fun <get-settingsSections>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<kotlin/Pair<cx.m42.superizer.app/AppId, kotlin/Function3<cx.m42.superizer.runtime/AppRuntime, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>>>> // cx.m42.superizer.registry/AppHandler.settingsSections.<get-settingsSections>|<get-settingsSections>(){}[0]
+    final val states // cx.m42.superizer.registry/AppHandler.states|{}states[0]
+        final fun <get-states>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Map<cx.m42.superizer.app/AppId, cx.m42.superizer.registry/AppState>> // cx.m42.superizer.registry/AppHandler.states.<get-states>|<get-states>(){}[0]
+
+    final fun appRuntime(cx.m42.superizer.app/AppId): cx.m42.superizer.runtime/AppRuntime? // cx.m42.superizer.registry/AppHandler.appRuntime|appRuntime(cx.m42.superizer.app.AppId){}[0]
+    final fun deepLinkHandler(cx.m42.superizer.app/AppId, kotlin/String): kotlin/Function1<kotlin.collections/Map<kotlin/String, kotlin/String>, cx.m42.superizer.app/AppConfig>? // cx.m42.superizer.registry/AppHandler.deepLinkHandler|deepLinkHandler(cx.m42.superizer.app.AppId;kotlin.String){}[0]
+    final fun isEnabled(cx.m42.superizer.app/AppId): kotlin/Boolean // cx.m42.superizer.registry/AppHandler.isEnabled|isEnabled(cx.m42.superizer.app.AppId){}[0]
+    final fun observeLifecycle() // cx.m42.superizer.registry/AppHandler.observeLifecycle|observeLifecycle(){}[0]
+    final suspend fun close(kotlin/Boolean = ...): kotlin/Boolean // cx.m42.superizer.registry/AppHandler.close|close(kotlin.Boolean){}[0]
+    final suspend fun disable(cx.m42.superizer.app/AppId): kotlin/Boolean // cx.m42.superizer.registry/AppHandler.disable|disable(cx.m42.superizer.app.AppId){}[0]
+    final suspend fun enable(cx.m42.superizer.app/AppId): kotlin/Boolean // cx.m42.superizer.registry/AppHandler.enable|enable(cx.m42.superizer.app.AppId){}[0]
+    final suspend fun enableAll() // cx.m42.superizer.registry/AppHandler.enableAll|enableAll(){}[0]
+    final suspend fun forgetSnapshot(cx.m42.superizer.app/AppId) // cx.m42.superizer.registry/AppHandler.forgetSnapshot|forgetSnapshot(cx.m42.superizer.app.AppId){}[0]
+    final suspend fun launch(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig = ..., kotlinx.serialization.json/JsonObject? = ..., kotlin/Boolean = ...): kotlin/Result<cx.m42.superizer.registry/AppSession> // cx.m42.superizer.registry/AppHandler.launch|launch(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig;kotlinx.serialization.json.JsonObject?;kotlin.Boolean){}[0]
+    final suspend fun restoreLastSession(): kotlin/Result<cx.m42.superizer.registry/AppSession>? // cx.m42.superizer.registry/AppHandler.restoreLastSession|restoreLastSession(){}[0]
+}
+
+final class cx.m42.superizer.registry/AppRegistry { // cx.m42.superizer.registry/AppRegistry|null[0]
+    constructor <init>(cx.m42.superizer.runtime/HostInfo, kotlinx.coroutines.flow/MutableSharedFlow<cx.m42.superizer.event/SuperizerEvent>? = ...) // cx.m42.superizer.registry/AppRegistry.<init>|<init>(cx.m42.superizer.runtime.HostInfo;kotlinx.coroutines.flow.MutableSharedFlow<cx.m42.superizer.event.SuperizerEvent>?){}[0]
+
+    final val apps // cx.m42.superizer.registry/AppRegistry.apps|{}apps[0]
+        final fun <get-apps>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer.app/SuperizerApp<*>>> // cx.m42.superizer.registry/AppRegistry.apps.<get-apps>|<get-apps>(){}[0]
+    final val manifests // cx.m42.superizer.registry/AppRegistry.manifests|{}manifests[0]
+        final fun <get-manifests>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<kotlin/Pair<cx.m42.superizer.app/AppManifest, cx.m42.superizer.registry/RegistrationOutcome>>> // cx.m42.superizer.registry/AppRegistry.manifests.<get-manifests>|<get-manifests>(){}[0]
+
+    final fun all(): kotlin.collections/List<cx.m42.superizer.app/SuperizerApp<*>> // cx.m42.superizer.registry/AppRegistry.all|all(){}[0]
+    final fun get(cx.m42.superizer.app/AppId): cx.m42.superizer.app/SuperizerApp<*>? // cx.m42.superizer.registry/AppRegistry.get|get(cx.m42.superizer.app.AppId){}[0]
+    final fun outcome(cx.m42.superizer.app/AppId): cx.m42.superizer.registry/RegistrationOutcome? // cx.m42.superizer.registry/AppRegistry.outcome|outcome(cx.m42.superizer.app.AppId){}[0]
+    final fun register(cx.m42.superizer.app/SuperizerApp<*>): kotlin/Boolean // cx.m42.superizer.registry/AppRegistry.register|register(cx.m42.superizer.app.SuperizerApp<*>){}[0]
+    final fun visible(kotlin.collections/Set<cx.m42.superizer.app/AppId>): kotlin.collections/List<cx.m42.superizer.app/SuperizerApp<*>> // cx.m42.superizer.registry/AppRegistry.visible|visible(kotlin.collections.Set<cx.m42.superizer.app.AppId>){}[0]
+}
+
+final class cx.m42.superizer.registry/AppSession { // cx.m42.superizer.registry/AppSession|null[0]
+    final val app // cx.m42.superizer.registry/AppSession.app|{}app[0]
+        final fun <get-app>(): cx.m42.superizer.app/SuperizerApp<*> // cx.m42.superizer.registry/AppSession.app.<get-app>|<get-app>(){}[0]
+    final val config // cx.m42.superizer.registry/AppSession.config|{}config[0]
+        final fun <get-config>(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.registry/AppSession.config.<get-config>|<get-config>(){}[0]
+    final val instance // cx.m42.superizer.registry/AppSession.instance|{}instance[0]
+        final fun <get-instance>(): cx.m42.superizer.app/AppInstance // cx.m42.superizer.registry/AppSession.instance.<get-instance>|<get-instance>(){}[0]
+    final val runtime // cx.m42.superizer.registry/AppSession.runtime|{}runtime[0]
+        final fun <get-runtime>(): cx.m42.superizer.runtime/InstanceRuntime // cx.m42.superizer.registry/AppSession.runtime.<get-runtime>|<get-runtime>(){}[0]
+    final val state // cx.m42.superizer.registry/AppSession.state|{}state[0]
+        final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.registry/AppState> // cx.m42.superizer.registry/AppSession.state.<get-state>|<get-state>(){}[0]
+}
+
+final class cx.m42.superizer.registry/SessionSnapshot { // cx.m42.superizer.registry/SessionSnapshot|null[0]
+    constructor <init>(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig, kotlinx.serialization.json/JsonObject?, kotlin/Long) // cx.m42.superizer.registry/SessionSnapshot.<init>|<init>(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig;kotlinx.serialization.json.JsonObject?;kotlin.Long){}[0]
+
+    final val appId // cx.m42.superizer.registry/SessionSnapshot.appId|{}appId[0]
+        final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.registry/SessionSnapshot.appId.<get-appId>|<get-appId>(){}[0]
+    final val config // cx.m42.superizer.registry/SessionSnapshot.config|{}config[0]
+        final fun <get-config>(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.registry/SessionSnapshot.config.<get-config>|<get-config>(){}[0]
+    final val savedAt // cx.m42.superizer.registry/SessionSnapshot.savedAt|{}savedAt[0]
+        final fun <get-savedAt>(): kotlin/Long // cx.m42.superizer.registry/SessionSnapshot.savedAt.<get-savedAt>|<get-savedAt>(){}[0]
+    final val state // cx.m42.superizer.registry/SessionSnapshot.state|{}state[0]
+        final fun <get-state>(): kotlinx.serialization.json/JsonObject? // cx.m42.superizer.registry/SessionSnapshot.state.<get-state>|<get-state>(){}[0]
+
+    final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.registry/SessionSnapshot.component1|component1(){}[0]
+    final fun component2(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.registry/SessionSnapshot.component2|component2(){}[0]
+    final fun component3(): kotlinx.serialization.json/JsonObject? // cx.m42.superizer.registry/SessionSnapshot.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // cx.m42.superizer.registry/SessionSnapshot.component4|component4(){}[0]
+    final fun copy(cx.m42.superizer.app/AppId = ..., cx.m42.superizer.app/AppConfig = ..., kotlinx.serialization.json/JsonObject? = ..., kotlin/Long = ...): cx.m42.superizer.registry/SessionSnapshot // cx.m42.superizer.registry/SessionSnapshot.copy|copy(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig;kotlinx.serialization.json.JsonObject?;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.registry/SessionSnapshot.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.registry/SessionSnapshot.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.registry/SessionSnapshot.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.registry/SessionSnapshot> { // cx.m42.superizer.registry/SessionSnapshot.$serializer|null[0]
+        final val descriptor // cx.m42.superizer.registry/SessionSnapshot.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.registry/SessionSnapshot.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.registry/SessionSnapshot.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.registry/SessionSnapshot // cx.m42.superizer.registry/SessionSnapshot.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.registry/SessionSnapshot) // cx.m42.superizer.registry/SessionSnapshot.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.registry.SessionSnapshot){}[0]
+    }
+
+    final object Companion { // cx.m42.superizer.registry/SessionSnapshot.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.registry/SessionSnapshot> // cx.m42.superizer.registry/SessionSnapshot.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class cx.m42.superizer.runtime/AppResult { // cx.m42.superizer.runtime/AppResult|null[0]
+    constructor <init>(kotlinx.serialization.json/JsonObject? = ...) // cx.m42.superizer.runtime/AppResult.<init>|<init>(kotlinx.serialization.json.JsonObject?){}[0]
+
+    final val payload // cx.m42.superizer.runtime/AppResult.payload|{}payload[0]
+        final fun <get-payload>(): kotlinx.serialization.json/JsonObject? // cx.m42.superizer.runtime/AppResult.payload.<get-payload>|<get-payload>(){}[0]
+
+    final fun component1(): kotlinx.serialization.json/JsonObject? // cx.m42.superizer.runtime/AppResult.component1|component1(){}[0]
+    final fun copy(kotlinx.serialization.json/JsonObject? = ...): cx.m42.superizer.runtime/AppResult // cx.m42.superizer.runtime/AppResult.copy|copy(kotlinx.serialization.json.JsonObject?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/AppResult.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/AppResult.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/AppResult.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.runtime/AppSummary { // cx.m42.superizer.runtime/AppSummary|null[0]
+    constructor <init>(cx.m42.superizer.app/AppId, kotlin/String, cx.m42.superizer.app/AppMetadata, cx.m42.superizer.registry/AppState, kotlin/Boolean) // cx.m42.superizer.runtime/AppSummary.<init>|<init>(cx.m42.superizer.app.AppId;kotlin.String;cx.m42.superizer.app.AppMetadata;cx.m42.superizer.registry.AppState;kotlin.Boolean){}[0]
+
+    final val id // cx.m42.superizer.runtime/AppSummary.id|{}id[0]
+        final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer.runtime/AppSummary.id.<get-id>|<get-id>(){}[0]
+    final val metadata // cx.m42.superizer.runtime/AppSummary.metadata|{}metadata[0]
+        final fun <get-metadata>(): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.runtime/AppSummary.metadata.<get-metadata>|<get-metadata>(){}[0]
+    final val state // cx.m42.superizer.runtime/AppSummary.state|{}state[0]
+        final fun <get-state>(): cx.m42.superizer.registry/AppState // cx.m42.superizer.runtime/AppSummary.state.<get-state>|<get-state>(){}[0]
+    final val unlocked // cx.m42.superizer.runtime/AppSummary.unlocked|{}unlocked[0]
+        final fun <get-unlocked>(): kotlin/Boolean // cx.m42.superizer.runtime/AppSummary.unlocked.<get-unlocked>|<get-unlocked>(){}[0]
+    final val version // cx.m42.superizer.runtime/AppSummary.version|{}version[0]
+        final fun <get-version>(): kotlin/String // cx.m42.superizer.runtime/AppSummary.version.<get-version>|<get-version>(){}[0]
+
+    final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.runtime/AppSummary.component1|component1(){}[0]
+    final fun component2(): kotlin/String // cx.m42.superizer.runtime/AppSummary.component2|component2(){}[0]
+    final fun component3(): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.runtime/AppSummary.component3|component3(){}[0]
+    final fun component4(): cx.m42.superizer.registry/AppState // cx.m42.superizer.runtime/AppSummary.component4|component4(){}[0]
+    final fun component5(): kotlin/Boolean // cx.m42.superizer.runtime/AppSummary.component5|component5(){}[0]
+    final fun copy(cx.m42.superizer.app/AppId = ..., kotlin/String = ..., cx.m42.superizer.app/AppMetadata = ..., cx.m42.superizer.registry/AppState = ..., kotlin/Boolean = ...): cx.m42.superizer.runtime/AppSummary // cx.m42.superizer.runtime/AppSummary.copy|copy(cx.m42.superizer.app.AppId;kotlin.String;cx.m42.superizer.app.AppMetadata;cx.m42.superizer.registry.AppState;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/AppSummary.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/AppSummary.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/AppSummary.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.runtime/AuthSession { // cx.m42.superizer.runtime/AuthSession|null[0]
+    constructor <init>(kotlin/String, kotlin/String?, kotlin/String?) // cx.m42.superizer.runtime/AuthSession.<init>|<init>(kotlin.String;kotlin.String?;kotlin.String?){}[0]
+
+    final val displayName // cx.m42.superizer.runtime/AuthSession.displayName|{}displayName[0]
+        final fun <get-displayName>(): kotlin/String? // cx.m42.superizer.runtime/AuthSession.displayName.<get-displayName>|<get-displayName>(){}[0]
+    final val token // cx.m42.superizer.runtime/AuthSession.token|{}token[0]
+        final fun <get-token>(): kotlin/String? // cx.m42.superizer.runtime/AuthSession.token.<get-token>|<get-token>(){}[0]
+    final val userId // cx.m42.superizer.runtime/AuthSession.userId|{}userId[0]
+        final fun <get-userId>(): kotlin/String // cx.m42.superizer.runtime/AuthSession.userId.<get-userId>|<get-userId>(){}[0]
+
+    final fun component1(): kotlin/String // cx.m42.superizer.runtime/AuthSession.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // cx.m42.superizer.runtime/AuthSession.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // cx.m42.superizer.runtime/AuthSession.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String? = ..., kotlin/String? = ...): cx.m42.superizer.runtime/AuthSession // cx.m42.superizer.runtime/AuthSession.copy|copy(kotlin.String;kotlin.String?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/AuthSession.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/AuthSession.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/AuthSession.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.runtime/HostInfo { // cx.m42.superizer.runtime/HostInfo|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String, cx.m42.superizer.runtime/Platform, kotlin/Int, kotlin/Boolean = ..., kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> = ...) // cx.m42.superizer.runtime/HostInfo.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;cx.m42.superizer.runtime.Platform;kotlin.Int;kotlin.Boolean;kotlin.collections.Set<cx.m42.superizer.runtime.ServiceKey<*>>){}[0]
+
+    final val build // cx.m42.superizer.runtime/HostInfo.build|{}build[0]
+        final fun <get-build>(): kotlin/String // cx.m42.superizer.runtime/HostInfo.build.<get-build>|<get-build>(){}[0]
+    final val contractVersion // cx.m42.superizer.runtime/HostInfo.contractVersion|{}contractVersion[0]
+        final fun <get-contractVersion>(): kotlin/Int // cx.m42.superizer.runtime/HostInfo.contractVersion.<get-contractVersion>|<get-contractVersion>(){}[0]
+    final val debug // cx.m42.superizer.runtime/HostInfo.debug|{}debug[0]
+        final fun <get-debug>(): kotlin/Boolean // cx.m42.superizer.runtime/HostInfo.debug.<get-debug>|<get-debug>(){}[0]
+    final val name // cx.m42.superizer.runtime/HostInfo.name|{}name[0]
+        final fun <get-name>(): kotlin/String // cx.m42.superizer.runtime/HostInfo.name.<get-name>|<get-name>(){}[0]
+    final val platform // cx.m42.superizer.runtime/HostInfo.platform|{}platform[0]
+        final fun <get-platform>(): cx.m42.superizer.runtime/Platform // cx.m42.superizer.runtime/HostInfo.platform.<get-platform>|<get-platform>(){}[0]
+    final val services // cx.m42.superizer.runtime/HostInfo.services|{}services[0]
+        final fun <get-services>(): kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> // cx.m42.superizer.runtime/HostInfo.services.<get-services>|<get-services>(){}[0]
+    final val version // cx.m42.superizer.runtime/HostInfo.version|{}version[0]
+        final fun <get-version>(): kotlin/String // cx.m42.superizer.runtime/HostInfo.version.<get-version>|<get-version>(){}[0]
+
+    final fun component1(): kotlin/String // cx.m42.superizer.runtime/HostInfo.component1|component1(){}[0]
+    final fun component2(): kotlin/String // cx.m42.superizer.runtime/HostInfo.component2|component2(){}[0]
+    final fun component3(): kotlin/String // cx.m42.superizer.runtime/HostInfo.component3|component3(){}[0]
+    final fun component4(): cx.m42.superizer.runtime/Platform // cx.m42.superizer.runtime/HostInfo.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // cx.m42.superizer.runtime/HostInfo.component5|component5(){}[0]
+    final fun component6(): kotlin/Boolean // cx.m42.superizer.runtime/HostInfo.component6|component6(){}[0]
+    final fun component7(): kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> // cx.m42.superizer.runtime/HostInfo.component7|component7(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., cx.m42.superizer.runtime/Platform = ..., kotlin/Int = ..., kotlin/Boolean = ..., kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> = ...): cx.m42.superizer.runtime/HostInfo // cx.m42.superizer.runtime/HostInfo.copy|copy(kotlin.String;kotlin.String;kotlin.String;cx.m42.superizer.runtime.Platform;kotlin.Int;kotlin.Boolean;kotlin.collections.Set<cx.m42.superizer.runtime.ServiceKey<*>>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/HostInfo.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/HostInfo.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/HostInfo.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.runtime/NetworkException : kotlin/Exception { // cx.m42.superizer.runtime/NetworkException|null[0]
+    constructor <init>(kotlin/Int?, kotlin/String, kotlin/Throwable? = ...) // cx.m42.superizer.runtime/NetworkException.<init>|<init>(kotlin.Int?;kotlin.String;kotlin.Throwable?){}[0]
+
+    final val status // cx.m42.superizer.runtime/NetworkException.status|{}status[0]
+        final fun <get-status>(): kotlin/Int? // cx.m42.superizer.runtime/NetworkException.status.<get-status>|<get-status>(){}[0]
+}
+
+final class cx.m42.superizer.runtime/NetworkRequest { // cx.m42.superizer.runtime/NetworkRequest|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ..., kotlin/String? = ..., kotlin/String? = ...) // cx.m42.superizer.runtime/NetworkRequest.<init>|<init>(kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>;kotlin.String?;kotlin.String?){}[0]
+
+    final val body // cx.m42.superizer.runtime/NetworkRequest.body|{}body[0]
+        final fun <get-body>(): kotlin/String? // cx.m42.superizer.runtime/NetworkRequest.body.<get-body>|<get-body>(){}[0]
+    final val contentType // cx.m42.superizer.runtime/NetworkRequest.contentType|{}contentType[0]
+        final fun <get-contentType>(): kotlin/String? // cx.m42.superizer.runtime/NetworkRequest.contentType.<get-contentType>|<get-contentType>(){}[0]
+    final val headers // cx.m42.superizer.runtime/NetworkRequest.headers|{}headers[0]
+        final fun <get-headers>(): kotlin.collections/Map<kotlin/String, kotlin/String> // cx.m42.superizer.runtime/NetworkRequest.headers.<get-headers>|<get-headers>(){}[0]
+    final val method // cx.m42.superizer.runtime/NetworkRequest.method|{}method[0]
+        final fun <get-method>(): kotlin/String // cx.m42.superizer.runtime/NetworkRequest.method.<get-method>|<get-method>(){}[0]
+    final val url // cx.m42.superizer.runtime/NetworkRequest.url|{}url[0]
+        final fun <get-url>(): kotlin/String // cx.m42.superizer.runtime/NetworkRequest.url.<get-url>|<get-url>(){}[0]
+
+    final fun component1(): kotlin/String // cx.m42.superizer.runtime/NetworkRequest.component1|component1(){}[0]
+    final fun component2(): kotlin/String // cx.m42.superizer.runtime/NetworkRequest.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/Map<kotlin/String, kotlin/String> // cx.m42.superizer.runtime/NetworkRequest.component3|component3(){}[0]
+    final fun component4(): kotlin/String? // cx.m42.superizer.runtime/NetworkRequest.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // cx.m42.superizer.runtime/NetworkRequest.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ..., kotlin/String? = ..., kotlin/String? = ...): cx.m42.superizer.runtime/NetworkRequest // cx.m42.superizer.runtime/NetworkRequest.copy|copy(kotlin.String;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>;kotlin.String?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/NetworkRequest.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/NetworkRequest.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/NetworkRequest.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.runtime/NetworkResponse { // cx.m42.superizer.runtime/NetworkResponse|null[0]
+    constructor <init>(kotlin/Int, kotlin/String, kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> = ...) // cx.m42.superizer.runtime/NetworkResponse.<init>|<init>(kotlin.Int;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.collections.List<kotlin.String>>){}[0]
+
+    final val body // cx.m42.superizer.runtime/NetworkResponse.body|{}body[0]
+        final fun <get-body>(): kotlin/String // cx.m42.superizer.runtime/NetworkResponse.body.<get-body>|<get-body>(){}[0]
+    final val headers // cx.m42.superizer.runtime/NetworkResponse.headers|{}headers[0]
+        final fun <get-headers>(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> // cx.m42.superizer.runtime/NetworkResponse.headers.<get-headers>|<get-headers>(){}[0]
+    final val isSuccess // cx.m42.superizer.runtime/NetworkResponse.isSuccess|{}isSuccess[0]
+        final fun <get-isSuccess>(): kotlin/Boolean // cx.m42.superizer.runtime/NetworkResponse.isSuccess.<get-isSuccess>|<get-isSuccess>(){}[0]
+    final val status // cx.m42.superizer.runtime/NetworkResponse.status|{}status[0]
+        final fun <get-status>(): kotlin/Int // cx.m42.superizer.runtime/NetworkResponse.status.<get-status>|<get-status>(){}[0]
+
+    final fun component1(): kotlin/Int // cx.m42.superizer.runtime/NetworkResponse.component1|component1(){}[0]
+    final fun component2(): kotlin/String // cx.m42.superizer.runtime/NetworkResponse.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> // cx.m42.superizer.runtime/NetworkResponse.component3|component3(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/String = ..., kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>> = ...): cx.m42.superizer.runtime/NetworkResponse // cx.m42.superizer.runtime/NetworkResponse.copy|copy(kotlin.Int;kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.collections.List<kotlin.String>>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/NetworkResponse.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/NetworkResponse.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/NetworkResponse.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer.runtime/PushMessage { // cx.m42.superizer.runtime/PushMessage|null[0]
+    constructor <init>(kotlin/String?, kotlinx.serialization.json/JsonObject, kotlin/String?, kotlin/Long) // cx.m42.superizer.runtime/PushMessage.<init>|<init>(kotlin.String?;kotlinx.serialization.json.JsonObject;kotlin.String?;kotlin.Long){}[0]
+
+    final val data // cx.m42.superizer.runtime/PushMessage.data|{}data[0]
+        final fun <get-data>(): kotlinx.serialization.json/JsonObject // cx.m42.superizer.runtime/PushMessage.data.<get-data>|<get-data>(){}[0]
+    final val link // cx.m42.superizer.runtime/PushMessage.link|{}link[0]
+        final fun <get-link>(): kotlin/String? // cx.m42.superizer.runtime/PushMessage.link.<get-link>|<get-link>(){}[0]
+    final val receivedAt // cx.m42.superizer.runtime/PushMessage.receivedAt|{}receivedAt[0]
+        final fun <get-receivedAt>(): kotlin/Long // cx.m42.superizer.runtime/PushMessage.receivedAt.<get-receivedAt>|<get-receivedAt>(){}[0]
+    final val topic // cx.m42.superizer.runtime/PushMessage.topic|{}topic[0]
+        final fun <get-topic>(): kotlin/String? // cx.m42.superizer.runtime/PushMessage.topic.<get-topic>|<get-topic>(){}[0]
+
+    final fun component1(): kotlin/String? // cx.m42.superizer.runtime/PushMessage.component1|component1(){}[0]
+    final fun component2(): kotlinx.serialization.json/JsonObject // cx.m42.superizer.runtime/PushMessage.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // cx.m42.superizer.runtime/PushMessage.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // cx.m42.superizer.runtime/PushMessage.component4|component4(){}[0]
+    final fun copy(kotlin/String? = ..., kotlinx.serialization.json/JsonObject = ..., kotlin/String? = ..., kotlin/Long = ...): cx.m42.superizer.runtime/PushMessage // cx.m42.superizer.runtime/PushMessage.copy|copy(kotlin.String?;kotlinx.serialization.json.JsonObject;kotlin.String?;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/PushMessage.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/PushMessage.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/PushMessage.toString|toString(){}[0]
+}
+
+final class cx.m42.superizer/LanguageOption { // cx.m42.superizer/LanguageOption|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // cx.m42.superizer/LanguageOption.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val nativeName // cx.m42.superizer/LanguageOption.nativeName|{}nativeName[0]
+        final fun <get-nativeName>(): kotlin/String // cx.m42.superizer/LanguageOption.nativeName.<get-nativeName>|<get-nativeName>(){}[0]
+    final val tag // cx.m42.superizer/LanguageOption.tag|{}tag[0]
+        final fun <get-tag>(): kotlin/String // cx.m42.superizer/LanguageOption.tag.<get-tag>|<get-tag>(){}[0]
+
+    final fun component1(): kotlin/String // cx.m42.superizer/LanguageOption.component1|component1(){}[0]
+    final fun component2(): kotlin/String // cx.m42.superizer/LanguageOption.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): cx.m42.superizer/LanguageOption // cx.m42.superizer/LanguageOption.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer/LanguageOption.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer/LanguageOption.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer/LanguageOption.toString|toString(){}[0]
+}
+
+final value class cx.m42.superizer.app/AppConfig { // cx.m42.superizer.app/AppConfig|null[0]
+    constructor <init>(kotlinx.serialization.json/JsonObject) // cx.m42.superizer.app/AppConfig.<init>|<init>(kotlinx.serialization.json.JsonObject){}[0]
+
+    final val json // cx.m42.superizer.app/AppConfig.json|{}json[0]
+        final fun <get-json>(): kotlinx.serialization.json/JsonObject // cx.m42.superizer.app/AppConfig.json.<get-json>|<get-json>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppConfig.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppConfig.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.app/AppConfig.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/AppConfig> { // cx.m42.superizer.app/AppConfig.$serializer|null[0]
+        final val descriptor // cx.m42.superizer.app/AppConfig.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/AppConfig.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/AppConfig.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/AppConfig // cx.m42.superizer.app/AppConfig.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/AppConfig) // cx.m42.superizer.app/AppConfig.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.AppConfig){}[0]
+    }
+
+    final object Companion { // cx.m42.superizer.app/AppConfig.Companion|null[0]
+        final val Empty // cx.m42.superizer.app/AppConfig.Companion.Empty|{}Empty[0]
+            final fun <get-Empty>(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.app/AppConfig.Companion.Empty.<get-Empty>|<get-Empty>(){}[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppConfig> // cx.m42.superizer.app/AppConfig.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final value class cx.m42.superizer.app/AppId { // cx.m42.superizer.app/AppId|null[0]
+    constructor <init>(kotlin/String) // cx.m42.superizer.app/AppId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // cx.m42.superizer.app/AppId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // cx.m42.superizer.app/AppId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.app/AppId.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.app/AppId> { // cx.m42.superizer.app/AppId.$serializer|null[0]
+        final val descriptor // cx.m42.superizer.app/AppId.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.app/AppId.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.app/AppId.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.app/AppId // cx.m42.superizer.app/AppId.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.app/AppId) // cx.m42.superizer.app/AppId.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.app.AppId){}[0]
+    }
+
+    final object Companion { // cx.m42.superizer.app/AppId.Companion|null[0]
+        final fun parseOrNull(kotlin/String?): cx.m42.superizer.app/AppId? // cx.m42.superizer.app/AppId.Companion.parseOrNull|parseOrNull(kotlin.String?){}[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.app/AppId> // cx.m42.superizer.app/AppId.Companion.serializer|serializer(){}[0]
+    }
+}
+
+sealed class cx.m42.superizer.runtime/NavigationError : kotlin/Exception { // cx.m42.superizer.runtime/NavigationError|null[0]
+    final class Locked : cx.m42.superizer.runtime/NavigationError { // cx.m42.superizer.runtime/NavigationError.Locked|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.runtime/NavigationError.Locked.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val id // cx.m42.superizer.runtime/NavigationError.Locked.id|{}id[0]
+            final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer.runtime/NavigationError.Locked.id.<get-id>|<get-id>(){}[0]
+    }
+
+    final class UnknownApp : cx.m42.superizer.runtime/NavigationError { // cx.m42.superizer.runtime/NavigationError.UnknownApp|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.runtime/NavigationError.UnknownApp.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val id // cx.m42.superizer.runtime/NavigationError.UnknownApp.id|{}id[0]
+            final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer.runtime/NavigationError.UnknownApp.id.<get-id>|<get-id>(){}[0]
+    }
+
+    final class Vetoed : cx.m42.superizer.runtime/NavigationError { // cx.m42.superizer.runtime/NavigationError.Vetoed|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.runtime/NavigationError.Vetoed.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val id // cx.m42.superizer.runtime/NavigationError.Vetoed.id|{}id[0]
+            final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer.runtime/NavigationError.Vetoed.id.<get-id>|<get-id>(){}[0]
+    }
+}
+
+final object cx.m42.superizer.runtime/ServiceKeySerializer : kotlinx.serialization/KSerializer<cx.m42.superizer.runtime/ServiceKey<*>> { // cx.m42.superizer.runtime/ServiceKeySerializer|null[0]
+    final val descriptor // cx.m42.superizer.runtime/ServiceKeySerializer.descriptor|{}descriptor[0]
+        final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.runtime/ServiceKeySerializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+    final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.runtime/ServiceKey<*> // cx.m42.superizer.runtime/ServiceKeySerializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+    final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.runtime/ServiceKey<*>) // cx.m42.superizer.runtime/ServiceKeySerializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.runtime.ServiceKey<*>){}[0]
+}
+
+final object cx.m42.superizer/SuperizerContract { // cx.m42.superizer/SuperizerContract|null[0]
+    final const val VERSION // cx.m42.superizer/SuperizerContract.VERSION|{}VERSION[0]
+        final fun <get-VERSION>(): kotlin/Int // cx.m42.superizer/SuperizerContract.VERSION.<get-VERSION>|<get-VERSION>(){}[0]
+}
+
+final val cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop|#static{}cx_m42_superizer_activation_Activation$stableprop[0]
+final val cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop|#static{}cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop[0]
+final val cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop|#static{}cx_m42_superizer_activation_ActivationResult_Rejected$stableprop[0]
+final val cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop|#static{}cx_m42_superizer_activation_ActivationResult_Success$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop|#static{}cx_m42_superizer_app_AppChrome$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppConfigSpec$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppConfigSpec$stableprop|#static{}cx_m42_superizer_app_AppConfigSpec$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppConfig_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppConfig_$serializer$stableprop|#static{}cx_m42_superizer_app_AppConfig_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter$stableprop|#static{}cx_m42_superizer_app_AppIcon_Letter$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter_$serializer$stableprop|#static{}cx_m42_superizer_app_AppIcon_Letter_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named$stableprop|#static{}cx_m42_superizer_app_AppIcon_Named$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named_$serializer$stableprop|#static{}cx_m42_superizer_app_AppIcon_Named_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path$stableprop|#static{}cx_m42_superizer_app_AppIcon_Path$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path_$serializer$stableprop|#static{}cx_m42_superizer_app_AppIcon_Path_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppId_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppId_$serializer$stableprop|#static{}cx_m42_superizer_app_AppId_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppInstance$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppInstance$stableprop|#static{}cx_m42_superizer_app_AppInstance$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppManifest$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppManifest$stableprop|#static{}cx_m42_superizer_app_AppManifest$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppManifest_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppManifest_$serializer$stableprop|#static{}cx_m42_superizer_app_AppManifest_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata$stableprop|#static{}cx_m42_superizer_app_AppMetadata$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata_$serializer$stableprop|#static{}cx_m42_superizer_app_AppMetadata_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_Localized$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_Localized$stableprop|#static{}cx_m42_superizer_app_Localized$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_Localized_$serializer$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_Localized_$serializer$stableprop|#static{}cx_m42_superizer_app_Localized_$serializer$stableprop[0]
+final val cx.m42.superizer.app/cx_m42_superizer_app_SuperizerApp$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_SuperizerApp$stableprop|#static{}cx_m42_superizer_app_SuperizerApp$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Activated$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Active$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Background$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Closed$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Configured$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Configured$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Configured$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Crashed$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Crashed$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Crashed$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Created$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Created$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Created$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_DeepLinkUnmatched$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_DeepLinkUnmatched$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_DeepLinkUnmatched$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disabled$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disabled$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Disabled$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disposed$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disposed$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Disposed$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Enabled$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Enabled$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Enabled$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Launched$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Registered$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Reset$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Restored$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RuntimeCreated$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RuntimeCreated$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_RuntimeCreated$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_SetupMismatch$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_SetupMismatch$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_SetupMismatch$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Unlocked$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Unlocked$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Unlocked$stableprop[0]
+final val cx.m42.superizer.registry/cx_m42_superizer_registry_AppHandler$stableprop // cx.m42.superizer.registry/cx_m42_superizer_registry_AppHandler$stableprop|#static{}cx_m42_superizer_registry_AppHandler$stableprop[0]
+final val cx.m42.superizer.registry/cx_m42_superizer_registry_AppRegistry$stableprop // cx.m42.superizer.registry/cx_m42_superizer_registry_AppRegistry$stableprop|#static{}cx_m42_superizer_registry_AppRegistry$stableprop[0]
+final val cx.m42.superizer.registry/cx_m42_superizer_registry_AppSession$stableprop // cx.m42.superizer.registry/cx_m42_superizer_registry_AppSession$stableprop|#static{}cx_m42_superizer_registry_AppSession$stableprop[0]
+final val cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Accepted$stableprop // cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Accepted$stableprop|#static{}cx_m42_superizer_registry_RegistrationOutcome_Accepted$stableprop[0]
+final val cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Rejected$stableprop // cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Rejected$stableprop|#static{}cx_m42_superizer_registry_RegistrationOutcome_Rejected$stableprop[0]
+final val cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot$stableprop // cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot$stableprop|#static{}cx_m42_superizer_registry_SessionSnapshot$stableprop[0]
+final val cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot_$serializer$stableprop // cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot_$serializer$stableprop|#static{}cx_m42_superizer_registry_SessionSnapshot_$serializer$stableprop[0]
+final val cx.m42.superizer.runtime/LenientJson // cx.m42.superizer.runtime/LenientJson|{}LenientJson[0]
+    final fun <get-LenientJson>(): kotlinx.serialization.json/Json // cx.m42.superizer.runtime/LenientJson.<get-LenientJson>|<get-LenientJson>(){}[0]
+final val cx.m42.superizer.runtime/LocalAppRuntime // cx.m42.superizer.runtime/LocalAppRuntime|{}LocalAppRuntime[0]
+    final fun <get-LocalAppRuntime>(): androidx.compose.runtime/ProvidableCompositionLocal<cx.m42.superizer.runtime/InstanceRuntime> // cx.m42.superizer.runtime/LocalAppRuntime.<get-LocalAppRuntime>|<get-LocalAppRuntime>(){}[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppResult$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppResult$stableprop|#static{}cx_m42_superizer_runtime_AppResult$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppSummary$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppSummary$stableprop|#static{}cx_m42_superizer_runtime_AppSummary$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_AuthSession$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_AuthSession$stableprop|#static{}cx_m42_superizer_runtime_AuthSession$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_HostInfo$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_HostInfo$stableprop|#static{}cx_m42_superizer_runtime_HostInfo$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError$stableprop|#static{}cx_m42_superizer_runtime_NavigationError$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Locked$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Locked$stableprop|#static{}cx_m42_superizer_runtime_NavigationError_Locked$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_UnknownApp$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_UnknownApp$stableprop|#static{}cx_m42_superizer_runtime_NavigationError_UnknownApp$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Vetoed$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Vetoed$stableprop|#static{}cx_m42_superizer_runtime_NavigationError_Vetoed$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop|#static{}cx_m42_superizer_runtime_NetworkException$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop|#static{}cx_m42_superizer_runtime_NetworkRequest$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop|#static{}cx_m42_superizer_runtime_NetworkResponse$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop|#static{}cx_m42_superizer_runtime_PushMessage$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop|#static{}cx_m42_superizer_runtime_ServiceKey$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKeySerializer$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKeySerializer$stableprop|#static{}cx_m42_superizer_runtime_ServiceKeySerializer$stableprop[0]
+final val cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop // cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop|#static{}cx_m42_superizer_LanguageOption$stableprop[0]
+final val cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop // cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop|#static{}cx_m42_superizer_ShellCommand_Close$stableprop[0]
+final val cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop // cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop|#static{}cx_m42_superizer_ShellCommand_OpenApp$stableprop[0]
+final val cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenSettings$stableprop // cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenSettings$stableprop|#static{}cx_m42_superizer_ShellCommand_OpenSettings$stableprop[0]
+final val cx.m42.superizer/cx_m42_superizer_SuperizerContract$stableprop // cx.m42.superizer/cx_m42_superizer_SuperizerContract$stableprop|#static{}cx_m42_superizer_SuperizerContract$stableprop[0]
+
+final fun (kotlinx.serialization.json/JsonObject).cx.m42.superizer.app/asConfig(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.app/asConfig|asConfig@kotlinx.serialization.json.JsonObject(){}[0]
+final fun (kotlinx.serialization.json/JsonObject).cx.m42.superizer.app/schemaVersion(kotlin/Int): kotlin/Int // cx.m42.superizer.app/schemaVersion|schemaVersion@kotlinx.serialization.json.JsonObject(kotlin.Int){}[0]
+final fun (kotlinx.serialization.json/JsonObject).cx.m42.superizer.app/schemaVersionOrNull(): kotlin/Int? // cx.m42.superizer.app/schemaVersionOrNull|schemaVersionOrNull@kotlinx.serialization.json.JsonObject(){}[0]
+final fun <#A: kotlin/Any> (cx.m42.superizer.runtime/AppRuntime).cx.m42.superizer.runtime/require(cx.m42.superizer.runtime/ServiceKey<#A>): #A // cx.m42.superizer.runtime/require|require@cx.m42.superizer.runtime.AppRuntime(cx.m42.superizer.runtime.ServiceKey<0:0>){0§<kotlin.Any>}[0]
+final fun cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop_getter|cx_m42_superizer_activation_Activation$stableprop_getter(){}[0]
+final fun cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop_getter|cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop_getter(){}[0]
+final fun cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop_getter|cx_m42_superizer_activation_ActivationResult_Rejected$stableprop_getter(){}[0]
+final fun cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop_getter|cx_m42_superizer_activation_ActivationResult_Success$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop_getter|cx_m42_superizer_app_AppChrome$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppConfigSpec$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppConfigSpec$stableprop_getter|cx_m42_superizer_app_AppConfigSpec$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppConfig_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppConfig_$serializer$stableprop_getter|cx_m42_superizer_app_AppConfig_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter$stableprop_getter|cx_m42_superizer_app_AppIcon_Letter$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Letter_$serializer$stableprop_getter|cx_m42_superizer_app_AppIcon_Letter_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named$stableprop_getter|cx_m42_superizer_app_AppIcon_Named$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Named_$serializer$stableprop_getter|cx_m42_superizer_app_AppIcon_Named_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path$stableprop_getter|cx_m42_superizer_app_AppIcon_Path$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppIcon_Path_$serializer$stableprop_getter|cx_m42_superizer_app_AppIcon_Path_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppId_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppId_$serializer$stableprop_getter|cx_m42_superizer_app_AppId_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppInstance$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppInstance$stableprop_getter|cx_m42_superizer_app_AppInstance$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppManifest$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppManifest$stableprop_getter|cx_m42_superizer_app_AppManifest$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppManifest_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppManifest_$serializer$stableprop_getter|cx_m42_superizer_app_AppManifest_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata$stableprop_getter|cx_m42_superizer_app_AppMetadata$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppMetadata_$serializer$stableprop_getter|cx_m42_superizer_app_AppMetadata_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_Localized$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_Localized$stableprop_getter|cx_m42_superizer_app_Localized$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_Localized_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_Localized_$serializer$stableprop_getter|cx_m42_superizer_app_Localized_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/cx_m42_superizer_app_SuperizerApp$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_SuperizerApp$stableprop_getter|cx_m42_superizer_app_SuperizerApp$stableprop_getter(){}[0]
+final fun cx.m42.superizer.app/localized(kotlin/Array<out kotlin/Pair<kotlin/String, kotlin/String>>...): cx.m42.superizer.app/Localized // cx.m42.superizer.app/localized|localized(kotlin.Array<out|kotlin.Pair<kotlin.String,kotlin.String>>...){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Activated$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Active$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Background$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Closed$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Configured$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Configured$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Configured$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Crashed$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Crashed$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Crashed$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Created$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Created$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Created$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_DeepLinkUnmatched$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_DeepLinkUnmatched$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_DeepLinkUnmatched$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disabled$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disabled$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Disabled$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disposed$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Disposed$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Disposed$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Enabled$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Enabled$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Enabled$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Launched$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Registered$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Reset$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Restored$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RuntimeCreated$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RuntimeCreated$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_RuntimeCreated$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_SetupMismatch$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_SetupMismatch$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_SetupMismatch$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Unlocked$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Unlocked$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Unlocked$stableprop_getter(){}[0]
+final fun cx.m42.superizer.registry/cx_m42_superizer_registry_AppHandler$stableprop_getter(): kotlin/Int // cx.m42.superizer.registry/cx_m42_superizer_registry_AppHandler$stableprop_getter|cx_m42_superizer_registry_AppHandler$stableprop_getter(){}[0]
+final fun cx.m42.superizer.registry/cx_m42_superizer_registry_AppRegistry$stableprop_getter(): kotlin/Int // cx.m42.superizer.registry/cx_m42_superizer_registry_AppRegistry$stableprop_getter|cx_m42_superizer_registry_AppRegistry$stableprop_getter(){}[0]
+final fun cx.m42.superizer.registry/cx_m42_superizer_registry_AppSession$stableprop_getter(): kotlin/Int // cx.m42.superizer.registry/cx_m42_superizer_registry_AppSession$stableprop_getter|cx_m42_superizer_registry_AppSession$stableprop_getter(){}[0]
+final fun cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Accepted$stableprop_getter(): kotlin/Int // cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Accepted$stableprop_getter|cx_m42_superizer_registry_RegistrationOutcome_Accepted$stableprop_getter(){}[0]
+final fun cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Rejected$stableprop_getter(): kotlin/Int // cx.m42.superizer.registry/cx_m42_superizer_registry_RegistrationOutcome_Rejected$stableprop_getter|cx_m42_superizer_registry_RegistrationOutcome_Rejected$stableprop_getter(){}[0]
+final fun cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot$stableprop_getter(): kotlin/Int // cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot$stableprop_getter|cx_m42_superizer_registry_SessionSnapshot$stableprop_getter(){}[0]
+final fun cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.registry/cx_m42_superizer_registry_SessionSnapshot_$serializer$stableprop_getter|cx_m42_superizer_registry_SessionSnapshot_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppResult$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppResult$stableprop_getter|cx_m42_superizer_runtime_AppResult$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppSummary$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_AppSummary$stableprop_getter|cx_m42_superizer_runtime_AppSummary$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_AuthSession$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_AuthSession$stableprop_getter|cx_m42_superizer_runtime_AuthSession$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_HostInfo$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_HostInfo$stableprop_getter|cx_m42_superizer_runtime_HostInfo$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError$stableprop_getter|cx_m42_superizer_runtime_NavigationError$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Locked$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Locked$stableprop_getter|cx_m42_superizer_runtime_NavigationError_Locked$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_UnknownApp$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_UnknownApp$stableprop_getter|cx_m42_superizer_runtime_NavigationError_UnknownApp$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Vetoed$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Vetoed$stableprop_getter|cx_m42_superizer_runtime_NavigationError_Vetoed$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop_getter|cx_m42_superizer_runtime_NetworkException$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop_getter|cx_m42_superizer_runtime_NetworkRequest$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop_getter|cx_m42_superizer_runtime_NetworkResponse$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop_getter|cx_m42_superizer_runtime_PushMessage$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop_getter|cx_m42_superizer_runtime_ServiceKey$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKeySerializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKeySerializer$stableprop_getter|cx_m42_superizer_runtime_ServiceKeySerializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop_getter|cx_m42_superizer_LanguageOption$stableprop_getter(){}[0]
+final fun cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop_getter|cx_m42_superizer_ShellCommand_Close$stableprop_getter(){}[0]
+final fun cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop_getter|cx_m42_superizer_ShellCommand_OpenApp$stableprop_getter(){}[0]
+final fun cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenSettings$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenSettings$stableprop_getter|cx_m42_superizer_ShellCommand_OpenSettings$stableprop_getter(){}[0]
+final fun cx.m42.superizer/cx_m42_superizer_SuperizerContract$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_SuperizerContract$stableprop_getter|cx_m42_superizer_SuperizerContract$stableprop_getter(){}[0]
+final inline fun <#A: reified kotlin/Any?> (cx.m42.superizer.runtime/NetworkResponse).cx.m42.superizer.runtime/decode(kotlinx.serialization.json/Json = ...): #A // cx.m42.superizer.runtime/decode|decode@cx.m42.superizer.runtime.NetworkResponse(kotlinx.serialization.json.Json){0§<kotlin.Any?>}[0]
+final suspend inline fun <#A: reified kotlin/Any?> (cx.m42.superizer.runtime/StorageService).cx.m42.superizer.runtime/getJson(kotlin/String, kotlinx.serialization.json/Json = ...): #A? // cx.m42.superizer.runtime/getJson|getJson@cx.m42.superizer.runtime.StorageService(kotlin.String;kotlinx.serialization.json.Json){0§<kotlin.Any?>}[0]
+final suspend inline fun <#A: reified kotlin/Any?> (cx.m42.superizer.runtime/StorageService).cx.m42.superizer.runtime/setJson(kotlin/String, #A, kotlinx.serialization.json/Json = ...) // cx.m42.superizer.runtime/setJson|setJson@cx.m42.superizer.runtime.StorageService(kotlin.String;0:0;kotlinx.serialization.json.Json){0§<kotlin.Any?>}[0]

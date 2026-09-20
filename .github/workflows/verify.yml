@@ -1,0 +1,41 @@
+# The same script a person runs locally (12 §4.6). One file, one command — a green CI and a green
+# laptop have to mean the same thing, and they only do when they run the same thing.
+name: verify
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Chromium for the wasm tests (Karma) and the web smoke test. Playwright's own, so the two
+      # agree about which browser they are talking to.
+      - name: Install Chromium
+        run: npx --yes playwright@1.49.0 install --with-deps chromium
+
+      - name: Verify
+        run: ./scripts/verify.sh
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verify
+          path: build/verify/

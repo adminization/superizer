@@ -1,0 +1,227 @@
+public final class cx/m42/superizer/ui/components/AppScaffoldKt {
+	public static final fun AppScaffold (Ljava/lang/String;Ljava/util/List;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalDrawerDismiss ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
+public final class cx/m42/superizer/ui/components/ButtonSize : java/lang/Enum {
+	public static final field Default Lcx/m42/superizer/ui/components/ButtonSize;
+	public static final field Lg Lcx/m42/superizer/ui/components/ButtonSize;
+	public static final field Sm Lcx/m42/superizer/ui/components/ButtonSize;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ui/components/ButtonSize;
+	public static fun values ()[Lcx/m42/superizer/ui/components/ButtonSize;
+}
+
+public final class cx/m42/superizer/ui/components/ButtonVariant : java/lang/Enum {
+	public static final field Accent Lcx/m42/superizer/ui/components/ButtonVariant;
+	public static final field Default Lcx/m42/superizer/ui/components/ButtonVariant;
+	public static final field Destructive Lcx/m42/superizer/ui/components/ButtonVariant;
+	public static final field Ghost Lcx/m42/superizer/ui/components/ButtonVariant;
+	public static final field Outline Lcx/m42/superizer/ui/components/ButtonVariant;
+	public static final field Secondary Lcx/m42/superizer/ui/components/ButtonVariant;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ui/components/ButtonVariant;
+	public static fun values ()[Lcx/m42/superizer/ui/components/ButtonVariant;
+}
+
+public final class cx/m42/superizer/ui/components/ComposableSingletons$AppScaffoldKt {
+	public static final field INSTANCE Lcx/m42/superizer/ui/components/ComposableSingletons$AppScaffoldKt;
+	public fun <init> ()V
+	public final fun getLambda$-1013826200$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-833960681$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$895078435$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class cx/m42/superizer/ui/components/IconsKt {
+	public static final fun AppIconGlyph-BazWgJc (Lcx/m42/superizer/app/AppIcon;JFCLandroidx/compose/runtime/Composer;II)V
+	public static final fun AppsIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun BackIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun BackspaceIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun BurgerIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun CalculatorIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun CheckIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun CurrencyIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun QrIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun SettingsIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun getIconSize ()F
+}
+
+public final class cx/m42/superizer/ui/components/MenuEntry {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ZZ)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlin/jvm/functions/Function0;
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun copy (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ZZ)Lcx/m42/superizer/ui/components/MenuEntry;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ui/components/MenuEntry;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ZZILjava/lang/Object;)Lcx/m42/superizer/ui/components/MenuEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDanger ()Z
+	public final fun getEnabled ()Z
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/components/WidgetsKt {
+	public static final fun AppButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLcx/m42/superizer/ui/components/ButtonVariant;Lcx/m42/superizer/ui/components/ButtonSize;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AppTextField-0vH8DBg (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZFLandroidx/compose/ui/text/TextStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ChoiceRow (Ljava/lang/String;ZLkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
+	public static final fun Divider (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun IconButton (Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun RowDivider (Landroidx/compose/runtime/Composer;I)V
+	public static final fun Section (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Switch (ZLjava/lang/String;Landroidx/compose/runtime/Composer;I)V
+	public static final fun ToggleRow (Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
+}
+
+public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
+	public abstract fun getActivate ()Ljava/lang/String;
+	public abstract fun getActivateApply ()Ljava/lang/String;
+	public abstract fun getActivateCameraNote ()Ljava/lang/String;
+	public abstract fun getActivateErrorExpired ()Ljava/lang/String;
+	public abstract fun getActivateErrorMalformed ()Ljava/lang/String;
+	public abstract fun getActivateErrorUnknownApp ()Ljava/lang/String;
+	public abstract fun getActivateErrorUnknownCode ()Ljava/lang/String;
+	public abstract fun getActivateErrorUnsupported ()Ljava/lang/String;
+	public abstract fun getActivatePromoLabel ()Ljava/lang/String;
+	public abstract fun getActivateQrLabel ()Ljava/lang/String;
+	public abstract fun getAllApps ()Ljava/lang/String;
+	public abstract fun getBackAction ()Ljava/lang/String;
+	public abstract fun getCloseDialogBody ()Ljava/lang/String;
+	public abstract fun getCloseDialogConfirm ()Ljava/lang/String;
+	public abstract fun getCloseDialogStay ()Ljava/lang/String;
+	public abstract fun getCloseDialogTitle ()Ljava/lang/String;
+	public abstract fun getErrorBack ()Ljava/lang/String;
+	public abstract fun getErrorRetry ()Ljava/lang/String;
+	public abstract fun getErrorTitle ()Ljava/lang/String;
+	public abstract fun getLangTag ()Ljava/lang/String;
+	public abstract fun getMenu ()Ljava/lang/String;
+	public abstract fun getNoApps ()Ljava/lang/String;
+	public abstract fun getOpenMenu ()Ljava/lang/String;
+	public abstract fun getServiceApps ()Ljava/lang/String;
+	public abstract fun getServiceDisable ()Ljava/lang/String;
+	public abstract fun getServiceEnable ()Ljava/lang/String;
+	public abstract fun getServiceEvents ()Ljava/lang/String;
+	public abstract fun getServiceLock ()Ljava/lang/String;
+	public abstract fun getServiceLog ()Ljava/lang/String;
+	public abstract fun getServiceManifest ()Ljava/lang/String;
+	public abstract fun getServiceMenu ()Ljava/lang/String;
+	public abstract fun getServiceRejected ()Ljava/lang/String;
+	public abstract fun getServiceReset ()Ljava/lang/String;
+	public abstract fun getServiceResetConfirm ()Ljava/lang/String;
+	public abstract fun getServiceRun ()Ljava/lang/String;
+	public abstract fun getServiceRunWithConfig ()Ljava/lang/String;
+	public abstract fun getServiceSimulatePush ()Ljava/lang/String;
+	public abstract fun getServiceUnlock ()Ljava/lang/String;
+	public abstract fun getSettings ()Ljava/lang/String;
+	public abstract fun getSettingsAbout ()Ljava/lang/String;
+	public abstract fun getSettingsHaptics ()Ljava/lang/String;
+	public abstract fun getSettingsHapticsHint ()Ljava/lang/String;
+	public abstract fun getSettingsLanguage ()Ljava/lang/String;
+	public abstract fun getSettingsLanguageHint ()Ljava/lang/String;
+	public abstract fun getUngrouped ()Ljava/lang/String;
+	public abstract fun settingsBuild (Ljava/lang/String;)Ljava/lang/String;
+	public abstract fun version (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/i18n/HostStringsKt {
+	public static final fun getHostStringTables ()Ljava/util/Map;
+	public static final fun getHostStrings (Landroidx/compose/runtime/Composer;I)Lcx/m42/superizer/ui/i18n/HostStrings;
+	public static final fun getHostStringsFallback ()Lcx/m42/superizer/ui/i18n/HostStrings;
+	public static final fun getLocalHostStrings ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun hostStringsFor (Ljava/lang/String;)Lcx/m42/superizer/ui/i18n/HostStrings;
+}
+
+public final class cx/m42/superizer/ui/platform/BackHandler_desktopKt {
+	public static final fun SystemBackHandler (ZLkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class cx/m42/superizer/ui/screens/ActivateScreenKt {
+	public static final fun ActivateScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/ui/screens/AllAppsScreenKt {
+	public static final fun AllAppsScreen (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/ui/screens/HostErrorScreenKt {
+	public static final fun HostErrorScreen (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/ui/screens/ServiceMenuScreenKt {
+	public static final fun ServiceMenuScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/ui/screens/SettingsScreenKt {
+	public static final fun SettingsScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShellKt {
+	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShellKt;
+	public fun <init> ()V
+	public final fun getLambda$-1261979799$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$1235512928$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public abstract interface class cx/m42/superizer/ui/shell/ShellDestination {
+}
+
+public final class cx/m42/superizer/ui/shell/ShellDestination$Activate : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/ui/shell/ShellDestination;)V
+	public final fun component1 ()Lcx/m42/superizer/ui/shell/ShellDestination;
+	public final fun copy (Lcx/m42/superizer/ui/shell/ShellDestination;)Lcx/m42/superizer/ui/shell/ShellDestination$Activate;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ui/shell/ShellDestination$Activate;Lcx/m42/superizer/ui/shell/ShellDestination;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$Activate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFrom ()Lcx/m42/superizer/ui/shell/ShellDestination;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/shell/ShellDestination$App : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/ui/shell/ShellDestination$App;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/ui/shell/ShellDestination$App;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$App;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/shell/ShellDestination$Home : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ShellDestination$Home;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/shell/ShellDestination$ServiceMenu : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ShellDestination$ServiceMenu;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/shell/ShellDestination$Settings : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/ui/shell/ShellDestination;)V
+	public final fun component1 ()Lcx/m42/superizer/ui/shell/ShellDestination;
+	public final fun copy (Lcx/m42/superizer/ui/shell/ShellDestination;)Lcx/m42/superizer/ui/shell/ShellDestination$Settings;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ui/shell/ShellDestination$Settings;Lcx/m42/superizer/ui/shell/ShellDestination;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$Settings;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFrom ()Lcx/m42/superizer/ui/shell/ShellDestination;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/shell/SuperizerShellKt {
+	public static final fun SuperizerShell (Lcx/m42/superizer/Superizer;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+

@@ -1,0 +1,1334 @@
+public abstract interface class cx/m42/superizer/ActivationPort {
+	public abstract fun apply-0E7RQCE (Lcx/m42/superizer/activation/Activation;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun fromDeepLink (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun fromPromo (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun fromQr (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/DiagnosticsPort {
+	public abstract fun getLog ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getRecentEvents ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun lock-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun reset-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun simulatePush (Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun unlock-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/HostSettingsPort {
+	public abstract fun chooseLanguage (Ljava/lang/String;)V
+	public abstract fun getHaptics ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getLangTag ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getLanguages ()Ljava/util/List;
+	public abstract fun setHaptics (Z)V
+}
+
+public final class cx/m42/superizer/LanguageOption {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/LanguageOption;
+	public static synthetic fun copy$default (Lcx/m42/superizer/LanguageOption;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/LanguageOption;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNativeName ()Ljava/lang/String;
+	public final fun getTag ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/RoutePort {
+	public abstract fun consume ()Ljava/lang/String;
+	public abstract fun deliver (Ljava/lang/String;)V
+	public abstract fun discard ()V
+	public abstract fun getRoute ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public abstract interface class cx/m42/superizer/ShellCommand {
+}
+
+public final class cx/m42/superizer/ShellCommand$Close : cx/m42/superizer/ShellCommand {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ShellCommand$Close;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ShellCommand$OpenApp : cx/m42/superizer/ShellCommand {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/ShellCommand$OpenApp;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/ShellCommand$OpenApp;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ShellCommand$OpenApp;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ShellCommand$OpenSettings : cx/m42/superizer/ShellCommand {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ShellCommand$OpenSettings;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/Superizer {
+	public static final field Companion Lcx/m42/superizer/Superizer$Companion;
+	public abstract fun getActivation ()Lcx/m42/superizer/ActivationPort;
+	public abstract fun getCommands ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun getDiagnostics ()Lcx/m42/superizer/DiagnosticsPort;
+	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun getHandler ()Lcx/m42/superizer/registry/AppHandler;
+	public abstract fun getHaptics ()Lcx/m42/superizer/runtime/HapticsService;
+	public abstract fun getHostInfo ()Lcx/m42/superizer/runtime/HostInfo;
+	public abstract fun getRegistry ()Lcx/m42/superizer/registry/AppRegistry;
+	public abstract fun getRoute ()Lcx/m42/superizer/RoutePort;
+	public abstract fun getSettings ()Lcx/m42/superizer/HostSettingsPort;
+	public abstract fun getUnlocked ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class cx/m42/superizer/Superizer$Companion {
+}
+
+public final class cx/m42/superizer/SuperizerContract {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/SuperizerContract;
+	public static final field VERSION I
+}
+
+public final class cx/m42/superizer/activation/Activation {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component3 ()Z
+	public final fun copy-2sr2Yis (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Z)Lcx/m42/superizer/activation/Activation;
+	public static synthetic fun copy-2sr2Yis$default (Lcx/m42/superizer/activation/Activation;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;ZILjava/lang/Object;)Lcx/m42/superizer/activation/Activation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppId-eVupTzA ()Ljava/lang/String;
+	public final fun getConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getUnlock ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/activation/ActivationResult {
+}
+
+public final class cx/m42/superizer/activation/ActivationResult$Command : java/lang/Enum {
+	public static final field OpenServiceMenu Lcx/m42/superizer/activation/ActivationResult$Command;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/activation/ActivationResult$Command;
+	public static fun values ()[Lcx/m42/superizer/activation/ActivationResult$Command;
+}
+
+public final class cx/m42/superizer/activation/ActivationResult$HostCommand : cx/m42/superizer/activation/ActivationResult {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/activation/ActivationResult$Command;)V
+	public final fun component1 ()Lcx/m42/superizer/activation/ActivationResult$Command;
+	public final fun copy (Lcx/m42/superizer/activation/ActivationResult$Command;)Lcx/m42/superizer/activation/ActivationResult$HostCommand;
+	public static synthetic fun copy$default (Lcx/m42/superizer/activation/ActivationResult$HostCommand;Lcx/m42/superizer/activation/ActivationResult$Command;ILjava/lang/Object;)Lcx/m42/superizer/activation/ActivationResult$HostCommand;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCommand ()Lcx/m42/superizer/activation/ActivationResult$Command;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/activation/ActivationResult$Reason : java/lang/Enum {
+	public static final field Expired Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public static final field Malformed Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public static final field UnknownApp Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public static final field UnknownCode Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public static final field UnsupportedSchema Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public static fun values ()[Lcx/m42/superizer/activation/ActivationResult$Reason;
+}
+
+public final class cx/m42/superizer/activation/ActivationResult$Rejected : cx/m42/superizer/activation/ActivationResult {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/activation/ActivationResult$Reason;)V
+	public final fun component1 ()Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public final fun copy (Lcx/m42/superizer/activation/ActivationResult$Reason;)Lcx/m42/superizer/activation/ActivationResult$Rejected;
+	public static synthetic fun copy$default (Lcx/m42/superizer/activation/ActivationResult$Rejected;Lcx/m42/superizer/activation/ActivationResult$Reason;ILjava/lang/Object;)Lcx/m42/superizer/activation/ActivationResult$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lcx/m42/superizer/activation/ActivationResult$Reason;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/activation/ActivationResult$Success : cx/m42/superizer/activation/ActivationResult {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/activation/Activation;)V
+	public final fun component1 ()Lcx/m42/superizer/activation/Activation;
+	public final fun copy (Lcx/m42/superizer/activation/Activation;)Lcx/m42/superizer/activation/ActivationResult$Success;
+	public static synthetic fun copy$default (Lcx/m42/superizer/activation/ActivationResult$Success;Lcx/m42/superizer/activation/Activation;ILjava/lang/Object;)Lcx/m42/superizer/activation/ActivationResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActivation ()Lcx/m42/superizer/activation/Activation;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/app/AppChrome {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Z)Lcx/m42/superizer/app/AppChrome;
+	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppChrome;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lcx/m42/superizer/app/AppChrome;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanGoBack ()Z
+	public final fun getSubtitle ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/app/AppConfig {
+	public static final field Companion Lcx/m42/superizer/app/AppConfig$Companion;
+	public static final synthetic fun box-impl (Lkotlinx/serialization/json/JsonObject;)Lcx/m42/superizer/app/AppConfig;
+	public static fun constructor-impl (Lkotlinx/serialization/json/JsonObject;)Lkotlinx/serialization/json/JsonObject;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Lkotlinx/serialization/json/JsonObject;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;)Z
+	public final fun getJson ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Lkotlinx/serialization/json/JsonObject;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Lkotlinx/serialization/json/JsonObject;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Lkotlinx/serialization/json/JsonObject;
+}
+
+public final synthetic class cx/m42/superizer/app/AppConfig$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/AppConfig$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-khDJ23M (Lkotlinx/serialization/encoding/Decoder;)Lkotlinx/serialization/json/JsonObject;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-ffJix5E (Lkotlinx/serialization/encoding/Encoder;Lkotlinx/serialization/json/JsonObject;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppConfig$Companion {
+	public final fun getEmpty-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppConfigKt {
+	public static final fun asConfig (Lkotlinx/serialization/json/JsonObject;)Lkotlinx/serialization/json/JsonObject;
+	public static final fun schemaVersion (Lkotlinx/serialization/json/JsonObject;I)I
+	public static final fun schemaVersionOrNull (Lkotlinx/serialization/json/JsonObject;)Ljava/lang/Integer;
+}
+
+public final class cx/m42/superizer/app/AppConfigSpec {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/app/AppConfigSpec$Companion;
+	public static final field SCHEMA_VERSION Ljava/lang/String;
+	public fun <init> (Lkotlinx/serialization/KSerializer;Ljava/lang/Object;IZLkotlin/jvm/functions/Function2;Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lkotlinx/serialization/KSerializer;Ljava/lang/Object;IZLkotlin/jvm/functions/Function2;Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun decode-BXQ2ZQ8 (Lkotlinx/serialization/json/JsonObject;)Ljava/lang/Object;
+	public final fun encode-khDJ23M (Ljava/lang/Object;)Lkotlinx/serialization/json/JsonObject;
+	public final fun getDefault ()Ljava/lang/Object;
+	public final fun getFallbackToDefault ()Z
+	public final fun getSchemaVersion ()I
+	public final fun getSerializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppConfigSpec$Companion {
+	public final fun getDefaultJson ()Lkotlinx/serialization/json/Json;
+	public final fun getNone ()Lcx/m42/superizer/app/AppConfigSpec;
+}
+
+public abstract interface class cx/m42/superizer/app/AppIcon {
+	public static final field Companion Lcx/m42/superizer/app/AppIcon$Companion;
+}
+
+public final class cx/m42/superizer/app/AppIcon$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppIcon$Letter : cx/m42/superizer/app/AppIcon {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/app/AppIcon$Letter$Companion;
+	public fun <init> (C)V
+	public final fun component1 ()C
+	public final fun copy (C)Lcx/m42/superizer/app/AppIcon$Letter;
+	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppIcon$Letter;CILjava/lang/Object;)Lcx/m42/superizer/app/AppIcon$Letter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChar ()C
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/app/AppIcon$Letter$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/AppIcon$Letter$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/app/AppIcon$Letter;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/app/AppIcon$Letter;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppIcon$Letter$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppIcon$Named : cx/m42/superizer/app/AppIcon {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/app/AppIcon$Named$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/app/AppIcon$Named;
+	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppIcon$Named;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/app/AppIcon$Named;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/app/AppIcon$Named$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/AppIcon$Named$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/app/AppIcon$Named;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/app/AppIcon$Named;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppIcon$Named$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppIcon$Path : cx/m42/superizer/app/AppIcon {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/app/AppIcon$Path$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/app/AppIcon$Path;
+	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppIcon$Path;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/app/AppIcon$Path;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSvgPath ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/app/AppIcon$Path$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/AppIcon$Path$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/app/AppIcon$Path;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/app/AppIcon$Path;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppIcon$Path$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppId {
+	public static final field Companion Lcx/m42/superizer/app/AppId$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcx/m42/superizer/app/AppId;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/app/AppId$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/AppId$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-tdLTqXY (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-WvMBCSM (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppId$Companion {
+	public final fun parseOrNull-ftmmx9o (Ljava/lang/String;)Ljava/lang/String;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class cx/m42/superizer/app/AppInstance {
+	public static final field $stable I
+	public fun <init> ()V
+	public abstract fun Content (Landroidx/compose/runtime/Composer;I)V
+	public fun dispose ()V
+	public fun getChrome ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun onBackground ()V
+	public fun onClose ()V
+	public fun onCloseRequested (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun onForeground ()V
+	public fun onLaunch (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun restore (Lkotlinx/serialization/json/JsonObject;)V
+	public fun saveState ()Lkotlinx/serialization/json/JsonObject;
+}
+
+public final class cx/m42/superizer/app/AppManifest {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/app/AppManifest$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()I
+	public final fun component4 ()Lcx/m42/superizer/app/AppMetadata;
+	public final fun component5 ()Ljava/util/Set;
+	public final fun component6 ()Ljava/util/Set;
+	public final fun component7 ()Ljava/util/Set;
+	public final fun component8 ()Ljava/util/Set;
+	public final fun copy-45xxAuc (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;)Lcx/m42/superizer/app/AppManifest;
+	public static synthetic fun copy-45xxAuc$default (Lcx/m42/superizer/app/AppManifest;Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;ILjava/lang/Object;)Lcx/m42/superizer/app/AppManifest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeepLinks ()Ljava/util/Set;
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+	public final fun getMetadata ()Lcx/m42/superizer/app/AppMetadata;
+	public final fun getMinHostContract ()I
+	public final fun getNetworkHosts ()Ljava/util/Set;
+	public final fun getPushTopics ()Ljava/util/Set;
+	public final fun getRequires ()Ljava/util/Set;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/app/AppManifest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/AppManifest$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/app/AppManifest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/app/AppManifest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppManifest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppManifestKt {
+	public static final fun localized ([Lkotlin/Pair;)Lcx/m42/superizer/app/Localized;
+}
+
+public final class cx/m42/superizer/app/AppMetadata {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/app/AppMetadata$Companion;
+	public fun <init> (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;)V
+	public synthetic fun <init> (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcx/m42/superizer/app/Localized;
+	public final fun component2 ()Lcx/m42/superizer/app/Localized;
+	public final fun component3 ()Lcx/m42/superizer/app/AppIcon;
+	public final fun component4 ()Z
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;)Lcx/m42/superizer/app/AppMetadata;
+	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppMetadata;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/app/AppMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCategory ()Ljava/lang/String;
+	public final fun getDescription ()Lcx/m42/superizer/app/Localized;
+	public final fun getHidden ()Z
+	public final fun getIcon ()Lcx/m42/superizer/app/AppIcon;
+	public final fun getTitle ()Lcx/m42/superizer/app/Localized;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/app/AppMetadata$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/AppMetadata$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/app/AppMetadata;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/app/AppMetadata;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/AppMetadata$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/app/AppSetupContext {
+	public abstract fun deepLink (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun getRuntime ()Lcx/m42/superizer/runtime/AppRuntime;
+	public abstract fun listener (Lkotlin/jvm/functions/Function2;)V
+	public abstract fun settingsSection (Lkotlin/jvm/functions/Function3;)V
+}
+
+public abstract interface class cx/m42/superizer/app/Disposable {
+	public abstract fun dispose ()V
+}
+
+public final class cx/m42/superizer/app/Localized {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/app/Localized$Companion;
+	public fun <init> (Ljava/util/Map;Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun resolve (Ljava/lang/String;)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/app/Localized$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/app/Localized$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/app/Localized;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/app/Localized;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/app/Localized$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class cx/m42/superizer/app/SuperizerApp {
+	public static final field $stable I
+	public fun <init> ()V
+	public abstract fun getConfigSpec ()Lcx/m42/superizer/app/AppConfigSpec;
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+	public abstract fun getManifest ()Lcx/m42/superizer/app/AppManifest;
+	public final fun getMetadata ()Lcx/m42/superizer/app/AppMetadata;
+	public final fun getVersion ()Ljava/lang/String;
+	public abstract fun launch (Lcx/m42/superizer/runtime/InstanceRuntime;Ljava/lang/Object;)Lcx/m42/superizer/app/AppInstance;
+	public fun setup (Lcx/m42/superizer/app/AppSetupContext;)V
+}
+
+public abstract interface class cx/m42/superizer/event/SuperizerEvent {
+	public abstract fun getAppId-oQ6rsvY ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Activated : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Activated;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$Activated;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Activated;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getSource ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Active : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Active;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Active;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Active;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Background : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oQ6rsvY ()Ljava/lang/String;
+	public final fun copy-EU_bkdE (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Background;
+	public static synthetic fun copy-EU_bkdE$default (Lcx/m42/superizer/event/SuperizerEvent$Background;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Background;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Closed : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Closed;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Closed;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Closed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$ConfigRejected : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy-2sr2Yis (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$ConfigRejected;
+	public static synthetic fun copy-2sr2Yis$default (Lcx/m42/superizer/event/SuperizerEvent$ConfigRejected;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$ConfigRejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Configured : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy-gEp3lMI (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)Lcx/m42/superizer/event/SuperizerEvent$Configured;
+	public static synthetic fun copy-gEp3lMI$default (Lcx/m42/superizer/event/SuperizerEvent$Configured;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Configured;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Crashed : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Throwable;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/Throwable;)Lcx/m42/superizer/event/SuperizerEvent$Crashed;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$Crashed;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Crashed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getCause ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Created : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Created;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Created;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Created;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$DeepLinkUnmatched : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$DeepLinkUnmatched;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$DeepLinkUnmatched;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$DeepLinkUnmatched;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getPath ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Disabled : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Disabled;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Disabled;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Disabled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Disposed : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Disposed;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Disposed;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Disposed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Enabled : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Enabled;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Enabled;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Enabled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Foreground : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oQ6rsvY ()Ljava/lang/String;
+	public final fun copy-EU_bkdE (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Foreground;
+	public static synthetic fun copy-EU_bkdE$default (Lcx/m42/superizer/event/SuperizerEvent$Foreground;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Foreground;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$LaunchFailed : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oQ6rsvY ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/Throwable;
+	public final fun copy-tLYbT50 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)Lcx/m42/superizer/event/SuperizerEvent$LaunchFailed;
+	public static synthetic fun copy-tLYbT50$default (Lcx/m42/superizer/event/SuperizerEvent$LaunchFailed;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$LaunchFailed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getCause ()Ljava/lang/Throwable;
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Launched : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Launched;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Launched;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Launched;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$PushDropped : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oQ6rsvY ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-MyCxjR4 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$PushDropped;
+	public static synthetic fun copy-MyCxjR4$default (Lcx/m42/superizer/event/SuperizerEvent$PushDropped;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$PushDropped;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$PushReceived : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$PushReceived;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$PushReceived;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$PushReceived;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getTopic ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Registered : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Registered;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$Registered;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Registered;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$RegistrationRejected : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$RegistrationRejected;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$RegistrationRejected;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$RegistrationRejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Reset : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Reset;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Reset;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Reset;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Restored : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Restored;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Restored;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Restored;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$RouteDiscarded : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$RouteDiscarded;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$RouteDiscarded;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$RouteDiscarded;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getLink ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$RuntimeCreated : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$RuntimeCreated;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$RuntimeCreated;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$RuntimeCreated;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$SetupMismatch : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$SetupMismatch;
+	public static synthetic fun copy-HNJm7k8$default (Lcx/m42/superizer/event/SuperizerEvent$SetupMismatch;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$SetupMismatch;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public final fun getWhat ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$Unlocked : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Unlocked;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Unlocked;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Unlocked;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/registry/AppHandler {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/runtime/HostRuntimeFactory;Lkotlinx/coroutines/flow/MutableSharedFlow;Lkotlinx/coroutines/flow/StateFlow;Lcx/m42/superizer/registry/SnapshotStore;Lcx/m42/superizer/runtime/Clock;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/runtime/HostRuntimeFactory;Lkotlinx/coroutines/flow/MutableSharedFlow;Lkotlinx/coroutines/flow/StateFlow;Lcx/m42/superizer/registry/SnapshotStore;Lcx/m42/superizer/runtime/Clock;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun appRuntime-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/runtime/AppRuntime;
+	public final fun close (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun close$default (Lcx/m42/superizer/registry/AppHandler;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun deepLinkHandler-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Lkotlin/jvm/functions/Function1;
+	public final fun disable-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun enable-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun enableAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun forgetSnapshot-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getCurrent ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getSettingsSections ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getStates ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun isEnabled-GGaiHfc (Ljava/lang/String;)Z
+	public final fun launch-fFNU3Z4 (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun launch-fFNU3Z4$default (Lcx/m42/superizer/registry/AppHandler;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun observeLifecycle ()V
+	public final fun restoreLastSession-CmtIpJM (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/registry/AppRegistry {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lkotlinx/coroutines/flow/MutableSharedFlow;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lkotlinx/coroutines/flow/MutableSharedFlow;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun all ()Ljava/util/List;
+	public final fun get-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/app/SuperizerApp;
+	public final fun getApps ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getManifests ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun outcome-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/registry/RegistrationOutcome;
+	public final fun register (Lcx/m42/superizer/app/SuperizerApp;)Z
+	public final fun visible (Ljava/util/Set;)Ljava/util/List;
+}
+
+public final class cx/m42/superizer/registry/AppSession {
+	public static final field $stable I
+	public final fun getApp ()Lcx/m42/superizer/app/SuperizerApp;
+	public final fun getConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getInstance ()Lcx/m42/superizer/app/AppInstance;
+	public final fun getRuntime ()Lcx/m42/superizer/runtime/InstanceRuntime;
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class cx/m42/superizer/registry/AppState : java/lang/Enum {
+	public static final field Active Lcx/m42/superizer/registry/AppState;
+	public static final field Closing Lcx/m42/superizer/registry/AppState;
+	public static final field Creating Lcx/m42/superizer/registry/AppState;
+	public static final field Disposed Lcx/m42/superizer/registry/AppState;
+	public static final field Enabled Lcx/m42/superizer/registry/AppState;
+	public static final field Failed Lcx/m42/superizer/registry/AppState;
+	public static final field Launching Lcx/m42/superizer/registry/AppState;
+	public static final field Registered Lcx/m42/superizer/registry/AppState;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/registry/AppState;
+	public static fun values ()[Lcx/m42/superizer/registry/AppState;
+}
+
+public abstract interface class cx/m42/superizer/registry/RegistrationOutcome {
+}
+
+public final class cx/m42/superizer/registry/RegistrationOutcome$Accepted : cx/m42/superizer/registry/RegistrationOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/registry/RegistrationOutcome$Accepted;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/registry/RegistrationOutcome$Rejected : cx/m42/superizer/registry/RegistrationOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/registry/RegistrationOutcome$Rejected;
+	public static synthetic fun copy$default (Lcx/m42/superizer/registry/RegistrationOutcome$Rejected;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/registry/RegistrationOutcome$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/registry/SessionSnapshot {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/registry/SessionSnapshot$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component3 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component4 ()J
+	public final fun copy-Grp9vZI (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;J)Lcx/m42/superizer/registry/SessionSnapshot;
+	public static synthetic fun copy-Grp9vZI$default (Lcx/m42/superizer/registry/SessionSnapshot;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;JILjava/lang/Object;)Lcx/m42/superizer/registry/SessionSnapshot;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppId-eVupTzA ()Ljava/lang/String;
+	public final fun getConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getSavedAt ()J
+	public final fun getState ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/registry/SessionSnapshot$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/registry/SessionSnapshot$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/registry/SessionSnapshot;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/registry/SessionSnapshot;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/registry/SessionSnapshot$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/registry/SnapshotStore {
+	public abstract fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun load (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun save (Lcx/m42/superizer/registry/SessionSnapshot;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/runtime/AnalyticsService {
+	public abstract fun event (Ljava/lang/String;Ljava/util/Map;)V
+	public static synthetic fun event$default (Lcx/m42/superizer/runtime/AnalyticsService;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)V
+	public abstract fun screen (Ljava/lang/String;)V
+}
+
+public final class cx/m42/superizer/runtime/AnalyticsService$DefaultImpls {
+	public static synthetic fun event$default (Lcx/m42/superizer/runtime/AnalyticsService;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)V
+}
+
+public final class cx/m42/superizer/runtime/AppResult {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lkotlinx/serialization/json/JsonObject;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/JsonObject;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy (Lkotlinx/serialization/json/JsonObject;)Lcx/m42/superizer/runtime/AppResult;
+	public static synthetic fun copy$default (Lcx/m42/superizer/runtime/AppResult;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lcx/m42/superizer/runtime/AppResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPayload ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/runtime/AppRuntime {
+	public abstract fun getAnalytics ()Lcx/m42/superizer/runtime/AnalyticsService;
+	public abstract fun getAppId-eVupTzA ()Ljava/lang/String;
+	public abstract fun getApps ()Lcx/m42/superizer/runtime/AppsService;
+	public abstract fun getAuth ()Lcx/m42/superizer/runtime/AuthService;
+	public abstract fun getClock ()Lcx/m42/superizer/runtime/Clock;
+	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun getHaptics ()Lcx/m42/superizer/runtime/HapticsService;
+	public abstract fun getHost ()Lcx/m42/superizer/runtime/HostInfo;
+	public abstract fun getLifecycle ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getLocale ()Lcx/m42/superizer/runtime/LocaleService;
+	public abstract fun getLogger ()Lcx/m42/superizer/runtime/Logger;
+	public abstract fun getNetwork ()Lcx/m42/superizer/runtime/NetworkService;
+	public abstract fun getPush ()Lcx/m42/superizer/runtime/PushService;
+	public abstract fun getScope ()Lkotlinx/coroutines/CoroutineScope;
+	public abstract fun getStorage ()Lcx/m42/superizer/runtime/StorageService;
+	public abstract fun service (Lcx/m42/superizer/runtime/ServiceKey;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/AppRuntimeKt {
+	public static final fun getLocalAppRuntime ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun require (Lcx/m42/superizer/runtime/AppRuntime;Lcx/m42/superizer/runtime/ServiceKey;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/AppSummary {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/app/AppMetadata;Lcx/m42/superizer/registry/AppState;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcx/m42/superizer/app/AppMetadata;
+	public final fun component4 ()Lcx/m42/superizer/registry/AppState;
+	public final fun component5 ()Z
+	public final fun copy-de2eQ9A (Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/app/AppMetadata;Lcx/m42/superizer/registry/AppState;Z)Lcx/m42/superizer/runtime/AppSummary;
+	public static synthetic fun copy-de2eQ9A$default (Lcx/m42/superizer/runtime/AppSummary;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/app/AppMetadata;Lcx/m42/superizer/registry/AppState;ZILjava/lang/Object;)Lcx/m42/superizer/runtime/AppSummary;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+	public final fun getMetadata ()Lcx/m42/superizer/app/AppMetadata;
+	public final fun getState ()Lcx/m42/superizer/registry/AppState;
+	public final fun getUnlocked ()Z
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/runtime/AppsService {
+	public abstract fun get-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/runtime/AppSummary;
+	public abstract fun list ()Ljava/util/List;
+}
+
+public abstract interface class cx/m42/superizer/runtime/AuthService {
+	public abstract fun getSession ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun signIn (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun signOut (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/AuthSession {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/runtime/AuthSession;
+	public static synthetic fun copy$default (Lcx/m42/superizer/runtime/AuthSession;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/runtime/AuthSession;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisplayName ()Ljava/lang/String;
+	public final fun getToken ()Ljava/lang/String;
+	public final fun getUserId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/runtime/Clock {
+	public abstract fun now ()J
+}
+
+public abstract interface class cx/m42/superizer/runtime/HapticsService {
+	public abstract fun tick ()V
+}
+
+public final class cx/m42/superizer/runtime/HostInfo {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/runtime/Platform;IZLjava/util/Set;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/runtime/Platform;IZLjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lcx/m42/superizer/runtime/Platform;
+	public final fun component5 ()I
+	public final fun component6 ()Z
+	public final fun component7 ()Ljava/util/Set;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/runtime/Platform;IZLjava/util/Set;)Lcx/m42/superizer/runtime/HostInfo;
+	public static synthetic fun copy$default (Lcx/m42/superizer/runtime/HostInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/runtime/Platform;IZLjava/util/Set;ILjava/lang/Object;)Lcx/m42/superizer/runtime/HostInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBuild ()Ljava/lang/String;
+	public final fun getContractVersion ()I
+	public final fun getDebug ()Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPlatform ()Lcx/m42/superizer/runtime/Platform;
+	public final fun getServices ()Ljava/util/Set;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/runtime/HostLifecycle : java/lang/Enum {
+	public static final field Background Lcx/m42/superizer/runtime/HostLifecycle;
+	public static final field Foreground Lcx/m42/superizer/runtime/HostLifecycle;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/runtime/HostLifecycle;
+	public static fun values ()[Lcx/m42/superizer/runtime/HostLifecycle;
+}
+
+public abstract interface class cx/m42/superizer/runtime/HostRuntimeFactory {
+	public abstract fun createApp-HNJm7k8 (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/AppRuntime;
+	public abstract fun createInstance (Lcx/m42/superizer/runtime/AppRuntime;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/InstanceRuntime;
+}
+
+public abstract interface class cx/m42/superizer/runtime/InstanceRuntime : cx/m42/superizer/runtime/AppRuntime {
+	public abstract fun getNavigation ()Lcx/m42/superizer/runtime/NavigationService;
+	public abstract fun getScope ()Lkotlinx/coroutines/CoroutineScope;
+}
+
+public abstract interface class cx/m42/superizer/runtime/LocaleService {
+	public abstract fun getLangTag ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun pick (Ljava/util/Map;Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/runtime/Logger {
+	public abstract fun debug (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun debug$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public abstract fun error (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun error$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public abstract fun info (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun info$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public abstract fun warn (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun warn$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+}
+
+public final class cx/m42/superizer/runtime/Logger$DefaultImpls {
+	public static synthetic fun debug$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public static synthetic fun error$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public static synthetic fun info$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public static synthetic fun warn$default (Lcx/m42/superizer/runtime/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+}
+
+public abstract class cx/m42/superizer/runtime/NavigationError : java/lang/Exception {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class cx/m42/superizer/runtime/NavigationError$Locked : cx/m42/superizer/runtime/NavigationError {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/runtime/NavigationError$UnknownApp : cx/m42/superizer/runtime/NavigationError {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/runtime/NavigationError$Vetoed : cx/m42/superizer/runtime/NavigationError {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getId-eVupTzA ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/runtime/NavigationService {
+	public abstract fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun openApp-Z_5eAyw (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun openApp-Z_5eAyw$default (Lcx/m42/superizer/runtime/NavigationService;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun openSettings ()V
+	public abstract fun openUrl (Ljava/lang/String;)Z
+}
+
+public final class cx/m42/superizer/runtime/NavigationService$DefaultImpls {
+	public static synthetic fun openApp-Z_5eAyw$default (Lcx/m42/superizer/runtime/NavigationService;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/NetworkException : java/lang/Exception {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getStatus ()Ljava/lang/Integer;
+}
+
+public final class cx/m42/superizer/runtime/NetworkRequest {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/runtime/NetworkRequest;
+	public static synthetic fun copy$default (Lcx/m42/superizer/runtime/NetworkRequest;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/runtime/NetworkRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Ljava/lang/String;
+	public final fun getContentType ()Ljava/lang/String;
+	public final fun getHeaders ()Ljava/util/Map;
+	public final fun getMethod ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/runtime/NetworkResponse {
+	public static final field $stable I
+	public fun <init> (ILjava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun copy (ILjava/lang/String;Ljava/util/Map;)Lcx/m42/superizer/runtime/NetworkResponse;
+	public static synthetic fun copy$default (Lcx/m42/superizer/runtime/NetworkResponse;ILjava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lcx/m42/superizer/runtime/NetworkResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Ljava/lang/String;
+	public final fun getHeaders ()Ljava/util/Map;
+	public final fun getStatus ()I
+	public fun hashCode ()I
+	public final fun isSuccess ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/runtime/NetworkService {
+	public fun get (Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun get$default (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun getOnline ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun post (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun post$default (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun request (Lcx/m42/superizer/runtime/NetworkRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/NetworkService$DefaultImpls {
+	public static fun get (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun get$default (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun post (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun post$default (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/Platform : java/lang/Enum {
+	public static final field Android Lcx/m42/superizer/runtime/Platform;
+	public static final field Desktop Lcx/m42/superizer/runtime/Platform;
+	public static final field Web Lcx/m42/superizer/runtime/Platform;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/runtime/Platform;
+	public static fun values ()[Lcx/m42/superizer/runtime/Platform;
+}
+
+public final class cx/m42/superizer/runtime/PushMessage {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()J
+	public final fun copy (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;J)Lcx/m42/superizer/runtime/PushMessage;
+	public static synthetic fun copy$default (Lcx/m42/superizer/runtime/PushMessage;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;JILjava/lang/Object;)Lcx/m42/superizer/runtime/PushMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getLink ()Ljava/lang/String;
+	public final fun getReceivedAt ()J
+	public final fun getTopic ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/runtime/PushService {
+	public abstract fun getEnabled ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getMessages ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun getSubscriptions ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun requestPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun subscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun unsubscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/ServiceKey {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/runtime/ServiceKeySerializer : kotlinx/serialization/KSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/runtime/ServiceKeySerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/runtime/ServiceKey;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/runtime/ServiceKey;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class cx/m42/superizer/runtime/ServicesKt {
+	public static final fun getLenientJson ()Lkotlinx/serialization/json/Json;
+}
+
+public abstract interface class cx/m42/superizer/runtime/StorageService {
+	public abstract fun get (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun keys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun set (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

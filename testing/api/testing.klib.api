@@ -1,0 +1,265 @@
+// Klib ABI Dump
+// Targets: [wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <cx.m42.superizer:testing>
+final class <#A: kotlin/Any> cx.m42.superizer.testing/AppTestScope { // cx.m42.superizer.testing/AppTestScope|null[0]
+    constructor <init>(cx.m42.superizer.app/SuperizerApp<#A>, cx.m42.superizer.app/AppInstance, cx.m42.superizer.testing/FakeAppRuntime, androidx.compose.ui.test/ComposeUiTest) // cx.m42.superizer.testing/AppTestScope.<init>|<init>(cx.m42.superizer.app.SuperizerApp<1:0>;cx.m42.superizer.app.AppInstance;cx.m42.superizer.testing.FakeAppRuntime;androidx.compose.ui.test.ComposeUiTest){}[0]
+
+    final val app // cx.m42.superizer.testing/AppTestScope.app|{}app[0]
+        final fun <get-app>(): cx.m42.superizer.app/SuperizerApp<#A> // cx.m42.superizer.testing/AppTestScope.app.<get-app>|<get-app>(){}[0]
+    final val instance // cx.m42.superizer.testing/AppTestScope.instance|{}instance[0]
+        final fun <get-instance>(): cx.m42.superizer.app/AppInstance // cx.m42.superizer.testing/AppTestScope.instance.<get-instance>|<get-instance>(){}[0]
+    final val runtime // cx.m42.superizer.testing/AppTestScope.runtime|{}runtime[0]
+        final fun <get-runtime>(): cx.m42.superizer.testing/FakeAppRuntime // cx.m42.superizer.testing/AppTestScope.runtime.<get-runtime>|<get-runtime>(){}[0]
+    final val ui // cx.m42.superizer.testing/AppTestScope.ui|{}ui[0]
+        final fun <get-ui>(): androidx.compose.ui.test/ComposeUiTest // cx.m42.superizer.testing/AppTestScope.ui.<get-ui>|<get-ui>(){}[0]
+
+    final fun assertAbsent(kotlin/String) // cx.m42.superizer.testing/AppTestScope.assertAbsent|assertAbsent(kotlin.String){}[0]
+    final fun assertShown(kotlin/String) // cx.m42.superizer.testing/AppTestScope.assertShown|assertShown(kotlin.String){}[0]
+    final fun click(kotlin/String) // cx.m42.superizer.testing/AppTestScope.click|click(kotlin.String){}[0]
+    final fun idle() // cx.m42.superizer.testing/AppTestScope.idle|idle(){}[0]
+    final fun node(kotlin/String): androidx.compose.ui.test/SemanticsNodeInteraction // cx.m42.superizer.testing/AppTestScope.node|node(kotlin.String){}[0]
+    final fun type(kotlin/String, kotlin/String) // cx.m42.superizer.testing/AppTestScope.type|type(kotlin.String;kotlin.String){}[0]
+}
+
+final class cx.m42.superizer.testing/FakeAppRuntime : cx.m42.superizer.runtime/InstanceRuntime { // cx.m42.superizer.testing/FakeAppRuntime|null[0]
+    constructor <init>(cx.m42.superizer.app/AppId = ..., kotlinx.coroutines/CoroutineScope, kotlin/String = ..., kotlin/Boolean = ..., kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> = ...) // cx.m42.superizer.testing/FakeAppRuntime.<init>|<init>(cx.m42.superizer.app.AppId;kotlinx.coroutines.CoroutineScope;kotlin.String;kotlin.Boolean;kotlin.collections.Set<cx.m42.superizer.runtime.ServiceKey<*>>){}[0]
+
+    final val analytics // cx.m42.superizer.testing/FakeAppRuntime.analytics|{}analytics[0]
+        final fun <get-analytics>(): cx.m42.superizer.testing/RecordingAnalytics // cx.m42.superizer.testing/FakeAppRuntime.analytics.<get-analytics>|<get-analytics>(){}[0]
+    final val appId // cx.m42.superizer.testing/FakeAppRuntime.appId|{}appId[0]
+        final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.testing/FakeAppRuntime.appId.<get-appId>|<get-appId>(){}[0]
+    final val apps // cx.m42.superizer.testing/FakeAppRuntime.apps|{}apps[0]
+        final fun <get-apps>(): cx.m42.superizer.testing/FakeApps // cx.m42.superizer.testing/FakeAppRuntime.apps.<get-apps>|<get-apps>(){}[0]
+    final val auth // cx.m42.superizer.testing/FakeAppRuntime.auth|{}auth[0]
+        final fun <get-auth>(): cx.m42.superizer.testing/FakeAuth // cx.m42.superizer.testing/FakeAppRuntime.auth.<get-auth>|<get-auth>(){}[0]
+    final val clock // cx.m42.superizer.testing/FakeAppRuntime.clock|{}clock[0]
+        final fun <get-clock>(): cx.m42.superizer.testing/FakeClock // cx.m42.superizer.testing/FakeAppRuntime.clock.<get-clock>|<get-clock>(){}[0]
+    final val emittedEvents // cx.m42.superizer.testing/FakeAppRuntime.emittedEvents|{}emittedEvents[0]
+        final fun <get-emittedEvents>(): kotlinx.coroutines.flow/MutableSharedFlow<cx.m42.superizer.event/SuperizerEvent> // cx.m42.superizer.testing/FakeAppRuntime.emittedEvents.<get-emittedEvents>|<get-emittedEvents>(){}[0]
+    final val events // cx.m42.superizer.testing/FakeAppRuntime.events|{}events[0]
+        final fun <get-events>(): kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer.event/SuperizerEvent> // cx.m42.superizer.testing/FakeAppRuntime.events.<get-events>|<get-events>(){}[0]
+    final val haptics // cx.m42.superizer.testing/FakeAppRuntime.haptics|{}haptics[0]
+        final fun <get-haptics>(): cx.m42.superizer.testing/RecordingHaptics // cx.m42.superizer.testing/FakeAppRuntime.haptics.<get-haptics>|<get-haptics>(){}[0]
+    final val host // cx.m42.superizer.testing/FakeAppRuntime.host|{}host[0]
+        final fun <get-host>(): cx.m42.superizer.runtime/HostInfo // cx.m42.superizer.testing/FakeAppRuntime.host.<get-host>|<get-host>(){}[0]
+    final val hostLifecycle // cx.m42.superizer.testing/FakeAppRuntime.hostLifecycle|{}hostLifecycle[0]
+        final fun <get-hostLifecycle>(): kotlinx.coroutines.flow/MutableStateFlow<cx.m42.superizer.runtime/HostLifecycle> // cx.m42.superizer.testing/FakeAppRuntime.hostLifecycle.<get-hostLifecycle>|<get-hostLifecycle>(){}[0]
+    final val lifecycle // cx.m42.superizer.testing/FakeAppRuntime.lifecycle|{}lifecycle[0]
+        final fun <get-lifecycle>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle> // cx.m42.superizer.testing/FakeAppRuntime.lifecycle.<get-lifecycle>|<get-lifecycle>(){}[0]
+    final val locale // cx.m42.superizer.testing/FakeAppRuntime.locale|{}locale[0]
+        final fun <get-locale>(): cx.m42.superizer.testing/FakeLocale // cx.m42.superizer.testing/FakeAppRuntime.locale.<get-locale>|<get-locale>(){}[0]
+    final val logger // cx.m42.superizer.testing/FakeAppRuntime.logger|{}logger[0]
+        final fun <get-logger>(): cx.m42.superizer.testing/RecordingLogger // cx.m42.superizer.testing/FakeAppRuntime.logger.<get-logger>|<get-logger>(){}[0]
+    final val navigation // cx.m42.superizer.testing/FakeAppRuntime.navigation|{}navigation[0]
+        final fun <get-navigation>(): cx.m42.superizer.testing/RecordingNavigation // cx.m42.superizer.testing/FakeAppRuntime.navigation.<get-navigation>|<get-navigation>(){}[0]
+    final val network // cx.m42.superizer.testing/FakeAppRuntime.network|{}network[0]
+        final fun <get-network>(): cx.m42.superizer.testing/FakeNetwork // cx.m42.superizer.testing/FakeAppRuntime.network.<get-network>|<get-network>(){}[0]
+    final val push // cx.m42.superizer.testing/FakeAppRuntime.push|{}push[0]
+        final fun <get-push>(): cx.m42.superizer.testing/FakePush // cx.m42.superizer.testing/FakeAppRuntime.push.<get-push>|<get-push>(){}[0]
+    final val scope // cx.m42.superizer.testing/FakeAppRuntime.scope|{}scope[0]
+        final fun <get-scope>(): kotlinx.coroutines/CoroutineScope // cx.m42.superizer.testing/FakeAppRuntime.scope.<get-scope>|<get-scope>(){}[0]
+    final val services // cx.m42.superizer.testing/FakeAppRuntime.services|{}services[0]
+        final fun <get-services>(): kotlin.collections/MutableMap<cx.m42.superizer.runtime/ServiceKey<*>, kotlin/Any> // cx.m42.superizer.testing/FakeAppRuntime.services.<get-services>|<get-services>(){}[0]
+    final val storage // cx.m42.superizer.testing/FakeAppRuntime.storage|{}storage[0]
+        final fun <get-storage>(): cx.m42.superizer.testing/InMemoryStorage // cx.m42.superizer.testing/FakeAppRuntime.storage.<get-storage>|<get-storage>(){}[0]
+
+    final fun <#A1: kotlin/Any> provide(cx.m42.superizer.runtime/ServiceKey<#A1>, #A1) // cx.m42.superizer.testing/FakeAppRuntime.provide|provide(cx.m42.superizer.runtime.ServiceKey<0:0>;0:0){0§<kotlin.Any>}[0]
+    final fun <#A1: kotlin/Any> service(cx.m42.superizer.runtime/ServiceKey<#A1>): #A1? // cx.m42.superizer.testing/FakeAppRuntime.service|service(cx.m42.superizer.runtime.ServiceKey<0:0>){0§<kotlin.Any>}[0]
+}
+
+final class cx.m42.superizer.testing/FakeApps : cx.m42.superizer.runtime/AppsService { // cx.m42.superizer.testing/FakeApps|null[0]
+    constructor <init>(kotlin.collections/List<cx.m42.superizer.runtime/AppSummary> = ...) // cx.m42.superizer.testing/FakeApps.<init>|<init>(kotlin.collections.List<cx.m42.superizer.runtime.AppSummary>){}[0]
+
+    final fun get(cx.m42.superizer.app/AppId): cx.m42.superizer.runtime/AppSummary? // cx.m42.superizer.testing/FakeApps.get|get(cx.m42.superizer.app.AppId){}[0]
+    final fun list(): kotlin.collections/List<cx.m42.superizer.runtime/AppSummary> // cx.m42.superizer.testing/FakeApps.list|list(){}[0]
+}
+
+final class cx.m42.superizer.testing/FakeAuth : cx.m42.superizer.runtime/AuthService { // cx.m42.superizer.testing/FakeAuth|null[0]
+    constructor <init>(cx.m42.superizer.runtime/AuthSession? = ...) // cx.m42.superizer.testing/FakeAuth.<init>|<init>(cx.m42.superizer.runtime.AuthSession?){}[0]
+
+    final val session // cx.m42.superizer.testing/FakeAuth.session|{}session[0]
+        final fun <get-session>(): kotlinx.coroutines.flow/MutableStateFlow<cx.m42.superizer.runtime/AuthSession?> // cx.m42.superizer.testing/FakeAuth.session.<get-session>|<get-session>(){}[0]
+
+    final suspend fun signIn(): cx.m42.superizer.runtime/AuthSession? // cx.m42.superizer.testing/FakeAuth.signIn|signIn(){}[0]
+    final suspend fun signOut() // cx.m42.superizer.testing/FakeAuth.signOut|signOut(){}[0]
+}
+
+final class cx.m42.superizer.testing/FakeClock : cx.m42.superizer.runtime/Clock { // cx.m42.superizer.testing/FakeClock|null[0]
+    constructor <init>(kotlin/Long = ...) // cx.m42.superizer.testing/FakeClock.<init>|<init>(kotlin.Long){}[0]
+
+    final fun advance(kotlin/Long = ..., kotlin/Long = ..., kotlin/Long = ..., kotlin/Long = ...) // cx.m42.superizer.testing/FakeClock.advance|advance(kotlin.Long;kotlin.Long;kotlin.Long;kotlin.Long){}[0]
+    final fun now(): kotlin/Long // cx.m42.superizer.testing/FakeClock.now|now(){}[0]
+}
+
+final class cx.m42.superizer.testing/FakeHostRuntimeFactory : cx.m42.superizer.runtime/HostRuntimeFactory { // cx.m42.superizer.testing/FakeHostRuntimeFactory|null[0]
+    constructor <init>(cx.m42.superizer.runtime/HostInfo? = ...) // cx.m42.superizer.testing/FakeHostRuntimeFactory.<init>|<init>(cx.m42.superizer.runtime.HostInfo?){}[0]
+
+    final val created // cx.m42.superizer.testing/FakeHostRuntimeFactory.created|{}created[0]
+        final fun <get-created>(): kotlin.collections/MutableMap<cx.m42.superizer.app/AppId, cx.m42.superizer.testing/FakeAppRuntime> // cx.m42.superizer.testing/FakeHostRuntimeFactory.created.<get-created>|<get-created>(){}[0]
+
+    final fun createApp(cx.m42.superizer.app/AppId, kotlinx.coroutines/CoroutineScope): cx.m42.superizer.runtime/AppRuntime // cx.m42.superizer.testing/FakeHostRuntimeFactory.createApp|createApp(cx.m42.superizer.app.AppId;kotlinx.coroutines.CoroutineScope){}[0]
+    final fun createInstance(cx.m42.superizer.runtime/AppRuntime, kotlinx.coroutines/CoroutineScope): cx.m42.superizer.runtime/InstanceRuntime // cx.m42.superizer.testing/FakeHostRuntimeFactory.createInstance|createInstance(cx.m42.superizer.runtime.AppRuntime;kotlinx.coroutines.CoroutineScope){}[0]
+}
+
+final class cx.m42.superizer.testing/FakeLocale : cx.m42.superizer.runtime/LocaleService { // cx.m42.superizer.testing/FakeLocale|null[0]
+    constructor <init>(kotlin/String = ...) // cx.m42.superizer.testing/FakeLocale.<init>|<init>(kotlin.String){}[0]
+
+    final val langTag // cx.m42.superizer.testing/FakeLocale.langTag|{}langTag[0]
+        final fun <get-langTag>(): kotlinx.coroutines.flow/MutableStateFlow<kotlin/String> // cx.m42.superizer.testing/FakeLocale.langTag.<get-langTag>|<get-langTag>(){}[0]
+
+    final fun <#A1: kotlin/Any?> pick(kotlin.collections/Map<kotlin/String, #A1>, #A1): #A1 // cx.m42.superizer.testing/FakeLocale.pick|pick(kotlin.collections.Map<kotlin.String,0:0>;0:0){0§<kotlin.Any?>}[0]
+}
+
+final class cx.m42.superizer.testing/FakeNetwork : cx.m42.superizer.runtime/NetworkService { // cx.m42.superizer.testing/FakeNetwork|null[0]
+    constructor <init>() // cx.m42.superizer.testing/FakeNetwork.<init>|<init>(){}[0]
+
+    final val calls // cx.m42.superizer.testing/FakeNetwork.calls|{}calls[0]
+        final fun <get-calls>(): kotlin.collections/MutableList<cx.m42.superizer.runtime/NetworkRequest> // cx.m42.superizer.testing/FakeNetwork.calls.<get-calls>|<get-calls>(){}[0]
+    final val online // cx.m42.superizer.testing/FakeNetwork.online|{}online[0]
+        final fun <get-online>(): kotlinx.coroutines.flow/MutableStateFlow<kotlin/Boolean> // cx.m42.superizer.testing/FakeNetwork.online.<get-online>|<get-online>(){}[0]
+
+    final fun fail(kotlin/String, kotlin/String = ...) // cx.m42.superizer.testing/FakeNetwork.fail|fail(kotlin.String;kotlin.String){}[0]
+    final fun respond(kotlin/String, kotlin/Function1<cx.m42.superizer.runtime/NetworkRequest, cx.m42.superizer.runtime/NetworkResponse>) // cx.m42.superizer.testing/FakeNetwork.respond|respond(kotlin.String;kotlin.Function1<cx.m42.superizer.runtime.NetworkRequest,cx.m42.superizer.runtime.NetworkResponse>){}[0]
+    final fun respond(kotlin/String, kotlin/String, kotlin/Int = ...) // cx.m42.superizer.testing/FakeNetwork.respond|respond(kotlin.String;kotlin.String;kotlin.Int){}[0]
+    final suspend fun request(cx.m42.superizer.runtime/NetworkRequest): cx.m42.superizer.runtime/NetworkResponse // cx.m42.superizer.testing/FakeNetwork.request|request(cx.m42.superizer.runtime.NetworkRequest){}[0]
+}
+
+final class cx.m42.superizer.testing/FakePush : cx.m42.superizer.runtime/PushService { // cx.m42.superizer.testing/FakePush|null[0]
+    constructor <init>() // cx.m42.superizer.testing/FakePush.<init>|<init>(){}[0]
+
+    final val enabled // cx.m42.superizer.testing/FakePush.enabled|{}enabled[0]
+        final fun <get-enabled>(): kotlinx.coroutines.flow/MutableStateFlow<kotlin/Boolean> // cx.m42.superizer.testing/FakePush.enabled.<get-enabled>|<get-enabled>(){}[0]
+    final val messages // cx.m42.superizer.testing/FakePush.messages|{}messages[0]
+        final fun <get-messages>(): kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer.runtime/PushMessage> // cx.m42.superizer.testing/FakePush.messages.<get-messages>|<get-messages>(){}[0]
+    final val subscriptions // cx.m42.superizer.testing/FakePush.subscriptions|{}subscriptions[0]
+        final fun <get-subscriptions>(): kotlinx.coroutines.flow/MutableStateFlow<kotlin.collections/Set<kotlin/String>> // cx.m42.superizer.testing/FakePush.subscriptions.<get-subscriptions>|<get-subscriptions>(){}[0]
+
+    final var permissionGranted // cx.m42.superizer.testing/FakePush.permissionGranted|{}permissionGranted[0]
+        final fun <get-permissionGranted>(): kotlin/Boolean // cx.m42.superizer.testing/FakePush.permissionGranted.<get-permissionGranted>|<get-permissionGranted>(){}[0]
+        final fun <set-permissionGranted>(kotlin/Boolean) // cx.m42.superizer.testing/FakePush.permissionGranted.<set-permissionGranted>|<set-permissionGranted>(kotlin.Boolean){}[0]
+
+    final fun deliver(kotlin/String? = ..., kotlinx.serialization.json/JsonObject = ..., kotlin/String? = ..., kotlin/Long = ...) // cx.m42.superizer.testing/FakePush.deliver|deliver(kotlin.String?;kotlinx.serialization.json.JsonObject;kotlin.String?;kotlin.Long){}[0]
+    final suspend fun requestPermission(): kotlin/Boolean // cx.m42.superizer.testing/FakePush.requestPermission|requestPermission(){}[0]
+    final suspend fun subscribe(kotlin/String) // cx.m42.superizer.testing/FakePush.subscribe|subscribe(kotlin.String){}[0]
+    final suspend fun unsubscribe(kotlin/String) // cx.m42.superizer.testing/FakePush.unsubscribe|unsubscribe(kotlin.String){}[0]
+}
+
+final class cx.m42.superizer.testing/InMemorySnapshotStore : cx.m42.superizer.registry/SnapshotStore { // cx.m42.superizer.testing/InMemorySnapshotStore|null[0]
+    constructor <init>() // cx.m42.superizer.testing/InMemorySnapshotStore.<init>|<init>(){}[0]
+
+    final var snapshot // cx.m42.superizer.testing/InMemorySnapshotStore.snapshot|{}snapshot[0]
+        final fun <get-snapshot>(): cx.m42.superizer.registry/SessionSnapshot? // cx.m42.superizer.testing/InMemorySnapshotStore.snapshot.<get-snapshot>|<get-snapshot>(){}[0]
+        final fun <set-snapshot>(cx.m42.superizer.registry/SessionSnapshot?) // cx.m42.superizer.testing/InMemorySnapshotStore.snapshot.<set-snapshot>|<set-snapshot>(cx.m42.superizer.registry.SessionSnapshot?){}[0]
+
+    final suspend fun clear() // cx.m42.superizer.testing/InMemorySnapshotStore.clear|clear(){}[0]
+    final suspend fun load(): cx.m42.superizer.registry/SessionSnapshot? // cx.m42.superizer.testing/InMemorySnapshotStore.load|load(){}[0]
+    final suspend fun save(cx.m42.superizer.registry/SessionSnapshot) // cx.m42.superizer.testing/InMemorySnapshotStore.save|save(cx.m42.superizer.registry.SessionSnapshot){}[0]
+}
+
+final class cx.m42.superizer.testing/InMemoryStorage : cx.m42.superizer.runtime/StorageService { // cx.m42.superizer.testing/InMemoryStorage|null[0]
+    constructor <init>(kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // cx.m42.superizer.testing/InMemoryStorage.<init>|<init>(kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val entries // cx.m42.superizer.testing/InMemoryStorage.entries|{}entries[0]
+        final fun <get-entries>(): kotlin.collections/MutableMap<kotlin/String, kotlin/String> // cx.m42.superizer.testing/InMemoryStorage.entries.<get-entries>|<get-entries>(){}[0]
+
+    final suspend fun get(kotlin/String): kotlin/String? // cx.m42.superizer.testing/InMemoryStorage.get|get(kotlin.String){}[0]
+    final suspend fun keys(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.testing/InMemoryStorage.keys|keys(){}[0]
+    final suspend fun remove(kotlin/String) // cx.m42.superizer.testing/InMemoryStorage.remove|remove(kotlin.String){}[0]
+    final suspend fun set(kotlin/String, kotlin/String) // cx.m42.superizer.testing/InMemoryStorage.set|set(kotlin.String;kotlin.String){}[0]
+}
+
+final class cx.m42.superizer.testing/RecordingAnalytics : cx.m42.superizer.runtime/AnalyticsService { // cx.m42.superizer.testing/RecordingAnalytics|null[0]
+    constructor <init>() // cx.m42.superizer.testing/RecordingAnalytics.<init>|<init>(){}[0]
+
+    final val events // cx.m42.superizer.testing/RecordingAnalytics.events|{}events[0]
+        final fun <get-events>(): kotlin.collections/MutableList<kotlin/Pair<kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String>>> // cx.m42.superizer.testing/RecordingAnalytics.events.<get-events>|<get-events>(){}[0]
+    final val screens // cx.m42.superizer.testing/RecordingAnalytics.screens|{}screens[0]
+        final fun <get-screens>(): kotlin.collections/MutableList<kotlin/String> // cx.m42.superizer.testing/RecordingAnalytics.screens.<get-screens>|<get-screens>(){}[0]
+
+    final fun event(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String>) // cx.m42.superizer.testing/RecordingAnalytics.event|event(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun screen(kotlin/String) // cx.m42.superizer.testing/RecordingAnalytics.screen|screen(kotlin.String){}[0]
+}
+
+final class cx.m42.superizer.testing/RecordingHaptics : cx.m42.superizer.runtime/HapticsService { // cx.m42.superizer.testing/RecordingHaptics|null[0]
+    constructor <init>() // cx.m42.superizer.testing/RecordingHaptics.<init>|<init>(){}[0]
+
+    final var ticks // cx.m42.superizer.testing/RecordingHaptics.ticks|{}ticks[0]
+        final fun <get-ticks>(): kotlin/Int // cx.m42.superizer.testing/RecordingHaptics.ticks.<get-ticks>|<get-ticks>(){}[0]
+        final fun <set-ticks>(kotlin/Int) // cx.m42.superizer.testing/RecordingHaptics.ticks.<set-ticks>|<set-ticks>(kotlin.Int){}[0]
+
+    final fun tick() // cx.m42.superizer.testing/RecordingHaptics.tick|tick(){}[0]
+}
+
+final class cx.m42.superizer.testing/RecordingLogger : cx.m42.superizer.runtime/Logger { // cx.m42.superizer.testing/RecordingLogger|null[0]
+    constructor <init>() // cx.m42.superizer.testing/RecordingLogger.<init>|<init>(){}[0]
+
+    final val lines // cx.m42.superizer.testing/RecordingLogger.lines|{}lines[0]
+        final fun <get-lines>(): kotlin.collections/MutableList<kotlin/String> // cx.m42.superizer.testing/RecordingLogger.lines.<get-lines>|<get-lines>(){}[0]
+
+    final fun debug(kotlin/String, kotlin/Throwable?) // cx.m42.superizer.testing/RecordingLogger.debug|debug(kotlin.String;kotlin.Throwable?){}[0]
+    final fun error(kotlin/String, kotlin/Throwable?) // cx.m42.superizer.testing/RecordingLogger.error|error(kotlin.String;kotlin.Throwable?){}[0]
+    final fun info(kotlin/String, kotlin/Throwable?) // cx.m42.superizer.testing/RecordingLogger.info|info(kotlin.String;kotlin.Throwable?){}[0]
+    final fun warn(kotlin/String, kotlin/Throwable?) // cx.m42.superizer.testing/RecordingLogger.warn|warn(kotlin.String;kotlin.Throwable?){}[0]
+}
+
+final class cx.m42.superizer.testing/RecordingNavigation : cx.m42.superizer.runtime/NavigationService { // cx.m42.superizer.testing/RecordingNavigation|null[0]
+    constructor <init>() // cx.m42.superizer.testing/RecordingNavigation.<init>|<init>(){}[0]
+
+    final val opened // cx.m42.superizer.testing/RecordingNavigation.opened|{}opened[0]
+        final fun <get-opened>(): kotlin.collections/MutableList<kotlin/Pair<cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig>> // cx.m42.superizer.testing/RecordingNavigation.opened.<get-opened>|<get-opened>(){}[0]
+    final val unknown // cx.m42.superizer.testing/RecordingNavigation.unknown|{}unknown[0]
+        final fun <get-unknown>(): kotlin.collections/MutableSet<cx.m42.superizer.app/AppId> // cx.m42.superizer.testing/RecordingNavigation.unknown.<get-unknown>|<get-unknown>(){}[0]
+    final val urls // cx.m42.superizer.testing/RecordingNavigation.urls|{}urls[0]
+        final fun <get-urls>(): kotlin.collections/MutableList<kotlin/String> // cx.m42.superizer.testing/RecordingNavigation.urls.<get-urls>|<get-urls>(){}[0]
+
+    final var closed // cx.m42.superizer.testing/RecordingNavigation.closed|{}closed[0]
+        final fun <get-closed>(): kotlin/Int // cx.m42.superizer.testing/RecordingNavigation.closed.<get-closed>|<get-closed>(){}[0]
+        final fun <set-closed>(kotlin/Int) // cx.m42.superizer.testing/RecordingNavigation.closed.<set-closed>|<set-closed>(kotlin.Int){}[0]
+    final var settingsOpened // cx.m42.superizer.testing/RecordingNavigation.settingsOpened|{}settingsOpened[0]
+        final fun <get-settingsOpened>(): kotlin/Int // cx.m42.superizer.testing/RecordingNavigation.settingsOpened.<get-settingsOpened>|<get-settingsOpened>(){}[0]
+        final fun <set-settingsOpened>(kotlin/Int) // cx.m42.superizer.testing/RecordingNavigation.settingsOpened.<set-settingsOpened>|<set-settingsOpened>(kotlin.Int){}[0]
+
+    final fun openSettings() // cx.m42.superizer.testing/RecordingNavigation.openSettings|openSettings(){}[0]
+    final fun openUrl(kotlin/String): kotlin/Boolean // cx.m42.superizer.testing/RecordingNavigation.openUrl|openUrl(kotlin.String){}[0]
+    final suspend fun close() // cx.m42.superizer.testing/RecordingNavigation.close|close(){}[0]
+    final suspend fun openApp(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppConfig): kotlin/Result<cx.m42.superizer.runtime/AppResult> // cx.m42.superizer.testing/RecordingNavigation.openApp|openApp(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppConfig){}[0]
+}
+
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop|#static{}cx_m42_superizer_testing_AppTestScope$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop|#static{}cx_m42_superizer_testing_FakeAppRuntime$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop|#static{}cx_m42_superizer_testing_FakeApps$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop|#static{}cx_m42_superizer_testing_FakeAuth$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop|#static{}cx_m42_superizer_testing_FakeClock$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop|#static{}cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop|#static{}cx_m42_superizer_testing_FakeLocale$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop|#static{}cx_m42_superizer_testing_FakeNetwork$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop|#static{}cx_m42_superizer_testing_FakePush$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop|#static{}cx_m42_superizer_testing_InMemorySnapshotStore$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop|#static{}cx_m42_superizer_testing_InMemoryStorage$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop|#static{}cx_m42_superizer_testing_RecordingAnalytics$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingHaptics$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingHaptics$stableprop|#static{}cx_m42_superizer_testing_RecordingHaptics$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingLogger$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingLogger$stableprop|#static{}cx_m42_superizer_testing_RecordingLogger$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingNavigation$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingNavigation$stableprop|#static{}cx_m42_superizer_testing_RecordingNavigation$stableprop[0]
+
+final fun <#A: kotlin/Any> cx.m42.superizer.testing/runAppTest(cx.m42.superizer.app/SuperizerApp<#A>, cx.m42.superizer.app/AppConfig = ..., kotlinx.serialization.json/JsonObject? = ..., kotlin/Function1<cx.m42.superizer.testing/FakeAppRuntime, kotlin/Unit> = ..., kotlin/Function1<cx.m42.superizer.testing/AppTestScope<#A>, kotlin/Unit>) // cx.m42.superizer.testing/runAppTest|runAppTest(cx.m42.superizer.app.SuperizerApp<0:0>;cx.m42.superizer.app.AppConfig;kotlinx.serialization.json.JsonObject?;kotlin.Function1<cx.m42.superizer.testing.FakeAppRuntime,kotlin.Unit>;kotlin.Function1<cx.m42.superizer.testing.AppTestScope<0:0>,kotlin.Unit>){0§<kotlin.Any>}[0]
+final fun cx.m42.superizer.testing/appSummary(kotlin/String, cx.m42.superizer.app/AppMetadata, kotlin/String = ..., cx.m42.superizer.registry/AppState = ..., kotlin/Boolean = ...): cx.m42.superizer.runtime/AppSummary // cx.m42.superizer.testing/appSummary|appSummary(kotlin.String;cx.m42.superizer.app.AppMetadata;kotlin.String;cx.m42.superizer.registry.AppState;kotlin.Boolean){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop_getter|cx_m42_superizer_testing_AppTestScope$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop_getter|cx_m42_superizer_testing_FakeAppRuntime$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop_getter|cx_m42_superizer_testing_FakeApps$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop_getter|cx_m42_superizer_testing_FakeAuth$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop_getter|cx_m42_superizer_testing_FakeClock$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter|cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop_getter|cx_m42_superizer_testing_FakeLocale$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter|cx_m42_superizer_testing_FakeNetwork$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter|cx_m42_superizer_testing_FakePush$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop_getter|cx_m42_superizer_testing_InMemorySnapshotStore$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop_getter|cx_m42_superizer_testing_InMemoryStorage$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop_getter|cx_m42_superizer_testing_RecordingAnalytics$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingHaptics$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingHaptics$stableprop_getter|cx_m42_superizer_testing_RecordingHaptics$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingLogger$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingLogger$stableprop_getter|cx_m42_superizer_testing_RecordingLogger$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingNavigation$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingNavigation$stableprop_getter|cx_m42_superizer_testing_RecordingNavigation$stableprop_getter(){}[0]

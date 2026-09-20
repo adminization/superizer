@@ -1,0 +1,229 @@
+public abstract class cx/m42/superizer/testing/AppContractTest {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/app/SuperizerApp;)V
+	public final fun aBrokenPayloadIsAFailureAndNotASilentDefault ()V
+	public final fun aSnapshotSurvivesARoundTrip ()V
+	public final fun closingIsAllowedByDefaultAndDisposeIsIdempotent ()V
+	public final fun everyFixtureStillReadsWithTheCurrentSpec ()V
+	public final fun everyStateFixtureCanStillBeRestored ()V
+	protected fun getConfigFixtures ()Ljava/util/List;
+	protected fun getSampleConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+	protected fun getStateFixtures ()Ljava/util/List;
+	public final fun launchingIsCheapAndTouchesNoNetworkBeforeTheFirstFrame ()V
+	public final fun setupRegistersOnlyWhatTheManifestDeclares ()V
+	public final fun theDefaultConfigDecodes ()V
+	public final fun theManifestSurvivesARoundTripThroughJson ()V
+	public final fun theScreenComposesAndHasTheRootTagTheContainerPutsOnIt ()V
+}
+
+public final class cx/m42/superizer/testing/AppTestScope {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/app/SuperizerApp;Lcx/m42/superizer/app/AppInstance;Lcx/m42/superizer/testing/FakeAppRuntime;Landroidx/compose/ui/test/ComposeUiTest;)V
+	public final fun assertAbsent (Ljava/lang/String;)V
+	public final fun assertShown (Ljava/lang/String;)V
+	public final fun click (Ljava/lang/String;)V
+	public final fun getApp ()Lcx/m42/superizer/app/SuperizerApp;
+	public final fun getInstance ()Lcx/m42/superizer/app/AppInstance;
+	public final fun getRuntime ()Lcx/m42/superizer/testing/FakeAppRuntime;
+	public final fun getUi ()Landroidx/compose/ui/test/ComposeUiTest;
+	public final fun idle ()V
+	public final fun node (Ljava/lang/String;)Landroidx/compose/ui/test/SemanticsNodeInteraction;
+	public final fun type (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class cx/m42/superizer/testing/FakeAppRuntime : cx/m42/superizer/runtime/InstanceRuntime {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;Ljava/lang/String;ZLjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;Ljava/lang/String;ZLjava/util/Set;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun getAnalytics ()Lcx/m42/superizer/runtime/AnalyticsService;
+	public fun getAnalytics ()Lcx/m42/superizer/testing/RecordingAnalytics;
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getApps ()Lcx/m42/superizer/runtime/AppsService;
+	public fun getApps ()Lcx/m42/superizer/testing/FakeApps;
+	public synthetic fun getAuth ()Lcx/m42/superizer/runtime/AuthService;
+	public fun getAuth ()Lcx/m42/superizer/testing/FakeAuth;
+	public synthetic fun getClock ()Lcx/m42/superizer/runtime/Clock;
+	public fun getClock ()Lcx/m42/superizer/testing/FakeClock;
+	public final fun getEmittedEvents ()Lkotlinx/coroutines/flow/MutableSharedFlow;
+	public fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public synthetic fun getHaptics ()Lcx/m42/superizer/runtime/HapticsService;
+	public fun getHaptics ()Lcx/m42/superizer/testing/RecordingHaptics;
+	public fun getHost ()Lcx/m42/superizer/runtime/HostInfo;
+	public final fun getHostLifecycle ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public fun getLifecycle ()Lkotlinx/coroutines/flow/StateFlow;
+	public synthetic fun getLocale ()Lcx/m42/superizer/runtime/LocaleService;
+	public fun getLocale ()Lcx/m42/superizer/testing/FakeLocale;
+	public synthetic fun getLogger ()Lcx/m42/superizer/runtime/Logger;
+	public fun getLogger ()Lcx/m42/superizer/testing/RecordingLogger;
+	public synthetic fun getNavigation ()Lcx/m42/superizer/runtime/NavigationService;
+	public fun getNavigation ()Lcx/m42/superizer/testing/RecordingNavigation;
+	public synthetic fun getNetwork ()Lcx/m42/superizer/runtime/NetworkService;
+	public fun getNetwork ()Lcx/m42/superizer/testing/FakeNetwork;
+	public synthetic fun getPush ()Lcx/m42/superizer/runtime/PushService;
+	public fun getPush ()Lcx/m42/superizer/testing/FakePush;
+	public fun getScope ()Lkotlinx/coroutines/CoroutineScope;
+	public final fun getServices ()Ljava/util/Map;
+	public synthetic fun getStorage ()Lcx/m42/superizer/runtime/StorageService;
+	public fun getStorage ()Lcx/m42/superizer/testing/InMemoryStorage;
+	public final fun provide (Lcx/m42/superizer/runtime/ServiceKey;Ljava/lang/Object;)V
+	public fun service (Lcx/m42/superizer/runtime/ServiceKey;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/FakeApps : cx/m42/superizer/runtime/AppsService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun get-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/runtime/AppSummary;
+	public fun list ()Ljava/util/List;
+}
+
+public final class cx/m42/superizer/testing/FakeAuth : cx/m42/superizer/runtime/AuthService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcx/m42/superizer/runtime/AuthSession;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/AuthSession;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getSession ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getSession ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun signIn (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun signOut (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/FakeClock : cx/m42/superizer/runtime/Clock {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (J)V
+	public synthetic fun <init> (JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun advance (JJJJ)V
+	public static synthetic fun advance$default (Lcx/m42/superizer/testing/FakeClock;JJJJILjava/lang/Object;)V
+	public fun now ()J
+}
+
+public final class cx/m42/superizer/testing/FakeHostRuntimeFactory : cx/m42/superizer/runtime/HostRuntimeFactory {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun createApp-HNJm7k8 (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/AppRuntime;
+	public fun createInstance (Lcx/m42/superizer/runtime/AppRuntime;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/InstanceRuntime;
+	public final fun getCreated ()Ljava/util/Map;
+}
+
+public final class cx/m42/superizer/testing/FakeLocale : cx/m42/superizer/runtime/LocaleService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getLangTag ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getLangTag ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun pick (Ljava/util/Map;Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/FakeNetwork : cx/m42/superizer/runtime/NetworkService {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun fail (Ljava/lang/String;Ljava/lang/String;)V
+	public static synthetic fun fail$default (Lcx/m42/superizer/testing/FakeNetwork;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public fun get (Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getCalls ()Ljava/util/List;
+	public fun getOnline ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getOnline ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun post (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun request (Lcx/m42/superizer/runtime/NetworkRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun respond (Ljava/lang/String;Ljava/lang/String;I)V
+	public final fun respond (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun respond$default (Lcx/m42/superizer/testing/FakeNetwork;Ljava/lang/String;Ljava/lang/String;IILjava/lang/Object;)V
+}
+
+public final class cx/m42/superizer/testing/FakePush : cx/m42/superizer/runtime/PushService {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun deliver (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;J)V
+	public static synthetic fun deliver$default (Lcx/m42/superizer/testing/FakePush;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;JILjava/lang/Object;)V
+	public fun getEnabled ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getEnabled ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun getMessages ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun getPermissionGranted ()Z
+	public fun getSubscriptions ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getSubscriptions ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun requestPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setPermissionGranted (Z)V
+	public fun subscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun unsubscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/FakesKt {
+	public static final fun appSummary (Ljava/lang/String;Lcx/m42/superizer/app/AppMetadata;Ljava/lang/String;Lcx/m42/superizer/registry/AppState;Z)Lcx/m42/superizer/runtime/AppSummary;
+	public static synthetic fun appSummary$default (Ljava/lang/String;Lcx/m42/superizer/app/AppMetadata;Ljava/lang/String;Lcx/m42/superizer/registry/AppState;ZILjava/lang/Object;)Lcx/m42/superizer/runtime/AppSummary;
+}
+
+public final class cx/m42/superizer/testing/InMemorySnapshotStore : cx/m42/superizer/registry/SnapshotStore {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getSnapshot ()Lcx/m42/superizer/registry/SessionSnapshot;
+	public fun load (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun save (Lcx/m42/superizer/registry/SessionSnapshot;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setSnapshot (Lcx/m42/superizer/registry/SessionSnapshot;)V
+}
+
+public final class cx/m42/superizer/testing/InMemoryStorage : cx/m42/superizer/runtime/StorageService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun get (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getEntries ()Ljava/util/Map;
+	public fun keys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun set (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/RecordingAnalytics : cx/m42/superizer/runtime/AnalyticsService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun event (Ljava/lang/String;Ljava/util/Map;)V
+	public final fun getEvents ()Ljava/util/List;
+	public final fun getScreens ()Ljava/util/List;
+	public fun screen (Ljava/lang/String;)V
+}
+
+public final class cx/m42/superizer/testing/RecordingHaptics : cx/m42/superizer/runtime/HapticsService {
+	public static final field $stable I
+	public fun <init> ()V
+	public final fun getTicks ()I
+	public final fun setTicks (I)V
+	public fun tick ()V
+}
+
+public final class cx/m42/superizer/testing/RecordingLogger : cx/m42/superizer/runtime/Logger {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun debug (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public fun error (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public final fun getLines ()Ljava/util/List;
+	public fun info (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public fun warn (Ljava/lang/String;Ljava/lang/Throwable;)V
+}
+
+public final class cx/m42/superizer/testing/RecordingNavigation : cx/m42/superizer/runtime/NavigationService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getClosed ()I
+	public final fun getOpened ()Ljava/util/List;
+	public final fun getSettingsOpened ()I
+	public final fun getUnknown ()Ljava/util/Set;
+	public final fun getUrls ()Ljava/util/List;
+	public fun openApp-Z_5eAyw (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun openSettings ()V
+	public fun openUrl (Ljava/lang/String;)Z
+	public final fun setClosed (I)V
+	public final fun setSettingsOpened (I)V
+}
+
+public final class cx/m42/superizer/testing/RunAppTestKt {
+	public static final fun runAppTest-61gmM3M (Lcx/m42/superizer/app/SuperizerApp;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun runAppTest-61gmM3M$default (Lcx/m42/superizer/app/SuperizerApp;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+

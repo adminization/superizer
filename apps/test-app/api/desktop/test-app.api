@@ -1,0 +1,49 @@
+public final class cx/m42/apps/testapp/TestApp : cx/m42/superizer/app/SuperizerApp {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/apps/testapp/TestApp$Companion;
+	public fun <init> ()V
+	public fun getConfigSpec ()Lcx/m42/superizer/app/AppConfigSpec;
+	public fun getManifest ()Lcx/m42/superizer/app/AppManifest;
+	public fun launch (Lcx/m42/superizer/runtime/InstanceRuntime;Lcx/m42/apps/testapp/TestConfig;)Lcx/m42/superizer/app/AppInstance;
+	public synthetic fun launch (Lcx/m42/superizer/runtime/InstanceRuntime;Ljava/lang/Object;)Lcx/m42/superizer/app/AppInstance;
+	public fun setup (Lcx/m42/superizer/app/AppSetupContext;)V
+}
+
+public final class cx/m42/apps/testapp/TestApp$Companion {
+	public final fun getPROMO_CODE ()Ljava/lang/String;
+	public final fun promoConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
+}
+
+public final class cx/m42/apps/testapp/TestConfig {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/apps/testapp/TestConfig$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/apps/testapp/TestConfig;
+	public static synthetic fun copy$default (Lcx/m42/apps/testapp/TestConfig;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/apps/testapp/TestConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getMode ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/apps/testapp/TestConfig$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/apps/testapp/TestConfig$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/apps/testapp/TestConfig;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/apps/testapp/TestConfig;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/apps/testapp/TestConfig$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
