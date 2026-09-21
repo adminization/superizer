@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The host library's own manifest. Everything here is merged into any app that depends on
+  `superizer:host`, which is why it holds exactly two things and not one more.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Push needs the network. Declared here rather than left to arrive invisibly through
+      firebase-messaging's own manifest: a permission that changes what an app may tell its users
+      about itself has to be a line somebody wrote, in a file somebody reviews. An app that does not
+      want it can still remove it with `tools:node="remove"`, and then FCM registration simply fails
+      and `available` stays false.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--
+      Android 13+. A normal install grants nothing and the first notification is dropped silently;
+      `PushTransport.requestPermission()` is what asks. Below API 33 the permission does not exist
+      and notifications are on unless the user turned them off in system settings.
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+        <!--
+          FCM's entry point. The system constructs it by name, so it is public and must not be
+          renamed or obfuscated — firebase-messaging's own consumer ProGuard rules keep it.
+        -->
+        <service
+            android:name="cx.m42.superizer.host.push.SuperizerMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

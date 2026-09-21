@@ -1,5 +1,6 @@
 package cx.m42.superizer.host.platform
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -10,6 +11,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import java.lang.ref.WeakReference
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -32,11 +34,25 @@ public object AndroidHost {
     internal var vibrator: Vibrator? = null
     internal var appContext: Context? = null
 
+    /**
+     * The activity, weakly, and only for the one thing that cannot be done without one: putting a
+     * runtime-permission dialog on the screen (`PushTransport.requestPermission`).
+     *
+     * Weak because this object outlives every activity and a strong reference here would hold a
+     * destroyed one across a rotation — the exact leak the application context below exists to
+     * avoid. Everything that does not need an Activity keeps using `appContext`.
+     */
+    private var activityRef: WeakReference<Activity>? = null
+
     public fun init(context: Context) {
         // The application context, not the activity: these outlive any one activity, and holding
         // an activity here would leak it across a rotation.
         val app = context.applicationContext
         appContext = app
+        // A rotation calls init again with the new activity, so this refreshes itself. An
+        // Application-context init simply leaves it null, and a permission prompt is then
+        // impossible rather than wrong.
+        if (context is Activity) activityRef = WeakReference(context)
         vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             // getSystemService(VIBRATOR_SERVICE) still works on API 31+ but is deprecated, and on a
             // multi-motor device it picks an arbitrary one; the manager names the default.
@@ -48,6 +64,8 @@ public object AndroidHost {
         PlatformLifecycle.attach()
         Connectivity.attach(app)
     }
+
+    internal fun currentActivity(): Activity? = activityRef?.get()?.takeIf { !it.isFinishing }
 }
 
 internal actual fun platformHapticTick() {

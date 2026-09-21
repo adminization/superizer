@@ -13,6 +13,13 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.androidx.lifecycle.process)
+            // Firebase Cloud Messaging: the Android half of the push seam (13 §8). Compiled in
+            // unconditionally, so the messaging service is always part of any host built on this
+            // library. Whether it can do anything is a runtime question — it needs a
+            // `google-services.json` in the *app*, which is a per-deployment secret and cannot
+            // live here. Without one, `PushTransport.available` is false and every call is inert.
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.messaging)
         }
         val desktopMain by getting
         desktopMain.dependencies {

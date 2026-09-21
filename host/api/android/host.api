@@ -264,6 +264,7 @@ public final class cx/m42/superizer/host/push/PushTransport {
 	public final fun getAvailable ()Z
 	public final fun getIncoming ()Lkotlinx/coroutines/flow/SharedFlow;
 	public final fun getToken ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun onPermissionResult (I[I)V
 	public final fun requestPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun subscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun unsubscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -278,6 +279,13 @@ public final class cx/m42/superizer/host/push/RoutedPush : cx/m42/superizer/runt
 	public fun requestPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun subscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun unsubscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/push/SuperizerMessagingService : com/google/firebase/messaging/FirebaseMessagingService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun onMessageReceived (Lcom/google/firebase/messaging/RemoteMessage;)V
+	public fun onNewToken (Ljava/lang/String;)V
 }
 
 public final class cx/m42/superizer/host/push/TopicStore {
