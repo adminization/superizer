@@ -1,0 +1,27 @@
+# GitHub Pages' own Jekyll, with no generator on top of it.
+#
+# The docs are plain markdown that reads correctly in a checkout, on github.com and on the site,
+# and nothing in this file changes what they say. Four plugins are what makes that possible; all
+# four are on GitHub Pages' allowlist and all four are normally on by default, listed here anyway
+# so that a build which stops applying the defaults fails loudly instead of quietly dropping them.
+title: Superizer
+description: A Compose Multiplatform host framework — independent apps plug into a host through one contract
+theme: jekyll-theme-primer
+
+plugins:
+  # Renders a .md file that has no YAML front matter. Ours have none, and adding it to eleven
+  # files would be eleven lines that exist only for the website.
+  - jekyll-optional-front-matter
+  # README.md becomes the index of its directory, so docs/README.md is the landing page.
+  - jekyll-readme-index
+  # Rewrites `01-getting-started.md` to `01-getting-started.html`, which is what makes the same
+  # link work in a checkout and on the site.
+  - jekyll-relative-links
+  # A page's <title> comes from its first heading rather than from its filename.
+  - jekyll-titles-from-headings
+
+# The library's own build output and the Gradle scaffolding are not documentation.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor

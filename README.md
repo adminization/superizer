@@ -13,7 +13,8 @@ on a `Superizer`, an `AppHandler` or an `AppRegistry`; the build fails if it tri
 
 Targets: Android, desktop (JVM), wasm in the browser. MIT licensed.
 
-**Full documentation is in [`docs/`](docs/)** — [getting started from scratch](docs/01-getting-started.md),
+**Full documentation: [adminization.github.io/superizer](https://adminization.github.io/superizer/)**,
+or [`docs/`](docs/) in a checkout — [getting started from scratch](docs/01-getting-started.md),
 [the architecture](docs/02-architecture.md), [writing an app](docs/03-app-guide.md), a reference for
 [`core`](docs/04-core-api.md), [`host`](docs/05-host-api.md) and [`ui`](docs/06-ui-api.md),
 [testing](docs/07-testing.md), [activation, deep links and push](docs/08-activation-routing-push.md),
