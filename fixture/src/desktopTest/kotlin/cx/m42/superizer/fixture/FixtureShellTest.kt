@@ -113,13 +113,12 @@ class FixtureShellTest {
     }
 
     /**
-     * D48, the way back out of D8: what an activation revealed, a long press puts away again.
-     *
-     * The assertion that matters is the second half — a long press on the *ordinary* app does
-     * nothing. Hiding is the inverse of an activation, not a way to lose the app you use.
+     * D48: Home is chosen. An activation puts the bench app there, a long press takes it off, and
+     * the catalog still lists it — being unlocked is what "available" means, and removing a tile
+     * is not a lock.
      */
     @Test
-    fun aLongPressPutsAnUnlockedHiddenAppAwayAgain() = runComposeUiTest {
+    fun anActivationPutsTheBenchAppOnHomeAndALongPressTakesItOff() = runComposeUiTest {
         setContent { FixtureApp(fixture()) }
         waitForIdle()
 
@@ -129,18 +128,48 @@ class FixtureShellTest {
 
         onNodeWithTag("home:tile-test-app").performTouchInput { longClick() }
         waitForIdle()
-        onNodeWithTag("home:confirm-hide").assertIsDisplayed()
-        onNodeWithText("Hide").performClick()
-        waitForIdle()
-
         onNodeWithTag("home:tile-test-app").assertDoesNotExist()
 
-        // The ordinary app has no long press to answer: the gesture falls through to the tap it
-        // always was and the app opens, which is the only sane thing a tile can do with it.
+        onNodeWithTag("home:add").performClick()
+        waitForIdle()
+        onNodeWithTag("catalog:row-test-app").assertIsDisplayed()
+    }
+
+    @Test
+    fun theCatalogAddsAnAppToHomeAndTheChoiceSurvivesARestart() = runComposeUiTest {
+        setContent { FixtureApp(fixture()) }
+        waitForIdle()
+
+        // The probe is on Home by the host's default; take it off, then put it back from the list.
         onNodeWithTag("home:tile-probe").performTouchInput { longClick() }
         waitForIdle()
-        onNodeWithTag("home:confirm-hide").assertDoesNotExist()
-        onNodeWithTag("probe:root").assertIsDisplayed()
+        onNodeWithTag("home:tile-probe").assertDoesNotExist()
+        onNodeWithText("Nothing on Home yet. Add an app from the list.").assertIsDisplayed()
+
+        onNodeWithTag("home:add").performClick()
+        waitForIdle()
+        onNodeWithTag("catalog:row-probe").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Back").performClick()
+        waitForIdle()
+        onNodeWithTag("home:tile-probe").assertIsDisplayed()
+
+        // A second host on the same preferences directory — which is what the next process is.
+        setContent { FixtureApp(fixture()) }
+        waitForIdle()
+        onNodeWithTag("home:tile-probe").assertIsDisplayed()
+    }
+
+    @Test
+    fun aLockedAppIsNotInTheCatalogAndCannotBeAddedFromIt() = runComposeUiTest {
+        setContent { FixtureApp(fixture()) }
+        waitForIdle()
+
+        onNodeWithTag("home:add").performClick()
+        waitForIdle()
+        onNodeWithTag("catalog:row-probe").assertIsDisplayed()
+        // D8 holds in the catalog too: a row for a locked app would be the reveal itself.
+        onNodeWithTag("catalog:row-test-app").assertDoesNotExist()
     }
 
     private fun ComposeUiTest.unlockBenchApp() {
@@ -156,7 +185,7 @@ class FixtureShellTest {
     private fun ComposeUiTest.goHome() {
         onNodeWithContentDescription("Open menu").performClick()
         waitForIdle()
-        onNodeWithText("All apps").performClick()
+        onNodeWithText("Home").performClick()
         waitForIdle()
     }
 

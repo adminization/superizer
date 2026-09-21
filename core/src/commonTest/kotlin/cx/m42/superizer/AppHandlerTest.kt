@@ -261,6 +261,34 @@ class AppHandlerTest {
     }
 
     @Test
+    fun aSnapshotOfAnAppLockedAgainSinceIsDroppedNotRestored(): TestResult = runTest {
+        // The snapshot is yesterday's screen, not an activation: an app put back behind its
+        // activation in between (the Service Menu, a reset) does not walk back in through it.
+        val unlocked = mutableSetOf<AppId>()
+        val events = MutableSharedFlow<SuperizerEvent>(replay = 64, extraBufferCapacity = 64)
+        val lifecycle = MutableStateFlow(HostLifecycle.Foreground)
+        val registry = AppRegistry(testHost(), events)
+        registry.register(ProbeApp(hidden = true))
+        val snapshots = MemorySnapshots()
+        snapshots.save(SessionSnapshot(AppId("probe"), AppConfig.Empty, null, 0))
+        val hostScope = CoroutineScope(SupervisorJob() + UnconfinedTestDispatcher(testScheduler))
+        val handler = AppHandler(
+            registry, TestRuntimeFactory(events, lifecycle), events, lifecycle, snapshots,
+            Clock { 0 }, hostScope, unlocked = { unlocked },
+        )
+        handler.enableAll()
+
+        val restored = handler.restoreLastSession()
+        advanceUntilIdle()
+
+        assertNotNull(restored)
+        assertTrue(restored.isFailure)
+        assertNull(snapshots.snapshot)
+        assertNull(handler.current.value)
+        hostScope.cancel()
+    }
+
+    @Test
     fun setupThatRegistersAnUndeclaredDeepLinkLeavesTheAppDisabled(): TestResult = handlerTest { f ->
         // D47: the manifest is the declaration, `setup` is the wiring, and a manifest that can be
         // wrong about what an app serves is a manifest the Service Menu cannot be trusted to show.

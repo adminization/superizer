@@ -26,20 +26,27 @@ The first version. Everything below is contract 1, which means an app declaring
 - `Superizer` and its ports (`HostSettingsPort`, `ActivationPort`, `RoutePort`, `DiagnosticsPort`) —
   what the shell needs from a host, declared next to the contract so that `ui` never has to depend
   on `host` and apps therefore cannot reach it.
+- `Superizer.home` / `addToHome` / `removeFromHome` — Home is a chosen, ordered set, not "everything
+  visible". Events `AddedToHome`, `RemovedFromHome`, and `Locked` as the pair of `Unlocked`.
 
 ### The host (`host`)
 
 Preferences, a namespaced storage service, a Ktor network service with a 15-second timeout and no
 injected credentials, a tagged logger with a 500-line ring buffer, locale and haptics that respect
 the host's own settings, a system clock, process lifecycle, connectivity, an optional-service
-registry, QR and promo-code activation, an unlock store, a session snapshot store, deep links in
-four shapes, and push routing on a transport that is a no-op everywhere.
+registry, QR and promo-code activation, an unlock store, a home store with the host's first-run
+defaults (`SuperizerBuilder.home(...)`), a session snapshot store, deep links in four shapes, and
+push routing on a transport that is a no-op everywhere. Unlocking a hidden app — by activation or
+from the Service Menu — puts it on Home; locking or resetting it takes it off and closes it. A
+session snapshot is restored without `force`, so a locked app does not come back through it.
 
 ### The shell (`ui`, `ui-theme`)
 
-Design tokens as a value rather than an object, so a dark theme is a second value. All Apps, the
-drawer, Settings with a section per app, Activate, the Service Menu, the app container, the host's
-error screen, and the veto dialog. Content is capped at 480 dp and centred.
+Design tokens as a value rather than an object, so a dark theme is a second value. Home (chosen
+tiles, a long press removes one, a "+" tile leads to the catalog), All Apps (the catalog: a tap
+adds to Home or takes off), the drawer, Settings with a section per app, Activate, the Service Menu,
+the app container, the host's error screen, and the veto dialog. Content is capped at 480 dp and
+centred.
 
 ### Known limitations
 

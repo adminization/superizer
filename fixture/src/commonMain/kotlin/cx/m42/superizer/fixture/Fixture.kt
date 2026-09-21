@@ -48,6 +48,8 @@ public fun buildFixture(scope: CoroutineScope, debug: Boolean = true): Superizer
     scheme("superizer")
     register(ProbeApp())
     register(TestApp())
+    // A fresh install starts with the probe on Home (D48); the bench app gets there by activation.
+    home("probe")
     promoCodes(
         mapOf(
             TestApp.PROMO_CODE to ActivationResult.Success(

@@ -2,6 +2,8 @@ package cx.m42.superizer.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,43 +31,64 @@ import com.composeunstyled.Text
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.theme.AppTheme
+import cx.m42.superizer.ui.components.AppButton
 import cx.m42.superizer.ui.components.AppIconGlyph
+import cx.m42.superizer.ui.components.ButtonSize
+import cx.m42.superizer.ui.components.ButtonVariant
+import cx.m42.superizer.ui.components.PlusIcon
 import cx.m42.superizer.ui.i18n.hostStrings
 
 /**
- * Home: every app this device may open, as tiles two to a row, grouped by the category each app
- * names for itself.
+ * Home: the apps the user chose, as tiles two to a row, grouped by the category each app names
+ * for itself, and one more tile that leads to the catalog (D48).
  *
- * It renders whatever the registry hands it and knows nothing about any particular app — which is
- * the point. A fourth app appears here because it was registered, not because this file learned
- * about it (§24).
+ * It renders whatever the shell hands it and knows nothing about any particular app — which is the
+ * point. A fourth app appears here because the user added it from the catalog, not because this
+ * file learned about it (§24).
  *
- * Hidden apps are filtered out by the caller (D8): what is not unlocked is not listed, and there
- * is no "locked" tile to tap, because a tile that says "you cannot have this" is an advertisement.
+ * Every tile answers a long press with [onRemove], and it is the same gesture for every tile
+ * because every tile got here by a choice: the catalog, or an activation. No confirmation — the
+ * way back is one tap in the catalog, and a dialog guarding a reversible action is noise.
  *
- * The apps in [hideable] — the hidden ones an activation has revealed — answer a long press with
- * [onHide] (D48). The screen only reports the gesture: the confirmation is a modal, and a modal
- * belongs to the shell.
+ * Hidden apps that are not unlocked never reach [apps] (D8): a tile that says "you cannot have
+ * this" is an advertisement.
  */
 @Composable
-public fun AllAppsScreen(
+public fun HomeScreen(
     apps: List<SuperizerApp<*>>,
     langTag: String,
     onOpen: (AppId) -> Unit,
+    onRemove: (AppId) -> Unit,
+    onAdd: () -> Unit,
     modifier: Modifier = Modifier,
-    hideable: Set<AppId> = emptySet(),
-    onHide: (AppId) -> Unit = {},
 ) {
     val tokens = AppTheme
     if (apps.isEmpty()) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = hostStrings.noApps, style = tokens.body, color = tokens.muted)
+        Column(
+            modifier = modifier.fillMaxSize().background(tokens.pageBackground).padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = hostStrings.homeEmpty,
+                style = tokens.body,
+                color = tokens.muted,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.height(16.dp))
+            AppButton(
+                text = hostStrings.addApp,
+                onClick = onAdd,
+                variant = ButtonVariant.Default,
+                size = ButtonSize.Default,
+                modifier = Modifier.testTag("home:add"),
+            )
         }
         return
     }
 
-    // Grouped in the order the apps were registered, so the host decides what comes first by the
-    // order it registers in — no sort key to invent, no priority field to argue about.
+    // Grouped in the order the apps were added, so the user decides what comes first by the order
+    // they add in — no sort key to invent, no priority field to argue about.
     val groups = apps.groupBy { it.metadata.category }
 
     Column(
@@ -95,7 +118,7 @@ public fun AllAppsScreen(
                             app = app,
                             langTag = langTag,
                             onOpen = onOpen,
-                            onHide = if (app.id in hideable) onHide else null,
+                            onRemove = onRemove,
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -104,6 +127,11 @@ public fun AllAppsScreen(
                 }
             }
             Spacer(Modifier.height(12.dp))
+        }
+        // The catalog's tile, last and on its own row, so it reads as a door rather than as an app.
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
+            AddTile(onAdd = onAdd, modifier = Modifier.weight(1f))
+            Spacer(Modifier.weight(1f))
         }
     }
 }
@@ -114,7 +142,7 @@ private fun AppTile(
     app: SuperizerApp<*>,
     langTag: String,
     onOpen: (AppId) -> Unit,
-    onHide: ((AppId) -> Unit)?,
+    onRemove: (AppId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val tokens = AppTheme
@@ -124,13 +152,10 @@ private fun AppTile(
             .padding(4.dp)
             .clip(RoundedCornerShape(tokens.radius))
             .background(tokens.background)
-            // `combinedClickable` on every tile rather than only on the ones that can be hidden:
-            // the modifier chain then has the same shape everywhere, and the long press is a
-            // labelled accessibility action wherever it exists at all.
             .combinedClickable(
                 role = Role.Button,
-                onLongClickLabel = onHide?.let { hostStrings.hideAction },
-                onLongClick = onHide?.let { hide -> { hide(app.id) } },
+                onLongClickLabel = hostStrings.removeFromHome,
+                onLongClick = { onRemove(app.id) },
                 onClick = { onOpen(app.id) },
             )
             .testTag("home:tile-${app.id.value}")
@@ -152,6 +177,34 @@ private fun AppTile(
             maxLines = 2,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+/** Outlined where the app tiles are filled: it is the one tile that is not an app. */
+@Composable
+private fun AddTile(onAdd: () -> Unit, modifier: Modifier = Modifier) {
+    val tokens = AppTheme
+    Column(
+        modifier = modifier
+            .padding(4.dp)
+            .clip(RoundedCornerShape(tokens.radius))
+            .border(1.dp, tokens.border, RoundedCornerShape(tokens.radius))
+            .clickable(role = Role.Button, onClick = onAdd)
+            .testTag("home:add")
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(modifier = Modifier.fillMaxWidth().aspectRatio(1.6f), contentAlignment = Alignment.Center) {
+            PlusIcon(tokens.muted, size = 40.dp)
+        }
+        Text(
+            text = hostStrings.addApp,
+            style = tokens.label,
+            color = tokens.muted,
+            maxLines = 1,
+            textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
         )
     }

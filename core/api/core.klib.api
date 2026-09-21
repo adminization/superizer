@@ -201,6 +201,7 @@ abstract interface cx.m42.superizer/DiagnosticsPort { // cx.m42.superizer/Diagno
     abstract val recentEvents // cx.m42.superizer/DiagnosticsPort.recentEvents|{}recentEvents[0]
         abstract fun <get-recentEvents>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer.event/SuperizerEvent>> // cx.m42.superizer/DiagnosticsPort.recentEvents.<get-recentEvents>|<get-recentEvents>(){}[0]
 
+    abstract suspend fun lock(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.lock|lock(cx.m42.superizer.app.AppId){}[0]
     abstract suspend fun reset(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.reset|reset(cx.m42.superizer.app.AppId){}[0]
     abstract suspend fun simulatePush(kotlin.collections/Map<kotlin/String, kotlin/String>) // cx.m42.superizer/DiagnosticsPort.simulatePush|simulatePush(kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
     abstract suspend fun unlock(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.unlock|unlock(cx.m42.superizer.app.AppId){}[0]
@@ -240,6 +241,8 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
         abstract fun <get-handler>(): cx.m42.superizer.registry/AppHandler // cx.m42.superizer/Superizer.handler.<get-handler>|<get-handler>(){}[0]
     abstract val haptics // cx.m42.superizer/Superizer.haptics|{}haptics[0]
         abstract fun <get-haptics>(): cx.m42.superizer.runtime/HapticsService // cx.m42.superizer/Superizer.haptics.<get-haptics>|<get-haptics>(){}[0]
+    abstract val home // cx.m42.superizer/Superizer.home|{}home[0]
+        abstract fun <get-home>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer.app/AppId>> // cx.m42.superizer/Superizer.home.<get-home>|<get-home>(){}[0]
     abstract val hostInfo // cx.m42.superizer/Superizer.hostInfo|{}hostInfo[0]
         abstract fun <get-hostInfo>(): cx.m42.superizer.runtime/HostInfo // cx.m42.superizer/Superizer.hostInfo.<get-hostInfo>|<get-hostInfo>(){}[0]
     abstract val registry // cx.m42.superizer/Superizer.registry|{}registry[0]
@@ -251,7 +254,8 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
     abstract val unlocked // cx.m42.superizer/Superizer.unlocked|{}unlocked[0]
         abstract fun <get-unlocked>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Set<cx.m42.superizer.app/AppId>> // cx.m42.superizer/Superizer.unlocked.<get-unlocked>|<get-unlocked>(){}[0]
 
-    abstract suspend fun hide(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.hide|hide(cx.m42.superizer.app.AppId){}[0]
+    abstract suspend fun addToHome(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.addToHome|addToHome(cx.m42.superizer.app.AppId){}[0]
+    abstract suspend fun removeFromHome(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.removeFromHome|removeFromHome(cx.m42.superizer.app.AppId){}[0]
 
     final object Companion // cx.m42.superizer/Superizer.Companion|null[0]
 }
@@ -437,6 +441,19 @@ sealed interface cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.eve
         final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Active.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Active.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Active.toString|toString(){}[0]
+    }
+
+    final class AddedToHome : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.AddedToHome|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.AddedToHome.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.AddedToHome.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.AddedToHome.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.AddedToHome.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.AddedToHome // cx.m42.superizer.event/SuperizerEvent.AddedToHome.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.AddedToHome.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.AddedToHome.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.AddedToHome.toString|toString(){}[0]
     }
 
     final class Background : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Background|null[0]
@@ -629,6 +646,19 @@ sealed interface cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.eve
         final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Launched.toString|toString(){}[0]
     }
 
+    final class Locked : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Locked|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.Locked.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.Locked.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Locked.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.Locked.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.Locked // cx.m42.superizer.event/SuperizerEvent.Locked.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.Locked.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.Locked.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.Locked.toString|toString(){}[0]
+    }
+
     final class PushDropped : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.PushDropped|null[0]
         constructor <init>(cx.m42.superizer.app/AppId?, kotlin/String) // cx.m42.superizer.event/SuperizerEvent.PushDropped.<init>|<init>(cx.m42.superizer.app.AppId?;kotlin.String){}[0]
 
@@ -691,6 +721,19 @@ sealed interface cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.eve
         final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RegistrationRejected.toString|toString(){}[0]
+    }
+
+    final class RemovedFromHome : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome|null[0]
+        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+
+        final val appId // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.appId|{}appId[0]
+            final fun <get-appId>(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.appId.<get-appId>|<get-appId>(){}[0]
+
+        final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.component1|component1(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.event/SuperizerEvent.RemovedFromHome // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.event/SuperizerEvent.RemovedFromHome.toString|toString(){}[0]
     }
 
     final class Reset : cx.m42.superizer.event/SuperizerEvent { // cx.m42.superizer.event/SuperizerEvent.Reset|null[0]
@@ -1426,6 +1469,7 @@ final val cx.m42.superizer.app/cx_m42_superizer_app_Localized_$serializer$stable
 final val cx.m42.superizer.app/cx_m42_superizer_app_SuperizerApp$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_SuperizerApp$stableprop|#static{}cx_m42_superizer_app_SuperizerApp$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Activated$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Active$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_AddedToHome$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_AddedToHome$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_AddedToHome$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Background$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Closed$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop[0]
@@ -1439,10 +1483,12 @@ final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Enabled$s
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Launched$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Locked$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Locked$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Locked$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Registered$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop[0]
+final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RemovedFromHome$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RemovedFromHome$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_RemovedFromHome$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Reset$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_Restored$stableprop[0]
 final val cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop|#static{}cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop[0]
@@ -1509,6 +1555,7 @@ final fun cx.m42.superizer.app/cx_m42_superizer_app_SuperizerApp$stableprop_gett
 final fun cx.m42.superizer.app/localized(kotlin/Array<out kotlin/Pair<kotlin/String, kotlin/String>>...): cx.m42.superizer.app/Localized // cx.m42.superizer.app/localized|localized(kotlin.Array<out|kotlin.Pair<kotlin.String,kotlin.String>>...){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Activated$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Activated$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Active$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Active$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_AddedToHome$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_AddedToHome$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_AddedToHome$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Background$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Background$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Closed$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Closed$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_ConfigRejected$stableprop_getter(){}[0]
@@ -1522,10 +1569,12 @@ final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Enabled$s
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Foreground$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_LaunchFailed$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Launched$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Launched$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Locked$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Locked$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Locked$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_PushDropped$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_PushReceived$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Registered$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Registered$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_RegistrationRejected$stableprop_getter(){}[0]
+final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RemovedFromHome$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RemovedFromHome$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_RemovedFromHome$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Reset$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Reset$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_Restored$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_Restored$stableprop_getter(){}[0]
 final fun cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop_getter(): kotlin/Int // cx.m42.superizer.event/cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop_getter|cx_m42_superizer_event_SuperizerEvent_RouteDiscarded$stableprop_getter(){}[0]

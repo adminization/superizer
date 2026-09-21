@@ -30,22 +30,24 @@ public interface HostStrings {
     public fun version(value: String): String
 
     // ------------------------------------------------------------------ destinations
+    public val home: String
     public val allApps: String
     public val settings: String
     public val activate: String
     public val serviceMenu: String
 
-    // ------------------------------------------------------------------ all apps
+    // ------------------------------------------------------------------ home (D48)
     public val noApps: String
     public val ungrouped: String
+    public val homeEmpty: String
+    /** The tile that leads to the catalog. */
+    public val addApp: String
+    /** The long-press label on a tile, so the gesture is announced rather than folklore. */
+    public val removeFromHome: String
 
-    // ------------------------------------------------------------------ hiding an app (D48)
-    /** The long-press label, so the gesture is announced rather than folklore. */
-    public val hideAction: String
-    public fun hideDialogTitle(app: String): String
-    public val hideDialogBody: String
-    public val hideDialogConfirm: String
-    public val hideDialogCancel: String
+    // ------------------------------------------------------------------ catalog (D48)
+    public val catalogHint: String
+    public val onHome: String
 
     // ------------------------------------------------------------------ settings
     public val settingsLanguage: String
@@ -102,6 +104,7 @@ internal object HostStringsEn : HostStrings {
     override val backAction = "Back"
     override fun version(value: String) = "Version $value"
 
+    override val home = "Home"
     override val allApps = "All apps"
     override val settings = "Settings"
     override val activate = "Activate"
@@ -109,13 +112,12 @@ internal object HostStringsEn : HostStrings {
 
     override val noApps = "No apps installed"
     override val ungrouped = "Other"
+    override val homeEmpty = "Nothing on Home yet. Add an app from the list."
+    override val addApp = "Add"
+    override val removeFromHome = "Remove from Home"
 
-    override val hideAction = "Hide from home"
-    override fun hideDialogTitle(app: String) = "Hide \u201C$app\u201D?"
-    override val hideDialogBody =
-        "The tile goes away and only another activation brings it back. Its data is kept."
-    override val hideDialogConfirm = "Hide"
-    override val hideDialogCancel = "Cancel"
+    override val catalogHint = "Tap to put an app on Home or take it off. Hidden apps appear here once activated."
+    override val onHome = "On Home"
 
     override val settingsLanguage = "Language"
     override val settingsLanguageHint = "Interface language on this device"
@@ -141,7 +143,7 @@ internal object HostStringsEn : HostStrings {
 
     override val errorTitle = "The app could not start"
     override val errorRetry = "Try again"
-    override val errorBack = "Back to all apps"
+    override val errorBack = "Back to Home"
 
     override val serviceApps = "Apps"
     override val serviceRun = "Run"
@@ -168,6 +170,7 @@ internal object HostStringsRu : HostStrings {
     override val backAction = "Назад"
     override fun version(value: String) = "Версия $value"
 
+    override val home = "Главная"
     override val allApps = "Все приложения"
     override val settings = "Настройки"
     override val activate = "Активировать"
@@ -175,13 +178,12 @@ internal object HostStringsRu : HostStrings {
 
     override val noApps = "Нет приложений"
     override val ungrouped = "Прочее"
+    override val homeEmpty = "На главной пока пусто. Добавьте приложение из списка."
+    override val addApp = "Добавить"
+    override val removeFromHome = "Убрать с главной"
 
-    override val hideAction = "Убрать с главной"
-    override fun hideDialogTitle(app: String) = "Скрыть «$app»?"
-    override val hideDialogBody =
-        "Плитка исчезнет, вернуть её сможет только повторная активация. Данные приложения останутся."
-    override val hideDialogConfirm = "Скрыть"
-    override val hideDialogCancel = "Отмена"
+    override val catalogHint = "Нажмите, чтобы добавить приложение на главную или убрать с неё. Скрытые появляются здесь после активации."
+    override val onHome = "На главной"
 
     override val settingsLanguage = "Язык"
     override val settingsLanguageHint = "Язык интерфейса на этом устройстве"
@@ -207,7 +209,7 @@ internal object HostStringsRu : HostStrings {
 
     override val errorTitle = "Приложение не запустилось"
     override val errorRetry = "Повторить"
-    override val errorBack = "Ко всем приложениям"
+    override val errorBack = "На главную"
 
     override val serviceApps = "Приложения"
     override val serviceRun = "Запустить"

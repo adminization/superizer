@@ -141,7 +141,16 @@ public fun BackspaceIcon(tint: Color, size: Dp = IconSize) {
     }
 }
 
-/** Four tiles — All Apps, and the home the drawer leads back to. */
+/** A plus, for the tile on Home that leads to the catalog (D48). */
+@Composable
+public fun PlusIcon(tint: Color, size: Dp = IconSize) {
+    Icon(size) { s ->
+        line(s, tint, 0.5f, 0.2f, 0.5f, 0.8f)
+        line(s, tint, 0.2f, 0.5f, 0.8f, 0.5f)
+    }
+}
+
+/** Four tiles — Home, and the screen the drawer leads back to. */
 @Composable
 public fun AppsIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->

@@ -41,6 +41,7 @@ public final class cx/m42/superizer/ui/components/IconsKt {
 	public static final fun CalculatorIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun CheckIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun CurrencyIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun PlusIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun QrIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun SettingsIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun getIconSize ()F
@@ -88,8 +89,10 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getActivateErrorUnsupported ()Ljava/lang/String;
 	public abstract fun getActivatePromoLabel ()Ljava/lang/String;
 	public abstract fun getActivateQrLabel ()Ljava/lang/String;
+	public abstract fun getAddApp ()Ljava/lang/String;
 	public abstract fun getAllApps ()Ljava/lang/String;
 	public abstract fun getBackAction ()Ljava/lang/String;
+	public abstract fun getCatalogHint ()Ljava/lang/String;
 	public abstract fun getCloseDialogBody ()Ljava/lang/String;
 	public abstract fun getCloseDialogConfirm ()Ljava/lang/String;
 	public abstract fun getCloseDialogStay ()Ljava/lang/String;
@@ -97,14 +100,14 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getErrorBack ()Ljava/lang/String;
 	public abstract fun getErrorRetry ()Ljava/lang/String;
 	public abstract fun getErrorTitle ()Ljava/lang/String;
-	public abstract fun getHideAction ()Ljava/lang/String;
-	public abstract fun getHideDialogBody ()Ljava/lang/String;
-	public abstract fun getHideDialogCancel ()Ljava/lang/String;
-	public abstract fun getHideDialogConfirm ()Ljava/lang/String;
+	public abstract fun getHome ()Ljava/lang/String;
+	public abstract fun getHomeEmpty ()Ljava/lang/String;
 	public abstract fun getLangTag ()Ljava/lang/String;
 	public abstract fun getMenu ()Ljava/lang/String;
 	public abstract fun getNoApps ()Ljava/lang/String;
+	public abstract fun getOnHome ()Ljava/lang/String;
 	public abstract fun getOpenMenu ()Ljava/lang/String;
+	public abstract fun getRemoveFromHome ()Ljava/lang/String;
 	public abstract fun getServiceApps ()Ljava/lang/String;
 	public abstract fun getServiceDisable ()Ljava/lang/String;
 	public abstract fun getServiceEnable ()Ljava/lang/String;
@@ -127,7 +130,6 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getSettingsLanguage ()Ljava/lang/String;
 	public abstract fun getSettingsLanguageHint ()Ljava/lang/String;
 	public abstract fun getUngrouped ()Ljava/lang/String;
-	public abstract fun hideDialogTitle (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun settingsBuild (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun version (Ljava/lang/String;)Ljava/lang/String;
 }
@@ -148,8 +150,12 @@ public final class cx/m42/superizer/ui/screens/ActivateScreenKt {
 	public static final fun ActivateScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 }
 
-public final class cx/m42/superizer/ui/screens/AllAppsScreenKt {
-	public static final fun AllAppsScreen (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/util/Set;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+public final class cx/m42/superizer/ui/screens/CatalogScreenKt {
+	public static final fun CatalogScreen (Ljava/util/List;Ljava/util/Set;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/ui/screens/HomeScreenKt {
+	public static final fun HomeScreen (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class cx/m42/superizer/ui/screens/HostErrorScreenKt {
@@ -194,6 +200,18 @@ public final class cx/m42/superizer/ui/shell/ShellDestination$App : cx/m42/super
 	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/ui/shell/ShellDestination$App;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$App;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getId-eVupTzA ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/shell/ShellDestination$Catalog : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/ui/shell/ShellDestination;)V
+	public final fun component1 ()Lcx/m42/superizer/ui/shell/ShellDestination;
+	public final fun copy (Lcx/m42/superizer/ui/shell/ShellDestination;)Lcx/m42/superizer/ui/shell/ShellDestination$Catalog;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ui/shell/ShellDestination$Catalog;Lcx/m42/superizer/ui/shell/ShellDestination;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$Catalog;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFrom ()Lcx/m42/superizer/ui/shell/ShellDestination;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

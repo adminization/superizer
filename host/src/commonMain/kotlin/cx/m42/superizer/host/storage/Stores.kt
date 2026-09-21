@@ -53,6 +53,7 @@ public object HostKeys {
     public const val LANGUAGE: String = "host.language"
     public const val HAPTICS: String = "host.haptics"
     public const val UNLOCKED: String = "host.unlocked"
+    public const val HOME: String = "host.home"
     public const val SESSION: String = "host.session"
     public const val TOPICS: String = "host.push.topics"
 }
@@ -81,6 +82,7 @@ public class UnlockStore(
         if (id !in _unlocked.value) return
         _unlocked.value = _unlocked.value - id
         persist()
+        events?.tryEmit(SuperizerEvent.Locked(id))
     }
 
     private fun load(): Set<AppId> {
@@ -96,6 +98,53 @@ public class UnlockStore(
         SafePrefs.put(
             HostKeys.UNLOCKED,
             json.encodeToString(ListSerializer(String.serializer()), _unlocked.value.map { it.value }),
+        )
+    }
+}
+
+/**
+ * Which apps the user keeps on Home, in the order they were added (D48).
+ *
+ * Absent means a first run and the host's [defaults] apply; present-but-empty means the user took
+ * everything off, which is a choice to keep. Ids are stored as written and filtered by the shell
+ * against what is registered and unlocked *now*, so an app a build dropped and a later build
+ * brought back lands where the user had put it.
+ */
+public class HomeStore(
+    private val defaults: List<AppId>,
+    private val events: MutableSharedFlow<SuperizerEvent>? = null,
+    private val json: Json = Json,
+) {
+    private val _home = MutableStateFlow(load())
+    public val home: StateFlow<List<AppId>> get() = _home.asStateFlow()
+
+    public fun add(id: AppId) {
+        if (id in _home.value) return
+        _home.value = _home.value + id
+        persist()
+        events?.tryEmit(SuperizerEvent.AddedToHome(id))
+    }
+
+    public fun remove(id: AppId) {
+        if (id !in _home.value) return
+        _home.value = _home.value - id
+        persist()
+        events?.tryEmit(SuperizerEvent.RemovedFromHome(id))
+    }
+
+    private fun load(): List<AppId> {
+        val raw = SafePrefs.get(HostKeys.HOME) ?: return defaults.distinct()
+        return runCatching {
+            json.decodeFromString(ListSerializer(String.serializer()), raw)
+                .mapNotNull { AppId.parseOrNull(it) }
+                .distinct()
+        }.getOrDefault(defaults.distinct())
+    }
+
+    private fun persist() {
+        SafePrefs.put(
+            HostKeys.HOME,
+            json.encodeToString(ListSerializer(String.serializer()), _home.value.map { it.value }),
         )
     }
 }

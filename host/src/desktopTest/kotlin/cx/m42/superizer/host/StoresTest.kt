@@ -5,6 +5,7 @@ import cx.m42.superizer.app.AppId
 import cx.m42.superizer.host.push.PendingRoute
 import cx.m42.superizer.host.push.TopicStore
 import cx.m42.superizer.host.storage.PrefsSnapshotStore
+import cx.m42.superizer.host.storage.HomeStore
 import cx.m42.superizer.host.storage.PrefsStorageService
 import cx.m42.superizer.host.storage.SafePrefs
 import cx.m42.superizer.host.storage.UnlockStore
@@ -61,6 +62,36 @@ class StoresTest {
         store.unlock(AppId("secret"))
         store.lock(AppId("secret"))
         assertTrue(UnlockStore().unlocked.value.isEmpty())
+    }
+
+    @Test
+    fun aFreshInstallStartsWithTheHostsDefaultsOnHome() {
+        val defaults = listOf(AppId("calculator"))
+        assertEquals(defaults, HomeStore(defaults).home.value)
+    }
+
+    @Test
+    fun onceTheUserHasTouchedHomeTheDefaultsNoLongerApply() {
+        // Present-but-empty is a choice, and a later build with a longer default list must not
+        // undo it: "nothing on Home" is what the user asked for.
+        val store = HomeStore(listOf(AppId("calculator")))
+        store.remove(AppId("calculator"))
+        assertEquals(emptyList(), HomeStore(listOf(AppId("calculator"), AppId("converter"))).home.value)
+    }
+
+    @Test
+    fun homeKeepsTheOrderAppsWereAddedInAcrossARestart() {
+        val store = HomeStore(emptyList())
+        store.add(AppId("converter"))
+        store.add(AppId("calculator"))
+        store.add(AppId("converter"))
+        assertEquals(listOf(AppId("converter"), AppId("calculator")), HomeStore(emptyList()).home.value)
+    }
+
+    @Test
+    fun aCorruptHomeListFallsBackToTheDefaults() {
+        SafePrefs.put("host.home", "{not json")
+        assertEquals(listOf(AppId("calculator")), HomeStore(listOf(AppId("calculator"))).home.value)
     }
 
     @Test

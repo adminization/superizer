@@ -67,6 +67,15 @@ public sealed interface SuperizerEvent {
 
     public data class Unlocked(override val appId: AppId) : SuperizerEvent
 
+    /** Back behind its activation — the Service Menu or a reset (D35). Never a user gesture. */
+    public data class Locked(override val appId: AppId) : SuperizerEvent
+
+    /** The user chose it for Home (D48): from the catalog, or by activating a hidden app. */
+    public data class AddedToHome(override val appId: AppId) : SuperizerEvent
+
+    /** A long press on its tile (D48). The app is still unlocked and still in the catalog. */
+    public data class RemovedFromHome(override val appId: AppId) : SuperizerEvent
+
     public data class PushReceived(override val appId: AppId, val topic: String?) : SuperizerEvent
 
     /** UnsupportedSchema | UnknownApp | Locked | Disabled | LinkMismatch (13). */

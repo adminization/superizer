@@ -323,7 +323,12 @@ public class AppHandler(
             snapshots.clear()
             return null
         }
-        return launch(snapshot.appId, snapshot.config, snapshot.state, force = true)
+        // Not `force`: a snapshot is yesterday's screen, not an activation. A hidden app that was
+        // locked again in between (the Service Menu, a reset) must not walk back in through it —
+        // the restore fails like any other launch of a locked app, and the snapshot goes with it.
+        val restored = launch(snapshot.appId, snapshot.config, snapshot.state)
+        if (restored.isFailure) snapshots.clear()
+        return restored
     }
 
     /**

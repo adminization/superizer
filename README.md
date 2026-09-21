@@ -139,9 +139,11 @@ val superizer = Superizer.build(scope) {
 Registration is explicit — no classpath scanning, which does not exist on wasm and which R8 would
 have to be told about. Reading this block tells you exactly what is in a build.
 
-You get: All Apps, the drawer, Settings (with a section per app), Activate (promo code and QR text),
-the Service Menu, the app container, deep links, push routing, session restore after a process
-death, and the error screen a failed launch lands on.
+You get: Home (the apps the user chose, starting from `home("calculator")`), All Apps (the catalog
+a tile is added from; a long press takes one off), the drawer, Settings (with a section per app),
+Activate (promo code and QR text — activating a hidden app also puts it on Home), the Service Menu,
+the app container, deep links, push routing, session restore after a process death, and the error
+screen a failed launch lands on.
 
 ## Contract versioning
 

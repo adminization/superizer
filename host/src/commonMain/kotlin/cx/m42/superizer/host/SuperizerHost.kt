@@ -25,6 +25,7 @@ import cx.m42.superizer.host.push.PendingRoute
 import cx.m42.superizer.host.push.PushRouter
 import cx.m42.superizer.host.push.RoutedPush
 import cx.m42.superizer.host.push.TopicStore
+import cx.m42.superizer.host.storage.HomeStore
 import cx.m42.superizer.host.storage.PrefsSnapshotStore
 import cx.m42.superizer.host.storage.PrefsStorageService
 import cx.m42.superizer.host.storage.UnlockStore
@@ -91,14 +92,29 @@ public class SuperizerBuilder internal constructor() {
     internal var auth: AuthService = AnonymousAuth()
     internal var notifier: Notifier? = null
     internal var lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>? = null
+    internal var home: List<AppId> = emptyList()
 
     public fun host(info: HostInfo) {
         hostInfo = info
     }
 
-    /** Registration order is the order All Apps and the drawer list them in. */
+    /** Registration order is the order the catalog and the Service Menu list apps in. */
     public fun register(app: SuperizerApp<*>) {
         apps += app
+    }
+
+    /**
+     * What a fresh install has on Home (D48). Only the first run reads this: from then on Home is
+     * the user's, and a build that changes the list changes nothing for anyone who already has one.
+     * Registered apps that are not hidden, or the tile is skipped until an activation unlocks it.
+     */
+    public fun home(ids: List<AppId>) {
+        home = ids
+    }
+
+    /** The same, by id string — `home("calculator")` — because a value class cannot be a vararg. */
+    public fun home(vararg ids: String) {
+        home = ids.map(::AppId)
     }
 
     /** How a host adds an optional service (D19). None in the MVP — the mechanism is the point. */
@@ -194,13 +210,44 @@ internal class SuperizerHost(
     private val unlockStore = UnlockStore(_events, json)
     override val unlocked: StateFlow<Set<AppId>> = unlockStore.unlocked
 
-    /** D48. One call behind both doors: Home's long press and the Service Menu's "Hide". */
-    override suspend fun hide(id: AppId) {
-        unlockStore.lock(id)
-    }
-
     private val logBuffer = LogBuffer()
     private val hostLogger: Logger = ConsoleLogger("host", logBuffer, verbose = hostInfo.debug)
+
+    private val homeStore = HomeStore(builder.home, _events, json)
+    override val home: StateFlow<List<AppId>> = homeStore.home
+
+    override suspend fun addToHome(id: AppId) {
+        val app = registry.get(id)
+        if (app == null) {
+            hostLogger.warn("addToHome(${id.value}) ignored: not registered")
+            return
+        }
+        if (app.metadata.hidden && id !in unlockStore.unlocked.value) {
+            // Home is not a way around D8: a tile for a locked app would be the reveal itself.
+            hostLogger.warn("addToHome(${id.value}) ignored: locked")
+            return
+        }
+        homeStore.add(id)
+    }
+
+    override suspend fun removeFromHome(id: AppId) {
+        homeStore.remove(id)
+    }
+
+    /** D8 and D48 in one place: whatever reveals a hidden app also puts it on Home. */
+    private fun reveal(id: AppId) {
+        unlockStore.unlock(id)
+        homeStore.add(id)
+    }
+
+    /** The inverse, and the only path that takes a tile away without the user's own long press. */
+    private suspend fun conceal(id: AppId) {
+        homeStore.remove(id)
+        unlockStore.lock(id)
+        // A locked app must not stay on screen or come back through its snapshot.
+        if (handler.current.value?.app?.id == id) handler.close(force = true)
+        handler.forgetSnapshot(id)
+    }
 
     private val localeService = AppLocaleService(builder.languages, builder.fallbackLanguage)
     override val settings: HostSettingsPort = localeService
@@ -266,6 +313,7 @@ internal class SuperizerHost(
         scheme = builder.scheme,
         serviceCode = builder.serviceCode,
         json = json,
+        onUnlock = ::reveal,
     )
 
     private val router = PushRouter(
@@ -296,13 +344,16 @@ internal class SuperizerHost(
         override suspend fun reset(id: AppId) {
             PrefsStorageService.erase(id)
             topics.clear(id)
-            handler.forgetSnapshot(id)
-            unlockStore.lock(id)
+            conceal(id)
             _events.tryEmit(SuperizerEvent.Reset(id))
         }
 
         override suspend fun unlock(id: AppId) {
-            unlockStore.unlock(id)
+            reveal(id)
+        }
+
+        override suspend fun lock(id: AppId) {
+            conceal(id)
         }
 
         override suspend fun simulatePush(payload: Map<String, String>) {

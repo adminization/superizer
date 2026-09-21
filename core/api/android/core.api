@@ -8,6 +8,7 @@ public abstract interface class cx/m42/superizer/ActivationPort {
 public abstract interface class cx/m42/superizer/DiagnosticsPort {
 	public abstract fun getLog ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getRecentEvents ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun lock-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun reset-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun simulatePush (Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun unlock-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -75,18 +76,20 @@ public final class cx/m42/superizer/ShellCommand$OpenSettings : cx/m42/superizer
 
 public abstract interface class cx/m42/superizer/Superizer {
 	public static final field Companion Lcx/m42/superizer/Superizer$Companion;
+	public abstract fun addToHome-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getActivation ()Lcx/m42/superizer/ActivationPort;
 	public abstract fun getCommands ()Lkotlinx/coroutines/flow/SharedFlow;
 	public abstract fun getDiagnostics ()Lcx/m42/superizer/DiagnosticsPort;
 	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
 	public abstract fun getHandler ()Lcx/m42/superizer/registry/AppHandler;
 	public abstract fun getHaptics ()Lcx/m42/superizer/runtime/HapticsService;
+	public abstract fun getHome ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getHostInfo ()Lcx/m42/superizer/runtime/HostInfo;
 	public abstract fun getRegistry ()Lcx/m42/superizer/registry/AppRegistry;
 	public abstract fun getRoute ()Lcx/m42/superizer/RoutePort;
 	public abstract fun getSettings ()Lcx/m42/superizer/HostSettingsPort;
 	public abstract fun getUnlocked ()Lkotlinx/coroutines/flow/StateFlow;
-	public abstract fun hide-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun removeFromHome-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class cx/m42/superizer/Superizer$Companion {
@@ -556,6 +559,19 @@ public final class cx/m42/superizer/event/SuperizerEvent$Active : cx/m42/superiz
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class cx/m42/superizer/event/SuperizerEvent$AddedToHome : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$AddedToHome;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$AddedToHome;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$AddedToHome;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/event/SuperizerEvent$Background : cx/m42/superizer/event/SuperizerEvent {
 	public static final field $stable I
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -737,6 +753,19 @@ public final class cx/m42/superizer/event/SuperizerEvent$Launched : cx/m42/super
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class cx/m42/superizer/event/SuperizerEvent$Locked : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$Locked;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$Locked;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$Locked;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/event/SuperizerEvent$PushDropped : cx/m42/superizer/event/SuperizerEvent {
 	public static final field $stable I
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -792,6 +821,19 @@ public final class cx/m42/superizer/event/SuperizerEvent$RegistrationRejected : 
 	public fun getAppId-eVupTzA ()Ljava/lang/String;
 	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
 	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/event/SuperizerEvent$RemovedFromHome : cx/m42/superizer/event/SuperizerEvent {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/event/SuperizerEvent$RemovedFromHome;
+	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/event/SuperizerEvent$RemovedFromHome;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/event/SuperizerEvent$RemovedFromHome;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAppId-eVupTzA ()Ljava/lang/String;
+	public synthetic fun getAppId-oQ6rsvY ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

@@ -60,7 +60,8 @@ import cx.m42.superizer.ui.i18n.hostStrings
 import cx.m42.superizer.ui.i18n.hostStringsFor
 import cx.m42.superizer.ui.platform.SystemBackHandler
 import cx.m42.superizer.ui.screens.ActivateScreen
-import cx.m42.superizer.ui.screens.AllAppsScreen
+import cx.m42.superizer.ui.screens.CatalogScreen
+import cx.m42.superizer.ui.screens.HomeScreen
 import cx.m42.superizer.ui.screens.HostErrorScreen
 import cx.m42.superizer.ui.screens.ServiceMenuScreen
 import cx.m42.superizer.ui.screens.SettingsScreen
@@ -78,6 +79,8 @@ import kotlinx.coroutines.launch
 public sealed interface ShellDestination {
     public data object Home : ShellDestination
     public data class App(val id: AppId) : ShellDestination
+    /** All apps — where a tile is added to Home or taken off (D48). */
+    public data class Catalog(val from: ShellDestination) : ShellDestination
     public data class Settings(val from: ShellDestination) : ShellDestination
     public data class Activate(val from: ShellDestination) : ShellDestination
     public data object ServiceMenu : ShellDestination
@@ -103,14 +106,13 @@ private val MaxContentWidth = 480.dp
 public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
     val langTag by superizer.settings.langTag.collectAsState()
     val unlocked by superizer.unlocked.collectAsState()
+    val home by superizer.home.collectAsState()
     val registered by superizer.registry.apps.collectAsState()
     val scope = rememberCoroutineScope()
 
     var destination by remember { mutableStateOf<ShellDestination>(ShellDestination.Home) }
     var navDirection by remember { mutableStateOf(NavDirection.Forward) }
     var vetoed by remember { mutableStateOf<(suspend () -> Unit)?>(null) }
-    // The app whose tile was long-pressed on Home, waiting for the answer to "hide it?" (D48).
-    var hiding by remember { mutableStateOf<AppId?>(null) }
 
     fun go(dest: ShellDestination) {
         navDirection = NavDirection.Forward
@@ -174,10 +176,12 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
 
     val strings = hostStringsFor(langTag)
     val here = destination
+    // What this device may open (D8): the catalog lists it, and only the Service Menu sees more.
     val visible = registered.filter { !it.metadata.hidden || it.id in unlocked }
-    // Only what an activation revealed can be put away again (D48): hiding an app that was never
-    // hidden would be a way to lose the calculator with a slip of the thumb and no way back.
-    val hideable = visible.filter { it.metadata.hidden }.map { it.id }.toSet()
+    // What the user chose (D48), in the order they chose it. Filtered through `visible` rather than
+    // trusted: the store keeps ids across builds and across a lock, and the shell is where a stale
+    // id is skipped rather than drawn.
+    val onHome = home.mapNotNull { id -> visible.firstOrNull { it.id == id } }
 
     SuperizerTheme {
         CompositionLocalProvider(LocalHostStrings provides strings) {
@@ -187,6 +191,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
             // where back should leave the host, which is what the system does when nobody claims it.
             SystemBackHandler(enabled = here !is ShellDestination.Home) {
                 when (here) {
+                    is ShellDestination.Catalog -> goBack(here.from)
                     is ShellDestination.Settings -> goBack(here.from)
                     is ShellDestination.Activate -> goBack(here.from)
                     ShellDestination.ServiceMenu -> goBack(ShellDestination.Home)
@@ -198,14 +203,15 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
             val menu = buildList {
                 add(
                     MenuEntry(
-                        label = strings.allApps,
+                        label = strings.home,
                         onClick = {
                             scope.launch { closeCurrent { goBack(ShellDestination.Home) } }
                         },
                         enabled = here !is ShellDestination.Home,
                     ),
                 )
-                visible.forEach { app ->
+                // The same apps Home shows, in the same order: the drawer is Home, folded (D48).
+                onHome.forEach { app ->
                     add(
                         MenuEntry(
                             label = app.metadata.title.resolve(langTag),
@@ -216,6 +222,13 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                         ),
                     )
                 }
+                add(
+                    MenuEntry(
+                        label = strings.allApps,
+                        onClick = { go(ShellDestination.Catalog(destination)) },
+                        enabled = here !is ShellDestination.Catalog,
+                    ),
+                )
             }
 
             val haptic = superizer.hapticTick()
@@ -253,12 +266,33 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             footer = footer,
                         ) {
                             Capped {
-                                AllAppsScreen(
-                                    apps = visible,
+                                HomeScreen(
+                                    apps = onHome,
                                     langTag = langTag,
                                     onOpen = { id -> scope.launch { open(id) } },
-                                    hideable = hideable,
-                                    onHide = { id -> hiding = id },
+                                    onRemove = { id -> scope.launch { superizer.removeFromHome(id) } },
+                                    onAdd = { go(ShellDestination.Catalog(ShellDestination.Home)) },
+                                )
+                            }
+                        }
+
+                        is ShellDestination.Catalog -> AppScaffold(
+                            title = strings.allApps,
+                            menu = menu,
+                            onBack = { goBack(where.from) },
+                            onHaptic = haptic,
+                            footer = footer,
+                        ) {
+                            Capped {
+                                CatalogScreen(
+                                    apps = visible,
+                                    onHome = home.toSet(),
+                                    langTag = langTag,
+                                    onToggle = { id ->
+                                        scope.launch {
+                                            if (id in home) superizer.removeFromHome(id) else superizer.addToHome(id)
+                                        }
+                                    },
                                 )
                             }
                         }
@@ -350,27 +384,6 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             // it emits `RouteDiscarded`, so the Service Menu shows what happened.
                             superizer.route.discard()
                         },
-                    )
-                }
-
-                // D48. The host asks, for the same reason it asks about a veto: the tile the
-                // question is about is behind this dialog, and the answer is not undoable by
-                // tapping again — only an activation brings the app back.
-                val hide = hiding
-                if (hide != null) {
-                    val name = registered.firstOrNull { it.id == hide }
-                        ?.metadata?.title?.resolve(langTag) ?: hide.value
-                    HostDialog(
-                        title = strings.hideDialogTitle(name),
-                        body = strings.hideDialogBody,
-                        confirmText = strings.hideDialogConfirm,
-                        dismissText = strings.hideDialogCancel,
-                        tag = "home:confirm-hide",
-                        onConfirm = {
-                            hiding = null
-                            scope.launch { superizer.hide(hide) }
-                        },
-                        onDismiss = { hiding = null },
                     )
                 }
             }
@@ -475,8 +488,9 @@ private fun ShellFooter(superizer: Superizer, onActivate: () -> Unit, onSettings
 /**
  * The host's one modal: a question over a scrim, with the destructive answer on the right.
  *
- * Shared by the close veto and by hiding an app (D48) rather than written twice — two dialogs that
- * drifted apart would be two answers to "what does the host look like when it asks something".
+ * Parameterised rather than named after its one caller, so the next question the host has to ask
+ * is the same dialog — two that drifted apart would be two answers to "what does the host look
+ * like when it asks something".
  */
 @Composable
 private fun HostDialog(

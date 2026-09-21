@@ -28,18 +28,26 @@ public interface Superizer {
     public val handler: AppHandler
     public val events: SharedFlow<SuperizerEvent>
 
-    /** Hidden apps this device has unlocked (D8). All Apps and the drawer filter on it. */
+    /** Hidden apps this device has unlocked (D8). The catalog and the drawer filter on it. */
     public val unlocked: StateFlow<Set<AppId>>
 
     /**
-     * Takes an unlocked hidden app back out of [unlocked] (D48).
+     * The apps the user chose to keep on Home, in the order they were added (D48).
      *
-     * On [Superizer] rather than on [DiagnosticsPort], because hiding is the one half of D8 an
-     * ordinary user is allowed to do: what an activation revealed, a long press on its tile puts
-     * away again. Revealing stays where it was — behind a QR code, a promo code, or the Service
-     * Menu. The app's stored data is untouched; this is not [DiagnosticsPort.reset].
+     * Home is a *chosen* set, not "everything visible": a fresh install shows what the host named
+     * in `SuperizerBuilder.home(...)`, the catalog adds to it, an activation of a hidden app adds to
+     * it, and a long press on a tile takes away — the same gesture for every tile, because every
+     * tile got there by a choice. Ids that are no longer registered or no longer unlocked are kept
+     * in the store and skipped by the shell, so a build that drops an app and a later build that
+     * brings it back do not lose the user's arrangement in between.
      */
-    public suspend fun hide(id: AppId)
+    public val home: StateFlow<List<AppId>>
+
+    /** Puts a visible app on Home. A locked hidden app or an unknown id is ignored, not revealed. */
+    public suspend fun addToHome(id: AppId)
+
+    /** Takes a tile off Home. The app stays unlocked and keeps its data; the catalog still lists it. */
+    public suspend fun removeFromHome(id: AppId)
 
     /**
      * The host's own haptic. Here rather than only on [cx.m42.superizer.runtime.AppRuntime] because
@@ -130,11 +138,11 @@ public interface DiagnosticsPort {
     /** D35: erase one app's namespace, its topics, its snapshot and its unlock. Confirmed, and separate from disable. */
     public suspend fun reset(id: AppId)
 
-    /**
-     * Reveals a hidden app with no activation at all — the one power this port has over D8. The
-     * way back is [Superizer.hide], which is not a diagnostic and lives with the rest of the host.
-     */
+    /** Reveals a hidden app with no activation at all, and puts it on Home like an activation would. */
     public suspend fun unlock(id: AppId)
+
+    /** Puts a hidden app back behind its activation, and off Home with it. Diagnostic: a user removes tiles, not unlocks. */
+    public suspend fun lock(id: AppId)
 
     /** Feeds a raw push payload through the whole router, so the chain is testable without Firebase (13 §7). */
     public suspend fun simulatePush(payload: Map<String, String>)

@@ -112,9 +112,9 @@ public fun ServiceMenuScreen(
                     onToggleLock = {
                         scope.launch {
                             if (manifest.id in unlocked) {
-                                // The same call Home's long press makes (D48) — a row here and a
-                                // tile there must not be able to disagree about what hiding is.
-                                superizer.hide(manifest.id)
+                                // Diagnostic, not a user gesture (D48): a user takes a tile off
+                                // Home, and only this row puts an app back behind its activation.
+                                superizer.diagnostics.lock(manifest.id)
                             } else {
                                 superizer.diagnostics.unlock(manifest.id)
                             }

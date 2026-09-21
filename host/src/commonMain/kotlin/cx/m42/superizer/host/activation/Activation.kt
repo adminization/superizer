@@ -197,6 +197,8 @@ public class ActivationService(
     private val scheme: String,
     private val serviceCode: String?,
     private val json: Json = Json,
+    /** What "unlock" does to the host: the store, and in a real host Home as well (D48). */
+    private val onUnlock: (AppId) -> Unit = { unlocks.unlock(it) },
 ) : ActivationPort {
 
     private val parser = QrPayloadParser(registry, scheme, json)
@@ -253,7 +255,7 @@ public class ActivationService(
     }
 
     override suspend fun apply(activation: Activation, source: String): Result<AppSession> {
-        if (activation.unlock) unlocks.unlock(activation.appId)
+        if (activation.unlock) onUnlock(activation.appId)
         events.tryEmit(SuperizerEvent.Activated(activation.appId, source))
         // force, because an activation is the thing that is *allowed* to open a hidden app — that
         // is the entire difference between it and a link that merely names one (D25).
