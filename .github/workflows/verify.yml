@@ -33,8 +33,15 @@ jobs:
 
       # Chromium for the wasm tests (Karma) and the web smoke test. Playwright's own, so the two
       # agree about which browser they are talking to.
-      - name: Install Chromium
-        run: npx --yes playwright@1.49.0 install --with-deps chromium
+      #
+      # `npm ci` in scripts/ as well as the browser download: the smoke test resolves `playwright`
+      # as a library from scripts/node_modules, and without it verify.sh skips the step by name —
+      # which it did on every run here, a green-looking report for a test that never ran. The
+      # version comes from scripts/package-lock.json rather than being written again in this file.
+      - name: Install Playwright
+        run: |
+          npm ci --prefix scripts
+          npx --prefix scripts playwright install --with-deps chromium
 
       - name: Verify
         run: ./scripts/verify.sh

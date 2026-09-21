@@ -72,6 +72,16 @@ kotlin {
                 // where there is none, the wasm tests are skipped explicitly rather than failing
                 // the build with a download error (verify.sh reports the skip).
                 enabled = System.getenv("CHROME_BIN") != null
+                useKarma {
+                    // Naming `useKarma` at all clears the browser Kotlin would have picked, so
+                    // the default has to be said out loud — the config directory then replaces it
+                    // with a no-sandbox launcher of the same browser.
+                    useChromeHeadless()
+                    // One config for every module, at the root, rather than a `karma.config.d`
+                    // copied into each: they would drift, and the one that drifted would be the
+                    // one whose failure nobody could reproduce. See the file for why it exists.
+                    useConfigDirectory(rootProject.file("karma.config.d"))
+                }
             }
         }
     }
