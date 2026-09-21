@@ -20,7 +20,12 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      # `packages: ''` because the action's default is the `tools` package, which the SDK
+      # repository no longer has — it fails with "Failed to find package 'tools'" and takes
+      # the job with it. AGP only needs a licensed SDK, and the runner image already has one.
       - uses: android-actions/setup-android@v3
+        with:
+          packages: ''
 
       - uses: actions/setup-node@v4
         with:
