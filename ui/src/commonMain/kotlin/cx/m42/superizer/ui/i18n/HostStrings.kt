@@ -39,6 +39,14 @@ public interface HostStrings {
     public val noApps: String
     public val ungrouped: String
 
+    // ------------------------------------------------------------------ hiding an app (D48)
+    /** The long-press label, so the gesture is announced rather than folklore. */
+    public val hideAction: String
+    public fun hideDialogTitle(app: String): String
+    public val hideDialogBody: String
+    public val hideDialogConfirm: String
+    public val hideDialogCancel: String
+
     // ------------------------------------------------------------------ settings
     public val settingsLanguage: String
     public val settingsLanguageHint: String
@@ -102,6 +110,13 @@ internal object HostStringsEn : HostStrings {
     override val noApps = "No apps installed"
     override val ungrouped = "Other"
 
+    override val hideAction = "Hide from home"
+    override fun hideDialogTitle(app: String) = "Hide \u201C$app\u201D?"
+    override val hideDialogBody =
+        "The tile goes away and only another activation brings it back. Its data is kept."
+    override val hideDialogConfirm = "Hide"
+    override val hideDialogCancel = "Cancel"
+
     override val settingsLanguage = "Language"
     override val settingsLanguageHint = "Interface language on this device"
     override val settingsHaptics = "Haptics"
@@ -160,6 +175,13 @@ internal object HostStringsRu : HostStrings {
 
     override val noApps = "Нет приложений"
     override val ungrouped = "Прочее"
+
+    override val hideAction = "Убрать с главной"
+    override fun hideDialogTitle(app: String) = "Скрыть «$app»?"
+    override val hideDialogBody =
+        "Плитка исчезнет, вернуть её сможет только повторная активация. Данные приложения останутся."
+    override val hideDialogConfirm = "Скрыть"
+    override val hideDialogCancel = "Отмена"
 
     override val settingsLanguage = "Язык"
     override val settingsLanguageHint = "Язык интерфейса на этом устройстве"

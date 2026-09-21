@@ -194,6 +194,11 @@ internal class SuperizerHost(
     private val unlockStore = UnlockStore(_events, json)
     override val unlocked: StateFlow<Set<AppId>> = unlockStore.unlocked
 
+    /** D48. One call behind both doors: Home's long press and the Service Menu's "Hide". */
+    override suspend fun hide(id: AppId) {
+        unlockStore.lock(id)
+    }
+
     private val logBuffer = LogBuffer()
     private val hostLogger: Logger = ConsoleLogger("host", logBuffer, verbose = hostInfo.debug)
 
@@ -298,10 +303,6 @@ internal class SuperizerHost(
 
         override suspend fun unlock(id: AppId) {
             unlockStore.unlock(id)
-        }
-
-        override suspend fun lock(id: AppId) {
-            unlockStore.lock(id)
         }
 
         override suspend fun simulatePush(payload: Map<String, String>) {

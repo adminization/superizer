@@ -1,11 +1,15 @@
 package cx.m42.superizer.fixture
 
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import cx.m42.apps.testapp.TestApp
 import cx.m42.superizer.Superizer
@@ -106,6 +110,54 @@ class FixtureShellTest {
         onNodeWithTag("service:app-probe").assertIsDisplayed()
         // Including the hidden one: the Service Menu shows everything, which is what it is for.
         onNodeWithTag("service:app-test-app").assertIsDisplayed()
+    }
+
+    /**
+     * D48, the way back out of D8: what an activation revealed, a long press puts away again.
+     *
+     * The assertion that matters is the second half — a long press on the *ordinary* app does
+     * nothing. Hiding is the inverse of an activation, not a way to lose the app you use.
+     */
+    @Test
+    fun aLongPressPutsAnUnlockedHiddenAppAwayAgain() = runComposeUiTest {
+        setContent { FixtureApp(fixture()) }
+        waitForIdle()
+
+        unlockBenchApp()
+        goHome()
+        onNodeWithTag("home:tile-test-app").assertIsDisplayed()
+
+        onNodeWithTag("home:tile-test-app").performTouchInput { longClick() }
+        waitForIdle()
+        onNodeWithTag("home:confirm-hide").assertIsDisplayed()
+        onNodeWithText("Hide").performClick()
+        waitForIdle()
+
+        onNodeWithTag("home:tile-test-app").assertDoesNotExist()
+
+        // The ordinary app has no long press to answer: the gesture falls through to the tap it
+        // always was and the app opens, which is the only sane thing a tile can do with it.
+        onNodeWithTag("home:tile-probe").performTouchInput { longClick() }
+        waitForIdle()
+        onNodeWithTag("home:confirm-hide").assertDoesNotExist()
+        onNodeWithTag("probe:root").assertIsDisplayed()
+    }
+
+    private fun ComposeUiTest.unlockBenchApp() {
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:promo").performTextInput(TestApp.PROMO_CODE)
+        onNodeWithTag("activate:apply").performClick()
+        waitForIdle()
+    }
+
+    private fun ComposeUiTest.goHome() {
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithText("All apps").performClick()
+        waitForIdle()
     }
 
     @Test

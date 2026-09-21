@@ -201,7 +201,6 @@ abstract interface cx.m42.superizer/DiagnosticsPort { // cx.m42.superizer/Diagno
     abstract val recentEvents // cx.m42.superizer/DiagnosticsPort.recentEvents|{}recentEvents[0]
         abstract fun <get-recentEvents>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer.event/SuperizerEvent>> // cx.m42.superizer/DiagnosticsPort.recentEvents.<get-recentEvents>|<get-recentEvents>(){}[0]
 
-    abstract suspend fun lock(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.lock|lock(cx.m42.superizer.app.AppId){}[0]
     abstract suspend fun reset(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.reset|reset(cx.m42.superizer.app.AppId){}[0]
     abstract suspend fun simulatePush(kotlin.collections/Map<kotlin/String, kotlin/String>) // cx.m42.superizer/DiagnosticsPort.simulatePush|simulatePush(kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
     abstract suspend fun unlock(cx.m42.superizer.app/AppId) // cx.m42.superizer/DiagnosticsPort.unlock|unlock(cx.m42.superizer.app.AppId){}[0]
@@ -251,6 +250,8 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
         abstract fun <get-settings>(): cx.m42.superizer/HostSettingsPort // cx.m42.superizer/Superizer.settings.<get-settings>|<get-settings>(){}[0]
     abstract val unlocked // cx.m42.superizer/Superizer.unlocked|{}unlocked[0]
         abstract fun <get-unlocked>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Set<cx.m42.superizer.app/AppId>> // cx.m42.superizer/Superizer.unlocked.<get-unlocked>|<get-unlocked>(){}[0]
+
+    abstract suspend fun hide(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.hide|hide(cx.m42.superizer.app.AppId){}[0]
 
     final object Companion // cx.m42.superizer/Superizer.Companion|null[0]
 }

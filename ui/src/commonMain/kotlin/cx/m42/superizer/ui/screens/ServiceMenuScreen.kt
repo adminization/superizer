@@ -112,7 +112,9 @@ public fun ServiceMenuScreen(
                     onToggleLock = {
                         scope.launch {
                             if (manifest.id in unlocked) {
-                                superizer.diagnostics.lock(manifest.id)
+                                // The same call Home's long press makes (D48) — a row here and a
+                                // tile there must not be able to disagree about what hiding is.
+                                superizer.hide(manifest.id)
                             } else {
                                 superizer.diagnostics.unlock(manifest.id)
                             }

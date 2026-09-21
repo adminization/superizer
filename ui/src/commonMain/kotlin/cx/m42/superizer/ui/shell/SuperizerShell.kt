@@ -109,6 +109,8 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
     var destination by remember { mutableStateOf<ShellDestination>(ShellDestination.Home) }
     var navDirection by remember { mutableStateOf(NavDirection.Forward) }
     var vetoed by remember { mutableStateOf<(suspend () -> Unit)?>(null) }
+    // The app whose tile was long-pressed on Home, waiting for the answer to "hide it?" (D48).
+    var hiding by remember { mutableStateOf<AppId?>(null) }
 
     fun go(dest: ShellDestination) {
         navDirection = NavDirection.Forward
@@ -173,6 +175,9 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
     val strings = hostStringsFor(langTag)
     val here = destination
     val visible = registered.filter { !it.metadata.hidden || it.id in unlocked }
+    // Only what an activation revealed can be put away again (D48): hiding an app that was never
+    // hidden would be a way to lose the calculator with a slip of the thumb and no way back.
+    val hideable = visible.filter { it.metadata.hidden }.map { it.id }.toSet()
 
     SuperizerTheme {
         CompositionLocalProvider(LocalHostStrings provides strings) {
@@ -252,6 +257,8 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                                     apps = visible,
                                     langTag = langTag,
                                     onOpen = { id -> scope.launch { open(id) } },
+                                    hideable = hideable,
+                                    onHide = { id -> hiding = id },
                                 )
                             }
                         }
@@ -324,7 +331,12 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                 // drew its own would be drawing over the host's frame.
                 val ask = vetoed
                 if (ask != null) {
-                    CloseVetoDialog(
+                    HostDialog(
+                        title = strings.closeDialogTitle,
+                        body = strings.closeDialogBody,
+                        confirmText = strings.closeDialogConfirm,
+                        dismissText = strings.closeDialogStay,
+                        tag = "shell:close-dialog",
                         onConfirm = {
                             vetoed = null
                             scope.launch {
@@ -338,6 +350,27 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             // it emits `RouteDiscarded`, so the Service Menu shows what happened.
                             superizer.route.discard()
                         },
+                    )
+                }
+
+                // D48. The host asks, for the same reason it asks about a veto: the tile the
+                // question is about is behind this dialog, and the answer is not undoable by
+                // tapping again — only an activation brings the app back.
+                val hide = hiding
+                if (hide != null) {
+                    val name = registered.firstOrNull { it.id == hide }
+                        ?.metadata?.title?.resolve(langTag) ?: hide.value
+                    HostDialog(
+                        title = strings.hideDialogTitle(name),
+                        body = strings.hideDialogBody,
+                        confirmText = strings.hideDialogConfirm,
+                        dismissText = strings.hideDialogCancel,
+                        tag = "home:confirm-hide",
+                        onConfirm = {
+                            hiding = null
+                            scope.launch { superizer.hide(hide) }
+                        },
+                        onDismiss = { hiding = null },
                     )
                 }
             }
@@ -439,8 +472,22 @@ private fun ShellFooter(superizer: Superizer, onActivate: () -> Unit, onSettings
     }
 }
 
+/**
+ * The host's one modal: a question over a scrim, with the destructive answer on the right.
+ *
+ * Shared by the close veto and by hiding an app (D48) rather than written twice — two dialogs that
+ * drifted apart would be two answers to "what does the host look like when it asks something".
+ */
 @Composable
-private fun CloseVetoDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+private fun HostDialog(
+    title: String,
+    body: String,
+    confirmText: String,
+    dismissText: String,
+    tag: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     val tokens = AppTheme
     Box(
         modifier = Modifier
@@ -450,7 +497,11 @@ private fun CloseVetoDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onDismiss,
-            ),
+            )
+            // On the scrim rather than on the panel: the scrim is clickable, so it merges its
+            // children's semantics into one node, and a tag below it would only exist in the
+            // unmerged tree — findable by a test that knew the trick and by nothing else.
+            .testTag(tag),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -461,20 +512,20 @@ private fun CloseVetoDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
                 .background(tokens.background)
                 .padding(20.dp),
         ) {
-            Text(text = hostStrings.closeDialogTitle, style = tokens.header, color = tokens.foreground)
+            Text(text = title, style = tokens.header, color = tokens.foreground)
             Spacer(Modifier.height(8.dp))
-            Text(text = hostStrings.closeDialogBody, style = tokens.body, color = tokens.muted)
+            Text(text = body, style = tokens.body, color = tokens.muted)
             Spacer(Modifier.height(16.dp))
             Row {
                 AppButton(
-                    text = hostStrings.closeDialogStay,
+                    text = dismissText,
                     onClick = onDismiss,
                     variant = ButtonVariant.Outline,
                     size = ButtonSize.Default,
                 )
                 Spacer(Modifier.width(12.dp))
                 AppButton(
-                    text = hostStrings.closeDialogConfirm,
+                    text = confirmText,
                     onClick = onConfirm,
                     variant = ButtonVariant.Destructive,
                     size = ButtonSize.Default,

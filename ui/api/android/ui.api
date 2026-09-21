@@ -97,6 +97,10 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getErrorBack ()Ljava/lang/String;
 	public abstract fun getErrorRetry ()Ljava/lang/String;
 	public abstract fun getErrorTitle ()Ljava/lang/String;
+	public abstract fun getHideAction ()Ljava/lang/String;
+	public abstract fun getHideDialogBody ()Ljava/lang/String;
+	public abstract fun getHideDialogCancel ()Ljava/lang/String;
+	public abstract fun getHideDialogConfirm ()Ljava/lang/String;
 	public abstract fun getLangTag ()Ljava/lang/String;
 	public abstract fun getMenu ()Ljava/lang/String;
 	public abstract fun getNoApps ()Ljava/lang/String;
@@ -123,6 +127,7 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getSettingsLanguage ()Ljava/lang/String;
 	public abstract fun getSettingsLanguageHint ()Ljava/lang/String;
 	public abstract fun getUngrouped ()Ljava/lang/String;
+	public abstract fun hideDialogTitle (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun settingsBuild (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun version (Ljava/lang/String;)Ljava/lang/String;
 }
@@ -144,7 +149,7 @@ public final class cx/m42/superizer/ui/screens/ActivateScreenKt {
 }
 
 public final class cx/m42/superizer/ui/screens/AllAppsScreenKt {
-	public static final fun AllAppsScreen (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AllAppsScreen (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/util/Set;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class cx/m42/superizer/ui/screens/HostErrorScreenKt {

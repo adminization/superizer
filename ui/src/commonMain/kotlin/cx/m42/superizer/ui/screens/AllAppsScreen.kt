@@ -1,7 +1,8 @@
 package cx.m42.superizer.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,10 @@ import cx.m42.superizer.ui.i18n.hostStrings
  *
  * Hidden apps are filtered out by the caller (D8): what is not unlocked is not listed, and there
  * is no "locked" tile to tap, because a tile that says "you cannot have this" is an advertisement.
+ *
+ * The apps in [hideable] — the hidden ones an activation has revealed — answer a long press with
+ * [onHide] (D48). The screen only reports the gesture: the confirmation is a modal, and a modal
+ * belongs to the shell.
  */
 @Composable
 public fun AllAppsScreen(
@@ -48,6 +53,8 @@ public fun AllAppsScreen(
     langTag: String,
     onOpen: (AppId) -> Unit,
     modifier: Modifier = Modifier,
+    hideable: Set<AppId> = emptySet(),
+    onHide: (AppId) -> Unit = {},
 ) {
     val tokens = AppTheme
     if (apps.isEmpty()) {
@@ -88,6 +95,7 @@ public fun AllAppsScreen(
                             app = app,
                             langTag = langTag,
                             onOpen = onOpen,
+                            onHide = if (app.id in hideable) onHide else null,
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -100,11 +108,13 @@ public fun AllAppsScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppTile(
     app: SuperizerApp<*>,
     langTag: String,
     onOpen: (AppId) -> Unit,
+    onHide: ((AppId) -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val tokens = AppTheme
@@ -114,7 +124,15 @@ private fun AppTile(
             .padding(4.dp)
             .clip(RoundedCornerShape(tokens.radius))
             .background(tokens.background)
-            .clickable(role = Role.Button) { onOpen(app.id) }
+            // `combinedClickable` on every tile rather than only on the ones that can be hidden:
+            // the modifier chain then has the same shape everywhere, and the long press is a
+            // labelled accessibility action wherever it exists at all.
+            .combinedClickable(
+                role = Role.Button,
+                onLongClickLabel = onHide?.let { hostStrings.hideAction },
+                onLongClick = onHide?.let { hide -> { hide(app.id) } },
+                onClick = { onOpen(app.id) },
+            )
             .testTag("home:tile-${app.id.value}")
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
