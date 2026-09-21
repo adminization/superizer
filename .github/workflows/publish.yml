@@ -1,10 +1,25 @@
-# Publishes on a tag, to GitHub Packages. The version comes from gradle.properties, so a tag that
-# disagrees with it is a tag somebody has to fix before the release exists.
+# Two channels into GitHub Packages, and the same command behind both.
+#
+#   a tag `v0.1.0`  -> cx.m42.superizer:*:0.1.0            the release
+#   a push to master -> cx.m42.superizer:*:0.1.0-SNAPSHOT  what is being written
+#
+# The snapshot exists so a downstream build can track the library without anybody cutting a tag for
+# a half-finished change. The version itself lives in `gradle.properties` either way: a tag that
+# disagrees with it is a tag somebody has to fix before the release exists, and the job below says
+# so rather than quietly publishing whichever of the two it happened to read.
 name: publish
 
 on:
   push:
+    branches: [main, master]
     tags: ['v*']
+  workflow_dispatch:
+
+# A second push while the first is still uploading would race two writes at the same coordinates,
+# and GitHub Packages answers the loser with a 409 rather than a merge.
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -24,8 +39,55 @@ jobs:
 
       - uses: android-actions/setup-android@v3
 
-      - name: Publish
-        run: ./gradlew publish
+      # A release is the version in gradle.properties; a tag only names it. If the two disagree,
+      # one of them is a lie and there is no way to tell which, so nothing is published.
+      - name: Decide the channel
+        id: channel
+        run: |
+          set -euo pipefail
+          version=$(sed -n 's/^superizer\.version=//p' gradle.properties)
+          if [ -z "$version" ]; then
+            echo "::error::superizer.version is not set in gradle.properties"
+            exit 1
+          fi
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            tagged="${GITHUB_REF_NAME#v}"
+            if [ "$tagged" != "$version" ]; then
+              echo "::error::tag $GITHUB_REF_NAME claims $tagged but gradle.properties says $version"
+              exit 1
+            fi
+            echo "args=" >> "$GITHUB_OUTPUT"
+            echo "published=$version" >> "$GITHUB_OUTPUT"
+          else
+            echo "args=-Psuperizer.snapshot=true" >> "$GITHUB_OUTPUT"
+            echo "published=$version-SNAPSHOT" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Two invocations rather than `./gradlew verify publish`. In one, nothing orders a publish
+      # task after a test task — they have no dependency between them, and with --parallel an
+      # upload can finish before the test that would have stopped it. A separate step cannot.
+      - name: Verify
+        run: ./gradlew verify ${{ steps.channel.outputs.args }}
+
+      - name: Publish ${{ steps.channel.outputs.published }}
+        run: ./gradlew publish ${{ steps.channel.outputs.args }}
         env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        if: success()
+        run: |
+          {
+            echo "### Published \`${{ steps.channel.outputs.published }}\`"
+            echo
+            echo "\`\`\`kotlin"
+            echo "maven(\"https://maven.pkg.github.com/${{ github.repository }}\")"
+            echo "\`\`\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: publish-test-results
+          path: '**/build/test-results/**/*.xml'

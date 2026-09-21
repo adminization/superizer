@@ -13,6 +13,13 @@ on a `Superizer`, an `AppHandler` or an `AppRegistry`; the build fails if it tri
 
 Targets: Android, desktop (JVM), wasm in the browser. MIT licensed.
 
+**Full documentation is in [`docs/`](docs/)** — [getting started from scratch](docs/01-getting-started.md),
+[the architecture](docs/02-architecture.md), [writing an app](docs/03-app-guide.md), a reference for
+[`core`](docs/04-core-api.md), [`host`](docs/05-host-api.md) and [`ui`](docs/06-ui-api.md),
+[testing](docs/07-testing.md), [activation, deep links and push](docs/08-activation-routing-push.md),
+[recipes](docs/09-recipes.md), a [brief to hand an agent](docs/10-new-app-prompt.md), and
+[troubleshooting](docs/11-troubleshooting.md). What follows here is the two-minute version.
+
 ## Writing an app
 
 An app is one public class. Everything else in the module is `internal`.
@@ -144,6 +151,61 @@ a tile is added from; a long press takes one off), the drawer, Settings (with a 
 Activate (promo code and QR text — activating a hidden app also puts it on Home), the Service Menu,
 the app container, deep links, push routing, session restore after a process death, and the error
 screen a failed launch lands on.
+
+## Getting the library
+
+Published to GitHub Packages as `cx.m42.superizer`. A tag `v0.1.0` publishes `0.1.0`; every push to
+`master` publishes `0.1.0-SNAPSHOT`, so a downstream build can track the library between releases.
+
+```kotlin
+// settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        maven("https://maven.pkg.github.com/adminization/superizer") {
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull
+                    ?: providers.environmentVariable("GITHUB_ACTOR").orNull
+                password = providers.gradleProperty("gpr.key").orNull
+                    ?: providers.environmentVariable("GITHUB_TOKEN").orNull
+            }
+        }
+    }
+}
+```
+
+```kotlin
+// build.gradle.kts — an app needs the first three, a host needs all four
+implementation("cx.m42.superizer:core:0.1.0")
+implementation("cx.m42.superizer:ui-theme:0.1.0")
+implementation("cx.m42.superizer:ui:0.1.0")
+implementation("cx.m42.superizer:host:0.1.0")
+testImplementation("cx.m42.superizer:testing:0.1.0")
+```
+
+**The credentials are not optional.** GitHub Packages authenticates downloads even for a public
+repository — a build with no token gets a 401, not an anonymous read. Locally, put a classic PAT
+with the `read:packages` scope in `~/.gradle/gradle.properties`:
+
+```properties
+gpr.user=your-github-username
+gpr.key=ghp_…
+```
+
+In another repository's Actions, `secrets.GITHUB_TOKEN` is enough **only** for a repository inside
+the same organisation with access granted to the package; anywhere else, pass an organisation
+secret holding a PAT. This is the one real cost of GitHub Packages over Maven Central, and it is
+worth knowing before wiring it into a public CI.
+
+Publishing is the mirror image, and `publish.yml` does it for you. To publish by hand, the
+repository name decides the property names Gradle looks for:
+
+```bash
+ORG_GRADLE_PROJECT_GitHubPackagesUsername=… \
+ORG_GRADLE_PROJECT_GitHubPackagesPassword=… \
+  ./gradlew publish [-Psuperizer.snapshot=true]
+```
 
 ## Contract versioning
 

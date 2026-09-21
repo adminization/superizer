@@ -48,6 +48,14 @@ adds to Home or takes off), the drawer, Settings with a section per app, Activat
 the app container, the host's error screen, and the veto dialog. Content is capped at 480 dp and
 centred.
 
+### Distribution
+
+Published to GitHub Packages as `cx.m42.superizer:{core,ui-theme,ui,host,testing}` (and
+`cx.m42.superizer.apps:test-app` for the bench app), for Android, desktop and wasm. A tag `v0.1.0`
+publishes the release; every push to `master` publishes `0.1.0-SNAPSHOT` via
+`-Psuperizer.snapshot=true`. `publish.yml` refuses a tag that disagrees with `superizer.version`,
+and runs `verify` in the same Gradle invocation, so nothing is published that does not build.
+
 ### Known limitations
 
 - **One open app at a time.** The snapshot mechanism makes a stack cheap to add later; it is not

@@ -104,8 +104,21 @@ tasks.register("verify") {
     group = "verification"
     description = "Static checks plus every test that needs no browser or device."
     dependsOn(checkDependencyRules)
+
+    /**
+     * Matched by name rather than named by path.
+     *
+     * Not every module has every task: `:fixture` is not published, so it does not apply
+     * `superizer.kmp-library` and has no ABI dump to check. A hard `":fixture:checkLegacyAbi"`
+     * fails the task graph before a single check runs — which is what it did, unnoticed, because
+     * `verify.sh` names the tasks itself and nothing else asked for `verify`.
+     *
+     * A lazy `TaskCollection` also has to be used here rather than `findByName`: the root script
+     * is evaluated before any subproject, so at this point none of their tasks exist yet.
+     */
     // Kotlin's own ABI validation (D14): the published surface is reviewed as a diff of `api/*.api`,
     // which only means anything if a change that forgot to regenerate the dump fails the build.
-    dependsOn(subprojects.filter { it.buildFile.exists() }.map { "${it.path}:checkLegacyAbi" })
-    dependsOn(subprojects.filter { it.buildFile.exists() }.map { "${it.path}:desktopTest" })
+    val modules = subprojects.filter { it.buildFile.exists() }
+    dependsOn(modules.map { module -> module.tasks.matching { it.name == "checkLegacyAbi" } })
+    dependsOn(modules.map { module -> module.tasks.matching { it.name == "desktopTest" } })
 }

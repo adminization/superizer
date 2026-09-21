@@ -21,7 +21,18 @@ val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 fun version(name: String): String = libs.findVersion(name).get().requiredVersion
 
 group = providers.gradleProperty("superizer.group").getOrElse("cx.m42.superizer")
-version = providers.gradleProperty("superizer.version").getOrElse("0.1.0")
+
+/**
+ * One released version in `gradle.properties`, and a snapshot of it on demand.
+ *
+ * `-Psuperizer.snapshot=true` is what CI passes for every push to the default branch, so a
+ * downstream build can track the library while it is being written without anybody cutting a tag
+ * for a half-finished change. A tag publishes the bare version, and `publish.yml` refuses to run
+ * when the tag and this property disagree — the tag is the claim, this is the fact.
+ */
+val releaseVersion = providers.gradleProperty("superizer.version").getOrElse("0.1.0")
+val isSnapshot = providers.gradleProperty("superizer.snapshot").getOrElse("false").toBoolean()
+version = if (isSnapshot && !releaseVersion.endsWith("-SNAPSHOT")) "$releaseVersion-SNAPSHOT" else releaseVersion
 
 @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
 kotlin {
@@ -84,20 +95,60 @@ android {
     }
 }
 
+/**
+ * Where a release goes, and who it says it is.
+ *
+ * The slug is a property rather than a constant so a fork publishes to its own registry by
+ * setting one line, instead of editing a convention plugin every module inherits.
+ */
+val githubSlug = providers.gradleProperty("superizer.githubSlug").getOrElse("adminization/superizer")
+val projectUrl = "https://github.com/$githubSlug"
+
 publishing {
+    repositories {
+        /**
+         * GitHub Packages, with credentials Gradle resolves at execution time.
+         *
+         * `credentials(PasswordCredentials::class)` rather than reading the environment here: the
+         * values are looked up only when a task actually publishes to this repository, so
+         * `publishToMavenLocal` and every test task still run with no token at all, and the token
+         * never lands in the configuration cache. The names Gradle looks for come from the
+         * repository name — `GitHubPackagesUsername` and `GitHubPackagesPassword`, either as
+         * Gradle properties in `~/.gradle/gradle.properties` or as `ORG_GRADLE_PROJECT_*` in the
+         * environment, which is what `publish.yml` sets.
+         *
+         * Reading from here needs a token too: GitHub Packages authenticates downloads even for a
+         * public repository. See the README for what a consumer has to do.
+         */
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/$githubSlug")
+            credentials(PasswordCredentials::class)
+        }
+    }
+
     publications.withType<MavenPublication>().configureEach {
         pom {
             name.set("Superizer ${project.name}")
             description.set("Superizer — a Compose Multiplatform host framework for independent apps")
-            url.set("https://github.com/m42cx/superizer")
+            url.set(projectUrl)
             licenses {
                 license {
                     name.set("MIT License")
                     url.set("https://opensource.org/licenses/MIT")
                 }
             }
+            developers {
+                developer {
+                    id.set("adminization")
+                    name.set("Adminizer")
+                    url.set("https://github.com/adminization")
+                }
+            }
             scm {
-                url.set("https://github.com/m42cx/superizer")
+                url.set(projectUrl)
+                connection.set("scm:git:$projectUrl.git")
+                developerConnection.set("scm:git:ssh://git@github.com/$githubSlug.git")
             }
         }
     }
