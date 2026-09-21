@@ -23,16 +23,15 @@ fun version(name: String): String = libs.findVersion(name).get().requiredVersion
 group = providers.gradleProperty("superizer.group").getOrElse("cx.m42.superizer")
 
 /**
- * One released version in `gradle.properties`, and a snapshot of it on demand.
+ * A floor, not a decision.
  *
- * `-Psuperizer.snapshot=true` is what CI passes for every push to the default branch, so a
- * downstream build can track the library while it is being written without anybody cutting a tag
- * for a half-finished change. A tag publishes the bare version, and `publish.yml` refuses to run
- * when the tag and this property disagree — the tag is the claim, this is the fact.
+ * `superizer.version` in `gradle.properties` is the lowest version this working tree may publish.
+ * What actually goes out is computed by `scripts/resolve-version.sh` from what the registry
+ * already has and handed back as `-Psuperizer.version=…`, so the branch decides the channel and
+ * nobody edits a file to cut a release. Locally the property is read as written, which is what
+ * `publishToMavenLocal` and `samples/consumer` want.
  */
-val releaseVersion = providers.gradleProperty("superizer.version").getOrElse("0.1.0")
-val isSnapshot = providers.gradleProperty("superizer.snapshot").getOrElse("false").toBoolean()
-version = if (isSnapshot && !releaseVersion.endsWith("-SNAPSHOT")) "$releaseVersion-SNAPSHOT" else releaseVersion
+version = providers.gradleProperty("superizer.version").getOrElse("0.1.0")
 
 @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
 kotlin {

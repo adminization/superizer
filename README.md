@@ -154,8 +154,24 @@ screen a failed launch lands on.
 
 ## Getting the library
 
-Published to GitHub Packages as `cx.m42.superizer`. A tag `v0.1.0` publishes `0.1.0`; every push to
-`master` publishes `0.1.0-SNAPSHOT`, so a downstream build can track the library between releases.
+Published to GitHub Packages as `cx.m42.superizer`. **The branch decides the channel and the
+registry decides the number** — nobody edits a version to cut a release, and there are no tags.
+
+| Push to | You get | For |
+|---|---|---|
+| `main` / `master` | `0.1.1` — the last release, patch bumped | the release |
+| `next` | `0.1.1-next.3` | a release being prepared |
+| `alpha` | `0.1.1-alpha.0` — its own counter | something being tried |
+| `commit` | `0.1.0-commit.d66035c` | one build, pinned by the commit in it |
+
+`superizer.version` and `superizer.appsVersion` in `gradle.properties` are **floors**, not
+decisions: `scripts/resolve-version.sh` asks the registry what exists and goes one past it, and a
+floor only wins while it is higher. Raise one by hand to start a new minor or major series. The
+script runs on a laptop too, which is how you find out what the next push will publish:
+
+```bash
+GPR_USER=… GPR_TOKEN=… ./scripts/resolve-version.sh release cx/m42/superizer/core 0.1.0
+```
 
 ```kotlin
 // settings.gradle.kts
@@ -177,12 +193,16 @@ dependencyResolutionManagement {
 
 ```kotlin
 // build.gradle.kts — an app needs the first three, a host needs all four
-implementation("cx.m42.superizer:core:0.1.0")
-implementation("cx.m42.superizer:ui-theme:0.1.0")
-implementation("cx.m42.superizer:ui:0.1.0")
-implementation("cx.m42.superizer:host:0.1.0")
-testImplementation("cx.m42.superizer:testing:0.1.0")
+implementation("cx.m42.superizer:core:0.1.1")
+implementation("cx.m42.superizer:ui-theme:0.1.1")
+implementation("cx.m42.superizer:ui:0.1.1")
+implementation("cx.m42.superizer:host:0.1.1")
+testImplementation("cx.m42.superizer:testing:0.1.1")
 ```
+
+Maven has no dist-tags, so there is no `latest` to follow and no floating version to resolve: pin
+the number. To track a channel instead, name it — `0.1.+` for the releases, or the exact
+`-next.N` you want. A version catalog is the right place for it, so a bump is one line.
 
 **The credentials are not optional.** GitHub Packages authenticates downloads even for a public
 repository — a build with no token gets a 401, not an anonymous read. Locally, put a classic PAT
@@ -202,10 +222,9 @@ Publishing is the mirror image, and `publish.yml` does it for you. To publish by
 repository name decides the property names Gradle looks for:
 
 ```bash
-ORG_GRADLE_PROJECT_GitHubPackagesUsername=… \
-ORG_GRADLE_PROJECT_GitHubPackagesPassword=… \
-  ./gradlew publish [-Psuperizer.snapshot=true]
+ORG_GRADLE_PROJECT_GitHubPackagesUsername=… ORG_GRADLE_PROJECT_GitHubPackagesPassword=…   ./gradlew publish -Psuperizer.version=0.1.1 -Psuperizer.appsVersion=1.0.1
 ```
+
 
 ## Contract versioning
 

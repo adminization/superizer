@@ -1,22 +1,23 @@
-# Two channels into GitHub Packages, and the same command behind both.
+# The branch decides the channel; the registry decides the number.
 #
-#   a tag `v0.1.0`  -> cx.m42.superizer:*:0.1.0            the release
-#   a push to master -> cx.m42.superizer:*:0.1.0-SNAPSHOT  what is being written
+#   main, master -> 0.1.1                   the release, the previous one patch bumped
+#   next         -> 0.1.1-next.3            a prerelease series
+#   alpha        -> 0.1.1-alpha.0           another, on its own counter
+#   commit       -> 0.1.0-commit.d66035c    one build, named after the commit that is in it
 #
-# The snapshot exists so a downstream build can track the library without anybody cutting a tag for
-# a half-finished change. The version itself lives in `gradle.properties` either way: a tag that
-# disagrees with it is a tag somebody has to fix before the release exists, and the job below says
-# so rather than quietly publishing whichever of the two it happened to read.
+# This is Adminizer's scheme, ported to Maven. Nobody edits a version to cut a release and no tag
+# has to agree with a file: `superizer.version` in `gradle.properties` is a floor, raised by hand
+# to start a new series, and `scripts/resolve-version.sh` asks the registry for the rest. The
+# script is the whole of the logic and runs the same on a laptop — see its header.
 name: publish
 
 on:
   push:
-    branches: [main, master]
-    tags: ['v*']
+    branches: [main, master, next, alpha, commit]
   workflow_dispatch:
 
-# A second push while the first is still uploading would race two writes at the same coordinates,
-# and GitHub Packages answers the loser with a 409 rather than a merge.
+# Two pushes resolving a version at the same time would both read the same registry state and
+# both try to publish it; the loser gets a 409 rather than a merge.
 concurrency:
   group: publish-${{ github.ref }}
   cancel-in-progress: false
@@ -44,38 +45,43 @@ jobs:
         with:
           packages: ''
 
-      # A release is the version in gradle.properties; a tag only names it. If the two disagree,
-      # one of them is a lie and there is no way to tell which, so nothing is published.
-      - name: Decide the channel
-        id: channel
+      # The library and the bench app are resolved separately: apps version themselves (02), so
+      # `test-app` has its own floor and its own counter and must not inherit the library's.
+      - name: Resolve the version
+        id: version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          SUPERIZER_GITHUB_SLUG: ${{ github.repository }}
         run: |
           set -euo pipefail
-          version=$(sed -n 's/^superizer\.version=//p' gradle.properties)
-          if [ -z "$version" ]; then
-            echo "::error::superizer.version is not set in gradle.properties"
-            exit 1
-          fi
-          if [ "${{ github.ref_type }}" = "tag" ]; then
-            tagged="${GITHUB_REF_NAME#v}"
-            if [ "$tagged" != "$version" ]; then
-              echo "::error::tag $GITHUB_REF_NAME claims $tagged but gradle.properties says $version"
-              exit 1
-            fi
-            echo "args=" >> "$GITHUB_OUTPUT"
-            echo "published=$version" >> "$GITHUB_OUTPUT"
-          else
-            echo "args=-Psuperizer.snapshot=true" >> "$GITHUB_OUTPUT"
-            echo "published=$version-SNAPSHOT" >> "$GITHUB_OUTPUT"
-          fi
+          case "$GITHUB_REF_NAME" in
+            main|master) channel=release ;;
+            next)        channel=next    ;;
+            alpha)       channel=alpha   ;;
+            commit)      channel=commit  ;;
+            *) echo "::error::$GITHUB_REF_NAME has no channel"; exit 1 ;;
+          esac
+          sha=$(git rev-parse --short HEAD)
+          floor=$(sed -n 's/^superizer\.version=//p' gradle.properties)
+          appsFloor=$(sed -n 's/^superizer\.appsVersion=//p' gradle.properties)
+
+          library=$(./scripts/resolve-version.sh "$channel" cx/m42/superizer/core "$floor" "$sha")
+          apps=$(./scripts/resolve-version.sh "$channel" cx/m42/superizer/apps/test-app "$appsFloor" "$sha")
+
+          echo "channel=$channel" >> "$GITHUB_OUTPUT"
+          echo "library=$library" >> "$GITHUB_OUTPUT"
+          echo "apps=$apps" >> "$GITHUB_OUTPUT"
+          echo "args=-Psuperizer.version=$library -Psuperizer.appsVersion=$apps" >> "$GITHUB_OUTPUT"
 
       # Two invocations rather than `./gradlew verify publish`. In one, nothing orders a publish
       # task after a test task — they have no dependency between them, and with --parallel an
       # upload can finish before the test that would have stopped it. A separate step cannot.
       - name: Verify
-        run: ./gradlew verify ${{ steps.channel.outputs.args }}
+        run: ./gradlew verify ${{ steps.version.outputs.args }}
 
-      - name: Publish ${{ steps.channel.outputs.published }}
-        run: ./gradlew publish ${{ steps.channel.outputs.args }}
+      - name: Publish ${{ steps.version.outputs.library }}
+        run: ./gradlew publish ${{ steps.version.outputs.args }}
         env:
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ secrets.GITHUB_TOKEN }}
@@ -84,7 +90,12 @@ jobs:
         if: success()
         run: |
           {
-            echo "### Published \`${{ steps.channel.outputs.published }}\`"
+            echo "### Published on the \`${{ steps.version.outputs.channel }}\` channel"
+            echo
+            echo "| Coordinates | Version |"
+            echo "|---|---|"
+            echo "| \`cx.m42.superizer:{core,ui-theme,ui,host,testing}\` | \`${{ steps.version.outputs.library }}\` |"
+            echo "| \`cx.m42.superizer.apps:test-app\` | \`${{ steps.version.outputs.apps }}\` |"
             echo
             echo "\`\`\`kotlin"
             echo "maven(\"https://maven.pkg.github.com/${{ github.repository }}\")"

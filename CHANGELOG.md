@@ -51,10 +51,14 @@ centred.
 ### Distribution
 
 Published to GitHub Packages as `cx.m42.superizer:{core,ui-theme,ui,host,testing}` (and
-`cx.m42.superizer.apps:test-app` for the bench app), for Android, desktop and wasm. A tag `v0.1.0`
-publishes the release; every push to `master` publishes `0.1.0-SNAPSHOT` via
-`-Psuperizer.snapshot=true`. `publish.yml` refuses a tag that disagrees with `superizer.version`,
-and runs `verify` in the same Gradle invocation, so nothing is published that does not build.
+`cx.m42.superizer.apps:test-app` for the bench app), for Android, desktop and wasm.
+
+The branch decides the channel and the registry decides the number, which is Adminizer's scheme
+ported to Maven: `main`/`master` publishes the last release patch bumped, `next` and `alpha`
+publish `-next.N` / `-alpha.N` on their own counters, and `commit` publishes
+`-commit.<sha>`. `superizer.version` and `superizer.appsVersion` in `gradle.properties` are floors
+— raise one by hand to start a new series — and `scripts/resolve-version.sh` does the rest.
+Nothing is published that has not passed `verify` first.
 
 ### Known limitations
 

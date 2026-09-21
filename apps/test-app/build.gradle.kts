@@ -9,7 +9,16 @@ plugins {
  * Adminizer's fixture, not a product.
  */
 group = "cx.m42.superizer.apps"
-version = "1.0.0"
+
+/**
+ * Its own floor, on its own counter.
+ *
+ * "Apps version themselves" has to survive the branch-driven publishing the library uses, or the
+ * bench app would republish a fixed `1.0.0` on every push and the registry would answer 409. CI
+ * resolves this one against `cx.m42.superizer.apps:test-app` separately and passes it back, which
+ * is what independent versioning means when the release is not a manual act.
+ */
+version = providers.gradleProperty("superizer.appsVersion").getOrElse("1.0.0")
 
 kotlin {
     sourceSets {
