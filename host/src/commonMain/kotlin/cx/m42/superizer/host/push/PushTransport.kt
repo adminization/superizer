@@ -42,6 +42,15 @@ public expect object PushTransport {
 }
 
 /**
+ * FCM accepts `[a-zA-Z0-9-_.~%]` and nothing else in a topic name, and rejects the whole call
+ * otherwise. The host's qualified names are `<appId>.<topic>`, and an app id is not constrained to
+ * that set — so the mapping happens once, here, for both platforms that speak FCM.
+ */
+internal fun String.asFcmTopic(): String = map { if (it in FCM_TOPIC_CHARS) it else '_' }.joinToString("")
+
+private val FCM_TOPIC_CHARS: Set<Char> = (('a'..'z') + ('A'..'Z') + ('0'..'9') + listOf('-', '_', '.', '~', '%')).toSet()
+
+/**
  * The shared no-op body, so the three actuals are a line each and cannot drift apart. When Android
  * grows a real transport it stops delegating to this; the others keep it.
  */

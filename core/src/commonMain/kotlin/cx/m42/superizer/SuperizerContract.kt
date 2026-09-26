@@ -10,7 +10,11 @@ package cx.m42.superizer
  *
  * A host puts this in [cx.m42.superizer.runtime.HostInfo.contractVersion]; an app declares the
  * oldest it tolerates in [cx.m42.superizer.app.AppManifest.minHostContract].
+ *
+ * 2 added `AppManifest.protection`, the lock port and `UserPresence` (06, D138). An app that
+ * declares protection has to ask for 2, so that an older host rejects it rather than showing it
+ * unlocked.
  */
 public object SuperizerContract {
-    public const val VERSION: Int = 1
+    public const val VERSION: Int = 2
 }

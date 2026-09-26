@@ -297,7 +297,8 @@ private fun AppRow(
                 text = "requires=${manifest.requires.map { it.name }} " +
                     "deepLinks=${manifest.deepLinks} " +
                     "pushTopics=${manifest.pushTopics} " +
-                    "networkHosts=${manifest.networkHosts}",
+                    "networkHosts=${manifest.networkHosts} " +
+                    "protection=${manifest.protection}",
                 style = tokens.mono,
                 color = tokens.foreground,
             )

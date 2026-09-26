@@ -6,6 +6,8 @@ import cx.m42.superizer.app.AppConfigSpec
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppInstance
 import cx.m42.superizer.app.AppManifest
+import cx.m42.superizer.app.AppProtection
+import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.app.AppMetadata
 import cx.m42.superizer.app.AppSetupContext
 import cx.m42.superizer.app.SuperizerApp
@@ -26,14 +28,18 @@ internal class StubApp(
     hidden: Boolean = false,
     deepLinks: Set<String> = emptySet(),
     topics: Set<String> = emptySet(),
+    lock: LockPolicy = LockPolicy.Off,
+    secureWindow: Boolean = false,
 ) : SuperizerApp<StubConfig>() {
 
     override val manifest: AppManifest = AppManifest(
         id = AppId(id),
         version = "1.0.0",
+        minHostContract = if (lock != LockPolicy.Off || secureWindow) 2 else 1,
         metadata = AppMetadata(title = localized("en" to id), hidden = hidden),
         deepLinks = deepLinks,
         pushTopics = topics,
+        protection = AppProtection(lock, secureWindow),
     )
 
     override val configSpec: AppConfigSpec<StubConfig> =

@@ -5,6 +5,11 @@ agp = "8.13.2"
 composeUnstyled = "1.36.1"
 androidxActivityCompose = "1.13.0"
 androidxLifecycle = "2.10.0"
+# The lock's sheet (06): BiometricPrompt, and the FragmentActivity it has to be shown from. 1.1.0 is
+# the last stable biometric; fragment is named so a host gets a current one rather than the 1.2.5
+# biometric was built against.
+androidxBiometric = "1.1.0"
+androidxFragment = "1.8.9"
 androidCompileSdk = "36"
 androidMinSdk = "24"
 androidTargetSdk = "36"
@@ -26,6 +31,9 @@ compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "
 compose-unstyled = { module = "com.composables:core", version.ref = "composeUnstyled" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "androidxLifecycle" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "androidxBiometric" }
+androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "androidxFragment" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -39,6 +47,9 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+# NSURLSession, which is what an iOS app is expected to use: it honours the system proxy, App
+# Transport Security and the per-app VPN, and none of the other engines runs on Kotlin/Native iOS.
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 # No version: the BOM above supplies it.

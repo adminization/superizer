@@ -79,6 +79,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public static final field $stable I
 	public final fun auth (Lcx/m42/superizer/runtime/AuthService;)V
 	public final fun clock (Lcx/m42/superizer/runtime/Clock;)V
+	public final fun deviceAuthenticator (Lcx/m42/superizer/lock/DeviceAuthenticator;)V
 	public final fun home (Ljava/util/List;)V
 	public final fun home ([Ljava/lang/String;)V
 	public final fun host (Lcx/m42/superizer/runtime/HostInfo;)V
@@ -86,6 +87,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun languages ([Lcx/m42/superizer/LanguageOption;Ljava/lang/String;)V
 	public static synthetic fun languages$default (Lcx/m42/superizer/host/SuperizerBuilder;[Lcx/m42/superizer/LanguageOption;Ljava/lang/String;ILjava/lang/Object;)V
 	public final fun lifecycle (Lkotlinx/coroutines/flow/StateFlow;)V
+	public final fun lockStrength (Lcx/m42/superizer/lock/AuthStrength;)V
 	public final fun network (Lcx/m42/superizer/runtime/NetworkService;)V
 	public final fun notifier (Lcx/m42/superizer/host/push/Notifier;)V
 	public final fun promoCodes (Lcx/m42/superizer/host/activation/PromoCodeResolver;)V
@@ -145,6 +147,62 @@ public final class cx/m42/superizer/host/activation/QrPayloadParser {
 public final class cx/m42/superizer/host/activation/QrPayloadParser$Companion {
 }
 
+public final class cx/m42/superizer/host/lock/AppLockController : cx/m42/superizer/lock/AppLockPort {
+	public static final field $stable I
+	public fun <init> (Lkotlinx/coroutines/flow/StateFlow;Lcx/m42/superizer/lock/DeviceAuthenticator;Lcx/m42/superizer/host/lock/LockStore;Lcx/m42/superizer/runtime/Clock;Lkotlinx/coroutines/flow/StateFlow;Lkotlinx/coroutines/flow/Flow;Lkotlin/jvm/functions/Function0;Lcx/m42/superizer/lock/AuthStrength;Lkotlin/jvm/functions/Function0;Lcx/m42/superizer/runtime/Logger;)V
+	public synthetic fun <init> (Lkotlinx/coroutines/flow/StateFlow;Lcx/m42/superizer/lock/DeviceAuthenticator;Lcx/m42/superizer/host/lock/LockStore;Lcx/m42/superizer/runtime/Clock;Lkotlinx/coroutines/flow/StateFlow;Lkotlinx/coroutines/flow/Flow;Lkotlin/jvm/functions/Function0;Lcx/m42/superizer/lock/AuthStrength;Lkotlin/jvm/functions/Function0;Lcx/m42/superizer/runtime/Logger;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun attach (Lkotlinx/coroutines/CoroutineScope;)V
+	public final fun getPresence ()Lcx/m42/superizer/lock/UserPresence;
+	public fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun lockNow ()V
+	public fun openDeviceSettings ()Z
+	public fun setEnabled-HNJm7k8 (Ljava/lang/String;Z)V
+	public fun setGrace (J)V
+	public fun unlock (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/lock/LockSettings {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/host/lock/LockSettings$Companion;
+	public fun <init> ()V
+	public fun <init> (JLjava/util/Map;)V
+	public synthetic fun <init> (JLjava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/util/Map;
+	public final fun copy (JLjava/util/Map;)Lcx/m42/superizer/host/lock/LockSettings;
+	public static synthetic fun copy$default (Lcx/m42/superizer/host/lock/LockSettings;JLjava/util/Map;ILjava/lang/Object;)Lcx/m42/superizer/host/lock/LockSettings;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChoices ()Ljava/util/Map;
+	public final fun getGraceMillis ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/host/lock/LockSettings$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/host/lock/LockSettings$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/host/lock/LockSettings;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/host/lock/LockSettings;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/host/lock/LockSettings$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/host/lock/LockStore {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun load ()Lcx/m42/superizer/host/lock/LockSettings;
+	public final fun save (Lcx/m42/superizer/host/lock/LockSettings;)V
+}
+
 public final class cx/m42/superizer/host/net/KtorNetworkService : cx/m42/superizer/runtime/NetworkService {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/superizer/host/net/KtorNetworkService$Companion;
@@ -177,6 +235,13 @@ public final class cx/m42/superizer/host/platform/PlatformLifecycle {
 	public static final field INSTANCE Lcx/m42/superizer/host/platform/PlatformLifecycle;
 	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun set (Lcx/m42/superizer/runtime/HostLifecycle;)V
+}
+
+public final class cx/m42/superizer/host/platform/PlatformScreen {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/host/platform/PlatformScreen;
+	public final fun getOff ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun interactive ()Z
 }
 
 public final class cx/m42/superizer/host/platform/Platform_desktopKt {
@@ -221,8 +286,8 @@ public abstract interface class cx/m42/superizer/host/push/Notifier {
 public final class cx/m42/superizer/host/push/PendingRoute : cx/m42/superizer/RoutePort {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (Lkotlinx/coroutines/flow/MutableSharedFlow;)V
-	public synthetic fun <init> (Lkotlinx/coroutines/flow/MutableSharedFlow;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lkotlinx/coroutines/flow/MutableSharedFlow;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lkotlinx/coroutines/flow/MutableSharedFlow;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun consume ()Ljava/lang/String;
 	public fun deliver (Ljava/lang/String;)V
 	public fun discard ()V
@@ -303,6 +368,7 @@ public final class cx/m42/superizer/host/storage/HostKeys {
 	public static final field HOME Ljava/lang/String;
 	public static final field INSTANCE Lcx/m42/superizer/host/storage/HostKeys;
 	public static final field LANGUAGE Ljava/lang/String;
+	public static final field LOCK Ljava/lang/String;
 	public static final field SESSION Ljava/lang/String;
 	public static final field TOPICS Ljava/lang/String;
 	public static final field UNLOCKED Ljava/lang/String;

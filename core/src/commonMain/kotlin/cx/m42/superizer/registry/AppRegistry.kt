@@ -70,6 +70,12 @@ public class AppRegistry(
         if (manifest.minHostContract > host.contractVersion) {
             return "needs host contract ${manifest.minHostContract}, this host is ${host.contractVersion}"
         }
+        if (manifest.protection.sensitive && manifest.minHostContract < PROTECTION_CONTRACT) {
+            // D138: on a host of contract 1 this manifest would run with no lock and no one would
+            // notice. Refusing it here too makes the mistake fail in the app's first test instead.
+            return "declares protection but asks only for host contract ${manifest.minHostContract}; " +
+                "protection needs $PROTECTION_CONTRACT"
+        }
         val missing = manifest.requires - host.services
         if (missing.isNotEmpty()) {
             return "host provides no ${missing.joinToString(", ") { it.name }}"
@@ -96,5 +102,8 @@ public class AppRegistry(
         /** One or more slash-separated segments, no query, no scheme — `rate`, `chart/day`. */
         val DEEP_LINK_PATH = Regex("[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)*")
         val TOPIC = Regex("[A-Za-z0-9][A-Za-z0-9._-]*")
+
+        /** The contract that introduced `AppManifest.protection` (06). */
+        const val PROTECTION_CONTRACT = 2
     }
 }

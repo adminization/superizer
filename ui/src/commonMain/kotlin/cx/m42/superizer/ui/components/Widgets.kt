@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -178,16 +179,28 @@ public fun ChoiceRow(label: String, selected: Boolean, onClick: () -> Unit) {
 
 /** A row carrying a switch, with the whole row as its tap target. */
 @Composable
-public fun ToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+public fun ToggleRow(
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    /** False greys the row out and ignores taps — a switch that cannot be moved on this device. */
+    enabled: Boolean = true,
+) {
     val tokens = AppTheme
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .clickable(role = Role.Switch) { onCheckedChange(!checked) }
+            .clickable(enabled = enabled, role = Role.Switch) { onCheckedChange(!checked) }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = label, style = tokens.body, color = tokens.foreground, modifier = Modifier.weight(1f))
+        Text(
+            text = label,
+            style = tokens.body,
+            color = if (enabled) tokens.foreground else tokens.muted,
+            modifier = Modifier.weight(1f),
+        )
         Switch(checked = checked, label = label)
     }
 }
@@ -248,6 +261,11 @@ public fun AppTextField(
     singleLine: Boolean = true,
     minHeight: androidx.compose.ui.unit.Dp = 48.dp,
     textStyle: TextStyle? = null,
+    /**
+     * What the keyboard is told. A field for a secret passes `autoCorrectEnabled = false` so the
+     * keyboard neither suggests over it nor learns it into its dictionary (06 §7).
+     */
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
     val tokens = AppTheme
     val style = (textStyle ?: tokens.body).copy(color = tokens.foreground)
@@ -271,6 +289,7 @@ public fun AppTextField(
             onValueChange = onValueChange,
             singleLine = singleLine,
             textStyle = style,
+            keyboardOptions = keyboardOptions,
             cursorBrush = SolidColor(tokens.foreground),
             modifier = modifier.fillMaxWidth().semantics { contentDescription = label },
         )

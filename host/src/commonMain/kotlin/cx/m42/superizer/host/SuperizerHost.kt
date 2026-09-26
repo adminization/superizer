@@ -15,9 +15,14 @@ import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.host.activation.ActivationService
 import cx.m42.superizer.host.activation.LocalPromoCodes
 import cx.m42.superizer.host.activation.PromoCodeResolver
+import cx.m42.superizer.host.lock.AppLockController
+import cx.m42.superizer.host.lock.LockStore
 import cx.m42.superizer.host.net.KtorNetworkService
 import cx.m42.superizer.host.platform.PlatformLifecycle
+import cx.m42.superizer.host.platform.PlatformScreen
 import cx.m42.superizer.host.platform.openExternalUrl
+import cx.m42.superizer.host.platform.openSecuritySettings
+import cx.m42.superizer.host.platform.platformDeviceAuthenticator
 import cx.m42.superizer.host.push.DeviceRegistrar
 import cx.m42.superizer.host.push.IncomingPush
 import cx.m42.superizer.host.push.Notifier
@@ -29,6 +34,11 @@ import cx.m42.superizer.host.storage.HomeStore
 import cx.m42.superizer.host.storage.PrefsSnapshotStore
 import cx.m42.superizer.host.storage.PrefsStorageService
 import cx.m42.superizer.host.storage.UnlockStore
+import cx.m42.superizer.lock.AppLockPort
+import cx.m42.superizer.lock.AuthAvailability
+import cx.m42.superizer.lock.AuthStrength
+import cx.m42.superizer.lock.DeviceAuthenticator
+import cx.m42.superizer.lock.UserPresence
 import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.AppSession
@@ -93,6 +103,8 @@ public class SuperizerBuilder internal constructor() {
     internal var notifier: Notifier? = null
     internal var lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>? = null
     internal var home: List<AppId> = emptyList()
+    internal var authenticator: DeviceAuthenticator? = null
+    internal var lockStrength: AuthStrength = AuthStrength.Any
 
     public fun host(info: HostInfo) {
         hostInfo = info
@@ -170,6 +182,22 @@ public class SuperizerBuilder internal constructor() {
     public fun lifecycle(value: StateFlow<cx.m42.superizer.runtime.HostLifecycle>) {
         lifecycle = value
     }
+
+    /**
+     * What the lock asks (06). The platform's own by default — the system's biometric sheet on
+     * Android, none on desktop and the web — and a fake in a test.
+     */
+    public fun deviceAuthenticator(value: DeviceAuthenticator) {
+        authenticator = value
+    }
+
+    /**
+     * How strong a proof opening the lock takes, for the whole host (§5.7). [AuthStrength.Any] until
+     * the vault's key is bound to authentication (06 §8.5, D142).
+     */
+    public fun lockStrength(value: AuthStrength) {
+        lockStrength = value
+    }
 }
 
 /**
@@ -198,9 +226,31 @@ internal class SuperizerHost(
 
     private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 
-    override val hostInfo: HostInfo = requireNotNull(builder.hostInfo) {
+    private val declared: HostInfo = requireNotNull(builder.hostInfo) {
         "Superizer.build { host(HostInfo(…)) } is required"
-    }.copy(services = builder.services.keys)
+    }
+
+    private val logBuffer = LogBuffer()
+    private val hostLogger: Logger = ConsoleLogger("host", logBuffer, verbose = declared.debug)
+
+    private val authenticator: DeviceAuthenticator =
+        builder.authenticator ?: platformDeviceAuthenticator(declared.debug, hostLogger)
+
+    /**
+     * Confirmation for apps (D133), offered wherever the platform can ask at all. A device with no
+     * screen lock *can*, once somebody sets one, so it gets the service too; desktop and the web
+     * cannot and get none, and an app there does what it did before (§5.5).
+     */
+    private val services: Map<ServiceKey<*>, Any> = builder.services.let { declaredServices ->
+        val offersPresence = UserPresence.Key !in declaredServices &&
+            authenticator.availability(builder.lockStrength) != AuthAvailability.Unsupported
+        if (!offersPresence) return@let declaredServices
+        declaredServices + (UserPresence.Key to object : UserPresence {
+            override suspend fun confirm(reason: String): Boolean = lockController.presence.confirm(reason)
+        })
+    }
+
+    override val hostInfo: HostInfo = declared.copy(services = services.keys)
 
     private val _events = MutableSharedFlow<SuperizerEvent>(replay = 0, extraBufferCapacity = 64)
     override val events: SharedFlow<SuperizerEvent> = _events.asSharedFlow()
@@ -209,9 +259,6 @@ internal class SuperizerHost(
 
     private val unlockStore = UnlockStore(_events, json)
     override val unlocked: StateFlow<Set<AppId>> = unlockStore.unlocked
-
-    private val logBuffer = LogBuffer()
-    private val hostLogger: Logger = ConsoleLogger("host", logBuffer, verbose = hostInfo.debug)
 
     private val homeStore = HomeStore(builder.home, _events, json)
     override val home: StateFlow<List<AppId>> = homeStore.home
@@ -266,7 +313,9 @@ internal class SuperizerHost(
     private val _commands = MutableSharedFlow<ShellCommand>(replay = 0, extraBufferCapacity = 8)
     override val commands: SharedFlow<ShellCommand> = _commands.asSharedFlow()
 
-    private val pendingRoute = PendingRoute(_events)
+    private val pendingRoute = PendingRoute(_events) { id ->
+        registry.get(id)?.manifest?.protection?.sensitive == true
+    }
     override val route: RoutePort = pendingRoute
 
     private val snapshots = PrefsSnapshotStore(json)
@@ -282,7 +331,7 @@ internal class SuperizerHost(
         auth = builder.auth,
         apps = appsView,
         events = events,
-        services = ServiceRegistry(builder.services),
+        services = ServiceRegistry(services),
         clock = builder.clock,
         pushFor = { appId, logger ->
             pushes.getOrPut(appId) {
@@ -315,6 +364,20 @@ internal class SuperizerHost(
         json = json,
         onUnlock = ::reveal,
     )
+
+    private val lockController = AppLockController(
+        apps = registry.apps,
+        authenticator = authenticator,
+        store = LockStore(json),
+        clock = builder.clock,
+        lifecycle = builder.lifecycle ?: PlatformLifecycle.state,
+        screenOff = PlatformScreen.off,
+        screenOn = PlatformScreen::interactive,
+        strength = builder.lockStrength,
+        deviceSettings = ::openSecuritySettings,
+        logger = hostLogger,
+    )
+    override val lock: AppLockPort = lockController
 
     private val router = PushRouter(
         registry = registry,
@@ -364,6 +427,7 @@ internal class SuperizerHost(
     init {
         builder.apps.forEach { registry.register(it) }
         handler.observeLifecycle()
+        lockController.attach(scope)
         router.attach(scope)
         registrar.attach(scope)
         // The last hundred, because the Service Menu is read after something has gone wrong and

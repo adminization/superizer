@@ -56,6 +56,7 @@ public object HostKeys {
     public const val HOME: String = "host.home"
     public const val SESSION: String = "host.session"
     public const val TOPICS: String = "host.push.topics"
+    public const val LOCK: String = "host.lock"
 }
 
 /**

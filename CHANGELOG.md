@@ -3,6 +3,85 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.3.0 — contract 2
+
+Two things: iOS, and protected apps.
+
+### iOS
+
+Every published module now has `iosArm64` and `iosSimulatorArm64` targets. The klibs compile and
+publish from any host, since Kotlin 2.4 cross-compiles Apple targets. Linking an app framework and
+running the iOS tests need a Mac. `Platform.Ios` is new in contract 2.
+
+- `host`:
+  - `NSUserDefaults` in a suite of the host's own (`cx.m42.superizer.store`);
+  - Ktor's Darwin engine;
+  - `didEnterBackground`/`willEnterForeground` as the lifecycle, deliberately not resign-active;
+  - `NWPathMonitor` for connectivity;
+  - the Taptic Engine for haptics;
+  - `NSLocale.preferredLanguages` for the language.
+- The lock:
+  - `LocalAuthentication` with `deviceOwnerAuthentication`, which is Face ID or Touch ID with the
+    passcode as fallback;
+  - "the phone locked" is `protectedDataWillBecomeUnavailable`;
+  - a missing `NSFaceIDUsageDescription` crashes a debug build and disables the lock in a release.
+- Push is FCM, as on Android. The Firebase iOS SDK lives in the app's Swift target. The app hands
+  `PushTransport.messaging` (`IosMessaging`, for topics) in at launch, then calls
+  `PushTransport.deliverToken` from its `MessagingDelegate`, plus `deliverTap` and `deliverMessage`.
+  Without Firebase configured, push is inert.
+- `ui`: `SecureWindow` puts a plain view over the window while the app is resigning active, so the
+  app-switcher snapshot shows nothing, and keeps it there during screen recording, mirroring and
+  AirPlay (`UIScreen.isCaptured`). iOS gives an app no way to refuse a screenshot, and this does not
+  pretend to. `SystemBackHandler` is a no-op, since iOS has no system back.
+
+### Protected apps
+
+Protected apps: an app declares that its screen is its owner's business, and the host locks it
+behind the device's own biometrics or screen lock (Unitool note 06, D127–D142). Contract 2, because
+a contract-1 host has never heard of the declaration and would show such an app unlocked.
+
+### The contract (`core`)
+
+- `AppManifest.protection: AppProtection(lock, secureWindow)`, with `LockPolicy` `Off`,
+  `OptionalOff`, `OptionalOn`, `Required`. The registry rejects a manifest that declares protection
+  but asks for contract 1, so the mistake fails in the app's first test.
+- `Superizer.lock: AppLockPort` and `LockState` — what the shell draws the curtain, the banner and
+  the Settings section from. One unlock for the whole host, in memory only.
+- `DeviceAuthenticator`, `AuthStrength`, `AuthAvailability`, `AuthOutcome` — the platform's "is this
+  the owner?", implemented by the host. `AuthStrength.Strong` is in the contract already so that
+  binding a vault key to authentication later needs no contract 3.
+- `UserPresence` (optional service `user-presence`) — an app asks the person to confirm one action.
+  True with no screen lock, because there is nothing to ask with and the banner already says so.
+- A protected app's config never reaches an event (`AppConfig.Redacted` instead) or the session
+  snapshot (empty instead); a rejected config's reason is not quoted. Its links lose their query in
+  `RouteDiscarded`.
+
+### The host (`host`)
+
+- `AppLockController`: locks at once when the screen goes off, after the grace (a minute by
+  default) away in another app, and on every process start. Lifecycle transitions while its own
+  sheet is up are recorded, not acted on — the API 24–29 PIN screen is another activity — and
+  judged when the sheet closes. Grace and the person's switches are stored under `host.lock`.
+- `SuperizerBuilder.deviceAuthenticator(…)` and `.lockStrength(…)`. The default on Android is
+  `BiometricPrompt` with `BIOMETRIC_WEAK or DEVICE_CREDENTIAL`; the host's activity must be a
+  `FragmentActivity`, and a debug build crashes on the first frame if it is not. Desktop and the web
+  have none and say so.
+- `PlatformScreen` — `ACTION_SCREEN_OFF` and `PowerManager.isInteractive` on Android.
+- New Android dependencies: `androidx.biometric:biometric:1.1.0`, `androidx.fragment:fragment` (api).
+
+### The shell (`ui`)
+
+- The curtain in the app container — the one place `Content()` is drawn, so every road onto the
+  screen is covered by one branch. It asks once by itself, then offers a button; the bar shows the
+  app's name, not its current title.
+- The "not protected" banner over an app that wants a lock the device cannot give.
+- `FLAG_SECURE` while a `secureWindow` app is on screen, curtain included (`SecureWindow`).
+- Settings → Protection: grace, a switch per optional app, a line per required one, "Lock now". A
+  change that weakens the lock asks first. A covered app's own Settings block is not drawn.
+- `AppTextField(keyboardOptions)`, `ToggleRow(modifier, enabled)`.
+- The link route filters nulls before `collectLatest`, so consuming a link no longer cancels the
+  launch it was consumed for.
+
 ## 0.1.0 — contract 1
 
 The first version. Everything below is contract 1, which means an app declaring

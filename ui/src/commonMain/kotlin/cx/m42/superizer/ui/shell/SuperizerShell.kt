@@ -58,6 +58,7 @@ import cx.m42.superizer.ui.components.SettingsIcon
 import cx.m42.superizer.ui.i18n.LocalHostStrings
 import cx.m42.superizer.ui.i18n.hostStrings
 import cx.m42.superizer.ui.i18n.hostStringsFor
+import cx.m42.superizer.ui.platform.SecureWindow
 import cx.m42.superizer.ui.platform.SystemBackHandler
 import cx.m42.superizer.ui.screens.ActivateScreen
 import cx.m42.superizer.ui.screens.CatalogScreen
@@ -66,6 +67,7 @@ import cx.m42.superizer.ui.screens.HostErrorScreen
 import cx.m42.superizer.ui.screens.ServiceMenuScreen
 import cx.m42.superizer.ui.screens.SettingsScreen
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 /**
@@ -143,8 +145,10 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
     // query (13 §5). Always through the activation service, so it is the same code path a QR code
     // takes, and the app on the other end cannot tell the difference (§12–13).
     LaunchedEffect(superizer) {
-        superizer.route.route.collectLatest { pending ->
-            if (pending == null) return@collectLatest
+        // Nulls filtered out *before* collectLatest: consuming the route sets it to null, and an
+        // unfiltered null is a new value that cancels the very launch it was consumed for — the
+        // moment that launch first suspends.
+        superizer.route.route.filterNotNull().collectLatest {
             val link = superizer.route.consume() ?: return@collectLatest
             val result = superizer.activation.fromDeepLink(link)
             if (result !is ActivationResult.Success) return@collectLatest
@@ -418,14 +422,23 @@ private fun AppContainer(
 ) {
     val session by superizer.handler.current.collectAsState()
     val states by superizer.handler.states.collectAsState()
+    val lock by superizer.lock.state.collectAsState()
     val open: AppSession? = session?.takeIf { it.app.id == id }
     val chrome: AppChrome? = open?.let { it.instance.chrome.collectAsState().value }
 
-    val fallbackTitle = superizer.registry.get(id)?.metadata?.title?.resolve(langTag) ?: id.value
+    val app = superizer.registry.get(id)
+    val fallbackTitle = app?.metadata?.title?.resolve(langTag) ?: id.value
+    val covered = lock.covers(id)
+
+    // D132: from the first frame of a protected app to its last, curtain included — a screenshot of
+    // the curtain says which app is there, and the recents thumbnail is taken of whatever is on top.
+    SecureWindow(active = app?.manifest?.protection?.secureWindow == true)
 
     AppScaffold(
-        title = chrome?.title ?: fallbackTitle,
-        subtitle = chrome?.subtitle,
+        // The app's own title can be what it is hiding — the 2FA app titles an account's page with
+        // the account — so under the curtain the bar says only which app this is.
+        title = if (covered) fallbackTitle else chrome?.title ?: fallbackTitle,
+        subtitle = if (covered) null else chrome?.subtitle,
         menu = menu,
         onBack = onBack,
         onHaptic = haptic,
@@ -437,13 +450,24 @@ private fun AppContainer(
                 // it may not even have been constructed.
                 states[id] == AppState.Failed -> HostErrorScreen(onRetry = onRetry, onBack = onBack)
 
+                // 06 §5.4: the one place `Content()` is drawn, so the one place it is withheld. Ahead
+                // of the launching branch, so not even the blank frame of a launch shows through.
+                covered -> LockCurtain(
+                    lock = superizer.lock,
+                    title = fallbackTitle,
+                    icon = app?.metadata?.icon ?: cx.m42.superizer.app.AppIcon.Letter('?'),
+                )
+
                 // Launching. A blank frame rather than a spinner: `onLaunch` is budgeted at 200 ms
                 // (12 §4.7), and a spinner that flashes for one frame is worse than none.
                 open == null -> Box(Modifier.fillMaxSize())
 
-                else -> CompositionLocalProvider(LocalAppRuntime provides open.runtime) {
-                    Box(modifier = Modifier.fillMaxSize().testTag("${id.value}:root")) {
-                        open.instance.Content()
+                else -> Column(modifier = Modifier.fillMaxSize()) {
+                    if (lock.unprotected(id)) UnprotectedBanner(superizer.lock, lock.availability)
+                    CompositionLocalProvider(LocalAppRuntime provides open.runtime) {
+                        Box(modifier = Modifier.fillMaxWidth().weight(1f).testTag("${id.value}:root")) {
+                            open.instance.Content()
+                        }
                     }
                 }
             }

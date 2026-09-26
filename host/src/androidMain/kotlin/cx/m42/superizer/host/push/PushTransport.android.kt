@@ -134,16 +134,8 @@ public actual object PushTransport {
         return manager?.areNotificationsEnabled() == true
     }
 
-    /**
-     * FCM accepts `[a-zA-Z0-9-_.~%]` and nothing else in a topic name, and rejects the whole call
-     * otherwise. The host's qualified names are `<appId>.<topic>`, and an app id is not constrained
-     * to that set — so the mapping happens here, once, rather than every caller having to know.
-     */
-    private fun String.asFcmTopic(): String = map { if (it in ALLOWED) it else '_' }.joinToString("")
-
     private const val PLATFORM = "android"
     private const val REQUEST_CODE = 0x5075 // 'P','u'
-    private val ALLOWED = ('a'..'z') + ('A'..'Z') + ('0'..'9') + listOf('-', '_', '.', '~', '%')
 
     private var pending: CancellableContinuation<Boolean>? = null
 

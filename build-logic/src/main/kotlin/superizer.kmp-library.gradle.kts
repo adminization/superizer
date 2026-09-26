@@ -3,7 +3,8 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 /**
- * Everything a published Superizer module has in common: three targets, one JVM level, a published
+ * Everything a published Superizer module has in common: the same targets (Android, desktop, wasm,
+ * and iOS on device and simulator), one JVM level, a published
  * artifact and an explicit public API.
  *
  * It exists because seven modules repeating the same forty lines is seven places for them to drift
@@ -63,6 +64,9 @@ kotlin {
     }
 
     jvm("desktop")
+
+    iosArm64()
+    iosSimulatorArm64()
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {

@@ -1,6 +1,8 @@
 package cx.m42.superizer
 
 import cx.m42.superizer.app.AppId
+import cx.m42.superizer.app.AppProtection
+import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.RegistrationOutcome
@@ -41,6 +43,26 @@ class AppRegistryTest {
         assertNull(registry.get(AppId("probe")))
         val outcome = registry.outcome(AppId("probe"))
         assertTrue(outcome is RegistrationOutcome.Rejected && "contract" in outcome.reason)
+    }
+
+    @Test
+    fun anAppThatDeclaresProtectionMustAskForTheContractThatHasIt() {
+        // D138: on a contract-1 host such a manifest would run with no lock. Refusing it on this
+        // host as well is what makes the forgotten `minHostContract = 2` fail in the first test.
+        val locked = AppProtection(lock = LockPolicy.Required, secureWindow = true)
+        val registry = AppRegistry(testHost(), events)
+        assertFalse(registry.register(ProbeApp(id = "careless", protection = locked)))
+        val outcome = registry.outcome(AppId("careless"))
+        assertTrue(outcome is RegistrationOutcome.Rejected && "protection" in outcome.reason)
+
+        assertTrue(registry.register(ProbeApp(id = "careful", minHostContract = 2, protection = locked)))
+    }
+
+    @Test
+    fun aHostOfContractOneRejectsAProtectedApp() {
+        val registry = AppRegistry(testHost(contractVersion = 1), events)
+        val locked = AppProtection(lock = LockPolicy.Required)
+        assertFalse(registry.register(ProbeApp(minHostContract = 2, protection = locked)))
     }
 
     @Test

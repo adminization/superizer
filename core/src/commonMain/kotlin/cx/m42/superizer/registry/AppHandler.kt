@@ -237,9 +237,12 @@ public class AppHandler(
         val typed = decode(app, config)
         if (typed.isFailure) {
             instanceScope.cancel()
+            // The decoder's message quotes the payload it choked on, and the cause carries the
+            // same message; for a protected app neither goes into the log (D134).
+            if (app.sensitive) return fail(id, "config rejected")
             return fail(id, "config rejected: ${typed.exceptionOrNull()?.message}", typed.exceptionOrNull())
         }
-        events.tryEmit(SuperizerEvent.Configured(id, config))
+        events.tryEmit(SuperizerEvent.Configured(id, app.shown(config)))
 
         val instance = runCatching { create(app, runtime, typed.getOrThrow()) }.getOrElse { cause ->
             instanceScope.cancel()
@@ -293,7 +296,7 @@ public class AppHandler(
         setState(id, AppState.Closing)
         val snapshot = runCatching { session.instance.saveState() }.getOrNull()
         if (keepSnapshot) {
-            snapshots.save(SessionSnapshot(id, session.config, snapshot, clock.now()))
+            snapshots.save(SessionSnapshot(id, session.app.kept(session.config), snapshot, clock.now()))
         } else {
             snapshots.clear()
         }
@@ -350,7 +353,7 @@ public class AppHandler(
                             snapshots.save(
                                 SessionSnapshot(
                                     session.app.id,
-                                    session.config,
+                                    session.app.kept(session.config),
                                     runCatching { session.instance.saveState() }.getOrNull(),
                                     clock.now(),
                                 ),
@@ -390,12 +393,29 @@ public class AppHandler(
         val spec = app.configSpec as AppConfigSpec<Any>
         val decoded = spec.decode(config)
         if (decoded.isSuccess) return decoded
-        val reason = decoded.exceptionOrNull()?.message ?: "malformed config"
-        events.tryEmit(SuperizerEvent.ConfigRejected(app.id, config, reason))
+        val reason = decoded.exceptionOrNull()?.message?.takeUnless { app.sensitive } ?: "malformed config"
+        events.tryEmit(SuperizerEvent.ConfigRejected(app.id, app.shown(config), reason))
         // D18: a broken payload is reported either way. Whether it is also fatal is the app's call,
         // because only the app knows whether running on defaults is better than not running.
         return if (spec.fallbackToDefault) Result.success(spec.default) else decoded
     }
+
+    /**
+     * D134: a protected app's config may hold the very secret the lock is there for — the 2FA app
+     * is opened by `2fa/add?uri=otpauth://…secret=…`. Events are read by the Service Menu and by
+     * every app's listener, so they get [AppConfig.Redacted] instead.
+     */
+    private fun SuperizerApp<*>.shown(config: AppConfig): AppConfig =
+        if (sensitive && config != AppConfig.Empty) AppConfig.Redacted else config
+
+    /**
+     * And the snapshot keeps none of it, because the snapshot is plain text in the host's prefs.
+     * The price: after a process death, a form a link had filled in comes back empty.
+     */
+    private fun SuperizerApp<*>.kept(config: AppConfig): AppConfig =
+        if (sensitive) AppConfig.Empty else config
+
+    private val SuperizerApp<*>.sensitive: Boolean get() = manifest.protection.sensitive
 
     @Suppress("UNCHECKED_CAST")
     private fun create(app: SuperizerApp<*>, runtime: InstanceRuntime, config: Any): AppInstance =

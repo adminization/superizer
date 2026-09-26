@@ -23,6 +23,12 @@ import kotlinx.serialization.json.jsonPrimitive
 public value class AppConfig(public val json: JsonObject) {
     public companion object {
         public val Empty: AppConfig = AppConfig(JsonObject(emptyMap()))
+
+        /**
+         * What an event says a protected app was configured with (D134). The shape of a config and
+         * not an empty one, so a reader of the log can tell "had a config, not shown" from "had none".
+         */
+        public val Redacted: AppConfig = AppConfig(JsonObject(mapOf("…" to JsonPrimitive("redacted"))))
     }
 }
 

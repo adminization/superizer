@@ -81,6 +81,22 @@ public final class cx/m42/superizer/testing/FakeClock : cx/m42/superizer/runtime
 	public fun now ()J
 }
 
+public final class cx/m42/superizer/testing/FakeDeviceAuthenticator : cx/m42/superizer/lock/DeviceAuthenticator {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcx/m42/superizer/lock/AuthAvailability;Lcx/m42/superizer/lock/AuthOutcome;)V
+	public synthetic fun <init> (Lcx/m42/superizer/lock/AuthAvailability;Lcx/m42/superizer/lock/AuthOutcome;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun authenticate (Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/lock/AuthStrength;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun availability (Lcx/m42/superizer/lock/AuthStrength;)Lcx/m42/superizer/lock/AuthAvailability;
+	public final fun getAnswer ()Lcx/m42/superizer/lock/AuthOutcome;
+	public final fun getAvailability ()Lcx/m42/superizer/lock/AuthAvailability;
+	public final fun getPrompts ()Ljava/util/List;
+	public final fun getStrengths ()Ljava/util/List;
+	public final fun hold ()Lkotlinx/coroutines/CompletableDeferred;
+	public final fun setAnswer (Lcx/m42/superizer/lock/AuthOutcome;)V
+	public final fun setAvailability (Lcx/m42/superizer/lock/AuthAvailability;)V
+}
+
 public final class cx/m42/superizer/testing/FakeHostRuntimeFactory : cx/m42/superizer/runtime/HostRuntimeFactory {
 	public static final field $stable I
 	public fun <init> ()V
@@ -132,6 +148,17 @@ public final class cx/m42/superizer/testing/FakePush : cx/m42/superizer/runtime/
 	public final fun setPermissionGranted (Z)V
 	public fun subscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun unsubscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/FakeUserPresence : cx/m42/superizer/lock/UserPresence {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun confirm (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getAnswer ()Z
+	public final fun getReasons ()Ljava/util/List;
+	public final fun setAnswer (Z)V
 }
 
 public final class cx/m42/superizer/testing/FakesKt {

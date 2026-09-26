@@ -59,6 +59,25 @@ mkdir -p "$out/junit"
 find . -path '*/build/test-results/*' -name '*.xml' -not -path "./$out/*" -exec cp {} "$out/junit/" \; 2>/dev/null
 say "  ($(ls "$out/junit" 2>/dev/null | wc -l) result files)"
 
+step "2b. iOS (klibs)"
+# Every module, both iOS targets, compiled — on any host, because Kotlin 2.4 cross-compiles Apple
+# klibs. What this cannot do off a Mac is link a framework or run the iOS tests; that half is the
+# consumer's (Unitool's iosApp) and needs Xcode.
+if ./gradlew --quiet compileKotlinIosArm64 compileKotlinIosSimulatorArm64 > "$out/ios.log" 2>&1; then
+  ok "iOS klibs (iosArm64, iosSimulatorArm64)"
+else
+  bad "iOS klibs — see $out/ios.log"
+fi
+if [ "$(uname)" = "Darwin" ]; then
+  if ./gradlew --quiet iosSimulatorArm64Test >> "$out/ios.log" 2>&1; then
+    ok "iOS simulator tests"
+  else
+    bad "iOS simulator tests — see $out/ios.log"
+  fi
+else
+  skip "iOS simulator tests: need macOS with Xcode (this is $(uname))"
+fi
+
 step "3. Unit tests (wasm)"
 # Karma and the smoke test both need a browser binary. Playwright's if it is installed, the
 # system's otherwise; and if there is neither, both steps are skipped *by name* rather than by a

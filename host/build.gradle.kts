@@ -13,6 +13,12 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.androidx.lifecycle.process)
+            implementation(libs.androidx.lifecycle.runtime)
+            // The lock's sheet (06 §5.2). `api` for the fragment library: BiometricPrompt can only be
+            // shown from a FragmentActivity, so a host's activity has to be one, and the class it
+            // extends is part of what this module asks of it.
+            implementation(libs.androidx.biometric)
+            api(libs.androidx.fragment)
             // Firebase Cloud Messaging: the Android half of the push seam (13 §8). Compiled in
             // unconditionally, so the messaging service is always part of any host built on this
             // library. Whether it can do anything is a runtime question — it needs a
@@ -24,6 +30,9 @@ kotlin {
         val desktopMain by getting
         desktopMain.dependencies {
             implementation(libs.ktor.client.cio)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)

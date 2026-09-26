@@ -81,7 +81,8 @@ public fun interface Clock {
     public fun now(): Long
 }
 
-public enum class Platform { Android, Desktop, Web }
+/** [Ios] arrived with contract 2: a `when` over this written against contract 1 needs a branch for it. */
+public enum class Platform { Android, Desktop, Web, Ios }
 
 /** Read-only facts about whoever is hosting. */
 public data class HostInfo(

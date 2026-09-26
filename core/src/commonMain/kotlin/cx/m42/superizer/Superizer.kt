@@ -4,6 +4,7 @@ import cx.m42.superizer.activation.Activation
 import cx.m42.superizer.activation.ActivationResult
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.event.SuperizerEvent
+import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.AppSession
@@ -59,6 +60,9 @@ public interface Superizer {
     public val activation: ActivationPort
     public val route: RoutePort
     public val diagnostics: DiagnosticsPort
+
+    /** The lock over protected apps (06): the curtain, the banner and the Settings section read it. */
+    public val lock: AppLockPort
 
     /**
      * What an app asked the host to do about navigation (04). The shell collects these and moves;

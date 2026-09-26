@@ -1,11 +1,16 @@
 package cx.m42.superizer.host.platform
 
+import cx.m42.superizer.lock.DeviceAuthenticator
 import cx.m42.superizer.runtime.HostLifecycle
+import cx.m42.superizer.runtime.Logger
 import cx.m42.superizer.runtime.Platform
 import java.awt.Desktop
 import java.net.URI
 import java.util.Locale
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -41,3 +46,15 @@ public actual fun openExternalUrl(url: String): Boolean = runCatching {
 public actual object Connectivity {
     public actual val online: StateFlow<Boolean> = MutableStateFlow(true).asStateFlow()
 }
+
+/** No screen to go dark that this process could hear about. */
+public actual object PlatformScreen {
+    public actual val off: SharedFlow<Unit> = MutableSharedFlow<Unit>().asSharedFlow()
+
+    public actual fun interactive(): Boolean = true
+}
+
+internal actual fun openSecuritySettings(): Boolean = false
+
+internal actual fun platformDeviceAuthenticator(debug: Boolean, logger: Logger): DeviceAuthenticator =
+    NoDeviceAuthenticator

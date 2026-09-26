@@ -133,4 +133,10 @@ public data class AppManifest(
     val pushTopics: Set<String> = emptySet(),
     /** Hosts it talks to. Informational here; the allowlist of a Tier 2 bridge later (10). */
     val networkHosts: Set<String> = emptySet(),
+    /**
+     * The lock over its screen and the window flag (06). Anything but the default needs
+     * `minHostContract = 2`: a host of contract 1 has never heard of this field and would show the
+     * app with no lock at all, so the registry turns such a manifest away as inconsistent (D138).
+     */
+    val protection: AppProtection = AppProtection(),
 )

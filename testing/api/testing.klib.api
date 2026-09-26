@@ -1,5 +1,5 @@
 // Klib ABI Dump
-// Targets: [wasmJs]
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
 // Rendering settings:
 // - Signature version: 2
 // - Show manifest properties: true
@@ -96,6 +96,26 @@ final class cx.m42.superizer.testing/FakeClock : cx.m42.superizer.runtime/Clock 
     final fun now(): kotlin/Long // cx.m42.superizer.testing/FakeClock.now|now(){}[0]
 }
 
+final class cx.m42.superizer.testing/FakeDeviceAuthenticator : cx.m42.superizer.lock/DeviceAuthenticator { // cx.m42.superizer.testing/FakeDeviceAuthenticator|null[0]
+    constructor <init>(cx.m42.superizer.lock/AuthAvailability = ..., cx.m42.superizer.lock/AuthOutcome = ...) // cx.m42.superizer.testing/FakeDeviceAuthenticator.<init>|<init>(cx.m42.superizer.lock.AuthAvailability;cx.m42.superizer.lock.AuthOutcome){}[0]
+
+    final val prompts // cx.m42.superizer.testing/FakeDeviceAuthenticator.prompts|{}prompts[0]
+        final fun <get-prompts>(): kotlin.collections/MutableList<kotlin/String> // cx.m42.superizer.testing/FakeDeviceAuthenticator.prompts.<get-prompts>|<get-prompts>(){}[0]
+    final val strengths // cx.m42.superizer.testing/FakeDeviceAuthenticator.strengths|{}strengths[0]
+        final fun <get-strengths>(): kotlin.collections/MutableList<cx.m42.superizer.lock/AuthStrength> // cx.m42.superizer.testing/FakeDeviceAuthenticator.strengths.<get-strengths>|<get-strengths>(){}[0]
+
+    final var answer // cx.m42.superizer.testing/FakeDeviceAuthenticator.answer|{}answer[0]
+        final fun <get-answer>(): cx.m42.superizer.lock/AuthOutcome // cx.m42.superizer.testing/FakeDeviceAuthenticator.answer.<get-answer>|<get-answer>(){}[0]
+        final fun <set-answer>(cx.m42.superizer.lock/AuthOutcome) // cx.m42.superizer.testing/FakeDeviceAuthenticator.answer.<set-answer>|<set-answer>(cx.m42.superizer.lock.AuthOutcome){}[0]
+    final var availability // cx.m42.superizer.testing/FakeDeviceAuthenticator.availability|{}availability[0]
+        final fun <get-availability>(): cx.m42.superizer.lock/AuthAvailability // cx.m42.superizer.testing/FakeDeviceAuthenticator.availability.<get-availability>|<get-availability>(){}[0]
+        final fun <set-availability>(cx.m42.superizer.lock/AuthAvailability) // cx.m42.superizer.testing/FakeDeviceAuthenticator.availability.<set-availability>|<set-availability>(cx.m42.superizer.lock.AuthAvailability){}[0]
+
+    final fun availability(cx.m42.superizer.lock/AuthStrength): cx.m42.superizer.lock/AuthAvailability // cx.m42.superizer.testing/FakeDeviceAuthenticator.availability|availability(cx.m42.superizer.lock.AuthStrength){}[0]
+    final fun hold(): kotlinx.coroutines/CompletableDeferred<cx.m42.superizer.lock/AuthOutcome> // cx.m42.superizer.testing/FakeDeviceAuthenticator.hold|hold(){}[0]
+    final suspend fun authenticate(kotlin/String, kotlin/String?, cx.m42.superizer.lock/AuthStrength): cx.m42.superizer.lock/AuthOutcome // cx.m42.superizer.testing/FakeDeviceAuthenticator.authenticate|authenticate(kotlin.String;kotlin.String?;cx.m42.superizer.lock.AuthStrength){}[0]
+}
+
 final class cx.m42.superizer.testing/FakeHostRuntimeFactory : cx.m42.superizer.runtime/HostRuntimeFactory { // cx.m42.superizer.testing/FakeHostRuntimeFactory|null[0]
     constructor <init>(cx.m42.superizer.runtime/HostInfo? = ...) // cx.m42.superizer.testing/FakeHostRuntimeFactory.<init>|<init>(cx.m42.superizer.runtime.HostInfo?){}[0]
 
@@ -147,6 +167,19 @@ final class cx.m42.superizer.testing/FakePush : cx.m42.superizer.runtime/PushSer
     final suspend fun requestPermission(): kotlin/Boolean // cx.m42.superizer.testing/FakePush.requestPermission|requestPermission(){}[0]
     final suspend fun subscribe(kotlin/String) // cx.m42.superizer.testing/FakePush.subscribe|subscribe(kotlin.String){}[0]
     final suspend fun unsubscribe(kotlin/String) // cx.m42.superizer.testing/FakePush.unsubscribe|unsubscribe(kotlin.String){}[0]
+}
+
+final class cx.m42.superizer.testing/FakeUserPresence : cx.m42.superizer.lock/UserPresence { // cx.m42.superizer.testing/FakeUserPresence|null[0]
+    constructor <init>(kotlin/Boolean = ...) // cx.m42.superizer.testing/FakeUserPresence.<init>|<init>(kotlin.Boolean){}[0]
+
+    final val reasons // cx.m42.superizer.testing/FakeUserPresence.reasons|{}reasons[0]
+        final fun <get-reasons>(): kotlin.collections/MutableList<kotlin/String> // cx.m42.superizer.testing/FakeUserPresence.reasons.<get-reasons>|<get-reasons>(){}[0]
+
+    final var answer // cx.m42.superizer.testing/FakeUserPresence.answer|{}answer[0]
+        final fun <get-answer>(): kotlin/Boolean // cx.m42.superizer.testing/FakeUserPresence.answer.<get-answer>|<get-answer>(){}[0]
+        final fun <set-answer>(kotlin/Boolean) // cx.m42.superizer.testing/FakeUserPresence.answer.<set-answer>|<set-answer>(kotlin.Boolean){}[0]
+
+    final suspend fun confirm(kotlin/String): kotlin/Boolean // cx.m42.superizer.testing/FakeUserPresence.confirm|confirm(kotlin.String){}[0]
 }
 
 final class cx.m42.superizer.testing/InMemorySnapshotStore : cx.m42.superizer.registry/SnapshotStore { // cx.m42.superizer.testing/InMemorySnapshotStore|null[0]
@@ -235,10 +268,12 @@ final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stabl
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop|#static{}cx_m42_superizer_testing_FakeApps$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop|#static{}cx_m42_superizer_testing_FakeAuth$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop|#static{}cx_m42_superizer_testing_FakeClock$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop|#static{}cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop|#static{}cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop|#static{}cx_m42_superizer_testing_FakeLocale$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop|#static{}cx_m42_superizer_testing_FakeNetwork$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop|#static{}cx_m42_superizer_testing_FakePush$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeUserPresence$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeUserPresence$stableprop|#static{}cx_m42_superizer_testing_FakeUserPresence$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop|#static{}cx_m42_superizer_testing_InMemorySnapshotStore$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop|#static{}cx_m42_superizer_testing_InMemoryStorage$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop|#static{}cx_m42_superizer_testing_RecordingAnalytics$stableprop[0]
@@ -253,10 +288,12 @@ final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stabl
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop_getter|cx_m42_superizer_testing_FakeApps$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop_getter|cx_m42_superizer_testing_FakeAuth$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop_getter|cx_m42_superizer_testing_FakeClock$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop_getter|cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter|cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop_getter|cx_m42_superizer_testing_FakeLocale$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter|cx_m42_superizer_testing_FakeNetwork$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter|cx_m42_superizer_testing_FakePush$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeUserPresence$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeUserPresence$stableprop_getter|cx_m42_superizer_testing_FakeUserPresence$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemorySnapshotStore$stableprop_getter|cx_m42_superizer_testing_InMemorySnapshotStore$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_InMemoryStorage$stableprop_getter|cx_m42_superizer_testing_InMemoryStorage$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_RecordingAnalytics$stableprop_getter|cx_m42_superizer_testing_RecordingAnalytics$stableprop_getter(){}[0]

@@ -2,6 +2,8 @@ package cx.m42.superizer
 
 import cx.m42.superizer.app.AppConfig
 import cx.m42.superizer.app.AppId
+import cx.m42.superizer.app.AppProtection
+import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
@@ -381,6 +383,77 @@ class AppHandlerTest {
         assertNull(f.handler.current.value)
         assertNull(f.handler.deepLinkHandler(AppId("probe"), "rate"))
         assertFalse(f.handler.isEnabled(AppId("probe")))
+    }
+
+    // ------------------------------------------------------------------ D134
+
+    private val guarded = AppProtection(lock = LockPolicy.Required, secureWindow = true)
+
+    @Test
+    fun aProtectedAppsConfigNeverReachesAnEvent(): TestResult = handlerTest { f ->
+        // The 2FA app is opened by `2fa/add?uri=otpauth://…secret=…`: its config is the secret.
+        val app = ProbeApp(minHostContract = 2, protection = guarded)
+        f.registry.register(app)
+        f.handler.enableAll()
+
+        f.handler.launch(AppId("probe"), config("""{"mode":"secret=JBSWY3DPEHPK3PXP"}"""))
+        advanceUntilIdle()
+
+        // The app itself still gets it; only the log does not.
+        assertEquals("secret=JBSWY3DPEHPK3PXP", (app.lastInstance as ProbeInstance).config.mode)
+        val configured = f.events.replayCache.filterIsInstance<SuperizerEvent.Configured>().single()
+        assertEquals(AppConfig.Redacted, configured.config)
+        assertFalse(f.events.replayCache.any { "secret=" in it.toString() })
+    }
+
+    @Test
+    fun aProtectedAppsBrokenConfigIsRejectedWithoutQuotingIt(): TestResult = handlerTest { f ->
+        f.registry.register(ProbeApp(minHostContract = 2, protection = guarded, fallbackToDefault = false))
+        f.handler.enableAll()
+
+        // The decoder's own message names the value it could not read.
+        val result = f.handler.launch(AppId("probe"), config("""{"mode":{"secret":"JBSWY3DPEHPK3PXP"}}"""))
+        advanceUntilIdle()
+
+        assertTrue(result.isFailure)
+        assertTrue("ConfigRejected" in f.names())
+        assertTrue("LaunchFailed" in f.names())
+        assertFalse(f.events.replayCache.any { "JBSWY3DPEHPK3PXP" in it.toString() })
+    }
+
+    @Test
+    fun aProtectedAppsSnapshotKeepsItsStateButNotItsConfig(): TestResult = handlerTest { f ->
+        val app = ProbeApp(minHostContract = 2, protection = guarded)
+        f.registry.register(app)
+        f.handler.observeLifecycle()
+        f.handler.enableAll()
+        f.handler.launch(AppId("probe"), config("""{"mode":"secret=JBSWY3DPEHPK3PXP"}"""))
+        advanceUntilIdle()
+        (app.lastInstance as ProbeInstance).entry = "page"
+
+        f.lifecycle.value = HostLifecycle.Background
+        advanceUntilIdle()
+
+        val snapshot = assertNotNull(f.snapshots.snapshot)
+        assertEquals(AppConfig.Empty, snapshot.config)
+        assertEquals("page", (snapshot.state?.get("entry") as JsonPrimitive).content)
+        assertFalse("secret=" in Json.encodeToString(SessionSnapshot.serializer(), snapshot))
+    }
+
+    @Test
+    fun anOrdinaryAppsSnapshotStillCarriesItsConfig(): TestResult = handlerTest { f ->
+        f.registry.register(ProbeApp())
+        f.handler.observeLifecycle()
+        f.handler.enableAll()
+        f.handler.launch(AppId("probe"), config("""{"mode":"scientific"}"""))
+        advanceUntilIdle()
+
+        f.lifecycle.value = HostLifecycle.Background
+        advanceUntilIdle()
+
+        assertEquals(config("""{"mode":"scientific"}"""), f.snapshots.snapshot?.config)
+        val configured = f.events.replayCache.filterIsInstance<SuperizerEvent.Configured>().single()
+        assertEquals(config("""{"mode":"scientific"}"""), configured.config)
     }
 
     private fun config(json: String) = AppConfig(Json.parseToJsonElement(json) as JsonObject)

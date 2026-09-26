@@ -1,5 +1,6 @@
 // Klib ABI Dump
-// Targets: [wasmJs]
+// Targets: [iosArm64, iosSimulatorArm64, wasmJs]
+// Alias: ios => [iosArm64, iosSimulatorArm64]
 // Rendering settings:
 // - Signature version: 2
 // - Show manifest properties: true
@@ -46,6 +47,60 @@ final class cx.m42.superizer.host.activation/QrPayloadParser { // cx.m42.superiz
     }
 }
 
+final class cx.m42.superizer.host.lock/AppLockController : cx.m42.superizer.lock/AppLockPort { // cx.m42.superizer.host.lock/AppLockController|null[0]
+    constructor <init>(kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer.app/SuperizerApp<*>>>, cx.m42.superizer.lock/DeviceAuthenticator, cx.m42.superizer.host.lock/LockStore, cx.m42.superizer.runtime/Clock, kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle>, kotlinx.coroutines.flow/Flow<kotlin/Unit>, kotlin/Function0<kotlin/Boolean>, cx.m42.superizer.lock/AuthStrength = ..., kotlin/Function0<kotlin/Boolean> = ..., cx.m42.superizer.runtime/Logger? = ...) // cx.m42.superizer.host.lock/AppLockController.<init>|<init>(kotlinx.coroutines.flow.StateFlow<kotlin.collections.List<cx.m42.superizer.app.SuperizerApp<*>>>;cx.m42.superizer.lock.DeviceAuthenticator;cx.m42.superizer.host.lock.LockStore;cx.m42.superizer.runtime.Clock;kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>;kotlinx.coroutines.flow.Flow<kotlin.Unit>;kotlin.Function0<kotlin.Boolean>;cx.m42.superizer.lock.AuthStrength;kotlin.Function0<kotlin.Boolean>;cx.m42.superizer.runtime.Logger?){}[0]
+
+    final val presence // cx.m42.superizer.host.lock/AppLockController.presence|{}presence[0]
+        final fun <get-presence>(): cx.m42.superizer.lock/UserPresence // cx.m42.superizer.host.lock/AppLockController.presence.<get-presence>|<get-presence>(){}[0]
+    final val state // cx.m42.superizer.host.lock/AppLockController.state|{}state[0]
+        final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.lock/LockState> // cx.m42.superizer.host.lock/AppLockController.state.<get-state>|<get-state>(){}[0]
+
+    final fun attach(kotlinx.coroutines/CoroutineScope) // cx.m42.superizer.host.lock/AppLockController.attach|attach(kotlinx.coroutines.CoroutineScope){}[0]
+    final fun lockNow() // cx.m42.superizer.host.lock/AppLockController.lockNow|lockNow(){}[0]
+    final fun openDeviceSettings(): kotlin/Boolean // cx.m42.superizer.host.lock/AppLockController.openDeviceSettings|openDeviceSettings(){}[0]
+    final fun setEnabled(cx.m42.superizer.app/AppId, kotlin/Boolean) // cx.m42.superizer.host.lock/AppLockController.setEnabled|setEnabled(cx.m42.superizer.app.AppId;kotlin.Boolean){}[0]
+    final fun setGrace(kotlin/Long) // cx.m42.superizer.host.lock/AppLockController.setGrace|setGrace(kotlin.Long){}[0]
+    final suspend fun unlock(kotlin/String, kotlin/String?): cx.m42.superizer.lock/AuthOutcome // cx.m42.superizer.host.lock/AppLockController.unlock|unlock(kotlin.String;kotlin.String?){}[0]
+}
+
+final class cx.m42.superizer.host.lock/LockSettings { // cx.m42.superizer.host.lock/LockSettings|null[0]
+    constructor <init>(kotlin/Long = ..., kotlin.collections/Map<kotlin/String, kotlin/Boolean> = ...) // cx.m42.superizer.host.lock/LockSettings.<init>|<init>(kotlin.Long;kotlin.collections.Map<kotlin.String,kotlin.Boolean>){}[0]
+
+    final val choices // cx.m42.superizer.host.lock/LockSettings.choices|{}choices[0]
+        final fun <get-choices>(): kotlin.collections/Map<kotlin/String, kotlin/Boolean> // cx.m42.superizer.host.lock/LockSettings.choices.<get-choices>|<get-choices>(){}[0]
+    final val graceMillis // cx.m42.superizer.host.lock/LockSettings.graceMillis|{}graceMillis[0]
+        final fun <get-graceMillis>(): kotlin/Long // cx.m42.superizer.host.lock/LockSettings.graceMillis.<get-graceMillis>|<get-graceMillis>(){}[0]
+
+    final fun component1(): kotlin/Long // cx.m42.superizer.host.lock/LockSettings.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Map<kotlin/String, kotlin/Boolean> // cx.m42.superizer.host.lock/LockSettings.component2|component2(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin.collections/Map<kotlin/String, kotlin/Boolean> = ...): cx.m42.superizer.host.lock/LockSettings // cx.m42.superizer.host.lock/LockSettings.copy|copy(kotlin.Long;kotlin.collections.Map<kotlin.String,kotlin.Boolean>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.host.lock/LockSettings.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.host.lock/LockSettings.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.host.lock/LockSettings.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<cx.m42.superizer.host.lock/LockSettings> { // cx.m42.superizer.host.lock/LockSettings.$serializer|null[0]
+        final val descriptor // cx.m42.superizer.host.lock/LockSettings.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // cx.m42.superizer.host.lock/LockSettings.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // cx.m42.superizer.host.lock/LockSettings.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): cx.m42.superizer.host.lock/LockSettings // cx.m42.superizer.host.lock/LockSettings.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, cx.m42.superizer.host.lock/LockSettings) // cx.m42.superizer.host.lock/LockSettings.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;cx.m42.superizer.host.lock.LockSettings){}[0]
+    }
+
+    final object Companion { // cx.m42.superizer.host.lock/LockSettings.Companion|null[0]
+        final val $childSerializers // cx.m42.superizer.host.lock/LockSettings.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<cx.m42.superizer.host.lock/LockSettings> // cx.m42.superizer.host.lock/LockSettings.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class cx.m42.superizer.host.lock/LockStore { // cx.m42.superizer.host.lock/LockStore|null[0]
+    constructor <init>(kotlinx.serialization.json/Json = ...) // cx.m42.superizer.host.lock/LockStore.<init>|<init>(kotlinx.serialization.json.Json){}[0]
+
+    final fun load(): cx.m42.superizer.host.lock/LockSettings // cx.m42.superizer.host.lock/LockStore.load|load(){}[0]
+    final fun save(cx.m42.superizer.host.lock/LockSettings) // cx.m42.superizer.host.lock/LockStore.save|save(cx.m42.superizer.host.lock.LockSettings){}[0]
+}
+
 final class cx.m42.superizer.host.net/KtorNetworkService : cx.m42.superizer.runtime/NetworkService { // cx.m42.superizer.host.net/KtorNetworkService|null[0]
     constructor <init>(io.ktor.client/HttpClient, kotlinx.coroutines.flow/StateFlow<kotlin/Boolean> = ...) // cx.m42.superizer.host.net/KtorNetworkService.<init>|<init>(io.ktor.client.HttpClient;kotlinx.coroutines.flow.StateFlow<kotlin.Boolean>){}[0]
 
@@ -85,7 +140,7 @@ final class cx.m42.superizer.host.push/IncomingPush { // cx.m42.superizer.host.p
 }
 
 final class cx.m42.superizer.host.push/PendingRoute : cx.m42.superizer/RoutePort { // cx.m42.superizer.host.push/PendingRoute|null[0]
-    constructor <init>(kotlinx.coroutines.flow/MutableSharedFlow<cx.m42.superizer.event/SuperizerEvent>? = ...) // cx.m42.superizer.host.push/PendingRoute.<init>|<init>(kotlinx.coroutines.flow.MutableSharedFlow<cx.m42.superizer.event.SuperizerEvent>?){}[0]
+    constructor <init>(kotlinx.coroutines.flow/MutableSharedFlow<cx.m42.superizer.event/SuperizerEvent>? = ..., kotlin/Function1<cx.m42.superizer.app/AppId, kotlin/Boolean> = ...) // cx.m42.superizer.host.push/PendingRoute.<init>|<init>(kotlinx.coroutines.flow.MutableSharedFlow<cx.m42.superizer.event.SuperizerEvent>?;kotlin.Function1<cx.m42.superizer.app.AppId,kotlin.Boolean>){}[0]
 
     final val route // cx.m42.superizer.host.push/PendingRoute.route|{}route[0]
         final fun <get-route>(): kotlinx.coroutines.flow/StateFlow<kotlin/String?> // cx.m42.superizer.host.push/PendingRoute.route.<get-route>|<get-route>(){}[0]
@@ -272,12 +327,14 @@ final class cx.m42.superizer.host/SuperizerBuilder { // cx.m42.superizer.host/Su
     final fun <#A1: kotlin/Any> service(cx.m42.superizer.runtime/ServiceKey<#A1>, #A1) // cx.m42.superizer.host/SuperizerBuilder.service|service(cx.m42.superizer.runtime.ServiceKey<0:0>;0:0){0§<kotlin.Any>}[0]
     final fun auth(cx.m42.superizer.runtime/AuthService) // cx.m42.superizer.host/SuperizerBuilder.auth|auth(cx.m42.superizer.runtime.AuthService){}[0]
     final fun clock(cx.m42.superizer.runtime/Clock) // cx.m42.superizer.host/SuperizerBuilder.clock|clock(cx.m42.superizer.runtime.Clock){}[0]
+    final fun deviceAuthenticator(cx.m42.superizer.lock/DeviceAuthenticator) // cx.m42.superizer.host/SuperizerBuilder.deviceAuthenticator|deviceAuthenticator(cx.m42.superizer.lock.DeviceAuthenticator){}[0]
     final fun home(kotlin.collections/List<cx.m42.superizer.app/AppId>) // cx.m42.superizer.host/SuperizerBuilder.home|home(kotlin.collections.List<cx.m42.superizer.app.AppId>){}[0]
     final fun home(kotlin/Array<out kotlin/String>...) // cx.m42.superizer.host/SuperizerBuilder.home|home(kotlin.Array<out|kotlin.String>...){}[0]
     final fun host(cx.m42.superizer.runtime/HostInfo) // cx.m42.superizer.host/SuperizerBuilder.host|host(cx.m42.superizer.runtime.HostInfo){}[0]
     final fun httpClient(io.ktor.client/HttpClient) // cx.m42.superizer.host/SuperizerBuilder.httpClient|httpClient(io.ktor.client.HttpClient){}[0]
     final fun languages(kotlin/Array<out cx.m42.superizer/LanguageOption>..., kotlin/String = ...) // cx.m42.superizer.host/SuperizerBuilder.languages|languages(kotlin.Array<out|cx.m42.superizer.LanguageOption>...;kotlin.String){}[0]
     final fun lifecycle(kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle>) // cx.m42.superizer.host/SuperizerBuilder.lifecycle|lifecycle(kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>){}[0]
+    final fun lockStrength(cx.m42.superizer.lock/AuthStrength) // cx.m42.superizer.host/SuperizerBuilder.lockStrength|lockStrength(cx.m42.superizer.lock.AuthStrength){}[0]
     final fun network(cx.m42.superizer.runtime/NetworkService) // cx.m42.superizer.host/SuperizerBuilder.network|network(cx.m42.superizer.runtime.NetworkService){}[0]
     final fun notifier(cx.m42.superizer.host.push/Notifier) // cx.m42.superizer.host/SuperizerBuilder.notifier|notifier(cx.m42.superizer.host.push.Notifier){}[0]
     final fun promoCodes(cx.m42.superizer.host.activation/PromoCodeResolver) // cx.m42.superizer.host/SuperizerBuilder.promoCodes|promoCodes(cx.m42.superizer.host.activation.PromoCodeResolver){}[0]
@@ -295,6 +352,13 @@ final object cx.m42.superizer.host.platform/Connectivity { // cx.m42.superizer.h
 final object cx.m42.superizer.host.platform/PlatformLifecycle { // cx.m42.superizer.host.platform/PlatformLifecycle|null[0]
     final val state // cx.m42.superizer.host.platform/PlatformLifecycle.state|{}state[0]
         final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle> // cx.m42.superizer.host.platform/PlatformLifecycle.state.<get-state>|<get-state>(){}[0]
+}
+
+final object cx.m42.superizer.host.platform/PlatformScreen { // cx.m42.superizer.host.platform/PlatformScreen|null[0]
+    final val off // cx.m42.superizer.host.platform/PlatformScreen.off|{}off[0]
+        final fun <get-off>(): kotlinx.coroutines.flow/SharedFlow<kotlin/Unit> // cx.m42.superizer.host.platform/PlatformScreen.off.<get-off>|<get-off>(){}[0]
+
+    final fun interactive(): kotlin/Boolean // cx.m42.superizer.host.platform/PlatformScreen.interactive|interactive(){}[0]
 }
 
 final object cx.m42.superizer.host.push/NoopPushTransport { // cx.m42.superizer.host.push/NoopPushTransport|null[0]
@@ -320,6 +384,14 @@ final object cx.m42.superizer.host.push/PushTransport { // cx.m42.superizer.host
     final suspend fun requestPermission(): kotlin/Boolean // cx.m42.superizer.host.push/PushTransport.requestPermission|requestPermission(){}[0]
     final suspend fun subscribeTopic(kotlin/String) // cx.m42.superizer.host.push/PushTransport.subscribeTopic|subscribeTopic(kotlin.String){}[0]
     final suspend fun unsubscribeTopic(kotlin/String) // cx.m42.superizer.host.push/PushTransport.unsubscribeTopic|unsubscribeTopic(kotlin.String){}[0]
+
+    // Targets: [ios]
+    final var messaging // cx.m42.superizer.host.push/PushTransport.messaging|{}messaging[0]
+        final fun <get-messaging>(): cx.m42.superizer.host.push/IosMessaging? // cx.m42.superizer.host.push/PushTransport.messaging.<get-messaging>|<get-messaging>(){}[0]
+        final fun <set-messaging>(cx.m42.superizer.host.push/IosMessaging?) // cx.m42.superizer.host.push/PushTransport.messaging.<set-messaging>|<set-messaging>(cx.m42.superizer.host.push.IosMessaging?){}[0]
+
+    // Targets: [ios]
+    final fun deliverToken(kotlin/String) // cx.m42.superizer.host.push/PushTransport.deliverToken|deliverToken(kotlin.String){}[0]
 }
 
 final object cx.m42.superizer.host.storage/HostKeys { // cx.m42.superizer.host.storage/HostKeys|null[0]
@@ -329,6 +401,8 @@ final object cx.m42.superizer.host.storage/HostKeys { // cx.m42.superizer.host.s
         final fun <get-HOME>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.HOME.<get-HOME>|<get-HOME>(){}[0]
     final const val LANGUAGE // cx.m42.superizer.host.storage/HostKeys.LANGUAGE|{}LANGUAGE[0]
         final fun <get-LANGUAGE>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.LANGUAGE.<get-LANGUAGE>|<get-LANGUAGE>(){}[0]
+    final const val LOCK // cx.m42.superizer.host.storage/HostKeys.LOCK|{}LOCK[0]
+        final fun <get-LOCK>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.LOCK.<get-LOCK>|<get-LOCK>(){}[0]
     final const val SESSION // cx.m42.superizer.host.storage/HostKeys.SESSION|{}SESSION[0]
         final fun <get-SESSION>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.SESSION.<get-SESSION>|<get-SESSION>(){}[0]
     final const val TOPICS // cx.m42.superizer.host.storage/HostKeys.TOPICS|{}TOPICS[0]
@@ -358,9 +432,14 @@ final object cx.m42.superizer.host/SystemClock : cx.m42.superizer.runtime/Clock 
 final val cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop|#static{}cx_m42_superizer_host_activation_ActivationService$stableprop[0]
 final val cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop|#static{}cx_m42_superizer_host_activation_LocalPromoCodes$stableprop[0]
 final val cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop|#static{}cx_m42_superizer_host_activation_QrPayloadParser$stableprop[0]
+final val cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop|#static{}cx_m42_superizer_host_lock_AppLockController$stableprop[0]
+final val cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop|#static{}cx_m42_superizer_host_lock_LockSettings$stableprop[0]
+final val cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop|#static{}cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop[0]
+final val cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockStore$stableprop // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockStore$stableprop|#static{}cx_m42_superizer_host_lock_LockStore$stableprop[0]
 final val cx.m42.superizer.host.net/cx_m42_superizer_host_net_KtorNetworkService$stableprop // cx.m42.superizer.host.net/cx_m42_superizer_host_net_KtorNetworkService$stableprop|#static{}cx_m42_superizer_host_net_KtorNetworkService$stableprop[0]
 final val cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_Connectivity$stableprop // cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_Connectivity$stableprop|#static{}cx_m42_superizer_host_platform_Connectivity$stableprop[0]
 final val cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformLifecycle$stableprop // cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformLifecycle$stableprop|#static{}cx_m42_superizer_host_platform_PlatformLifecycle$stableprop[0]
+final val cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformScreen$stableprop // cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformScreen$stableprop|#static{}cx_m42_superizer_host_platform_PlatformScreen$stableprop[0]
 final val cx.m42.superizer.host.push/cx_m42_superizer_host_push_DeviceRegistrar$stableprop // cx.m42.superizer.host.push/cx_m42_superizer_host_push_DeviceRegistrar$stableprop|#static{}cx_m42_superizer_host_push_DeviceRegistrar$stableprop[0]
 final val cx.m42.superizer.host.push/cx_m42_superizer_host_push_IncomingPush$stableprop // cx.m42.superizer.host.push/cx_m42_superizer_host_push_IncomingPush$stableprop|#static{}cx_m42_superizer_host_push_IncomingPush$stableprop[0]
 final val cx.m42.superizer.host.push/cx_m42_superizer_host_push_NoopPushTransport$stableprop // cx.m42.superizer.host.push/cx_m42_superizer_host_push_NoopPushTransport$stableprop|#static{}cx_m42_superizer_host_push_NoopPushTransport$stableprop[0]
@@ -393,11 +472,16 @@ final fun (cx.m42.superizer/Superizer.Companion).cx.m42.superizer.host/build(kot
 final fun cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop_getter|cx_m42_superizer_host_activation_ActivationService$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop_getter|cx_m42_superizer_host_activation_LocalPromoCodes$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop_getter|cx_m42_superizer_host_activation_QrPayloadParser$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop_getter|cx_m42_superizer_host_lock_AppLockController$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop_getter|cx_m42_superizer_host_lock_LockSettings$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop_getter|cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockStore$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockStore$stableprop_getter|cx_m42_superizer_host_lock_LockStore$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.net/cx_m42_superizer_host_net_KtorNetworkService$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.net/cx_m42_superizer_host_net_KtorNetworkService$stableprop_getter|cx_m42_superizer_host_net_KtorNetworkService$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.net/defaultHttpClient(kotlin/Function1<io.ktor.client/HttpClientConfig<*>, kotlin/Unit> = ...): io.ktor.client/HttpClient // cx.m42.superizer.host.net/defaultHttpClient|defaultHttpClient(kotlin.Function1<io.ktor.client.HttpClientConfig<*>,kotlin.Unit>){}[0]
 final fun cx.m42.superizer.host.platform/currentPlatform(): cx.m42.superizer.runtime/Platform // cx.m42.superizer.host.platform/currentPlatform|currentPlatform(){}[0]
 final fun cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_Connectivity$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_Connectivity$stableprop_getter|cx_m42_superizer_host_platform_Connectivity$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformLifecycle$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformLifecycle$stableprop_getter|cx_m42_superizer_host_platform_PlatformLifecycle$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformScreen$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.platform/cx_m42_superizer_host_platform_PlatformScreen$stableprop_getter|cx_m42_superizer_host_platform_PlatformScreen$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.platform/deviceLanguageTag(): kotlin/String // cx.m42.superizer.host.platform/deviceLanguageTag|deviceLanguageTag(){}[0]
 final fun cx.m42.superizer.host.platform/openExternalUrl(kotlin/String): kotlin/Boolean // cx.m42.superizer.host.platform/openExternalUrl|openExternalUrl(kotlin.String){}[0]
 final fun cx.m42.superizer.host.push/cx_m42_superizer_host_push_DeviceRegistrar$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.push/cx_m42_superizer_host_push_DeviceRegistrar$stableprop_getter|cx_m42_superizer_host_push_DeviceRegistrar$stableprop_getter(){}[0]
@@ -427,3 +511,9 @@ final fun cx.m42.superizer.host/cx_m42_superizer_host_RegistryView$stableprop_ge
 final fun cx.m42.superizer.host/cx_m42_superizer_host_ServiceRegistry$stableprop_getter(): kotlin/Int // cx.m42.superizer.host/cx_m42_superizer_host_ServiceRegistry$stableprop_getter|cx_m42_superizer_host_ServiceRegistry$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host/cx_m42_superizer_host_SuperizerBuilder$stableprop_getter(): kotlin/Int // cx.m42.superizer.host/cx_m42_superizer_host_SuperizerBuilder$stableprop_getter|cx_m42_superizer_host_SuperizerBuilder$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host/cx_m42_superizer_host_SystemClock$stableprop_getter(): kotlin/Int // cx.m42.superizer.host/cx_m42_superizer_host_SystemClock$stableprop_getter|cx_m42_superizer_host_SystemClock$stableprop_getter(){}[0]
+
+// Targets: [ios]
+abstract interface cx.m42.superizer.host.push/IosMessaging { // cx.m42.superizer.host.push/IosMessaging|null[0]
+    abstract fun subscribe(kotlin/String) // cx.m42.superizer.host.push/IosMessaging.subscribe|subscribe(kotlin.String){}[0]
+    abstract fun unsubscribe(kotlin/String) // cx.m42.superizer.host.push/IosMessaging.unsubscribe|unsubscribe(kotlin.String){}[0]
+}

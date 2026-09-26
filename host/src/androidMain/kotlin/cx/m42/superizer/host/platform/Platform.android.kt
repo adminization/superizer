@@ -1,13 +1,17 @@
 package cx.m42.superizer.host.platform
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -15,10 +19,16 @@ import java.lang.ref.WeakReference
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import cx.m42.superizer.host.lock.AndroidDeviceAuthenticator
+import cx.m42.superizer.lock.DeviceAuthenticator
 import cx.m42.superizer.runtime.HostLifecycle
+import cx.m42.superizer.runtime.Logger
 import cx.m42.superizer.runtime.Platform
 import java.util.Locale
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -63,6 +73,7 @@ public object AndroidHost {
         }
         PlatformLifecycle.attach()
         Connectivity.attach(app)
+        PlatformScreen.attach(app)
     }
 
     internal fun currentActivity(): Activity? = activityRef?.get()?.takeIf { !it.isFinishing }
@@ -152,3 +163,48 @@ public actual object Connectivity {
         }
     }
 }
+
+public actual object PlatformScreen {
+    private val _off = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    public actual val off: SharedFlow<Unit> = _off.asSharedFlow()
+
+    private var attached = false
+
+    /**
+     * `ACTION_SCREEN_OFF` can only be heard by a receiver registered at runtime, which is what this
+     * is. It fires whether the app is in front or not, so a phone put down with another app open and
+     * picked up by someone else a minute later still finds the lock closed.
+     */
+    internal fun attach(context: Context) {
+        if (attached) return
+        attached = true
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (intent.action == Intent.ACTION_SCREEN_OFF) _off.tryEmit(Unit)
+            }
+        }
+        val filter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+        runCatching {
+            // A system broadcast reaches a not-exported receiver; nothing else on the device needs to.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                context.registerReceiver(receiver, filter)
+            }
+        }
+    }
+
+    public actual fun interactive(): Boolean =
+        (AndroidHost.appContext?.getSystemService(Context.POWER_SERVICE) as? PowerManager)?.isInteractive ?: true
+}
+
+internal actual fun openSecuritySettings(): Boolean {
+    val context = AndroidHost.appContext ?: return false
+    return runCatching {
+        context.startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        true
+    }.getOrDefault(false)
+}
+
+internal actual fun platformDeviceAuthenticator(debug: Boolean, logger: Logger): DeviceAuthenticator =
+    AndroidDeviceAuthenticator(debug, logger)

@@ -5,6 +5,7 @@ import cx.m42.superizer.app.AppConfigSpec
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppInstance
 import cx.m42.superizer.app.AppManifest
+import cx.m42.superizer.app.AppProtection
 import cx.m42.superizer.app.AppMetadata
 import cx.m42.superizer.app.AppSetupContext
 import cx.m42.superizer.app.SuperizerApp
@@ -90,6 +91,7 @@ internal class ProbeApp(
     private val vetoClose: Boolean = false,
     private val failOnLaunch: Boolean = false,
     fallbackToDefault: Boolean = true,
+    protection: AppProtection = AppProtection(),
 ) : SuperizerApp<ProbeConfig>() {
 
     override val manifest: AppManifest = AppManifest(
@@ -99,6 +101,7 @@ internal class ProbeApp(
         metadata = AppMetadata(title = localized("en" to "Probe"), hidden = hidden),
         requires = requires,
         deepLinks = deepLinks,
+        protection = protection,
     )
 
     override val configSpec: AppConfigSpec<ProbeConfig> =

@@ -11,7 +11,8 @@ The rule the whole library is built on:
 That is Adminizer's "App Boundary" rule, kept word for word. An app does not accept, store or depend
 on a `Superizer`, an `AppHandler` or an `AppRegistry`; the build fails if it tries.
 
-Targets: Android, desktop (JVM), wasm in the browser. MIT licensed.
+Targets: Android, desktop (JVM), wasm in the browser, iOS (`iosArm64`, `iosSimulatorArm64`). The
+iOS klibs build and publish from any host; an app framework links on a Mac. MIT licensed.
 
 **Full documentation: [adminization.github.io/superizer](https://adminization.github.io/superizer/)**,
 or [`docs/`](docs/) in a checkout — [getting started from scratch](docs/01-getting-started.md),

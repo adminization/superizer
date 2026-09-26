@@ -35,6 +35,11 @@ import kotlinx.serialization.json.jsonObject
  */
 public class PendingRoute(
     private val events: MutableSharedFlow<SuperizerEvent>? = null,
+    /**
+     * Apps whose links are secrets (D134): the 2FA app's `add?uri=otpauth://…secret=…`. Their
+     * discarded links go into the log without the query.
+     */
+    private val sensitive: (AppId) -> Boolean = { false },
 ) : RoutePort {
     private val _route = MutableStateFlow<String?>(null)
     override val route: StateFlow<String?> get() = _route.asStateFlow()
@@ -49,7 +54,10 @@ public class PendingRoute(
         val link = _route.value ?: return
         _route.value = null
         AppId.parseOrNull(link.substringAfter("app/", "").substringBefore('/').substringBefore('?'))
-            ?.let { events?.tryEmit(SuperizerEvent.RouteDiscarded(it, link)) }
+            ?.let { id ->
+                val shown = if (sensitive(id)) link.substringBefore('?').substringBefore('#') else link
+                events?.tryEmit(SuperizerEvent.RouteDiscarded(id, shown))
+            }
     }
 }
 

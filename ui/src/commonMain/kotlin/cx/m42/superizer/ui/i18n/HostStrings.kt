@@ -74,6 +74,29 @@ public interface HostStrings {
     public val closeDialogConfirm: String
     public val closeDialogStay: String
 
+    // ------------------------------------------------------------------ lock (06)
+    /** The curtain's line under the app's name. */
+    public val locked: String
+    public val lockedHint: String
+    public val unlock: String
+    /** The system sheet's title when the curtain asks. */
+    public fun unlockPrompt(app: String): String
+    public val unlockPromptSubtitle: String
+    /** The banner over an app that wants a lock the device cannot give (§5.8). */
+    public val unprotectedNoScreenLock: String
+    public val unprotectedPlatform: String
+    public val setUpScreenLock: String
+    public val settingsProtection: String
+    public val settingsProtectionHint: String
+    public val settingsLockAfter: String
+    public fun lockGrace(millis: Long): String
+    /** What a `Required` app shows where an optional one has its switch. */
+    public val settingsLockAlways: String
+    public val settingsLockNow: String
+    public val settingsNoScreenLock: String
+    /** The sheet's title when a change in Settings would weaken the lock. */
+    public val settingsLockChange: String
+
     // ------------------------------------------------------------------ failure
     public val errorTitle: String
     public val errorRetry: String
@@ -141,6 +164,28 @@ internal object HostStringsEn : HostStrings {
     override val closeDialogConfirm = "Close"
     override val closeDialogStay = "Stay"
 
+    override val locked = "Locked"
+    override val lockedHint = "Confirm it is you: fingerprint, face or the screen lock."
+    override val unlock = "Unlock"
+    override fun unlockPrompt(app: String) = "Unlock $app"
+    override val unlockPromptSubtitle = "Fingerprint, face or screen lock"
+    override val unprotectedNoScreenLock = "No screen lock is set up on this device, so this app is not protected."
+    override val unprotectedPlatform = "This platform has no lock, so this app is not protected here."
+    override val setUpScreenLock = "Set up"
+    override val settingsProtection = "Protection"
+    override val settingsProtectionHint = "Apps holding what is yours alone open with your fingerprint, face or screen lock"
+    override val settingsLockAfter = "Lock after leaving the app"
+    override fun lockGrace(millis: Long) = when {
+        millis <= 0L -> "Immediately"
+        millis < 60_000L -> "${millis / 1000} seconds"
+        millis == 60_000L -> "1 minute"
+        else -> "${millis / 60_000L} minutes"
+    }
+    override val settingsLockAlways = "Always"
+    override val settingsLockNow = "Lock now"
+    override val settingsNoScreenLock = "Turn on the device's screen lock first."
+    override val settingsLockChange = "Change protection"
+
     override val errorTitle = "The app could not start"
     override val errorRetry = "Try again"
     override val errorBack = "Back to Home"
@@ -206,6 +251,28 @@ internal object HostStringsRu : HostStrings {
     override val closeDialogBody = "В нём есть несохранённые изменения."
     override val closeDialogConfirm = "Закрыть"
     override val closeDialogStay = "Остаться"
+
+    override val locked = "Заблокировано"
+    override val lockedHint = "Подтвердите, что это вы: отпечаток, лицо или блокировка экрана."
+    override val unlock = "Разблокировать"
+    override fun unlockPrompt(app: String) = "Разблокировать «$app»"
+    override val unlockPromptSubtitle = "Отпечаток, лицо или блокировка экрана"
+    override val unprotectedNoScreenLock = "На устройстве не настроена блокировка экрана, поэтому приложение не защищено."
+    override val unprotectedPlatform = "На этой платформе блокировки нет, поэтому здесь приложение не защищено."
+    override val setUpScreenLock = "Настроить"
+    override val settingsProtection = "Защита"
+    override val settingsProtectionHint = "Приложения с тем, что принадлежит только вам, открываются по отпечатку, лицу или блокировке экрана"
+    override val settingsLockAfter = "Блокировать после ухода из приложения"
+    override fun lockGrace(millis: Long) = when {
+        millis <= 0L -> "Сразу"
+        millis < 60_000L -> "${millis / 1000} секунд"
+        millis == 60_000L -> "1 минута"
+        else -> "${millis / 60_000L} минут"
+    }
+    override val settingsLockAlways = "Всегда"
+    override val settingsLockNow = "Заблокировать сейчас"
+    override val settingsNoScreenLock = "Сначала включите блокировку экрана устройства."
+    override val settingsLockChange = "Изменить защиту"
 
     override val errorTitle = "Приложение не запустилось"
     override val errorRetry = "Повторить"

@@ -68,14 +68,14 @@ public final class cx/m42/superizer/ui/components/MenuEntry {
 
 public final class cx/m42/superizer/ui/components/WidgetsKt {
 	public static final fun AppButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLcx/m42/superizer/ui/components/ButtonVariant;Lcx/m42/superizer/ui/components/ButtonSize;Landroidx/compose/runtime/Composer;II)V
-	public static final fun AppTextField-0vH8DBg (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZFLandroidx/compose/ui/text/TextStyle;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AppTextField-V-95POc (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZFLandroidx/compose/ui/text/TextStyle;Landroidx/compose/foundation/text/KeyboardOptions;Landroidx/compose/runtime/Composer;II)V
 	public static final fun ChoiceRow (Ljava/lang/String;ZLkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
 	public static final fun Divider (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public static final fun IconButton (Lkotlin/jvm/functions/Function0;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 	public static final fun RowDivider (Landroidx/compose/runtime/Composer;I)V
 	public static final fun Section (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun Switch (ZLjava/lang/String;Landroidx/compose/runtime/Composer;I)V
-	public static final fun ToggleRow (Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
+	public static final fun ToggleRow (Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
 }
 
 public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
@@ -103,6 +103,8 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getHome ()Ljava/lang/String;
 	public abstract fun getHomeEmpty ()Ljava/lang/String;
 	public abstract fun getLangTag ()Ljava/lang/String;
+	public abstract fun getLocked ()Ljava/lang/String;
+	public abstract fun getLockedHint ()Ljava/lang/String;
 	public abstract fun getMenu ()Ljava/lang/String;
 	public abstract fun getNoApps ()Ljava/lang/String;
 	public abstract fun getOnHome ()Ljava/lang/String;
@@ -123,14 +125,28 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getServiceRunWithConfig ()Ljava/lang/String;
 	public abstract fun getServiceSimulatePush ()Ljava/lang/String;
 	public abstract fun getServiceUnlock ()Ljava/lang/String;
+	public abstract fun getSetUpScreenLock ()Ljava/lang/String;
 	public abstract fun getSettings ()Ljava/lang/String;
 	public abstract fun getSettingsAbout ()Ljava/lang/String;
 	public abstract fun getSettingsHaptics ()Ljava/lang/String;
 	public abstract fun getSettingsHapticsHint ()Ljava/lang/String;
 	public abstract fun getSettingsLanguage ()Ljava/lang/String;
 	public abstract fun getSettingsLanguageHint ()Ljava/lang/String;
+	public abstract fun getSettingsLockAfter ()Ljava/lang/String;
+	public abstract fun getSettingsLockAlways ()Ljava/lang/String;
+	public abstract fun getSettingsLockChange ()Ljava/lang/String;
+	public abstract fun getSettingsLockNow ()Ljava/lang/String;
+	public abstract fun getSettingsNoScreenLock ()Ljava/lang/String;
+	public abstract fun getSettingsProtection ()Ljava/lang/String;
+	public abstract fun getSettingsProtectionHint ()Ljava/lang/String;
 	public abstract fun getUngrouped ()Ljava/lang/String;
+	public abstract fun getUnlock ()Ljava/lang/String;
+	public abstract fun getUnlockPromptSubtitle ()Ljava/lang/String;
+	public abstract fun getUnprotectedNoScreenLock ()Ljava/lang/String;
+	public abstract fun getUnprotectedPlatform ()Ljava/lang/String;
+	public abstract fun lockGrace (J)Ljava/lang/String;
 	public abstract fun settingsBuild (Ljava/lang/String;)Ljava/lang/String;
+	public abstract fun unlockPrompt (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun version (Ljava/lang/String;)Ljava/lang/String;
 }
 
@@ -144,6 +160,10 @@ public final class cx/m42/superizer/ui/i18n/HostStringsKt {
 
 public final class cx/m42/superizer/ui/platform/BackHandler_androidKt {
 	public static final fun SystemBackHandler (ZLkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class cx/m42/superizer/ui/platform/SecureWindow_androidKt {
+	public static final fun SecureWindow (ZLandroidx/compose/runtime/Composer;I)V
 }
 
 public final class cx/m42/superizer/ui/screens/ActivateScreenKt {
