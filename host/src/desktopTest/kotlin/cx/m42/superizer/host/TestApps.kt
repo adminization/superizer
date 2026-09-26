@@ -3,6 +3,7 @@ package cx.m42.superizer.host
 import androidx.compose.runtime.Composable
 import cx.m42.superizer.SuperizerContract
 import cx.m42.superizer.app.AppConfigSpec
+import cx.m42.superizer.backup.BackupPolicy
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppInstance
 import cx.m42.superizer.app.AppManifest
@@ -30,16 +31,23 @@ internal class StubApp(
     topics: Set<String> = emptySet(),
     lock: LockPolicy = LockPolicy.Off,
     secureWindow: Boolean = false,
+    backup: BackupPolicy = BackupPolicy.All,
+    minContract: Int? = null,
 ) : SuperizerApp<StubConfig>() {
 
     override val manifest: AppManifest = AppManifest(
         id = AppId(id),
         version = "1.0.0",
-        minHostContract = if (lock != LockPolicy.Off || secureWindow) 2 else 1,
+        minHostContract = minContract ?: when {
+            backup != BackupPolicy.All -> 3
+            lock != LockPolicy.Off || secureWindow -> 2
+            else -> 1
+        },
         metadata = AppMetadata(title = localized("en" to id), hidden = hidden),
         deepLinks = deepLinks,
         pushTopics = topics,
         protection = AppProtection(lock, secureWindow),
+        backup = backup,
     )
 
     override val configSpec: AppConfigSpec<StubConfig> =

@@ -219,10 +219,28 @@ public class RegistryView(
  * The optional services this host provides (D19). Empty in the MVP, and that is the point: the
  * mechanism is in place and costs nothing, so the first host that gains a camera adds one line
  * rather than a field on every runtime implementation.
+ *
+ * A service may also be *bound to its caller* (D146): the host registers a factory, and each app
+ * gets the instance made for its own id — which is how the SSH keyring's sheet can say which app
+ * is asking, and how its grants stay per app. Made once per app and kept.
  */
-public class ServiceRegistry(private val services: Map<ServiceKey<*>, Any> = emptyMap()) {
-    public val keys: Set<ServiceKey<*>> get() = services.keys
+public class ServiceRegistry(
+    private val services: Map<ServiceKey<*>, Any> = emptyMap(),
+    private val bound: Map<ServiceKey<*>, (AppId) -> Any> = emptyMap(),
+) {
+    public val keys: Set<ServiceKey<*>> get() = services.keys + bound.keys
 
+    private val made = mutableMapOf<Pair<ServiceKey<*>, AppId>, Any>()
+
+    /** The shared instance; a caller-bound service has none and answers null here. */
     @Suppress("UNCHECKED_CAST")
     public fun <T : Any> get(key: ServiceKey<T>): T? = services[key] as T?
+
+    /** What [caller] gets: the shared instance, or the one made for it. */
+    @Suppress("UNCHECKED_CAST")
+    public fun <T : Any> get(key: ServiceKey<T>, caller: AppId): T? {
+        services[key]?.let { return it as T }
+        val factory = bound[key] ?: return null
+        return made.getOrPut(key to caller) { factory(caller) } as T
+    }
 }

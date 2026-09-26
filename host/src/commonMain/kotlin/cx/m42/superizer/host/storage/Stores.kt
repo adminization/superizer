@@ -57,6 +57,18 @@ public object HostKeys {
     public const val SESSION: String = "host.session"
     public const val TOPICS: String = "host.push.topics"
     public const val LOCK: String = "host.lock"
+
+    /** A constant the host sealed with its vault on first run; opening it is the heartbeat (06 §2). */
+    public const val HEARTBEAT: String = "host.heartbeat"
+
+    /** The last self-test's result, as JSON (06 §3). */
+    public const val SELF_TEST: String = "host.selftest"
+
+    /** When the last backup was made, epoch milliseconds (05 §3.1). */
+    public const val BACKUP_AT: String = "host.backup.at"
+
+    /** What a backup carries of the host itself: the person's choices, not the machinery (05 §3.3). */
+    public val BACKED_UP: List<String> = listOf(LANGUAGE, HAPTICS, UNLOCKED, HOME, LOCK)
 }
 
 /**

@@ -40,6 +40,9 @@ public class TestApp : SuperizerApp<TestConfig>() {
     override val manifest: AppManifest = AppManifest(
         id = AppId("test-app"),
         version = "1.0.0",
+        // The Secrets and SSH keyring cards use `runtime.secrets`, `runtime.diagnostics` and the
+        // keyring, all contract 3.
+        minHostContract = 3,
         metadata = AppMetadata(
             title = localized("en" to "Test App", "ru" to "Тестовое приложение"),
             description = localized(

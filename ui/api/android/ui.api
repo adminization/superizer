@@ -78,6 +78,10 @@ public final class cx/m42/superizer/ui/components/WidgetsKt {
 	public static final fun ToggleRow (Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
 }
 
+public final class cx/m42/superizer/ui/i18n/DiagnosticsWordsKt {
+	public static final fun getLocalDiagnosticsStrings ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+}
+
 public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getActivate ()Ljava/lang/String;
 	public abstract fun getActivateApply ()Ljava/lang/String;
@@ -187,7 +191,7 @@ public final class cx/m42/superizer/ui/screens/ServiceMenuScreenKt {
 }
 
 public final class cx/m42/superizer/ui/screens/SettingsScreenKt {
-	public static final fun SettingsScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SettingsScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class cx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShellKt {
@@ -240,6 +244,20 @@ public final class cx/m42/superizer/ui/shell/ShellDestination$Home : cx/m42/supe
 	public static final field $stable I
 	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ShellDestination$Home;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/shell/ShellDestination$Host : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/HostScreen;Lcx/m42/superizer/ui/shell/ShellDestination;)V
+	public final fun component1 ()Lcx/m42/superizer/HostScreen;
+	public final fun component2 ()Lcx/m42/superizer/ui/shell/ShellDestination;
+	public final fun copy (Lcx/m42/superizer/HostScreen;Lcx/m42/superizer/ui/shell/ShellDestination;)Lcx/m42/superizer/ui/shell/ShellDestination$Host;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ui/shell/ShellDestination$Host;Lcx/m42/superizer/HostScreen;Lcx/m42/superizer/ui/shell/ShellDestination;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$Host;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFrom ()Lcx/m42/superizer/ui/shell/ShellDestination;
+	public final fun getScreen ()Lcx/m42/superizer/HostScreen;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
+import cx.m42.superizer.HostScreen
 import cx.m42.superizer.Superizer
 import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.lock.AppLockPort
@@ -50,6 +51,7 @@ public fun SettingsScreen(
     superizer: Superizer,
     onOpenServiceMenu: () -> Unit,
     modifier: Modifier = Modifier,
+    onOpenHostScreen: (HostScreen) -> Unit = {},
 ) {
     val tokens = AppTheme
     val langTag by superizer.settings.langTag.collectAsState()
@@ -91,6 +93,16 @@ public fun SettingsScreen(
         }
 
         ProtectionSection(superizer)
+
+        // The host's own blocks (07 §2.4): its keys, its storage, its backup. After the host's
+        // settings and before any app's, because they are the host's and not an app's.
+        superizer.hostSections.forEach { section ->
+            Section(title = section.title(langTag)) {
+                Column(modifier = Modifier.fillMaxWidth().testTag("settings:host:${section.id}")) {
+                    section.Content(superizer, onOpenHostScreen)
+                }
+            }
+        }
 
         // Each app's own block, under its own title. The host does not know what is in one.
         sections.forEach { (appId, section) ->

@@ -1,5 +1,6 @@
 package cx.m42.superizer.app
 
+import cx.m42.superizer.backup.BackupPolicy
 import cx.m42.superizer.runtime.ServiceKey
 import cx.m42.superizer.runtime.ServiceKeySerializer
 import kotlin.jvm.JvmInline
@@ -139,4 +140,9 @@ public data class AppManifest(
      * app with no lock at all, so the registry turns such a manifest away as inconsistent (D138).
      */
     val protection: AppProtection = AppProtection(),
+    /**
+     * What of this app the host's backup carries (05 §3.3): everything, by default. Anything else
+     * needs `minHostContract = 3`, for the same reason as [protection] (D138).
+     */
+    val backup: BackupPolicy = BackupPolicy.All,
 )

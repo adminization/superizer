@@ -47,6 +47,31 @@ final class cx.m42.superizer.host.activation/QrPayloadParser { // cx.m42.superiz
     }
 }
 
+final class cx.m42.superizer.host.backup/HostBackup : cx.m42.superizer.backup/BackupPort { // cx.m42.superizer.host.backup/HostBackup|null[0]
+    constructor <init>(cx.m42.superizer.runtime/HostInfo, cx.m42.superizer.runtime/Clock, cx.m42.superizer.registry/AppRegistry, cx.m42.superizer.host.secrets/HostSecrets, cx.m42.superizer.backup/HostBackupCipher?, kotlin.coroutines/SuspendFunction0<kotlin.collections/List<cx.m42.superizer.backup/BackupKeyName>>, kotlin.coroutines/SuspendFunction1<kotlin/String, kotlin/Boolean>, kotlin.coroutines/SuspendFunction1<cx.m42.superizer.app/AppId, kotlin/Unit> = ..., kotlinx.serialization.json/Json = ...) // cx.m42.superizer.host.backup/HostBackup.<init>|<init>(cx.m42.superizer.runtime.HostInfo;cx.m42.superizer.runtime.Clock;cx.m42.superizer.registry.AppRegistry;cx.m42.superizer.host.secrets.HostSecrets;cx.m42.superizer.backup.HostBackupCipher?;kotlin.coroutines.SuspendFunction0<kotlin.collections.List<cx.m42.superizer.backup.BackupKeyName>>;kotlin.coroutines.SuspendFunction1<kotlin.String,kotlin.Boolean>;kotlin.coroutines.SuspendFunction1<cx.m42.superizer.app.AppId,kotlin.Unit>;kotlinx.serialization.json.Json){}[0]
+
+    final val lastBackupAt // cx.m42.superizer.host.backup/HostBackup.lastBackupAt|{}lastBackupAt[0]
+        final fun <get-lastBackupAt>(): kotlinx.coroutines.flow/StateFlow<kotlin/Long?> // cx.m42.superizer.host.backup/HostBackup.lastBackupAt.<get-lastBackupAt>|<get-lastBackupAt>(){}[0]
+
+    final suspend fun export(kotlin.collections/List<kotlin/String>, kotlin/String): cx.m42.superizer.backup/BackupOutcome<kotlin/ByteArray> // cx.m42.superizer.host.backup/HostBackup.export|export(kotlin.collections.List<kotlin.String>;kotlin.String){}[0]
+    final suspend fun preview(): cx.m42.superizer.backup/BackupPreview // cx.m42.superizer.host.backup/HostBackup.preview|preview(){}[0]
+    final suspend fun read(kotlin/ByteArray): cx.m42.superizer.backup/BackupOutcome<cx.m42.superizer.backup/RestorePlan> // cx.m42.superizer.host.backup/HostBackup.read|read(kotlin.ByteArray){}[0]
+    final suspend fun restore(cx.m42.superizer.backup/RestorePlan, kotlin.collections/Set<kotlin/String>, kotlin/Boolean, kotlin/String): cx.m42.superizer.backup/BackupOutcome<cx.m42.superizer.backup/RestoreReport> // cx.m42.superizer.host.backup/HostBackup.restore|restore(cx.m42.superizer.backup.RestorePlan;kotlin.collections.Set<kotlin.String>;kotlin.Boolean;kotlin.String){}[0]
+}
+
+final class cx.m42.superizer.host.diagnostics/DiagnosticsHub : cx.m42.superizer.diagnostics/StorageDiagnostics { // cx.m42.superizer.host.diagnostics/DiagnosticsHub|null[0]
+    constructor <init>(cx.m42.superizer.runtime/HostInfo, cx.m42.superizer.runtime/Clock, cx.m42.superizer.host.secrets/HostSecrets, kotlinx.coroutines.flow/StateFlow<kotlin/Long?>, kotlin.collections/List<cx.m42.superizer.diagnostics/DiagnosticsSource>, cx.m42.superizer.diagnostics/SelfTestRunner?, kotlinx.coroutines/CoroutineScope, cx.m42.superizer.runtime/Logger? = ..., kotlinx.serialization.json/Json = ...) // cx.m42.superizer.host.diagnostics/DiagnosticsHub.<init>|<init>(cx.m42.superizer.runtime.HostInfo;cx.m42.superizer.runtime.Clock;cx.m42.superizer.host.secrets.HostSecrets;kotlinx.coroutines.flow.StateFlow<kotlin.Long?>;kotlin.collections.List<cx.m42.superizer.diagnostics.DiagnosticsSource>;cx.m42.superizer.diagnostics.SelfTestRunner?;kotlinx.coroutines.CoroutineScope;cx.m42.superizer.runtime.Logger?;kotlinx.serialization.json.Json){}[0]
+
+    final val report // cx.m42.superizer.host.diagnostics/DiagnosticsHub.report|{}report[0]
+        final fun <get-report>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.diagnostics/DiagnosticsReport> // cx.m42.superizer.host.diagnostics/DiagnosticsHub.report.<get-report>|<get-report>(){}[0]
+
+    final fun exportText(): kotlin/String // cx.m42.superizer.host.diagnostics/DiagnosticsHub.exportText|exportText(){}[0]
+    final fun forApp(cx.m42.superizer.app/AppId): cx.m42.superizer.diagnostics/AppDiagnostics // cx.m42.superizer.host.diagnostics/DiagnosticsHub.forApp|forApp(cx.m42.superizer.app.AppId){}[0]
+    final suspend fun inspect(): cx.m42.superizer.diagnostics/DiagnosticsReport // cx.m42.superizer.host.diagnostics/DiagnosticsHub.inspect|inspect(){}[0]
+    final suspend fun onStart() // cx.m42.superizer.host.diagnostics/DiagnosticsHub.onStart|onStart(){}[0]
+    final suspend fun selfTest(kotlin/Boolean): cx.m42.superizer.diagnostics/DiagnosticsReport // cx.m42.superizer.host.diagnostics/DiagnosticsHub.selfTest|selfTest(kotlin.Boolean){}[0]
+}
+
 final class cx.m42.superizer.host.lock/AppLockController : cx.m42.superizer.lock/AppLockPort { // cx.m42.superizer.host.lock/AppLockController|null[0]
     constructor <init>(kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer.app/SuperizerApp<*>>>, cx.m42.superizer.lock/DeviceAuthenticator, cx.m42.superizer.host.lock/LockStore, cx.m42.superizer.runtime/Clock, kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle>, kotlinx.coroutines.flow/Flow<kotlin/Unit>, kotlin/Function0<kotlin/Boolean>, cx.m42.superizer.lock/AuthStrength = ..., kotlin/Function0<kotlin/Boolean> = ..., cx.m42.superizer.runtime/Logger? = ...) // cx.m42.superizer.host.lock/AppLockController.<init>|<init>(kotlinx.coroutines.flow.StateFlow<kotlin.collections.List<cx.m42.superizer.app.SuperizerApp<*>>>;cx.m42.superizer.lock.DeviceAuthenticator;cx.m42.superizer.host.lock.LockStore;cx.m42.superizer.runtime.Clock;kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>;kotlinx.coroutines.flow.Flow<kotlin.Unit>;kotlin.Function0<kotlin.Boolean>;cx.m42.superizer.lock.AuthStrength;kotlin.Function0<kotlin.Boolean>;cx.m42.superizer.runtime.Logger?){}[0]
 
@@ -199,6 +224,29 @@ final class cx.m42.superizer.host.push/TopicStore { // cx.m42.superizer.host.pus
     final fun remove(cx.m42.superizer.app/AppId, kotlin/String) // cx.m42.superizer.host.push/TopicStore.remove|remove(cx.m42.superizer.app.AppId;kotlin.String){}[0]
 }
 
+final class cx.m42.superizer.host.secrets/HostSecrets : cx.m42.superizer.secrets/SecretsPort { // cx.m42.superizer.host.secrets/HostSecrets|null[0]
+    constructor <init>(cx.m42.superizer.secrets/SecretVault?) // cx.m42.superizer.host.secrets/HostSecrets.<init>|<init>(cx.m42.superizer.secrets.SecretVault?){}[0]
+
+    final val vault // cx.m42.superizer.host.secrets/HostSecrets.vault|{}vault[0]
+        final fun <get-vault>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.secrets/SecretVault?> // cx.m42.superizer.host.secrets/HostSecrets.vault.<get-vault>|<get-vault>(){}[0]
+
+    final fun forApp(cx.m42.superizer.app/AppId): cx.m42.superizer.runtime/StorageService // cx.m42.superizer.host.secrets/HostSecrets.forApp|forApp(cx.m42.superizer.app.AppId){}[0]
+    final suspend fun counts(): kotlin.collections/Map<cx.m42.superizer.app/AppId, cx.m42.superizer.secrets/SecretsCount> // cx.m42.superizer.host.secrets/HostSecrets.counts|counts(){}[0]
+    final suspend fun open(kotlin/String): kotlin/String // cx.m42.superizer.host.secrets/HostSecrets.open|open(kotlin.String){}[0]
+    final suspend fun reseal(cx.m42.superizer.secrets/SecretVault): kotlin/Boolean // cx.m42.superizer.host.secrets/HostSecrets.reseal|reseal(cx.m42.superizer.secrets.SecretVault){}[0]
+    final suspend fun seal(kotlin/String): kotlin/String // cx.m42.superizer.host.secrets/HostSecrets.seal|seal(kotlin.String){}[0]
+
+    final object Companion { // cx.m42.superizer.host.secrets/HostSecrets.Companion|null[0]
+        final const val PLAIN // cx.m42.superizer.host.secrets/HostSecrets.Companion.PLAIN|{}PLAIN[0]
+            final fun <get-PLAIN>(): kotlin/String // cx.m42.superizer.host.secrets/HostSecrets.Companion.PLAIN.<get-PLAIN>|<get-PLAIN>(){}[0]
+        final const val SECRET_PREFIX // cx.m42.superizer.host.secrets/HostSecrets.Companion.SECRET_PREFIX|{}SECRET_PREFIX[0]
+            final fun <get-SECRET_PREFIX>(): kotlin/String // cx.m42.superizer.host.secrets/HostSecrets.Companion.SECRET_PREFIX.<get-SECRET_PREFIX>|<get-SECRET_PREFIX>(){}[0]
+
+        final fun erase(cx.m42.superizer.app/AppId) // cx.m42.superizer.host.secrets/HostSecrets.Companion.erase|erase(cx.m42.superizer.app.AppId){}[0]
+        final fun prefixOf(cx.m42.superizer.app/AppId): kotlin/String // cx.m42.superizer.host.secrets/HostSecrets.Companion.prefixOf|prefixOf(cx.m42.superizer.app.AppId){}[0]
+    }
+}
+
 final class cx.m42.superizer.host.storage/HomeStore { // cx.m42.superizer.host.storage/HomeStore|null[0]
     constructor <init>(kotlin.collections/List<cx.m42.superizer.app/AppId>, kotlinx.coroutines.flow/MutableSharedFlow<cx.m42.superizer.event/SuperizerEvent>? = ..., kotlinx.serialization.json/Json = ...) // cx.m42.superizer.host.storage/HomeStore.<init>|<init>(kotlin.collections.List<cx.m42.superizer.app.AppId>;kotlinx.coroutines.flow.MutableSharedFlow<cx.m42.superizer.event.SuperizerEvent>?;kotlinx.serialization.json.Json){}[0]
 
@@ -278,7 +326,7 @@ final class cx.m42.superizer.host/ConsoleLogger : cx.m42.superizer.runtime/Logge
 }
 
 final class cx.m42.superizer.host/DefaultHostRuntimeFactory : cx.m42.superizer.runtime/HostRuntimeFactory { // cx.m42.superizer.host/DefaultHostRuntimeFactory|null[0]
-    constructor <init>(cx.m42.superizer.runtime/HostInfo, cx.m42.superizer.runtime/NetworkService, cx.m42.superizer.host/LogBuffer, cx.m42.superizer.runtime/LocaleService, cx.m42.superizer.runtime/HapticsService, cx.m42.superizer.runtime/AuthService, cx.m42.superizer.runtime/AppsService, kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer.event/SuperizerEvent>, cx.m42.superizer.host/ServiceRegistry, cx.m42.superizer.runtime/Clock, kotlin/Function2<cx.m42.superizer.app/AppId, cx.m42.superizer.runtime/Logger, cx.m42.superizer.host.push/RoutedPush>, kotlin/Function1<cx.m42.superizer.app/AppId, cx.m42.superizer.runtime/NavigationService>, kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle> = ...) // cx.m42.superizer.host/DefaultHostRuntimeFactory.<init>|<init>(cx.m42.superizer.runtime.HostInfo;cx.m42.superizer.runtime.NetworkService;cx.m42.superizer.host.LogBuffer;cx.m42.superizer.runtime.LocaleService;cx.m42.superizer.runtime.HapticsService;cx.m42.superizer.runtime.AuthService;cx.m42.superizer.runtime.AppsService;kotlinx.coroutines.flow.SharedFlow<cx.m42.superizer.event.SuperizerEvent>;cx.m42.superizer.host.ServiceRegistry;cx.m42.superizer.runtime.Clock;kotlin.Function2<cx.m42.superizer.app.AppId,cx.m42.superizer.runtime.Logger,cx.m42.superizer.host.push.RoutedPush>;kotlin.Function1<cx.m42.superizer.app.AppId,cx.m42.superizer.runtime.NavigationService>;kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>){}[0]
+    constructor <init>(cx.m42.superizer.runtime/HostInfo, cx.m42.superizer.runtime/NetworkService, cx.m42.superizer.host/LogBuffer, cx.m42.superizer.runtime/LocaleService, cx.m42.superizer.runtime/HapticsService, cx.m42.superizer.runtime/AuthService, cx.m42.superizer.runtime/AppsService, kotlinx.coroutines.flow/SharedFlow<cx.m42.superizer.event/SuperizerEvent>, cx.m42.superizer.host/ServiceRegistry, cx.m42.superizer.runtime/Clock, kotlin/Function2<cx.m42.superizer.app/AppId, cx.m42.superizer.runtime/Logger, cx.m42.superizer.host.push/RoutedPush>, kotlin/Function1<cx.m42.superizer.app/AppId, cx.m42.superizer.runtime/NavigationService>, kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle> = ..., kotlin/Function1<cx.m42.superizer.app/AppId, cx.m42.superizer.runtime/StorageService> = ..., kotlin/Function1<cx.m42.superizer.app/AppId, cx.m42.superizer.diagnostics/AppDiagnostics> = ...) // cx.m42.superizer.host/DefaultHostRuntimeFactory.<init>|<init>(cx.m42.superizer.runtime.HostInfo;cx.m42.superizer.runtime.NetworkService;cx.m42.superizer.host.LogBuffer;cx.m42.superizer.runtime.LocaleService;cx.m42.superizer.runtime.HapticsService;cx.m42.superizer.runtime.AuthService;cx.m42.superizer.runtime.AppsService;kotlinx.coroutines.flow.SharedFlow<cx.m42.superizer.event.SuperizerEvent>;cx.m42.superizer.host.ServiceRegistry;cx.m42.superizer.runtime.Clock;kotlin.Function2<cx.m42.superizer.app.AppId,cx.m42.superizer.runtime.Logger,cx.m42.superizer.host.push.RoutedPush>;kotlin.Function1<cx.m42.superizer.app.AppId,cx.m42.superizer.runtime.NavigationService>;kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>;kotlin.Function1<cx.m42.superizer.app.AppId,cx.m42.superizer.runtime.StorageService>;kotlin.Function1<cx.m42.superizer.app.AppId,cx.m42.superizer.diagnostics.AppDiagnostics>){}[0]
 
     final fun createApp(cx.m42.superizer.app/AppId, kotlinx.coroutines/CoroutineScope): cx.m42.superizer.runtime/AppRuntime // cx.m42.superizer.host/DefaultHostRuntimeFactory.createApp|createApp(cx.m42.superizer.app.AppId;kotlinx.coroutines.CoroutineScope){}[0]
     final fun createInstance(cx.m42.superizer.runtime/AppRuntime, kotlinx.coroutines/CoroutineScope): cx.m42.superizer.runtime/InstanceRuntime // cx.m42.superizer.host/DefaultHostRuntimeFactory.createInstance|createInstance(cx.m42.superizer.runtime.AppRuntime;kotlinx.coroutines.CoroutineScope){}[0]
@@ -315,22 +363,29 @@ final class cx.m42.superizer.host/RegistryView : cx.m42.superizer.runtime/AppsSe
 }
 
 final class cx.m42.superizer.host/ServiceRegistry { // cx.m42.superizer.host/ServiceRegistry|null[0]
-    constructor <init>(kotlin.collections/Map<cx.m42.superizer.runtime/ServiceKey<*>, kotlin/Any> = ...) // cx.m42.superizer.host/ServiceRegistry.<init>|<init>(kotlin.collections.Map<cx.m42.superizer.runtime.ServiceKey<*>,kotlin.Any>){}[0]
+    constructor <init>(kotlin.collections/Map<cx.m42.superizer.runtime/ServiceKey<*>, kotlin/Any> = ..., kotlin.collections/Map<cx.m42.superizer.runtime/ServiceKey<*>, kotlin/Function1<cx.m42.superizer.app/AppId, kotlin/Any>> = ...) // cx.m42.superizer.host/ServiceRegistry.<init>|<init>(kotlin.collections.Map<cx.m42.superizer.runtime.ServiceKey<*>,kotlin.Any>;kotlin.collections.Map<cx.m42.superizer.runtime.ServiceKey<*>,kotlin.Function1<cx.m42.superizer.app.AppId,kotlin.Any>>){}[0]
 
     final val keys // cx.m42.superizer.host/ServiceRegistry.keys|{}keys[0]
         final fun <get-keys>(): kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> // cx.m42.superizer.host/ServiceRegistry.keys.<get-keys>|<get-keys>(){}[0]
 
     final fun <#A1: kotlin/Any> get(cx.m42.superizer.runtime/ServiceKey<#A1>): #A1? // cx.m42.superizer.host/ServiceRegistry.get|get(cx.m42.superizer.runtime.ServiceKey<0:0>){0§<kotlin.Any>}[0]
+    final fun <#A1: kotlin/Any> get(cx.m42.superizer.runtime/ServiceKey<#A1>, cx.m42.superizer.app/AppId): #A1? // cx.m42.superizer.host/ServiceRegistry.get|get(cx.m42.superizer.runtime.ServiceKey<0:0>;cx.m42.superizer.app.AppId){0§<kotlin.Any>}[0]
 }
 
 final class cx.m42.superizer.host/SuperizerBuilder { // cx.m42.superizer.host/SuperizerBuilder|null[0]
     final fun <#A1: kotlin/Any> service(cx.m42.superizer.runtime/ServiceKey<#A1>, #A1) // cx.m42.superizer.host/SuperizerBuilder.service|service(cx.m42.superizer.runtime.ServiceKey<0:0>;0:0){0§<kotlin.Any>}[0]
+    final fun <#A1: kotlin/Any> service(cx.m42.superizer.runtime/ServiceKey<#A1>, kotlin/Function1<cx.m42.superizer.app/AppId, #A1>) // cx.m42.superizer.host/SuperizerBuilder.service|service(cx.m42.superizer.runtime.ServiceKey<0:0>;kotlin.Function1<cx.m42.superizer.app.AppId,0:0>){0§<kotlin.Any>}[0]
     final fun auth(cx.m42.superizer.runtime/AuthService) // cx.m42.superizer.host/SuperizerBuilder.auth|auth(cx.m42.superizer.runtime.AuthService){}[0]
+    final fun backupCipher(cx.m42.superizer.backup/HostBackupCipher) // cx.m42.superizer.host/SuperizerBuilder.backupCipher|backupCipher(cx.m42.superizer.backup.HostBackupCipher){}[0]
+    final fun backupKeys(kotlin.coroutines/SuspendFunction0<kotlin.collections/List<cx.m42.superizer.backup/BackupKeyName>>) // cx.m42.superizer.host/SuperizerBuilder.backupKeys|backupKeys(kotlin.coroutines.SuspendFunction0<kotlin.collections.List<cx.m42.superizer.backup.BackupKeyName>>){}[0]
     final fun clock(cx.m42.superizer.runtime/Clock) // cx.m42.superizer.host/SuperizerBuilder.clock|clock(cx.m42.superizer.runtime.Clock){}[0]
     final fun deviceAuthenticator(cx.m42.superizer.lock/DeviceAuthenticator) // cx.m42.superizer.host/SuperizerBuilder.deviceAuthenticator|deviceAuthenticator(cx.m42.superizer.lock.DeviceAuthenticator){}[0]
+    final fun diagnosticsSource(cx.m42.superizer.diagnostics/DiagnosticsSource) // cx.m42.superizer.host/SuperizerBuilder.diagnosticsSource|diagnosticsSource(cx.m42.superizer.diagnostics.DiagnosticsSource){}[0]
     final fun home(kotlin.collections/List<cx.m42.superizer.app/AppId>) // cx.m42.superizer.host/SuperizerBuilder.home|home(kotlin.collections.List<cx.m42.superizer.app.AppId>){}[0]
     final fun home(kotlin/Array<out kotlin/String>...) // cx.m42.superizer.host/SuperizerBuilder.home|home(kotlin.Array<out|kotlin.String>...){}[0]
+    final fun homeBanner(cx.m42.superizer/HomeBanner) // cx.m42.superizer.host/SuperizerBuilder.homeBanner|homeBanner(cx.m42.superizer.HomeBanner){}[0]
     final fun host(cx.m42.superizer.runtime/HostInfo) // cx.m42.superizer.host/SuperizerBuilder.host|host(cx.m42.superizer.runtime.HostInfo){}[0]
+    final fun hostSection(cx.m42.superizer/HostSection) // cx.m42.superizer.host/SuperizerBuilder.hostSection|hostSection(cx.m42.superizer.HostSection){}[0]
     final fun httpClient(io.ktor.client/HttpClient) // cx.m42.superizer.host/SuperizerBuilder.httpClient|httpClient(io.ktor.client.HttpClient){}[0]
     final fun languages(kotlin/Array<out cx.m42.superizer/LanguageOption>..., kotlin/String = ...) // cx.m42.superizer.host/SuperizerBuilder.languages|languages(kotlin.Array<out|cx.m42.superizer.LanguageOption>...;kotlin.String){}[0]
     final fun lifecycle(kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle>) // cx.m42.superizer.host/SuperizerBuilder.lifecycle|lifecycle(kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>){}[0]
@@ -341,6 +396,8 @@ final class cx.m42.superizer.host/SuperizerBuilder { // cx.m42.superizer.host/Su
     final fun promoCodes(kotlin.collections/Map<kotlin/String, cx.m42.superizer.activation/ActivationResult>) // cx.m42.superizer.host/SuperizerBuilder.promoCodes|promoCodes(kotlin.collections.Map<kotlin.String,cx.m42.superizer.activation.ActivationResult>){}[0]
     final fun register(cx.m42.superizer.app/SuperizerApp<*>) // cx.m42.superizer.host/SuperizerBuilder.register|register(cx.m42.superizer.app.SuperizerApp<*>){}[0]
     final fun scheme(kotlin/String) // cx.m42.superizer.host/SuperizerBuilder.scheme|scheme(kotlin.String){}[0]
+    final fun secretVault(cx.m42.superizer.secrets/SecretVault?) // cx.m42.superizer.host/SuperizerBuilder.secretVault|secretVault(cx.m42.superizer.secrets.SecretVault?){}[0]
+    final fun selfTest(cx.m42.superizer.diagnostics/SelfTestRunner) // cx.m42.superizer.host/SuperizerBuilder.selfTest|selfTest(cx.m42.superizer.diagnostics.SelfTestRunner){}[0]
     final fun serviceCode(kotlin/String?) // cx.m42.superizer.host/SuperizerBuilder.serviceCode|serviceCode(kotlin.String?){}[0]
 }
 
@@ -395,20 +452,29 @@ final object cx.m42.superizer.host.push/PushTransport { // cx.m42.superizer.host
 }
 
 final object cx.m42.superizer.host.storage/HostKeys { // cx.m42.superizer.host.storage/HostKeys|null[0]
+    final const val BACKUP_AT // cx.m42.superizer.host.storage/HostKeys.BACKUP_AT|{}BACKUP_AT[0]
+        final fun <get-BACKUP_AT>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.BACKUP_AT.<get-BACKUP_AT>|<get-BACKUP_AT>(){}[0]
     final const val HAPTICS // cx.m42.superizer.host.storage/HostKeys.HAPTICS|{}HAPTICS[0]
         final fun <get-HAPTICS>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.HAPTICS.<get-HAPTICS>|<get-HAPTICS>(){}[0]
+    final const val HEARTBEAT // cx.m42.superizer.host.storage/HostKeys.HEARTBEAT|{}HEARTBEAT[0]
+        final fun <get-HEARTBEAT>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.HEARTBEAT.<get-HEARTBEAT>|<get-HEARTBEAT>(){}[0]
     final const val HOME // cx.m42.superizer.host.storage/HostKeys.HOME|{}HOME[0]
         final fun <get-HOME>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.HOME.<get-HOME>|<get-HOME>(){}[0]
     final const val LANGUAGE // cx.m42.superizer.host.storage/HostKeys.LANGUAGE|{}LANGUAGE[0]
         final fun <get-LANGUAGE>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.LANGUAGE.<get-LANGUAGE>|<get-LANGUAGE>(){}[0]
     final const val LOCK // cx.m42.superizer.host.storage/HostKeys.LOCK|{}LOCK[0]
         final fun <get-LOCK>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.LOCK.<get-LOCK>|<get-LOCK>(){}[0]
+    final const val SELF_TEST // cx.m42.superizer.host.storage/HostKeys.SELF_TEST|{}SELF_TEST[0]
+        final fun <get-SELF_TEST>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.SELF_TEST.<get-SELF_TEST>|<get-SELF_TEST>(){}[0]
     final const val SESSION // cx.m42.superizer.host.storage/HostKeys.SESSION|{}SESSION[0]
         final fun <get-SESSION>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.SESSION.<get-SESSION>|<get-SESSION>(){}[0]
     final const val TOPICS // cx.m42.superizer.host.storage/HostKeys.TOPICS|{}TOPICS[0]
         final fun <get-TOPICS>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.TOPICS.<get-TOPICS>|<get-TOPICS>(){}[0]
     final const val UNLOCKED // cx.m42.superizer.host.storage/HostKeys.UNLOCKED|{}UNLOCKED[0]
         final fun <get-UNLOCKED>(): kotlin/String // cx.m42.superizer.host.storage/HostKeys.UNLOCKED.<get-UNLOCKED>|<get-UNLOCKED>(){}[0]
+
+    final val BACKED_UP // cx.m42.superizer.host.storage/HostKeys.BACKED_UP|{}BACKED_UP[0]
+        final fun <get-BACKED_UP>(): kotlin.collections/List<kotlin/String> // cx.m42.superizer.host.storage/HostKeys.BACKED_UP.<get-BACKED_UP>|<get-BACKED_UP>(){}[0]
 }
 
 final object cx.m42.superizer.host.storage/PrefsStorage { // cx.m42.superizer.host.storage/PrefsStorage|null[0]
@@ -432,6 +498,8 @@ final object cx.m42.superizer.host/SystemClock : cx.m42.superizer.runtime/Clock 
 final val cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop|#static{}cx_m42_superizer_host_activation_ActivationService$stableprop[0]
 final val cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop|#static{}cx_m42_superizer_host_activation_LocalPromoCodes$stableprop[0]
 final val cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop|#static{}cx_m42_superizer_host_activation_QrPayloadParser$stableprop[0]
+final val cx.m42.superizer.host.backup/cx_m42_superizer_host_backup_HostBackup$stableprop // cx.m42.superizer.host.backup/cx_m42_superizer_host_backup_HostBackup$stableprop|#static{}cx_m42_superizer_host_backup_HostBackup$stableprop[0]
+final val cx.m42.superizer.host.diagnostics/cx_m42_superizer_host_diagnostics_DiagnosticsHub$stableprop // cx.m42.superizer.host.diagnostics/cx_m42_superizer_host_diagnostics_DiagnosticsHub$stableprop|#static{}cx_m42_superizer_host_diagnostics_DiagnosticsHub$stableprop[0]
 final val cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop|#static{}cx_m42_superizer_host_lock_AppLockController$stableprop[0]
 final val cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop|#static{}cx_m42_superizer_host_lock_LockSettings$stableprop[0]
 final val cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop|#static{}cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop[0]
@@ -449,6 +517,7 @@ final val cx.m42.superizer.host.push/cx_m42_superizer_host_push_PushRouter$stabl
 final val cx.m42.superizer.host.push/cx_m42_superizer_host_push_PushTransport$stableprop // cx.m42.superizer.host.push/cx_m42_superizer_host_push_PushTransport$stableprop|#static{}cx_m42_superizer_host_push_PushTransport$stableprop[0]
 final val cx.m42.superizer.host.push/cx_m42_superizer_host_push_RoutedPush$stableprop // cx.m42.superizer.host.push/cx_m42_superizer_host_push_RoutedPush$stableprop|#static{}cx_m42_superizer_host_push_RoutedPush$stableprop[0]
 final val cx.m42.superizer.host.push/cx_m42_superizer_host_push_TopicStore$stableprop // cx.m42.superizer.host.push/cx_m42_superizer_host_push_TopicStore$stableprop|#static{}cx_m42_superizer_host_push_TopicStore$stableprop[0]
+final val cx.m42.superizer.host.secrets/cx_m42_superizer_host_secrets_HostSecrets$stableprop // cx.m42.superizer.host.secrets/cx_m42_superizer_host_secrets_HostSecrets$stableprop|#static{}cx_m42_superizer_host_secrets_HostSecrets$stableprop[0]
 final val cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HomeStore$stableprop // cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HomeStore$stableprop|#static{}cx_m42_superizer_host_storage_HomeStore$stableprop[0]
 final val cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HostKeys$stableprop // cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HostKeys$stableprop|#static{}cx_m42_superizer_host_storage_HostKeys$stableprop[0]
 final val cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_PrefsSnapshotStore$stableprop // cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_PrefsSnapshotStore$stableprop|#static{}cx_m42_superizer_host_storage_PrefsSnapshotStore$stableprop[0]
@@ -472,6 +541,8 @@ final fun (cx.m42.superizer/Superizer.Companion).cx.m42.superizer.host/build(kot
 final fun cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_ActivationService$stableprop_getter|cx_m42_superizer_host_activation_ActivationService$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_LocalPromoCodes$stableprop_getter|cx_m42_superizer_host_activation_LocalPromoCodes$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.activation/cx_m42_superizer_host_activation_QrPayloadParser$stableprop_getter|cx_m42_superizer_host_activation_QrPayloadParser$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.backup/cx_m42_superizer_host_backup_HostBackup$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.backup/cx_m42_superizer_host_backup_HostBackup$stableprop_getter|cx_m42_superizer_host_backup_HostBackup$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.diagnostics/cx_m42_superizer_host_diagnostics_DiagnosticsHub$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.diagnostics/cx_m42_superizer_host_diagnostics_DiagnosticsHub$stableprop_getter|cx_m42_superizer_host_diagnostics_DiagnosticsHub$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_AppLockController$stableprop_getter|cx_m42_superizer_host_lock_AppLockController$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings$stableprop_getter|cx_m42_superizer_host_lock_LockSettings$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.lock/cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop_getter|cx_m42_superizer_host_lock_LockSettings_$serializer$stableprop_getter(){}[0]
@@ -493,6 +564,7 @@ final fun cx.m42.superizer.host.push/cx_m42_superizer_host_push_PushRouter$stabl
 final fun cx.m42.superizer.host.push/cx_m42_superizer_host_push_PushTransport$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.push/cx_m42_superizer_host_push_PushTransport$stableprop_getter|cx_m42_superizer_host_push_PushTransport$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.push/cx_m42_superizer_host_push_RoutedPush$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.push/cx_m42_superizer_host_push_RoutedPush$stableprop_getter|cx_m42_superizer_host_push_RoutedPush$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.push/cx_m42_superizer_host_push_TopicStore$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.push/cx_m42_superizer_host_push_TopicStore$stableprop_getter|cx_m42_superizer_host_push_TopicStore$stableprop_getter(){}[0]
+final fun cx.m42.superizer.host.secrets/cx_m42_superizer_host_secrets_HostSecrets$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.secrets/cx_m42_superizer_host_secrets_HostSecrets$stableprop_getter|cx_m42_superizer_host_secrets_HostSecrets$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HomeStore$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HomeStore$stableprop_getter|cx_m42_superizer_host_storage_HomeStore$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HostKeys$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_HostKeys$stableprop_getter|cx_m42_superizer_host_storage_HostKeys$stableprop_getter(){}[0]
 final fun cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_PrefsSnapshotStore$stableprop_getter(): kotlin/Int // cx.m42.superizer.host.storage/cx_m42_superizer_host_storage_PrefsSnapshotStore$stableprop_getter|cx_m42_superizer_host_storage_PrefsSnapshotStore$stableprop_getter(){}[0]

@@ -290,6 +290,10 @@ public class FakeAppRuntime(
     override val navigation: RecordingNavigation = RecordingNavigation()
     override val clock: FakeClock = FakeClock()
 
+    /** Contract 3: what the host would seal, as a map the test can read and break. */
+    override val secrets: FakeSecrets = FakeSecrets()
+    override val diagnostics: FakeAppDiagnostics = FakeAppDiagnostics()
+
     public val emittedEvents: MutableSharedFlow<SuperizerEvent> =
         MutableSharedFlow(replay = 0, extraBufferCapacity = 64)
     override val events: SharedFlow<SuperizerEvent> get() = emittedEvents.asSharedFlow()

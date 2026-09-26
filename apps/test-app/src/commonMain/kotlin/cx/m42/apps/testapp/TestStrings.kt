@@ -38,9 +38,17 @@ internal interface TestStrings {
     val veto: String
     val blockClose: String
     val vetoHint: String
+    val secrets: String
+    val storeSecret: String
+    val keyring: String
+    val signWithKey: String
 }
 
 internal object TestStringsEn : TestStrings {
+    override val secrets = "Secrets"
+    override val storeSecret = "Store a secret"
+    override val keyring = "SSH keyring"
+    override val signWithKey = "Sign with a key"
     override val identity = "Identity"
     override val config = "Config"
     override val lifecycle = "Lifecycle"
@@ -74,6 +82,10 @@ internal object TestStringsEn : TestStrings {
 }
 
 internal object TestStringsRu : TestStrings {
+    override val secrets = "Секреты"
+    override val storeSecret = "Сохранить секрет"
+    override val keyring = "SSH-ключи"
+    override val signWithKey = "Подписать ключом"
     override val identity = "Идентичность"
     override val config = "Конфигурация"
     override val lifecycle = "Жизненный цикл"

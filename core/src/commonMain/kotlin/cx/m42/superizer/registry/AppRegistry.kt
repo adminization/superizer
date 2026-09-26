@@ -1,5 +1,7 @@
 package cx.m42.superizer.registry
 
+import cx.m42.superizer.backup.BackupPolicy
+
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppManifest
 import cx.m42.superizer.app.SuperizerApp
@@ -76,6 +78,12 @@ public class AppRegistry(
             return "declares protection but asks only for host contract ${manifest.minHostContract}; " +
                 "protection needs $PROTECTION_CONTRACT"
         }
+        if (manifest.backup != BackupPolicy.All && manifest.minHostContract < BACKUP_CONTRACT) {
+            // The same mistake one field later (04 §9, Б10): a contract-2 host would back up what
+            // this app asked it to leave out.
+            return "declares a backup policy but asks only for host contract ${manifest.minHostContract}; " +
+                "a backup policy needs $BACKUP_CONTRACT"
+        }
         val missing = manifest.requires - host.services
         if (missing.isNotEmpty()) {
             return "host provides no ${missing.joinToString(", ") { it.name }}"
@@ -105,5 +113,8 @@ public class AppRegistry(
 
         /** The contract that introduced `AppManifest.protection` (06). */
         const val PROTECTION_CONTRACT = 2
+
+        /** The contract that introduced `AppManifest.backup`, `runtime.secrets` and `runtime.diagnostics` (ssh-new 07). */
+        const val BACKUP_CONTRACT = 3
     }
 }

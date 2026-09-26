@@ -3,6 +3,8 @@ package cx.m42.superizer
 import cx.m42.superizer.activation.Activation
 import cx.m42.superizer.activation.ActivationResult
 import cx.m42.superizer.app.AppId
+import cx.m42.superizer.backup.BackupPort
+import cx.m42.superizer.diagnostics.StorageDiagnostics
 import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.registry.AppHandler
@@ -10,6 +12,7 @@ import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.AppSession
 import cx.m42.superizer.runtime.HapticsService
 import cx.m42.superizer.runtime.HostInfo
+import cx.m42.superizer.secrets.SecretsPort
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -63,6 +66,21 @@ public interface Superizer {
 
     /** The lock over protected apps (06): the curtain, the banner and the Settings section read it. */
     public val lock: AppLockPort
+
+    /** The vault behind every app's `runtime.secrets`, and moving them to another (contract 3, ssh-new 05 §3.2). */
+    public val secrets: SecretsPort
+
+    /** The host's backup (contract 3, ssh-new 05 §3.3). */
+    public val backup: BackupPort
+
+    /** How secrets and keys are kept, as findings; the self-test (contract 3, ssh-new 06). */
+    public val storage: StorageDiagnostics
+
+    /** The host's own blocks in Settings, in the order it added them (ssh-new 07 §2.4). */
+    public val hostSections: List<HostSection>
+
+    /** The host's lines above the tiles on Home. */
+    public val homeBanners: List<HomeBanner>
 
     /**
      * What an app asked the host to do about navigation (04). The shell collects these and moves;

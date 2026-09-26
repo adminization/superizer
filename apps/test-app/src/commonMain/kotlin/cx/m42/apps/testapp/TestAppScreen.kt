@@ -126,6 +126,28 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             Mono("service(ServiceKey(\"camera\")) = ${instance.runtime.service(CameraKey)}")
         }
 
+        Card("secrets", strings.secrets) {
+            val keys by instance.secretKeys.collectAsState()
+            val findings by instance.runtime.diagnostics.findings.collectAsState()
+            Mono("secrets.keys = $keys")
+            Mono("diagnostics = ${findings.map { "${it.code}:${it.status}" }}")
+            Spacer(Modifier.height(8.dp))
+            AppButton(strings.storeSecret, onClick = instance::storeSecret, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+        }
+
+        Card("keyring", strings.keyring) {
+            val keyring = instance.runtime.service(cx.m42.superizer.ssh.SshKeyring.Key)
+            val signed by instance.signed.collectAsState()
+            Mono("service = ${if (keyring == null) "none" else "present"}")
+            if (keyring != null) {
+                val keys by keyring.keys.collectAsState()
+                Mono("granted keys = ${keys.map { "${it.label} ${it.id}" }}")
+            }
+            signed?.let { Mono(it) }
+            Spacer(Modifier.height(8.dp))
+            AppButton(strings.signWithKey, onClick = instance::signWithKey, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+        }
+
         Card("locale", strings.locale) {
             val tag by instance.runtime.locale.langTag.collectAsState()
             Mono("langTag = $tag")

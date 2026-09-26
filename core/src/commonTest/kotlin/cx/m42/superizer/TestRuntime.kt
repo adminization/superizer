@@ -27,6 +27,8 @@ import cx.m42.superizer.runtime.PushService
 import cx.m42.superizer.runtime.ServiceKey
 import cx.m42.superizer.runtime.StorageService
 import kotlinx.coroutines.CoroutineScope
+import cx.m42.superizer.diagnostics.AppDiagnostics
+import cx.m42.superizer.diagnostics.Finding
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -61,6 +63,26 @@ internal class TestRuntime(
         }
 
         override suspend fun keys(): Set<String> = map.keys
+    }
+
+    override val secrets: StorageService = object : StorageService {
+        val map = mutableMapOf<String, String>()
+
+        override suspend fun get(key: String): String? = map[key]
+
+        override suspend fun set(key: String, value: String) {
+            map[key] = value
+        }
+
+        override suspend fun remove(key: String) {
+            map.remove(key)
+        }
+
+        override suspend fun keys(): Set<String> = map.keys
+    }
+
+    override val diagnostics: AppDiagnostics = object : AppDiagnostics {
+        override val findings: StateFlow<List<Finding>> = MutableStateFlow(emptyList())
     }
 
     override val network: NetworkService = object : NetworkService {

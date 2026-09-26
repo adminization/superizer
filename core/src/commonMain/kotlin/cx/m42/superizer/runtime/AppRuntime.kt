@@ -2,6 +2,7 @@ package cx.m42.superizer.runtime
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import cx.m42.superizer.app.AppId
+import cx.m42.superizer.diagnostics.AppDiagnostics
 import cx.m42.superizer.event.SuperizerEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,6 +32,20 @@ public interface AppRuntime {
     public val auth: AuthService
     public val apps: AppsService
     public val events: SharedFlow<SuperizerEvent>
+
+    /**
+     * Key/value like [storage], but every value is sealed by the host before it is written (05 §3.2,
+     * D171): by the chip where the device has one, by the person's SSH key where it does not. The app
+     * knows nothing about either. Namespaced like [storage] and backed up with it.
+     *
+     * `get` throws [cx.m42.superizer.secrets.SecretsUnavailableException] when a value is there and
+     * cannot be opened now — never null for that, which would read as "nothing stored". `set`
+     * throws when the host cannot seal, and has then written nothing. Contract 3.
+     */
+    public val secrets: StorageService
+
+    /** How this app's secrets and the device are protected, as findings the host's words describe (06 §1). Contract 3. */
+    public val diagnostics: AppDiagnostics
 
     /** Foreground/Background of the host process (D17). */
     public val lifecycle: StateFlow<HostLifecycle>

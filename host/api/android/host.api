@@ -30,8 +30,8 @@ public final class cx/m42/superizer/host/ConsoleLogger : cx/m42/superizer/runtim
 
 public final class cx/m42/superizer/host/DefaultHostRuntimeFactory : cx/m42/superizer/runtime/HostRuntimeFactory {
 	public static final field $stable I
-	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;)V
-	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun createApp-HNJm7k8 (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/AppRuntime;
 	public fun createInstance (Lcx/m42/superizer/runtime/AppRuntime;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/InstanceRuntime;
 }
@@ -69,20 +69,26 @@ public final class cx/m42/superizer/host/RegistryView : cx/m42/superizer/runtime
 public final class cx/m42/superizer/host/ServiceRegistry {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (Ljava/util/Map;)V
-	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/util/Map;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun get (Lcx/m42/superizer/runtime/ServiceKey;)Ljava/lang/Object;
+	public final fun get-WvMBCSM (Lcx/m42/superizer/runtime/ServiceKey;Ljava/lang/String;)Ljava/lang/Object;
 	public final fun getKeys ()Ljava/util/Set;
 }
 
 public final class cx/m42/superizer/host/SuperizerBuilder {
 	public static final field $stable I
 	public final fun auth (Lcx/m42/superizer/runtime/AuthService;)V
+	public final fun backupCipher (Lcx/m42/superizer/backup/HostBackupCipher;)V
+	public final fun backupKeys (Lkotlin/jvm/functions/Function1;)V
 	public final fun clock (Lcx/m42/superizer/runtime/Clock;)V
 	public final fun deviceAuthenticator (Lcx/m42/superizer/lock/DeviceAuthenticator;)V
+	public final fun diagnosticsSource (Lcx/m42/superizer/diagnostics/DiagnosticsSource;)V
 	public final fun home (Ljava/util/List;)V
 	public final fun home ([Ljava/lang/String;)V
+	public final fun homeBanner (Lcx/m42/superizer/HomeBanner;)V
 	public final fun host (Lcx/m42/superizer/runtime/HostInfo;)V
+	public final fun hostSection (Lcx/m42/superizer/HostSection;)V
 	public final fun httpClient (Lio/ktor/client/HttpClient;)V
 	public final fun languages ([Lcx/m42/superizer/LanguageOption;Ljava/lang/String;)V
 	public static synthetic fun languages$default (Lcx/m42/superizer/host/SuperizerBuilder;[Lcx/m42/superizer/LanguageOption;Ljava/lang/String;ILjava/lang/Object;)V
@@ -94,7 +100,10 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun promoCodes (Ljava/util/Map;)V
 	public final fun register (Lcx/m42/superizer/app/SuperizerApp;)V
 	public final fun scheme (Ljava/lang/String;)V
+	public final fun secretVault (Lcx/m42/superizer/secrets/SecretVault;)V
+	public final fun selfTest (Lcx/m42/superizer/diagnostics/SelfTestRunner;)V
 	public final fun service (Lcx/m42/superizer/runtime/ServiceKey;Ljava/lang/Object;)V
+	public final fun service (Lcx/m42/superizer/runtime/ServiceKey;Lkotlin/jvm/functions/Function1;)V
 	public final fun serviceCode (Ljava/lang/String;)V
 }
 
@@ -145,6 +154,29 @@ public final class cx/m42/superizer/host/activation/QrPayloadParser {
 }
 
 public final class cx/m42/superizer/host/activation/QrPayloadParser$Companion {
+}
+
+public final class cx/m42/superizer/host/backup/HostBackup : cx/m42/superizer/backup/BackupPort {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/secrets/HostSecrets;Lcx/m42/superizer/backup/HostBackupCipher;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/secrets/HostSecrets;Lcx/m42/superizer/backup/HostBackupCipher;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun export (Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getLastBackupAt ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun preview (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun read ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun restore (Lcx/m42/superizer/backup/RestorePlan;Ljava/util/Set;ZLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/diagnostics/DiagnosticsHub : cx/m42/superizer/diagnostics/StorageDiagnostics {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/host/secrets/HostSecrets;Lkotlinx/coroutines/flow/StateFlow;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestRunner;Lkotlinx/coroutines/CoroutineScope;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/host/secrets/HostSecrets;Lkotlinx/coroutines/flow/StateFlow;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestRunner;Lkotlinx/coroutines/CoroutineScope;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun exportText ()Ljava/lang/String;
+	public final fun forApp-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/AppDiagnostics;
+	public fun getReport ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun inspect (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun onStart (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun selfTest (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class cx/m42/superizer/host/lock/AppLockController : cx/m42/superizer/lock/AppLockPort {
@@ -366,6 +398,25 @@ public final class cx/m42/superizer/host/push/TopicStore {
 	public final fun remove-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)V
 }
 
+public final class cx/m42/superizer/host/secrets/HostSecrets : cx/m42/superizer/secrets/SecretsPort {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/host/secrets/HostSecrets$Companion;
+	public static final field PLAIN Ljava/lang/String;
+	public static final field SECRET_PREFIX Ljava/lang/String;
+	public fun <init> (Lcx/m42/superizer/secrets/SecretVault;)V
+	public fun counts (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun forApp-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/runtime/StorageService;
+	public fun getVault ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun open (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun reseal (Lcx/m42/superizer/secrets/SecretVault;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun seal (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/secrets/HostSecrets$Companion {
+	public final fun erase-GGaiHfc (Ljava/lang/String;)V
+	public final fun prefixOf-GGaiHfc (Ljava/lang/String;)Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/host/storage/HomeStore {
 	public static final field $stable I
 	public fun <init> (Ljava/util/List;Lkotlinx/coroutines/flow/MutableSharedFlow;Lkotlinx/serialization/json/Json;)V
@@ -377,14 +428,18 @@ public final class cx/m42/superizer/host/storage/HomeStore {
 
 public final class cx/m42/superizer/host/storage/HostKeys {
 	public static final field $stable I
+	public static final field BACKUP_AT Ljava/lang/String;
 	public static final field HAPTICS Ljava/lang/String;
+	public static final field HEARTBEAT Ljava/lang/String;
 	public static final field HOME Ljava/lang/String;
 	public static final field INSTANCE Lcx/m42/superizer/host/storage/HostKeys;
 	public static final field LANGUAGE Ljava/lang/String;
 	public static final field LOCK Ljava/lang/String;
+	public static final field SELF_TEST Ljava/lang/String;
 	public static final field SESSION Ljava/lang/String;
 	public static final field TOPICS Ljava/lang/String;
 	public static final field UNLOCKED Ljava/lang/String;
+	public final fun getBACKED_UP ()Ljava/util/List;
 }
 
 public final class cx/m42/superizer/host/storage/PrefsSnapshotStore : cx/m42/superizer/registry/SnapshotStore {

@@ -1,6 +1,19 @@
 package cx.m42.superizer.host
 
 import cx.m42.superizer.ActivationPort
+import cx.m42.superizer.HomeBanner
+import cx.m42.superizer.HostSection
+import cx.m42.superizer.backup.BackupKeyName
+import cx.m42.superizer.backup.BackupPort
+import cx.m42.superizer.backup.HostBackupCipher
+import cx.m42.superizer.diagnostics.DiagnosticsSource
+import cx.m42.superizer.diagnostics.SelfTestRunner
+import cx.m42.superizer.diagnostics.StorageDiagnostics
+import cx.m42.superizer.host.backup.HostBackup
+import cx.m42.superizer.host.diagnostics.DiagnosticsHub
+import cx.m42.superizer.host.secrets.HostSecrets
+import cx.m42.superizer.secrets.SecretVault
+import cx.m42.superizer.secrets.SecretsPort
 import cx.m42.superizer.DiagnosticsPort
 import cx.m42.superizer.HostSettingsPort
 import cx.m42.superizer.LanguageOption
@@ -105,6 +118,14 @@ public class SuperizerBuilder internal constructor() {
     internal var home: List<AppId> = emptyList()
     internal var authenticator: DeviceAuthenticator? = null
     internal var lockStrength: AuthStrength = AuthStrength.Any
+    internal val boundServices: MutableMap<ServiceKey<*>, (AppId) -> Any> = mutableMapOf()
+    internal var secretVault: SecretVault? = null
+    internal var backupCipher: HostBackupCipher? = null
+    internal var backupKeys: suspend () -> List<BackupKeyName> = { emptyList() }
+    internal val diagnosticsSources: MutableList<DiagnosticsSource> = mutableListOf()
+    internal var selfTest: SelfTestRunner? = null
+    internal val hostSections: MutableList<HostSection> = mutableListOf()
+    internal val homeBanners: MutableList<HomeBanner> = mutableListOf()
 
     public fun host(info: HostInfo) {
         hostInfo = info
@@ -132,6 +153,53 @@ public class SuperizerBuilder internal constructor() {
     /** How a host adds an optional service (D19). None in the MVP — the mechanism is the point. */
     public fun <T : Any> service(key: ServiceKey<T>, implementation: T) {
         services[key] = implementation
+    }
+
+    /**
+     * A service bound to its caller (D146): each app gets what [factory] made for its id, once. The
+     * SSH keyring is registered this way, so its sheet can name the app asking and grants stay per app.
+     */
+    public fun <T : Any> service(key: ServiceKey<T>, factory: (caller: AppId) -> T) {
+        boundServices[key] = factory
+    }
+
+    /**
+     * The vault that seals every app's `runtime.secrets` (05 §3.2). The platform's own — the Keystore,
+     * the Secure Enclave — or the person's SSH key where there is no chip; none at all leaves secrets
+     * stored as plain text until one arrives through `Superizer.secrets.reseal`, and the diagnostics say so.
+     */
+    public fun secretVault(vault: SecretVault?) {
+        secretVault = vault
+    }
+
+    /** Encrypts backups to the person's keys and opens them with the keyring (05 §3.1). None: no backup. */
+    public fun backupCipher(cipher: HostBackupCipher) {
+        backupCipher = cipher
+    }
+
+    /** The names of the person's keys, for the backup's hint of what to import again (D170). */
+    public fun backupKeys(provider: suspend () -> List<BackupKeyName>) {
+        backupKeys = provider
+    }
+
+    /** Findings only the host's implementation can know: which chip, which key (06 §2). */
+    public fun diagnosticsSource(source: DiagnosticsSource) {
+        diagnosticsSources += source
+    }
+
+    /** The self-test (06 §3). Run once per install and per new version, and from Settings. */
+    public fun selfTest(runner: SelfTestRunner) {
+        selfTest = runner
+    }
+
+    /** A block of the host's own in Settings (07 §2.4). */
+    public fun hostSection(section: HostSection) {
+        hostSections += section
+    }
+
+    /** A line of the host's own above the tiles on Home. */
+    public fun homeBanner(banner: HomeBanner) {
+        homeBanners += banner
     }
 
     public fun promoCodes(resolver: PromoCodeResolver) {
@@ -250,7 +318,7 @@ internal class SuperizerHost(
         })
     }
 
-    override val hostInfo: HostInfo = declared.copy(services = services.keys)
+    override val hostInfo: HostInfo = declared.copy(services = services.keys + builder.boundServices.keys)
 
     private val _events = MutableSharedFlow<SuperizerEvent>(replay = 0, extraBufferCapacity = 64)
     override val events: SharedFlow<SuperizerEvent> = _events.asSharedFlow()
@@ -320,6 +388,9 @@ internal class SuperizerHost(
 
     private val snapshots = PrefsSnapshotStore(json)
 
+    private val hostSecrets = HostSecrets(builder.secretVault)
+    override val secrets: SecretsPort = hostSecrets
+
     private val appsView = RegistryView(registry, { handler }, unlockStore.unlocked)
 
     private val runtimeFactory = DefaultHostRuntimeFactory(
@@ -331,7 +402,7 @@ internal class SuperizerHost(
         auth = builder.auth,
         apps = appsView,
         events = events,
-        services = ServiceRegistry(services),
+        services = ServiceRegistry(services, builder.boundServices.toMap()),
         clock = builder.clock,
         pushFor = { appId, logger ->
             pushes.getOrPut(appId) {
@@ -340,6 +411,8 @@ internal class SuperizerHost(
         },
         navigationFor = { appId -> ShellNavigation(appId) },
         lifecycle = builder.lifecycle ?: PlatformLifecycle.state,
+        secretsFor = { appId -> hostSecrets.forApp(appId) },
+        diagnosticsFor = { appId -> diagnosticsHub.forApp(appId) },
     )
 
     override val handler: AppHandler = AppHandler(
@@ -379,6 +452,37 @@ internal class SuperizerHost(
     )
     override val lock: AppLockPort = lockController
 
+    private val hostBackup = HostBackup(
+        host = hostInfo,
+        clock = builder.clock,
+        registry = registry,
+        secrets = hostSecrets,
+        cipher = builder.backupCipher,
+        keyNames = builder.backupKeys,
+        confirm = { reason -> lockController.presence.confirm(reason) },
+        replaced = { id ->
+            // Data changed under a live screen: close it, and let its snapshot go with the old data.
+            if (handler.current.value?.app?.id == id) handler.close(force = true)
+            handler.forgetSnapshot(id)
+        },
+    )
+    override val backup: BackupPort = hostBackup
+
+    private val diagnosticsHub: DiagnosticsHub = DiagnosticsHub(
+        host = hostInfo,
+        clock = builder.clock,
+        secrets = hostSecrets,
+        lastBackupAt = hostBackup.lastBackupAt,
+        sources = builder.diagnosticsSources.toList(),
+        runner = builder.selfTest,
+        scope = scope,
+        logger = hostLogger,
+    )
+    override val storage: StorageDiagnostics = diagnosticsHub
+
+    override val hostSections: List<HostSection> = builder.hostSections.toList()
+    override val homeBanners: List<HomeBanner> = builder.homeBanners.toList()
+
     private val router = PushRouter(
         registry = registry,
         unlocked = { unlockStore.unlocked.value },
@@ -406,6 +510,7 @@ internal class SuperizerHost(
          */
         override suspend fun reset(id: AppId) {
             PrefsStorageService.erase(id)
+            HostSecrets.erase(id)
             topics.clear(id)
             conceal(id)
             _events.tryEmit(SuperizerEvent.Reset(id))
@@ -438,6 +543,8 @@ internal class SuperizerHost(
             }
         }
         scope.launch { handler.enableAll() }
+        // After the apps: a self-test on first run must not hold up the first frame's apps.
+        scope.launch { runCatching { diagnosticsHub.onStart() }.onFailure { hostLogger.warn("diagnostics at start failed", it) } }
     }
 
     /**

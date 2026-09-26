@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
+import cx.m42.superizer.HostScreen
 import cx.m42.superizer.Superizer
 import cx.m42.superizer.activation.ActivationResult
 import cx.m42.superizer.app.AppChrome
@@ -86,6 +87,9 @@ public sealed interface ShellDestination {
     public data class Settings(val from: ShellDestination) : ShellDestination
     public data class Activate(val from: ShellDestination) : ShellDestination
     public data object ServiceMenu : ShellDestination
+
+    /** One of the host's own screens (07 §2.4): the shell draws the frame, [screen] the content. */
+    public data class Host(val screen: HostScreen, val from: ShellDestination) : ShellDestination
 }
 
 private enum class NavDirection { Forward, Back }
@@ -199,6 +203,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                     is ShellDestination.Settings -> goBack(here.from)
                     is ShellDestination.Activate -> goBack(here.from)
                     ShellDestination.ServiceMenu -> goBack(ShellDestination.Home)
+                    is ShellDestination.Host -> goBack(here.from)
                     is ShellDestination.App -> scope.launch { closeCurrent { goBack(ShellDestination.Home) } }
                     ShellDestination.Home -> Unit
                 }
@@ -270,13 +275,22 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             footer = footer,
                         ) {
                             Capped {
-                                HomeScreen(
-                                    apps = onHome,
-                                    langTag = langTag,
-                                    onOpen = { id -> scope.launch { open(id) } },
-                                    onRemove = { id -> scope.launch { superizer.removeFromHome(id) } },
-                                    onAdd = { go(ShellDestination.Catalog(ShellDestination.Home)) },
-                                )
+                                Column(modifier = Modifier.fillMaxSize()) {
+                                    // The host's lines first (D179): a status of Unsafe or worse is
+                                    // on Home until it is fixed, above everything else there.
+                                    superizer.homeBanners.forEach { banner ->
+                                        banner.Content(superizer) { screen -> go(ShellDestination.Host(screen, ShellDestination.Home)) }
+                                    }
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        HomeScreen(
+                                            apps = onHome,
+                                            langTag = langTag,
+                                            onOpen = { id -> scope.launch { open(id) } },
+                                            onRemove = { id -> scope.launch { superizer.removeFromHome(id) } },
+                                            onAdd = { go(ShellDestination.Catalog(ShellDestination.Home)) },
+                                        )
+                                    }
+                                }
                             }
                         }
 
@@ -323,6 +337,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                                 SettingsScreen(
                                     superizer = superizer,
                                     onOpenServiceMenu = { go(ShellDestination.ServiceMenu) },
+                                    onOpenHostScreen = { screen -> go(ShellDestination.Host(screen, where)) },
                                 )
                             }
                         }
@@ -345,6 +360,27 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                                         }
                                     },
                                 )
+                            }
+                        }
+
+                        is ShellDestination.Host -> AppScaffold(
+                            title = where.screen.title(langTag),
+                            menu = menu,
+                            onBack = { goBack(where.from) },
+                            onHaptic = haptic,
+                            footer = footer,
+                        ) {
+                            // An import wizard is kept out of screenshots (T10); the flag goes with
+                            // the screen, so leaving it takes the flag off again.
+                            SecureWindow(active = where.screen.secure)
+                            Capped {
+                                Box(modifier = Modifier.fillMaxSize().testTag("host:${where.screen.id}")) {
+                                    where.screen.Content(
+                                        superizer,
+                                        { goBack(where.from) },
+                                        { next -> go(ShellDestination.Host(next, where)) },
+                                    )
+                                }
                             }
                         }
 

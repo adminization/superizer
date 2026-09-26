@@ -3,6 +3,71 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.4.0 — contract 3
+
+Contracts for a host that keeps secrets, SSH keys and backups — and says honestly how (Unitool
+notes ssh-new 05–07, D171–D184). The library gets the interfaces, the data and the mechanics that
+work through them; it gets no cryptography, no platform code and no words for a person. Every
+implementation is the host's.
+
+### The contract (`core`)
+
+- `AppRuntime.secrets`: a `StorageService` whose values the host seals before writing them, under
+  `secret.<id>.`. `get` throws `SecretsUnavailableException` when a value is there and cannot be
+  opened now — never null, which would read as "nothing stored". `set` throws when the host cannot
+  seal, and has then written nothing.
+- `AppRuntime.diagnostics.findings`: this app's secrets and the host-wide findings, as codes.
+- `AppManifest.backup: BackupPolicy` — `All` (default), `None`, `Except(keys)`. Anything but `All`
+  needs `minHostContract = 3`; the registry turns a contract-2 manifest with one away.
+- `secrets`: `SecretVault` (moved from Unitool unchanged, plus `opensSilently`, default true),
+  `SecretsPort` (`Superizer.secrets`: the vault, `reseal`, `counts`).
+- `backup`: `HostBackupCipher`, `BackupPort` (`Superizer.backup`), `BackupBundle` and friends.
+- `ssh`: `SshKeyring` (for apps: SSHSIG under a namespace, age decryption), `SshKeyAdmin` (the
+  host's screens only), `SshAgent` (the ssh-agent protocol), and their data — `KeyId`,
+  `SshKeyInfo`, `KeyStorage` (three levels), `KeyringDevice`, `Inspection`, `ImportOutcome`,
+  `SshOutcome`, `Grant`, `UseRecord`, `MIN_PASSPHRASE = 12`. No type can hold a private key.
+- `diagnostics`: `StorageDiagnostics` (`Superizer.storage`), `DiagnosticsSource`,
+  `SelfTestRunner`, `DiagnosticsStrings`, the report types, and the catalogue — `DiagnosticsCode`
+  (finding codes with their status and actions) and `SelfTestCode`, enums so that a host's words
+  table is checked for completeness by the compiler.
+- `FilePicker` (optional service `file-picker`) and `PickedFile`.
+- `HostSection`, `HostScreen`, `HomeBanner`: slots for the host's own screens; and
+  `Superizer.hostSections`, `Superizer.homeBanners`.
+
+### The host (`host`)
+
+- `HostSecrets`: seals with the vault the builder was given, or writes `plain:` when there is none;
+  `reseal` moves every secret to another vault all or nothing. Reset (D35) erases secrets too.
+- `DiagnosticsHub`: the host's own findings (`vault.missing`, the heartbeat, each app's secrets
+  sealed or plain, the last backup, the last self-test) plus every registered source; the
+  self-test once per install and per new host version; `exportText()` in English. The heartbeat
+  never opens a vault that would have to ask.
+- `HostBackup`: walks `app.<id>.` and `secret.<id>.` without reading a format, honours each
+  manifest's policy, opens secrets with the vault and seals them again with the next device's,
+  and carries key names but never keys. A bundle already opened on a computer is read as is.
+- `SuperizerBuilder`: `service(key) { caller -> }` (a service bound to the app that asks for it),
+  `secretVault`, `backupCipher`, `backupKeys`, `diagnosticsSource`, `selfTest`, `hostSection`,
+  `homeBanner`.
+
+### The shell (`ui`)
+
+- `ShellDestination.Host(screen, from)`: the shell's bar and back button around a host screen,
+  `FLAG_SECURE` while `screen.secure`.
+- Settings draws the host's sections after Protection and before the apps'
+  (`settings:host:<id>`); Home draws the host's banners above the tiles.
+- `LocalDiagnosticsStrings`, raw codes by default.
+
+### Testing (`testing`)
+
+- `FakeSecretVault`, `FakeSecrets` (`FakeAppRuntime.secrets`), `FakeAppDiagnostics`,
+  `FakeStorageDiagnostics`, `FakeSshKeyring`, `FakeFilePicker`.
+- `Canary` (masked, so a heap dump finds only the code under test's copies) and `LeakScanner`:
+  raw, Base64 at every alignment in both alphabets, hex, UTF-16LE and every 16-byte window.
+
+### The bench app
+
+- Contract 3: a Secrets card and an SSH keyring card that signs under `test-app@superizer`.
+
 ## 0.3.0 — contract 2
 
 Two things: iOS, and protected apps.

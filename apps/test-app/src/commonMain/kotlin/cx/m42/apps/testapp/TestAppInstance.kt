@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import cx.m42.superizer.ssh.KeyPurpose
+import cx.m42.superizer.ssh.SshKeyring
+import cx.m42.superizer.ssh.SshOutcome
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
@@ -51,6 +54,12 @@ internal class TestAppInstance(
 
     private val _navigationError = MutableStateFlow<String?>(null)
     val navigationError: StateFlow<String?> get() = _navigationError.asStateFlow()
+
+    private val _secretKeys = MutableStateFlow<String>("—")
+    val secretKeys: StateFlow<String> get() = _secretKeys.asStateFlow()
+
+    private val _signed = MutableStateFlow<String?>(null)
+    val signed: StateFlow<String?> get() = _signed.asStateFlow()
 
     /** The Veto card's switch: the one thing here that changes what the *host* does (03). */
     val blockClose = MutableStateFlow(false)
@@ -152,6 +161,42 @@ internal class TestAppInstance(
         runtime.scope.launch { runtime.navigation.close() }
     }
 
+    /** Contract 3: a value the host seals itself. The card shows the keys, never the value. */
+    fun storeSecret() {
+        runtime.scope.launch {
+            _secretKeys.value = runCatching {
+                runtime.secrets.set(KEY_SECRET, "bench-" + runtime.clock.now())
+                runtime.secrets.keys().sorted().toString()
+            }.getOrElse { "failed: ${it::class.simpleName}" }
+        }
+    }
+
+    /**
+     * SSHSIG under this app's own namespace (ssh-new 02 §3.2): the host's sheet picks the key and
+     * asks the person; the card shows the outcome and the signature's first line.
+     * `ssh-keygen -Y verify -n test-app@superizer` checks it on a computer.
+     */
+    fun signWithKey() {
+        runtime.scope.launch {
+            val keyring = runtime.service(SshKeyring.Key)
+            if (keyring == null) {
+                _signed.value = "no keyring on this host"
+                return@launch
+            }
+            val chosen = keyring.keys.value.firstOrNull() ?: when (val pick = keyring.choose(KeyPurpose.Sign(NAMESPACE))) {
+                is SshOutcome.Ok -> pick.value
+                else -> {
+                    _signed.value = "choose: $pick"
+                    return@launch
+                }
+            }
+            _signed.value = when (val result = keyring.sign(chosen.id, NAMESPACE, "bench ${runtime.clock.now()}".encodeToByteArray())) {
+                is SshOutcome.Ok -> "${chosen.label} ${chosen.id}\n" + result.value.armored.lines().take(2).joinToString("\n")
+                else -> "sign: $result"
+            }
+        }
+    }
+
     fun subscribe(topic: String) {
         runtime.scope.launch { runtime.push.subscribe(topic) }
     }
@@ -166,6 +211,8 @@ internal class TestAppInstance(
 
     companion object {
         const val KEY_LAUNCHES = "launches"
+        const val KEY_SECRET = "bench"
+        const val NAMESPACE = "test-app@superizer"
         const val PING_URL = "https://api.frankfurter.app/latest?from=USD&to=EUR"
         const val MAX_EVENTS = 40
     }

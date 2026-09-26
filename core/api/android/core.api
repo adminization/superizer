@@ -14,6 +14,27 @@ public abstract interface class cx/m42/superizer/DiagnosticsPort {
 	public abstract fun unlock-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public abstract interface class cx/m42/superizer/HomeBanner {
+	public abstract fun Content (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)Z
+}
+
+public abstract interface class cx/m42/superizer/HostScreen {
+	public abstract fun Content (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
+	public abstract fun getId ()Ljava/lang/String;
+	public fun getSecure ()Z
+	public abstract fun title (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/HostScreen$DefaultImpls {
+	public static fun getSecure (Lcx/m42/superizer/HostScreen;)Z
+}
+
+public abstract interface class cx/m42/superizer/HostSection {
+	public abstract fun Content (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
+	public abstract fun getId ()Ljava/lang/String;
+	public abstract fun title (Ljava/lang/String;)Ljava/lang/String;
+}
+
 public abstract interface class cx/m42/superizer/HostSettingsPort {
 	public abstract fun chooseLanguage (Ljava/lang/String;)V
 	public abstract fun getHaptics ()Lkotlinx/coroutines/flow/StateFlow;
@@ -78,17 +99,22 @@ public abstract interface class cx/m42/superizer/Superizer {
 	public static final field Companion Lcx/m42/superizer/Superizer$Companion;
 	public abstract fun addToHome-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getActivation ()Lcx/m42/superizer/ActivationPort;
+	public abstract fun getBackup ()Lcx/m42/superizer/backup/BackupPort;
 	public abstract fun getCommands ()Lkotlinx/coroutines/flow/SharedFlow;
 	public abstract fun getDiagnostics ()Lcx/m42/superizer/DiagnosticsPort;
 	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
 	public abstract fun getHandler ()Lcx/m42/superizer/registry/AppHandler;
 	public abstract fun getHaptics ()Lcx/m42/superizer/runtime/HapticsService;
 	public abstract fun getHome ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getHomeBanners ()Ljava/util/List;
 	public abstract fun getHostInfo ()Lcx/m42/superizer/runtime/HostInfo;
+	public abstract fun getHostSections ()Ljava/util/List;
 	public abstract fun getLock ()Lcx/m42/superizer/lock/AppLockPort;
 	public abstract fun getRegistry ()Lcx/m42/superizer/registry/AppRegistry;
 	public abstract fun getRoute ()Lcx/m42/superizer/RoutePort;
+	public abstract fun getSecrets ()Lcx/m42/superizer/secrets/SecretsPort;
 	public abstract fun getSettings ()Lcx/m42/superizer/HostSettingsPort;
+	public abstract fun getStorage ()Lcx/m42/superizer/diagnostics/StorageDiagnostics;
 	public abstract fun getUnlocked ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun removeFromHome-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -397,9 +423,10 @@ public abstract class cx/m42/superizer/app/AppInstance {
 public final class cx/m42/superizer/app/AppManifest {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/superizer/app/AppManifest$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;Lcx/m42/superizer/backup/BackupPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;Lcx/m42/superizer/backup/BackupPolicy;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component10 ()Lcx/m42/superizer/backup/BackupPolicy;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()I
 	public final fun component4 ()Lcx/m42/superizer/app/AppMetadata;
@@ -408,9 +435,10 @@ public final class cx/m42/superizer/app/AppManifest {
 	public final fun component7 ()Ljava/util/Set;
 	public final fun component8 ()Ljava/util/Set;
 	public final fun component9 ()Lcx/m42/superizer/app/AppProtection;
-	public final fun copy-BH5zkNM (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;)Lcx/m42/superizer/app/AppManifest;
-	public static synthetic fun copy-BH5zkNM$default (Lcx/m42/superizer/app/AppManifest;Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;ILjava/lang/Object;)Lcx/m42/superizer/app/AppManifest;
+	public final fun copy-qcq0gLw (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;Lcx/m42/superizer/backup/BackupPolicy;)Lcx/m42/superizer/app/AppManifest;
+	public static synthetic fun copy-qcq0gLw$default (Lcx/m42/superizer/app/AppManifest;Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/app/AppMetadata;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Ljava/util/Set;Lcx/m42/superizer/app/AppProtection;Lcx/m42/superizer/backup/BackupPolicy;ILjava/lang/Object;)Lcx/m42/superizer/app/AppManifest;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBackup ()Lcx/m42/superizer/backup/BackupPolicy;
 	public final fun getDeepLinks ()Ljava/util/Set;
 	public final fun getId-eVupTzA ()Ljava/lang/String;
 	public final fun getMetadata ()Lcx/m42/superizer/app/AppMetadata;
@@ -578,6 +606,796 @@ public abstract class cx/m42/superizer/app/SuperizerApp {
 	public final fun getVersion ()Ljava/lang/String;
 	public abstract fun launch (Lcx/m42/superizer/runtime/InstanceRuntime;Ljava/lang/Object;)Lcx/m42/superizer/app/AppInstance;
 	public fun setup (Lcx/m42/superizer/app/AppSetupContext;)V
+}
+
+public final class cx/m42/superizer/backup/AppBackup {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/backup/AppBackup$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Map;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/util/Map;Ljava/util/Map;)Lcx/m42/superizer/backup/AppBackup;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/AppBackup;Ljava/lang/String;Ljava/util/Map;Ljava/util/Map;ILjava/lang/Object;)Lcx/m42/superizer/backup/AppBackup;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSecrets ()Ljava/util/Map;
+	public final fun getStorage ()Ljava/util/Map;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/backup/AppBackup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/AppBackup$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/backup/AppBackup;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/backup/AppBackup;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/AppBackup$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/AppPreview {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;IIZ)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()Z
+	public final fun copy (Ljava/lang/String;IIZ)Lcx/m42/superizer/backup/AppPreview;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/AppPreview;Ljava/lang/String;IIZILjava/lang/Object;)Lcx/m42/superizer/backup/AppPreview;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExcluded ()Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getSecretKeys ()I
+	public final fun getStorageKeys ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupBundle {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/backup/BackupBundle$Companion;
+	public static final field SCHEMA I
+	public fun <init> (ILcx/m42/superizer/backup/BackupHost;Ljava/util/Map;Ljava/util/Map;Ljava/util/List;)V
+	public synthetic fun <init> (ILcx/m42/superizer/backup/BackupHost;Ljava/util/Map;Ljava/util/Map;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()Lcx/m42/superizer/backup/BackupHost;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun component4 ()Ljava/util/Map;
+	public final fun component5 ()Ljava/util/List;
+	public final fun copy (ILcx/m42/superizer/backup/BackupHost;Ljava/util/Map;Ljava/util/Map;Ljava/util/List;)Lcx/m42/superizer/backup/BackupBundle;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupBundle;ILcx/m42/superizer/backup/BackupHost;Ljava/util/Map;Ljava/util/Map;Ljava/util/List;ILjava/lang/Object;)Lcx/m42/superizer/backup/BackupBundle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getApps ()Ljava/util/Map;
+	public final fun getHost ()Lcx/m42/superizer/backup/BackupHost;
+	public final fun getKeys ()Ljava/util/List;
+	public final fun getSchema ()I
+	public final fun getSettings ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/backup/BackupBundle$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupBundle$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/backup/BackupBundle;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/backup/BackupBundle;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupBundle$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupHost {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/backup/BackupHost$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/runtime/Platform;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()I
+	public final fun component4 ()Lcx/m42/superizer/runtime/Platform;
+	public final fun component5 ()J
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/runtime/Platform;J)Lcx/m42/superizer/backup/BackupHost;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupHost;Ljava/lang/String;Ljava/lang/String;ILcx/m42/superizer/runtime/Platform;JILjava/lang/Object;)Lcx/m42/superizer/backup/BackupHost;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAt ()J
+	public final fun getContract ()I
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPlatform ()Lcx/m42/superizer/runtime/Platform;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/backup/BackupHost$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupHost$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/backup/BackupHost;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/backup/BackupHost;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupHost$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupKeyName {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/backup/BackupKeyName$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;I)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()I
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;I)Lcx/m42/superizer/backup/BackupKeyName;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupKeyName;Ljava/lang/String;Ljava/lang/String;IILjava/lang/Object;)Lcx/m42/superizer/backup/BackupKeyName;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getComment ()Ljava/lang/String;
+	public final fun getFingerprint ()Ljava/lang/String;
+	public final fun getLevel ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/backup/BackupKeyName$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupKeyName$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/backup/BackupKeyName;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/backup/BackupKeyName;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupKeyName$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/backup/BackupOutcome {
+}
+
+public final class cx/m42/superizer/backup/BackupOutcome$Cancelled : cx/m42/superizer/backup/BackupOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupOutcome$Cancelled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupOutcome$Failed : cx/m42/superizer/backup/BackupOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/backup/BackupOutcome$Failed;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupOutcome$Failed;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/backup/BackupOutcome$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getEvidence ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupOutcome$NoRecipients : cx/m42/superizer/backup/BackupOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupOutcome$NoRecipients;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupOutcome$Ok : cx/m42/superizer/backup/BackupOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lcx/m42/superizer/backup/BackupOutcome$Ok;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupOutcome$Ok;Ljava/lang/Object;ILjava/lang/Object;)Lcx/m42/superizer/backup/BackupOutcome$Ok;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupOutcome$SecretsLocked : cx/m42/superizer/backup/BackupOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupOutcome$SecretsLocked;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupOutcome$Unreadable : cx/m42/superizer/backup/BackupOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/backup/BackupOutcome$Unreadable;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupOutcome$Unreadable;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/backup/BackupOutcome$Unreadable;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupOutcome$Unsupported : cx/m42/superizer/backup/BackupOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupOutcome$Unsupported;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/backup/BackupPolicy {
+	public static final field Companion Lcx/m42/superizer/backup/BackupPolicy$Companion;
+}
+
+public final class cx/m42/superizer/backup/BackupPolicy$All : cx/m42/superizer/backup/BackupPolicy {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupPolicy$All;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/BackupPolicy$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupPolicy$Except : cx/m42/superizer/backup/BackupPolicy {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/backup/BackupPolicy$Except$Companion;
+	public fun <init> (Ljava/util/Set;)V
+	public final fun component1 ()Ljava/util/Set;
+	public final fun copy (Ljava/util/Set;)Lcx/m42/superizer/backup/BackupPolicy$Except;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupPolicy$Except;Ljava/util/Set;ILjava/lang/Object;)Lcx/m42/superizer/backup/BackupPolicy$Except;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKeys ()Ljava/util/Set;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/backup/BackupPolicy$Except$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupPolicy$Except$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/backup/BackupPolicy$Except;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/backup/BackupPolicy$Except;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupPolicy$Except$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/backup/BackupPolicy$None : cx/m42/superizer/backup/BackupPolicy {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/backup/BackupPolicy$None;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/backup/BackupPort {
+	public abstract fun export (Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getLastBackupAt ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun preview (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun read ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun restore (Lcx/m42/superizer/backup/RestorePlan;Ljava/util/Set;ZLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/backup/BackupPreview {
+	public static final field $stable I
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Ljava/util/List;)Lcx/m42/superizer/backup/BackupPreview;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/BackupPreview;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcx/m42/superizer/backup/BackupPreview;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getApps ()Ljava/util/List;
+	public final fun getKeys ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/backup/HostBackupCipher {
+	public abstract fun decrypt ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun encrypt ([BLjava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/backup/RestorePlan {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/backup/BackupBundle;Ljava/util/List;)V
+	public final fun getApps ()Ljava/util/List;
+	public final fun getBundle ()Lcx/m42/superizer/backup/BackupBundle;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/backup/RestoreReport {
+	public static final field $stable I
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Ljava/util/List;)Lcx/m42/superizer/backup/RestoreReport;
+	public static synthetic fun copy$default (Lcx/m42/superizer/backup/RestoreReport;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcx/m42/superizer/backup/RestoreReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKeysToImport ()Ljava/util/List;
+	public final fun getRestored ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/diagnostics/AppDiagnostics {
+	public abstract fun getFindings ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class cx/m42/superizer/diagnostics/DeviceFacts {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/diagnostics/DeviceFacts$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)Lcx/m42/superizer/diagnostics/DeviceFacts;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/DeviceFacts;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/DeviceFacts;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFacts ()Ljava/util/Map;
+	public final fun getModel ()Ljava/lang/String;
+	public final fun getOs ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/diagnostics/DeviceFacts$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/DeviceFacts$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/diagnostics/DeviceFacts;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/diagnostics/DeviceFacts;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/DeviceFacts$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/DiagnosticsAction : java/lang/Enum {
+	public static final field AddSshKey Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static final field Companion Lcx/m42/superizer/diagnostics/DiagnosticsAction$Companion;
+	public static final field EnableScreenLock Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static final field ImportKeyAgain Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static final field MakeBackup Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static final field Rekey Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static final field RunSelfTest Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static final field SetPassphrase Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static final field ShareReport Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+	public static fun values ()[Lcx/m42/superizer/diagnostics/DiagnosticsAction;
+}
+
+public final class cx/m42/superizer/diagnostics/DiagnosticsAction$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/DiagnosticsCode : java/lang/Enum {
+	public static final field AppSecretsPlain Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field AppSecretsSealed Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field BackupNever Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field BackupOk Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field BackupStale Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field Companion Lcx/m42/superizer/diagnostics/DiagnosticsCode$Companion;
+	public static final field DeviceEmulator Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field DeviceNoScreenLock Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field DeviceNoSecureHardware Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyLevel1 Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyLevel2 Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyLevel3 Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyLevel3Browser Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeySecretsAnchor Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeySessionPolicy Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyUnusable Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field PassphraseSlow Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field SelfTestFailed Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field SelfTestNever Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field SelfTestOk Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultBroken Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultChipOk Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultKeyLost Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultMissing Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultNotImplemented Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultPassphraseBrowser Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultPassphraseOk Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultSessionOpen Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field VaultSoftwareKey Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public final fun getActions ()Ljava/util/List;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getStatus ()Lcx/m42/superizer/diagnostics/Status;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static fun values ()[Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+}
+
+public final class cx/m42/superizer/diagnostics/DiagnosticsCode$Companion {
+	public final fun of (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+}
+
+public final class cx/m42/superizer/diagnostics/DiagnosticsKt {
+	public static final fun finding (Lcx/m42/superizer/diagnostics/DiagnosticsCode;Lcx/m42/superizer/diagnostics/Subject;Ljava/util/Map;Ljava/lang/String;)Lcx/m42/superizer/diagnostics/Finding;
+	public static synthetic fun finding$default (Lcx/m42/superizer/diagnostics/DiagnosticsCode;Lcx/m42/superizer/diagnostics/Subject;Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/Finding;
+}
+
+public final class cx/m42/superizer/diagnostics/DiagnosticsReport {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/diagnostics/DiagnosticsReport$Companion;
+	public fun <init> (JLjava/lang/String;Lcx/m42/superizer/runtime/Platform;Lcx/m42/superizer/diagnostics/DeviceFacts;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestResult;)V
+	public synthetic fun <init> (JLjava/lang/String;Lcx/m42/superizer/runtime/Platform;Lcx/m42/superizer/diagnostics/DeviceFacts;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestResult;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcx/m42/superizer/runtime/Platform;
+	public final fun component4 ()Lcx/m42/superizer/diagnostics/DeviceFacts;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Lcx/m42/superizer/diagnostics/SelfTestResult;
+	public final fun copy (JLjava/lang/String;Lcx/m42/superizer/runtime/Platform;Lcx/m42/superizer/diagnostics/DeviceFacts;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestResult;)Lcx/m42/superizer/diagnostics/DiagnosticsReport;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/DiagnosticsReport;JLjava/lang/String;Lcx/m42/superizer/runtime/Platform;Lcx/m42/superizer/diagnostics/DeviceFacts;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestResult;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/DiagnosticsReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAt ()J
+	public final fun getDevice ()Lcx/m42/superizer/diagnostics/DeviceFacts;
+	public final fun getFindings ()Ljava/util/List;
+	public final fun getHostVersion ()Ljava/lang/String;
+	public final fun getPlatform ()Lcx/m42/superizer/runtime/Platform;
+	public final fun getSelfTest ()Lcx/m42/superizer/diagnostics/SelfTestResult;
+	public final fun getWorst ()Lcx/m42/superizer/diagnostics/Status;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/diagnostics/DiagnosticsReport$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/DiagnosticsReport$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/diagnostics/DiagnosticsReport;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/diagnostics/DiagnosticsReport;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/DiagnosticsReport$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/diagnostics/DiagnosticsSource {
+	public abstract fun inspect (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/diagnostics/DiagnosticsStrings {
+	public abstract fun action (Lcx/m42/superizer/diagnostics/DiagnosticsAction;)Ljava/lang/String;
+	public abstract fun detail (Ljava/lang/String;Ljava/util/Map;)Ljava/lang/String;
+	public abstract fun status (Lcx/m42/superizer/diagnostics/Status;)Ljava/lang/String;
+	public abstract fun title (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/diagnostics/Finding {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/diagnostics/Finding$Companion;
+	public fun <init> (Lcx/m42/superizer/diagnostics/Subject;Lcx/m42/superizer/diagnostics/Status;Ljava/lang/String;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Lcx/m42/superizer/diagnostics/Subject;Lcx/m42/superizer/diagnostics/Status;Ljava/lang/String;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcx/m42/superizer/diagnostics/Subject;
+	public final fun component2 ()Lcx/m42/superizer/diagnostics/Status;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/util/Map;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Lcx/m42/superizer/diagnostics/Subject;Lcx/m42/superizer/diagnostics/Status;Ljava/lang/String;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;)Lcx/m42/superizer/diagnostics/Finding;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/Finding;Lcx/m42/superizer/diagnostics/Subject;Lcx/m42/superizer/diagnostics/Status;Ljava/lang/String;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/Finding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActions ()Ljava/util/List;
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getEvidence ()Ljava/lang/String;
+	public final fun getFacts ()Ljava/util/Map;
+	public final fun getStatus ()Lcx/m42/superizer/diagnostics/Status;
+	public final fun getSubject ()Lcx/m42/superizer/diagnostics/Subject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/diagnostics/Finding$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/Finding$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/diagnostics/Finding;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/diagnostics/Finding;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Finding$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Inspected {
+	public static final field $stable I
+	public fun <init> (Ljava/util/List;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun copy (Ljava/util/List;Ljava/util/Map;)Lcx/m42/superizer/diagnostics/Inspected;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/Inspected;Ljava/util/List;Ljava/util/Map;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/Inspected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDevice ()Ljava/util/Map;
+	public final fun getFindings ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/diagnostics/RawDiagnosticsStrings : cx/m42/superizer/diagnostics/DiagnosticsStrings {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/RawDiagnosticsStrings;
+	public fun action (Lcx/m42/superizer/diagnostics/DiagnosticsAction;)Ljava/lang/String;
+	public fun detail (Ljava/lang/String;Ljava/util/Map;)Ljava/lang/String;
+	public fun status (Lcx/m42/superizer/diagnostics/Status;)Ljava/lang/String;
+	public fun title (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/diagnostics/SelfTestCode : java/lang/Enum {
+	public static final field AgeRoundtrip Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field Companion Lcx/m42/superizer/diagnostics/SelfTestCode$Companion;
+	public static final field EnclaveSign Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field MemoryZeroed Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field PassphraseRoundtrip Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field ReportClean Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field StorageLocation Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field VaultHardware Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field VaultNonce Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field VaultRoundtrip Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field VaultTamper Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field WrapAuthRequired Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field WrapConfirmed Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static final field WrapPasscodeClass Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getId ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/SelfTestCode;
+	public static fun values ()[Lcx/m42/superizer/diagnostics/SelfTestCode;
+}
+
+public final class cx/m42/superizer/diagnostics/SelfTestCode$Companion {
+	public final fun of (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/SelfTestCode;
+}
+
+public final class cx/m42/superizer/diagnostics/SelfTestResult {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/diagnostics/SelfTestResult$Companion;
+	public fun <init> (Ljava/util/List;JLjava/lang/String;Lcx/m42/superizer/diagnostics/DeviceFacts;)V
+	public synthetic fun <init> (Ljava/util/List;JLjava/lang/String;Lcx/m42/superizer/diagnostics/DeviceFacts;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lcx/m42/superizer/diagnostics/DeviceFacts;
+	public final fun copy (Ljava/util/List;JLjava/lang/String;Lcx/m42/superizer/diagnostics/DeviceFacts;)Lcx/m42/superizer/diagnostics/SelfTestResult;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/SelfTestResult;Ljava/util/List;JLjava/lang/String;Lcx/m42/superizer/diagnostics/DeviceFacts;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/SelfTestResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAt ()J
+	public final fun getDevice ()Lcx/m42/superizer/diagnostics/DeviceFacts;
+	public final fun getHostVersion ()Ljava/lang/String;
+	public final fun getPassed ()Z
+	public final fun getSteps ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/diagnostics/SelfTestResult$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/SelfTestResult$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/diagnostics/SelfTestResult;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/diagnostics/SelfTestResult;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/SelfTestResult$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/diagnostics/SelfTestRunner {
+	public abstract fun run (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/diagnostics/SelfTestStep {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/diagnostics/SelfTestStep$Companion;
+	public fun <init> (Ljava/lang/String;ZJLjava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;ZJLjava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun component3 ()J
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Z
+	public final fun copy (Ljava/lang/String;ZJLjava/lang/String;Z)Lcx/m42/superizer/diagnostics/SelfTestStep;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/SelfTestStep;Ljava/lang/String;ZJLjava/lang/String;ZILjava/lang/Object;)Lcx/m42/superizer/diagnostics/SelfTestStep;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getEvidence ()Ljava/lang/String;
+	public final fun getMillis ()J
+	public final fun getPassed ()Z
+	public final fun getRan ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/diagnostics/SelfTestStep$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/SelfTestStep$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/diagnostics/SelfTestStep;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/diagnostics/SelfTestStep;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/SelfTestStep$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Status : java/lang/Enum {
+	public static final field Attention Lcx/m42/superizer/diagnostics/Status;
+	public static final field Broken Lcx/m42/superizer/diagnostics/Status;
+	public static final field Companion Lcx/m42/superizer/diagnostics/Status$Companion;
+	public static final field Info Lcx/m42/superizer/diagnostics/Status;
+	public static final field Missing Lcx/m42/superizer/diagnostics/Status;
+	public static final field Ok Lcx/m42/superizer/diagnostics/Status;
+	public static final field Unsafe Lcx/m42/superizer/diagnostics/Status;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/Status;
+	public static fun values ()[Lcx/m42/superizer/diagnostics/Status;
+}
+
+public final class cx/m42/superizer/diagnostics/Status$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/diagnostics/StorageDiagnostics {
+	public abstract fun exportText ()Ljava/lang/String;
+	public abstract fun getReport ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun inspect (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun selfTest (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/diagnostics/Subject {
+	public static final field Companion Lcx/m42/superizer/diagnostics/Subject$Companion;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$AppSecrets : cx/m42/superizer/diagnostics/Subject {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/diagnostics/Subject$AppSecrets$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/Subject$AppSecrets;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/Subject$AppSecrets;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/Subject$AppSecrets;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/diagnostics/Subject$AppSecrets$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/Subject$AppSecrets$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/diagnostics/Subject$AppSecrets;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/diagnostics/Subject$AppSecrets;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$AppSecrets$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$Backup : cx/m42/superizer/diagnostics/Subject {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/Subject$Backup;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$Device : cx/m42/superizer/diagnostics/Subject {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/Subject$Device;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$HostSecrets : cx/m42/superizer/diagnostics/Subject {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/Subject$HostSecrets;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$Key : cx/m42/superizer/diagnostics/Subject {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/diagnostics/Subject$Key$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/Subject$Key;
+	public static synthetic fun copy$default (Lcx/m42/superizer/diagnostics/Subject$Key;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/diagnostics/Subject$Key;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/diagnostics/Subject$Key$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/Subject$Key$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/diagnostics/Subject$Key;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/diagnostics/Subject$Key;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$Key$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/diagnostics/Subject$SelfTest : cx/m42/superizer/diagnostics/Subject {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/diagnostics/Subject$SelfTest;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class cx/m42/superizer/event/SuperizerEvent {
@@ -1253,6 +2071,7 @@ public abstract interface class cx/m42/superizer/runtime/AppRuntime {
 	public abstract fun getApps ()Lcx/m42/superizer/runtime/AppsService;
 	public abstract fun getAuth ()Lcx/m42/superizer/runtime/AuthService;
 	public abstract fun getClock ()Lcx/m42/superizer/runtime/Clock;
+	public abstract fun getDiagnostics ()Lcx/m42/superizer/diagnostics/AppDiagnostics;
 	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
 	public abstract fun getHaptics ()Lcx/m42/superizer/runtime/HapticsService;
 	public abstract fun getHost ()Lcx/m42/superizer/runtime/HostInfo;
@@ -1262,6 +2081,7 @@ public abstract interface class cx/m42/superizer/runtime/AppRuntime {
 	public abstract fun getNetwork ()Lcx/m42/superizer/runtime/NetworkService;
 	public abstract fun getPush ()Lcx/m42/superizer/runtime/PushService;
 	public abstract fun getScope ()Lkotlinx/coroutines/CoroutineScope;
+	public abstract fun getSecrets ()Lcx/m42/superizer/runtime/StorageService;
 	public abstract fun getStorage ()Lcx/m42/superizer/runtime/StorageService;
 	public abstract fun service (Lcx/m42/superizer/runtime/ServiceKey;)Ljava/lang/Object;
 }
@@ -1320,6 +2140,20 @@ public final class cx/m42/superizer/runtime/AuthSession {
 
 public abstract interface class cx/m42/superizer/runtime/Clock {
 	public abstract fun now ()J
+}
+
+public abstract interface class cx/m42/superizer/runtime/FilePicker {
+	public static final field Companion Lcx/m42/superizer/runtime/FilePicker$Companion;
+	public abstract fun pick (Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun pick$default (Lcx/m42/superizer/runtime/FilePicker;Ljava/util/List;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/FilePicker$Companion {
+	public final fun getKey ()Lcx/m42/superizer/runtime/ServiceKey;
+}
+
+public final class cx/m42/superizer/runtime/FilePicker$DefaultImpls {
+	public static synthetic fun pick$default (Lcx/m42/superizer/runtime/FilePicker;Ljava/util/List;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class cx/m42/superizer/runtime/HapticsService {
@@ -1489,6 +2323,14 @@ public final class cx/m42/superizer/runtime/NetworkService$DefaultImpls {
 	public static synthetic fun post$default (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
+public final class cx/m42/superizer/runtime/PickedFile {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;[B)V
+	public final fun getBytes ()[B
+	public final fun getName ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/runtime/Platform : java/lang/Enum {
 	public static final field Android Lcx/m42/superizer/runtime/Platform;
 	public static final field Desktop Lcx/m42/superizer/runtime/Platform;
@@ -1554,5 +2396,920 @@ public abstract interface class cx/m42/superizer/runtime/StorageService {
 	public abstract fun keys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun set (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/secrets/SecretVault {
+	public static final field Companion Lcx/m42/superizer/secrets/SecretVault$Companion;
+	public fun getOpensSilently ()Z
+	public abstract fun open (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun seal (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/secrets/SecretVault$Companion {
+	public final fun getKey ()Lcx/m42/superizer/runtime/ServiceKey;
+}
+
+public final class cx/m42/superizer/secrets/SecretVault$DefaultImpls {
+	public static fun getOpensSilently (Lcx/m42/superizer/secrets/SecretVault;)Z
+}
+
+public final class cx/m42/superizer/secrets/SecretsCount {
+	public static final field $stable I
+	public fun <init> (II)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Lcx/m42/superizer/secrets/SecretsCount;
+	public static synthetic fun copy$default (Lcx/m42/superizer/secrets/SecretsCount;IIILjava/lang/Object;)Lcx/m42/superizer/secrets/SecretsCount;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPlain ()I
+	public final fun getSealed ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/secrets/SecretsPort {
+	public abstract fun counts (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getVault ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun reseal (Lcx/m42/superizer/secrets/SecretVault;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/secrets/SecretsUnavailableException : java/lang/Exception {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public abstract interface class cx/m42/superizer/ssh/AgentConstraint {
+}
+
+public final class cx/m42/superizer/ssh/AgentConstraint$Confirm : cx/m42/superizer/ssh/AgentConstraint {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/AgentConstraint$Confirm;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/AgentConstraint$Extension : cx/m42/superizer/ssh/AgentConstraint {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;[B)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()[B
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/AgentConstraint$Lifetime : cx/m42/superizer/ssh/AgentConstraint {
+	public static final field $stable I
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Lcx/m42/superizer/ssh/AgentConstraint$Lifetime;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/AgentConstraint$Lifetime;JILjava/lang/Object;)Lcx/m42/superizer/ssh/AgentConstraint$Lifetime;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSeconds ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/AgentIdentity {
+	public static final field $stable I
+	public fun <init> ([BLjava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getComment ()Ljava/lang/String;
+	public final fun getPublicBlob ()[B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/Chip : java/lang/Enum {
+	public static final field Companion Lcx/m42/superizer/ssh/Chip$Companion;
+	public static final field SecureEnclave Lcx/m42/superizer/ssh/Chip;
+	public static final field StrongBox Lcx/m42/superizer/ssh/Chip;
+	public static final field Tee Lcx/m42/superizer/ssh/Chip;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ssh/Chip;
+	public static fun values ()[Lcx/m42/superizer/ssh/Chip;
+}
+
+public final class cx/m42/superizer/ssh/Chip$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/GeneratedKind : java/lang/Enum {
+	public static final field EcdsaP256 Lcx/m42/superizer/ssh/GeneratedKind;
+	public static final field Ed25519 Lcx/m42/superizer/ssh/GeneratedKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ssh/GeneratedKind;
+	public static fun values ()[Lcx/m42/superizer/ssh/GeneratedKind;
+}
+
+public final class cx/m42/superizer/ssh/Grant {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/Grant$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyPurpose;Ljava/lang/String;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyPurpose;Ljava/lang/String;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-eVupTzA ()Ljava/lang/String;
+	public final fun component2-8BZtlhA ()Ljava/lang/String;
+	public final fun component3 ()Lcx/m42/superizer/ssh/KeyPurpose;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()J
+	public final fun copy-XndtSes (Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyPurpose;Ljava/lang/String;J)Lcx/m42/superizer/ssh/Grant;
+	public static synthetic fun copy-XndtSes$default (Lcx/m42/superizer/ssh/Grant;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyPurpose;Ljava/lang/String;JILjava/lang/Object;)Lcx/m42/superizer/ssh/Grant;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getApp-eVupTzA ()Ljava/lang/String;
+	public final fun getBrick ()Ljava/lang/String;
+	public final fun getGrantedAt ()J
+	public final fun getKey-8BZtlhA ()Ljava/lang/String;
+	public final fun getPurpose ()Lcx/m42/superizer/ssh/KeyPurpose;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/Grant$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/Grant$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/Grant;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/Grant;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/Grant$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/ImportOptions {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/ImportOptions$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcx/m42/superizer/ssh/UsePolicy;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun copy (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;Z)Lcx/m42/superizer/ssh/ImportOptions;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOptions;Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOptions;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getComment ()Ljava/lang/String;
+	public final fun getKeepPassphrase ()Z
+	public final fun getPolicy ()Lcx/m42/superizer/ssh/UsePolicy;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/ImportOptions$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/ImportOptions$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/ImportOptions;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/ImportOptions;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/ImportOptions$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/ssh/ImportOutcome {
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$AlreadyThere : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/ssh/SshKeyInfo;)V
+	public final fun component1 ()Lcx/m42/superizer/ssh/SshKeyInfo;
+	public final fun copy (Lcx/m42/superizer/ssh/SshKeyInfo;)Lcx/m42/superizer/ssh/ImportOutcome$AlreadyThere;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOutcome$AlreadyThere;Lcx/m42/superizer/ssh/SshKeyInfo;ILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOutcome$AlreadyThere;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKey ()Lcx/m42/superizer/ssh/SshKeyInfo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$Cancelled : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/ImportOutcome$Cancelled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$Failed : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/ssh/ImportOutcome$Failed;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOutcome$Failed;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOutcome$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getEvidence ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$Imported : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/ssh/SshKeyInfo;)V
+	public final fun component1 ()Lcx/m42/superizer/ssh/SshKeyInfo;
+	public final fun copy (Lcx/m42/superizer/ssh/SshKeyInfo;)Lcx/m42/superizer/ssh/ImportOutcome$Imported;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOutcome$Imported;Lcx/m42/superizer/ssh/SshKeyInfo;ILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOutcome$Imported;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKey ()Lcx/m42/superizer/ssh/SshKeyInfo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$NeedsNewPassphrase : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lcx/m42/superizer/ssh/ImportOutcome$NeedsNewPassphrase;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOutcome$NeedsNewPassphrase;IILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOutcome$NeedsNewPassphrase;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLength ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$NoScreenLock : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/ImportOutcome$NoScreenLock;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$Rejected : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/ssh/ImportRefusal;)V
+	public final fun component1 ()Lcx/m42/superizer/ssh/ImportRefusal;
+	public final fun copy (Lcx/m42/superizer/ssh/ImportRefusal;)Lcx/m42/superizer/ssh/ImportOutcome$Rejected;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOutcome$Rejected;Lcx/m42/superizer/ssh/ImportRefusal;ILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOutcome$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRefusal ()Lcx/m42/superizer/ssh/ImportRefusal;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportOutcome$WrongPassphrase : cx/m42/superizer/ssh/ImportOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/ImportOutcome$WrongPassphrase;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/ImportRefusal : java/lang/Enum {
+	public static final field Companion Lcx/m42/superizer/ssh/ImportRefusal$Companion;
+	public static final field Corrupted Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field Dsa Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field HardwareToken Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field NotAKey Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field OldFormat Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field PublicKeyOnly Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field PuttyFormat Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field RsaTooShort Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field UnsupportedCipher Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field UnsupportedKdf Lcx/m42/superizer/ssh/ImportRefusal;
+	public static final field UnsupportedType Lcx/m42/superizer/ssh/ImportRefusal;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ssh/ImportRefusal;
+	public static fun values ()[Lcx/m42/superizer/ssh/ImportRefusal;
+}
+
+public final class cx/m42/superizer/ssh/ImportRefusal$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/Inspection {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/Inspection$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Integer;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/ImportRefusal;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Integer;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/ImportRefusal;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2-EDj_nkQ ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/Integer;
+	public final fun component7 ()Lcx/m42/superizer/ssh/KeyStorage;
+	public final fun component8 ()Lcx/m42/superizer/ssh/ImportRefusal;
+	public final fun component9 ()Z
+	public final fun copy-egYmCEo (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Integer;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/ImportRefusal;Z)Lcx/m42/superizer/ssh/Inspection;
+	public static synthetic fun copy-egYmCEo$default (Lcx/m42/superizer/ssh/Inspection;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/Integer;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/ImportRefusal;ZILjava/lang/Object;)Lcx/m42/superizer/ssh/Inspection;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAlreadyThere ()Z
+	public final fun getComment ()Ljava/lang/String;
+	public final fun getEncrypted ()Z
+	public final fun getId-EDj_nkQ ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getRefusal ()Lcx/m42/superizer/ssh/ImportRefusal;
+	public final fun getRounds ()Ljava/lang/Integer;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getWouldBe ()Lcx/m42/superizer/ssh/KeyStorage;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/Inspection$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/Inspection$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/Inspection;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/Inspection;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/Inspection$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyCapability : java/lang/Enum {
+	public static final field DecryptAge Lcx/m42/superizer/ssh/KeyCapability;
+	public static final field Sign Lcx/m42/superizer/ssh/KeyCapability;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ssh/KeyCapability;
+	public static fun values ()[Lcx/m42/superizer/ssh/KeyCapability;
+}
+
+public final class cx/m42/superizer/ssh/KeyId {
+	public static final field Companion Lcx/m42/superizer/ssh/KeyId$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcx/m42/superizer/ssh/KeyId;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getFingerprint ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/KeyId$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyId$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-hLAju3Q (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-p6DlFZE (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyId$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyOperation : java/lang/Enum {
+	public static final field AgentSign Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Decrypt Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Delete Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Generate Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Grant Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Import Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Rekey Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Revoke Lcx/m42/superizer/ssh/KeyOperation;
+	public static final field Sign Lcx/m42/superizer/ssh/KeyOperation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ssh/KeyOperation;
+	public static fun values ()[Lcx/m42/superizer/ssh/KeyOperation;
+}
+
+public abstract interface class cx/m42/superizer/ssh/KeyOrigin {
+	public static final field Companion Lcx/m42/superizer/ssh/KeyOrigin$Companion;
+}
+
+public final class cx/m42/superizer/ssh/KeyOrigin$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyOrigin$Generated : cx/m42/superizer/ssh/KeyOrigin {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/KeyOrigin$Generated$Companion;
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lcx/m42/superizer/ssh/KeyOrigin$Generated;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/KeyOrigin$Generated;ZILjava/lang/Object;)Lcx/m42/superizer/ssh/KeyOrigin$Generated;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAttested ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/KeyOrigin$Generated$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyOrigin$Generated$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/KeyOrigin$Generated;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/KeyOrigin$Generated;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyOrigin$Generated$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyOrigin$Imported : cx/m42/superizer/ssh/KeyOrigin {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyOrigin$Imported;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class cx/m42/superizer/ssh/KeyPurpose {
+	public static final field Companion Lcx/m42/superizer/ssh/KeyPurpose$Companion;
+}
+
+public final class cx/m42/superizer/ssh/KeyPurpose$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyPurpose$Decrypt : cx/m42/superizer/ssh/KeyPurpose {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyPurpose$Decrypt;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/KeyPurpose$Sign : cx/m42/superizer/ssh/KeyPurpose {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/KeyPurpose$Sign$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/ssh/KeyPurpose$Sign;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/KeyPurpose$Sign;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ssh/KeyPurpose$Sign;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNamespace ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/KeyPurpose$Sign$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyPurpose$Sign$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/KeyPurpose$Sign;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/KeyPurpose$Sign;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyPurpose$Sign$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/ssh/KeyStorage {
+	public static final field Companion Lcx/m42/superizer/ssh/KeyStorage$Companion;
+	public abstract fun getLevel ()I
+}
+
+public final class cx/m42/superizer/ssh/KeyStorage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyStorage$SealedByChip : cx/m42/superizer/ssh/KeyStorage {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/KeyStorage$SealedByChip$Companion;
+	public fun <init> (Lcx/m42/superizer/ssh/Chip;)V
+	public final fun component1 ()Lcx/m42/superizer/ssh/Chip;
+	public final fun copy (Lcx/m42/superizer/ssh/Chip;)Lcx/m42/superizer/ssh/KeyStorage$SealedByChip;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/KeyStorage$SealedByChip;Lcx/m42/superizer/ssh/Chip;ILjava/lang/Object;)Lcx/m42/superizer/ssh/KeyStorage$SealedByChip;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getLevel ()I
+	public final fun getUnder ()Lcx/m42/superizer/ssh/Chip;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/KeyStorage$SealedByChip$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyStorage$SealedByChip$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/KeyStorage$SealedByChip;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/KeyStorage$SealedByChip;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyStorage$SealedByChip$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyStorage$SealedByPassphrase : cx/m42/superizer/ssh/KeyStorage {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyStorage$SealedByPassphrase;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getLevel ()I
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/KeyStorage$SecureEnclave : cx/m42/superizer/ssh/KeyStorage {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyStorage$SecureEnclave;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getLevel ()I
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/KeyStorage$StrongBox : cx/m42/superizer/ssh/KeyStorage {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyStorage$StrongBox;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getLevel ()I
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/KeyStorage$Tee : cx/m42/superizer/ssh/KeyStorage {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyStorage$Tee;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getLevel ()I
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/KeyringDevice {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/KeyringDevice$Companion;
+	public fun <init> (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcx/m42/superizer/runtime/Platform;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()Z
+	public final fun component7 ()Z
+	public final fun component8 ()Ljava/util/Set;
+	public final fun copy (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;)Lcx/m42/superizer/ssh/KeyringDevice;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/KeyringDevice;Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;ILjava/lang/Object;)Lcx/m42/superizer/ssh/KeyringDevice;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurve25519InKeystore ()Z
+	public final fun getLevels ()Ljava/util/Set;
+	public final fun getPlatform ()Lcx/m42/superizer/runtime/Platform;
+	public final fun getScreenLockSet ()Z
+	public final fun getSdk ()Ljava/lang/Integer;
+	public final fun getSecureEnclave ()Z
+	public final fun getStrongBox ()Z
+	public final fun getTee ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/KeyringDevice$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/KeyringDevice$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/KeyringDevice;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/KeyringDevice;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/KeyringDevice$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/ssh/SshAgent {
+	public abstract fun add ([B[CLjava/util/Set;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun extension (Ljava/lang/String;[BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun identities (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun lock ([CLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun remove ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun removeAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun sign ([B[BILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun unlock ([CLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/ssh/SshKeyAdmin {
+	public abstract fun delete-xdMnVh4 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun generate (Lcx/m42/superizer/ssh/GeneratedKind;Lcx/m42/superizer/ssh/ImportOptions;[CLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun generate$default (Lcx/m42/superizer/ssh/SshKeyAdmin;Lcx/m42/superizer/ssh/GeneratedKind;Lcx/m42/superizer/ssh/ImportOptions;[CLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun getDevice ()Lcx/m42/superizer/ssh/KeyringDevice;
+	public abstract fun getKeys ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun grants-n_GncVA (Ljava/lang/String;)Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun import ([B[CLcx/m42/superizer/ssh/ImportOptions;[CLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun import$default (Lcx/m42/superizer/ssh/SshKeyAdmin;[B[CLcx/m42/superizer/ssh/ImportOptions;[CLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun inspect ([B)Lcx/m42/superizer/ssh/Inspection;
+	public abstract fun journal-n_GncVA (Ljava/lang/String;)Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun lockAll ()V
+	public abstract fun rekey-fYNwk44 (Ljava/lang/String;[CLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun rename-fYNwk44 (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun revoke (Lcx/m42/superizer/ssh/Grant;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/ssh/SshKeyAdmin$DefaultImpls {
+	public static synthetic fun generate$default (Lcx/m42/superizer/ssh/SshKeyAdmin;Lcx/m42/superizer/ssh/GeneratedKind;Lcx/m42/superizer/ssh/ImportOptions;[CLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun import$default (Lcx/m42/superizer/ssh/SshKeyAdmin;[B[CLcx/m42/superizer/ssh/ImportOptions;[CLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/ssh/SshKeyInfo {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/SshKeyInfo$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-8BZtlhA ()Ljava/lang/String;
+	public final fun component10 ()J
+	public final fun component11 ()Z
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lcx/m42/superizer/ssh/KeyStorage;
+	public final fun component7 ()Lcx/m42/superizer/ssh/UsePolicy;
+	public final fun component8 ()Lcx/m42/superizer/ssh/KeyOrigin;
+	public final fun component9 ()Ljava/util/Set;
+	public final fun copy-Mh4sMak (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZ)Lcx/m42/superizer/ssh/SshKeyInfo;
+	public static synthetic fun copy-Mh4sMak$default (Lcx/m42/superizer/ssh/SshKeyInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZILjava/lang/Object;)Lcx/m42/superizer/ssh/SshKeyInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCan ()Ljava/util/Set;
+	public final fun getComment ()Ljava/lang/String;
+	public final fun getCreatedAt ()J
+	public final fun getId-8BZtlhA ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOrigin ()Lcx/m42/superizer/ssh/KeyOrigin;
+	public final fun getPolicy ()Lcx/m42/superizer/ssh/UsePolicy;
+	public final fun getPublicKey ()Ljava/lang/String;
+	public final fun getStorage ()Lcx/m42/superizer/ssh/KeyStorage;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getUsable ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/SshKeyInfo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshKeyInfo$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/SshKeyInfo;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/SshKeyInfo;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/SshKeyInfo$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/ssh/SshKeyring {
+	public static final field Companion Lcx/m42/superizer/ssh/SshKeyring$Companion;
+	public abstract fun choose (Lcx/m42/superizer/ssh/KeyPurpose;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun decrypt ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getKeys ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun sign-dCUM3xA (Ljava/lang/String;Ljava/lang/String;[BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/ssh/SshKeyring$Companion {
+	public final fun getKey ()Lcx/m42/superizer/runtime/ServiceKey;
+}
+
+public abstract interface class cx/m42/superizer/ssh/SshOutcome {
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$Busy : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshOutcome$Busy;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$Cancelled : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshOutcome$Cancelled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$Failed : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/ssh/SshOutcome$Failed;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/SshOutcome$Failed;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ssh/SshOutcome$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getEvidence ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$Locked : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshOutcome$Locked;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$NoKey : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshOutcome$NoKey;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$NotAllowed : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/ssh/SshOutcome$NotAllowed;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/SshOutcome$NotAllowed;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ssh/SshOutcome$NotAllowed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$Ok : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lcx/m42/superizer/ssh/SshOutcome$Ok;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/SshOutcome$Ok;Ljava/lang/Object;ILjava/lang/Object;)Lcx/m42/superizer/ssh/SshOutcome$Ok;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$Refused : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshOutcome$Refused;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshOutcome$Unusable : cx/m42/superizer/ssh/SshOutcome {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshOutcome$Unusable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/SshSignature {
+	public static final field Companion Lcx/m42/superizer/ssh/SshSignature$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcx/m42/superizer/ssh/SshSignature;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getArmored ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/SshSignature$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/SshSignature$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-qhOLXoU (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-kLmVJS0 (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/SshSignature$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/TypesKt {
+	public static final field MIN_PASSPHRASE I
+}
+
+public abstract interface class cx/m42/superizer/ssh/UsePolicy {
+	public static final field Companion Lcx/m42/superizer/ssh/UsePolicy$Companion;
+}
+
+public final class cx/m42/superizer/ssh/UsePolicy$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/UsePolicy$EveryUse : cx/m42/superizer/ssh/UsePolicy {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/UsePolicy$EveryUse;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ssh/UsePolicy$Session : cx/m42/superizer/ssh/UsePolicy {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/UsePolicy$Session$Companion;
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lcx/m42/superizer/ssh/UsePolicy$Session;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/UsePolicy$Session;IILjava/lang/Object;)Lcx/m42/superizer/ssh/UsePolicy$Session;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSeconds ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/UsePolicy$Session$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/UsePolicy$Session$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/UsePolicy$Session;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/UsePolicy$Session;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/UsePolicy$Session$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/UseRecord {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/ssh/UseRecord$Companion;
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyOperation;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyOperation;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2-oQ6rsvY ()Ljava/lang/String;
+	public final fun component3-8BZtlhA ()Ljava/lang/String;
+	public final fun component4 ()Lcx/m42/superizer/ssh/KeyOperation;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun copy-RGnglfM (JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyOperation;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/ssh/UseRecord;
+	public static synthetic fun copy-RGnglfM$default (Lcx/m42/superizer/ssh/UseRecord;JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyOperation;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ssh/UseRecord;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getApp-oQ6rsvY ()Ljava/lang/String;
+	public final fun getAt ()J
+	public final fun getDigest ()Ljava/lang/String;
+	public final fun getKey-8BZtlhA ()Ljava/lang/String;
+	public final fun getNamespace ()Ljava/lang/String;
+	public final fun getOperation ()Lcx/m42/superizer/ssh/KeyOperation;
+	public final fun getOutcome ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/ssh/UseRecord$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ssh/UseRecord$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/ssh/UseRecord;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/ssh/UseRecord;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/ssh/UseRecord$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 

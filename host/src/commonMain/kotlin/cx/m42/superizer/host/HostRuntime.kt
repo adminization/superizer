@@ -1,6 +1,8 @@
 package cx.m42.superizer.host
 
 import cx.m42.superizer.app.AppId
+import cx.m42.superizer.diagnostics.AppDiagnostics
+import cx.m42.superizer.diagnostics.Finding
 import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.host.platform.PlatformLifecycle
 import cx.m42.superizer.host.push.RoutedPush
@@ -23,6 +25,7 @@ import cx.m42.superizer.runtime.PushService
 import cx.m42.superizer.runtime.ServiceKey
 import cx.m42.superizer.runtime.StorageService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -50,9 +53,32 @@ internal class DefaultAppRuntime(
     override val lifecycle: StateFlow<HostLifecycle>,
     override val clock: Clock,
     override val scope: CoroutineScope,
+    override val secrets: StorageService,
+    override val diagnostics: AppDiagnostics,
     private val services: ServiceRegistry,
 ) : AppRuntime {
-    override fun <T : Any> service(key: ServiceKey<T>): T? = services.get(key)
+    override fun <T : Any> service(key: ServiceKey<T>): T? = services.get(key, appId)
+}
+
+/** For a factory built without a host behind it (a standalone wrapper): secrets that last as long as the process. */
+private class InMemorySecrets : StorageService {
+    private val values = mutableMapOf<String, String>()
+
+    override suspend fun get(key: String): String? = values[key]
+
+    override suspend fun set(key: String, value: String) {
+        values[key] = value
+    }
+
+    override suspend fun remove(key: String) {
+        values.remove(key)
+    }
+
+    override suspend fun keys(): Set<String> = values.keys.toSet()
+}
+
+private object NoDiagnostics : AppDiagnostics {
+    override val findings: StateFlow<List<Finding>> = MutableStateFlow(emptyList())
 }
 
 /**
@@ -92,6 +118,8 @@ public class DefaultHostRuntimeFactory(
     private val pushFor: (AppId, Logger) -> RoutedPush,
     private val navigationFor: (AppId) -> NavigationService,
     private val lifecycle: StateFlow<HostLifecycle> = PlatformLifecycle.state,
+    private val secretsFor: (AppId) -> StorageService = { InMemorySecrets() },
+    private val diagnosticsFor: (AppId) -> AppDiagnostics = { NoDiagnostics },
 ) : HostRuntimeFactory {
 
     override fun createApp(appId: AppId, scope: CoroutineScope): AppRuntime {
@@ -112,6 +140,8 @@ public class DefaultHostRuntimeFactory(
             lifecycle = lifecycle,
             clock = clock,
             scope = scope,
+            secrets = secretsFor(appId),
+            diagnostics = diagnosticsFor(appId),
             services = services,
         )
     }

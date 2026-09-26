@@ -31,6 +31,32 @@ public final class cx/m42/superizer/testing/AppTestScope {
 	public final fun type (Ljava/lang/String;Ljava/lang/String;)V
 }
 
+public final class cx/m42/superizer/testing/Canary {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/testing/Canary$Companion;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSize ()I
+	public final fun reveal ()[B
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/testing/Canary$Companion {
+	public final fun getED25519_SEED ()Lcx/m42/superizer/testing/Canary;
+	public final fun getPASSPHRASE ()Lcx/m42/superizer/testing/Canary;
+	public final fun getPLAINTEXT ()Lcx/m42/superizer/testing/Canary;
+	public final fun masked (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/testing/Canary;
+	public final fun of (Ljava/lang/String;[B)Lcx/m42/superizer/testing/Canary;
+}
+
+public final class cx/m42/superizer/testing/FakeAppDiagnostics : cx/m42/superizer/diagnostics/AppDiagnostics {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getFindings ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getFindings ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
 public final class cx/m42/superizer/testing/FakeAppRuntime : cx/m42/superizer/runtime/InstanceRuntime {
 	public static final field $stable I
 	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;Ljava/lang/String;ZLjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -44,6 +70,8 @@ public final class cx/m42/superizer/testing/FakeAppRuntime : cx/m42/superizer/ru
 	public fun getAuth ()Lcx/m42/superizer/testing/FakeAuth;
 	public synthetic fun getClock ()Lcx/m42/superizer/runtime/Clock;
 	public fun getClock ()Lcx/m42/superizer/testing/FakeClock;
+	public synthetic fun getDiagnostics ()Lcx/m42/superizer/diagnostics/AppDiagnostics;
+	public fun getDiagnostics ()Lcx/m42/superizer/testing/FakeAppDiagnostics;
 	public final fun getEmittedEvents ()Lkotlinx/coroutines/flow/MutableSharedFlow;
 	public fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
 	public synthetic fun getHaptics ()Lcx/m42/superizer/runtime/HapticsService;
@@ -62,6 +90,8 @@ public final class cx/m42/superizer/testing/FakeAppRuntime : cx/m42/superizer/ru
 	public synthetic fun getPush ()Lcx/m42/superizer/runtime/PushService;
 	public fun getPush ()Lcx/m42/superizer/testing/FakePush;
 	public fun getScope ()Lkotlinx/coroutines/CoroutineScope;
+	public synthetic fun getSecrets ()Lcx/m42/superizer/runtime/StorageService;
+	public fun getSecrets ()Lcx/m42/superizer/testing/FakeSecrets;
 	public final fun getServices ()Ljava/util/Map;
 	public synthetic fun getStorage ()Lcx/m42/superizer/runtime/StorageService;
 	public fun getStorage ()Lcx/m42/superizer/testing/InMemoryStorage;
@@ -113,6 +143,17 @@ public final class cx/m42/superizer/testing/FakeDeviceAuthenticator : cx/m42/sup
 	public final fun hold ()Lkotlinx/coroutines/CompletableDeferred;
 	public final fun setAnswer (Lcx/m42/superizer/lock/AuthOutcome;)V
 	public final fun setAvailability (Lcx/m42/superizer/lock/AuthAvailability;)V
+}
+
+public final class cx/m42/superizer/testing/FakeFilePicker : cx/m42/superizer/runtime/FilePicker {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcx/m42/superizer/runtime/PickedFile;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/PickedFile;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAsked ()Ljava/util/List;
+	public final fun getNext ()Lcx/m42/superizer/runtime/PickedFile;
+	public fun pick (Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setNext (Lcx/m42/superizer/runtime/PickedFile;)V
 }
 
 public final class cx/m42/superizer/testing/FakeHostRuntimeFactory : cx/m42/superizer/runtime/HostRuntimeFactory {
@@ -168,6 +209,74 @@ public final class cx/m42/superizer/testing/FakePush : cx/m42/superizer/runtime/
 	public fun unsubscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class cx/m42/superizer/testing/FakeSecretVault : cx/m42/superizer/secrets/SecretVault {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAsked ()I
+	public final fun getDeclines ()Z
+	public final fun getFailsToSeal ()Z
+	public final fun getKeyLost ()Z
+	public fun getOpensSilently ()Z
+	public final fun getSealed ()I
+	public final fun getSilent ()Z
+	public fun open (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun seal (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setDeclines (Z)V
+	public final fun setFailsToSeal (Z)V
+	public final fun setKeyLost (Z)V
+	public final fun setSilent (Z)V
+}
+
+public final class cx/m42/superizer/testing/FakeSecrets : cx/m42/superizer/runtime/StorageService {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun get (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getEntries ()Ljava/util/Map;
+	public final fun getFailsToSeal ()Z
+	public final fun getUnavailable ()Z
+	public fun keys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun set (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setFailsToSeal (Z)V
+	public final fun setUnavailable (Z)V
+}
+
+public final class cx/m42/superizer/testing/FakeSshKeyring : cx/m42/superizer/ssh/SshKeyring {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun choose (Lcx/m42/superizer/ssh/KeyPurpose;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun decrypt ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getCalls ()Ljava/util/List;
+	public fun getKeys ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getKeys ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getOnChoose ()Lkotlin/jvm/functions/Function2;
+	public final fun getOnDecrypt ()Lkotlin/jvm/functions/Function2;
+	public final fun getOnSign ()Lkotlin/jvm/functions/Function4;
+	public final fun setOnChoose (Lkotlin/jvm/functions/Function2;)V
+	public final fun setOnDecrypt (Lkotlin/jvm/functions/Function2;)V
+	public final fun setOnSign (Lkotlin/jvm/functions/Function4;)V
+	public fun sign-dCUM3xA (Ljava/lang/String;Ljava/lang/String;[BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/FakeStorageDiagnostics : cx/m42/superizer/diagnostics/StorageDiagnostics {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcx/m42/superizer/diagnostics/DiagnosticsReport;)V
+	public synthetic fun <init> (Lcx/m42/superizer/diagnostics/DiagnosticsReport;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun exportText ()Ljava/lang/String;
+	public fun getReport ()Lkotlinx/coroutines/flow/MutableStateFlow;
+	public synthetic fun getReport ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getSelfTests ()I
+	public fun inspect (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun selfTest (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class cx/m42/superizer/testing/FakeUserPresence : cx/m42/superizer/lock/UserPresence {
 	public static final field $stable I
 	public fun <init> ()V
@@ -204,6 +313,29 @@ public final class cx/m42/superizer/testing/InMemoryStorage : cx/m42/superizer/r
 	public fun keys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun set (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/LeakFinding {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;I)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()I
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;I)Lcx/m42/superizer/testing/LeakFinding;
+	public static synthetic fun copy$default (Lcx/m42/superizer/testing/LeakFinding;Ljava/lang/String;Ljava/lang/String;IILjava/lang/Object;)Lcx/m42/superizer/testing/LeakFinding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanary ()Ljava/lang/String;
+	public final fun getEncoding ()Ljava/lang/String;
+	public final fun getOffset ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/testing/LeakScanner {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/testing/LeakScanner;
+	public final fun scan (Ljava/lang/String;Ljava/util/List;)Ljava/util/List;
+	public final fun scan ([BLjava/util/List;)Ljava/util/List;
 }
 
 public final class cx/m42/superizer/testing/RecordingAnalytics : cx/m42/superizer/runtime/AnalyticsService {

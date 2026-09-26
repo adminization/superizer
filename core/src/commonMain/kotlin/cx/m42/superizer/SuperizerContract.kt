@@ -14,7 +14,11 @@ package cx.m42.superizer
  * 2 added `AppManifest.protection`, the lock port and `UserPresence` (06, D138). An app that
  * declares protection has to ask for 2, so that an older host rejects it rather than showing it
  * unlocked.
+ *
+ * 3 added `runtime.secrets` (values the host seals itself), `runtime.diagnostics` and
+ * `AppManifest.backup` (Unitool ssh-new 05–07). An app that uses any of them asks for 3; one that
+ * declares a backup policy has to, or the registry turns it away.
  */
 public object SuperizerContract {
-    public const val VERSION: Int = 2
+    public const val VERSION: Int = 3
 }
