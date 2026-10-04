@@ -94,6 +94,11 @@ public data class KeyringDevice(
     val screenLockSet: Boolean = false,
     /** The levels a key can be kept at here, right now. Always contains 3. */
     val levels: Set<Int> = setOf(3),
+    /**
+     * A biometric of the strongest class is enrolled — Android's `BIOMETRIC_STRONG`: a fingerprint,
+     * or a face on the phones whose face unlock is that class — so a key can be bound to it alone.
+     */
+    val strongBiometric: Boolean = false,
 )
 
 public enum class KeyCapability { Sign, DecryptAge }
@@ -151,6 +156,8 @@ public data class SshKeyInfo(
     val createdAt: Long,
     /** False once the chip dropped the key — the screen lock was removed (01 §5.7). The public half stays. */
     val usable: Boolean = true,
+    /** Only a strong biometric opens it, not the screen lock's PIN; a new enrolment makes it unusable. */
+    val biometricOnly: Boolean = false,
 )
 
 /** What a file is, before any passphrase (02 §5, §8). */
@@ -208,6 +215,19 @@ public data class ImportOptions(
      * no other lock, so it is ignored there (05).
      */
     val keepPassphrase: Boolean = false,
+    /**
+     * The level the person chose (Unitool ssh-new 09, D237): 1 in the chip, 2 sealed by a key from
+     * it, 3 under the key's passphrase. Null takes the best this device offers for the key. A level
+     * the device or the key cannot have is `ImportOutcome.Failed("level.unavailable")`, and nothing
+     * is stored.
+     */
+    val level: Int? = null,
+    /**
+     * Levels 1–2 where [KeyringDevice.strongBiometric]: only a strong biometric opens the key — the
+     * screen lock's PIN does not — and enrolling a new one makes the key unusable, so a person who
+     * knows the PIN cannot add their own finger to it. Elsewhere `Failed("biometric.unavailable")`.
+     */
+    val biometricOnly: Boolean = false,
 )
 
 public sealed interface ImportOutcome {

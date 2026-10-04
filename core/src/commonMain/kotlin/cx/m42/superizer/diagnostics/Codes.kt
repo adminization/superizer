@@ -34,6 +34,12 @@ public enum class DiagnosticsCode(
     KeyLevel2("key.level2", Status.Ok),
     KeyLevel3("key.level3", Status.Info, listOf(Rekey)),
     KeyLevel3Browser("key.level3.browser", Status.Unsafe, listOf(ShareReport)),
+    /** Level 3 on a device whose chip could hold it — the person's choice, or a key from before the chip (ssh-new 09, D242). */
+    KeyLevel3ChipAvailable("key.level3.chip-available", Status.Info),
+    /** In the chip without the key's passphrase: whoever unlocks the device can use it (ssh-new 09, D244). */
+    KeyNoSecondLock("key.no-second-lock", Status.Attention),
+    /** Only a strong biometric opens the key, not the screen lock (ssh-new 09, D245). */
+    KeyBiometricOnly("key.biometric-only", Status.Ok),
     KeyUnusable("key.unusable", Status.Broken, listOf(ImportKeyAgain)),
     KeySecretsAnchor("key.secrets-anchor", Status.Info),
     KeySessionPolicy("key.session-policy", Status.Attention),

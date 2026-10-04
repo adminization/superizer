@@ -1015,10 +1015,13 @@ public final class cx/m42/superizer/diagnostics/DiagnosticsCode : java/lang/Enum
 	public static final field DeviceEmulator Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field DeviceNoScreenLock Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field DeviceNoSecureHardware Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyBiometricOnly Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field KeyLevel1 Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field KeyLevel2 Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field KeyLevel3 Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field KeyLevel3Browser Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyLevel3ChipAvailable Lcx/m42/superizer/diagnostics/DiagnosticsCode;
+	public static final field KeyNoSecondLock Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field KeySecretsAnchor Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field KeySessionPolicy Lcx/m42/superizer/diagnostics/DiagnosticsCode;
 	public static final field KeyUnusable Lcx/m42/superizer/diagnostics/DiagnosticsCode;
@@ -2547,16 +2550,20 @@ public final class cx/m42/superizer/ssh/ImportOptions {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/superizer/ssh/ImportOptions$Companion;
 	public fun <init> ()V
-	public fun <init> (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;Z)V
-	public synthetic fun <init> (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZLjava/lang/Integer;Z)V
+	public synthetic fun <init> (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZLjava/lang/Integer;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lcx/m42/superizer/ssh/UsePolicy;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Z
-	public final fun copy (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;Z)Lcx/m42/superizer/ssh/ImportOptions;
-	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOptions;Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOptions;
+	public final fun component4 ()Ljava/lang/Integer;
+	public final fun component5 ()Z
+	public final fun copy (Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZLjava/lang/Integer;Z)Lcx/m42/superizer/ssh/ImportOptions;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/ImportOptions;Lcx/m42/superizer/ssh/UsePolicy;Ljava/lang/String;ZLjava/lang/Integer;ZILjava/lang/Object;)Lcx/m42/superizer/ssh/ImportOptions;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBiometricOnly ()Z
 	public final fun getComment ()Ljava/lang/String;
 	public final fun getKeepPassphrase ()Z
+	public final fun getLevel ()Ljava/lang/Integer;
 	public final fun getPolicy ()Lcx/m42/superizer/ssh/UsePolicy;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -2964,8 +2971,8 @@ public final class cx/m42/superizer/ssh/KeyStorage$Tee : cx/m42/superizer/ssh/Ke
 public final class cx/m42/superizer/ssh/KeyringDevice {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/superizer/ssh/KeyringDevice$Companion;
-	public fun <init> (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;)V
-	public synthetic fun <init> (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;Z)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lcx/m42/superizer/runtime/Platform;
 	public final fun component2 ()Ljava/lang/Integer;
 	public final fun component3 ()Z
@@ -2974,8 +2981,9 @@ public final class cx/m42/superizer/ssh/KeyringDevice {
 	public final fun component6 ()Z
 	public final fun component7 ()Z
 	public final fun component8 ()Ljava/util/Set;
-	public final fun copy (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;)Lcx/m42/superizer/ssh/KeyringDevice;
-	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/KeyringDevice;Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;ILjava/lang/Object;)Lcx/m42/superizer/ssh/KeyringDevice;
+	public final fun component9 ()Z
+	public final fun copy (Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;Z)Lcx/m42/superizer/ssh/KeyringDevice;
+	public static synthetic fun copy$default (Lcx/m42/superizer/ssh/KeyringDevice;Lcx/m42/superizer/runtime/Platform;Ljava/lang/Integer;ZZZZZLjava/util/Set;ZILjava/lang/Object;)Lcx/m42/superizer/ssh/KeyringDevice;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCurve25519InKeystore ()Z
 	public final fun getLevels ()Ljava/util/Set;
@@ -2983,6 +2991,7 @@ public final class cx/m42/superizer/ssh/KeyringDevice {
 	public final fun getScreenLockSet ()Z
 	public final fun getSdk ()Ljava/lang/Integer;
 	public final fun getSecureEnclave ()Z
+	public final fun getStrongBiometric ()Z
 	public final fun getStrongBox ()Z
 	public final fun getTee ()Z
 	public fun hashCode ()I
@@ -3041,11 +3050,12 @@ public final class cx/m42/superizer/ssh/SshKeyAdmin$DefaultImpls {
 public final class cx/m42/superizer/ssh/SshKeyInfo {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/superizer/ssh/SshKeyInfo$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZZLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-8BZtlhA ()Ljava/lang/String;
 	public final fun component10 ()J
 	public final fun component11 ()Z
+	public final fun component12 ()Z
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/String;
@@ -3054,9 +3064,10 @@ public final class cx/m42/superizer/ssh/SshKeyInfo {
 	public final fun component7 ()Lcx/m42/superizer/ssh/UsePolicy;
 	public final fun component8 ()Lcx/m42/superizer/ssh/KeyOrigin;
 	public final fun component9 ()Ljava/util/Set;
-	public final fun copy-Mh4sMak (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZ)Lcx/m42/superizer/ssh/SshKeyInfo;
-	public static synthetic fun copy-Mh4sMak$default (Lcx/m42/superizer/ssh/SshKeyInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZILjava/lang/Object;)Lcx/m42/superizer/ssh/SshKeyInfo;
+	public final fun copy-2Pxazdk (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZZ)Lcx/m42/superizer/ssh/SshKeyInfo;
+	public static synthetic fun copy-2Pxazdk$default (Lcx/m42/superizer/ssh/SshKeyInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/ssh/KeyStorage;Lcx/m42/superizer/ssh/UsePolicy;Lcx/m42/superizer/ssh/KeyOrigin;Ljava/util/Set;JZZILjava/lang/Object;)Lcx/m42/superizer/ssh/SshKeyInfo;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBiometricOnly ()Z
 	public final fun getCan ()Ljava/util/Set;
 	public final fun getComment ()Ljava/lang/String;
 	public final fun getCreatedAt ()J
