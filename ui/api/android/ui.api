@@ -44,6 +44,7 @@ public final class cx/m42/superizer/ui/components/IconsKt {
 	public static final fun PlusIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun QrIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun SettingsIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
+	public static final fun StarIcon-iPRSM58 (JFLandroidx/compose/runtime/Composer;II)V
 	public static final fun getIconSize ()F
 }
 
@@ -204,7 +205,6 @@ public final class cx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShell
 	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShellKt;
 	public fun <init> ()V
 	public final fun getLambda$-1261979799$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$1235512928$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public abstract interface class cx/m42/superizer/ui/shell/ShellDestination {

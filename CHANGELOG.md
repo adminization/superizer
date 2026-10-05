@@ -9,6 +9,10 @@ changes incompatibly. A release that bumps one does not automatically bump the o
   the host's above the promo code on Activate, the fourth slot after `HostSection`, `HostScreen`
   and `HomeBanner`. Unitool's Premium offer is the first. A screen the banner opens comes back to
   Activate. The contract is unchanged, because apps never see the slot.
+- `ActivateEntry` and `SuperizerBuilder.activateEntry`: the host's own icon and title for Activate,
+  used for the drawer button and the bar. Without one, Activate keeps the QR glyph and "Activate".
+  Unitool calls it Premium, with a star.
+- `StarIcon`, and `AppIcon.Named("star")` in the glyph pack.
 
 ## 0.5.0 — contract 4
 

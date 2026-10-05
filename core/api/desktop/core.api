@@ -2,6 +2,11 @@ public abstract interface class cx/m42/superizer/ActivateBanner {
 	public abstract fun Content (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)Z
 }
 
+public abstract interface class cx/m42/superizer/ActivateEntry {
+	public abstract fun getIcon ()Lcx/m42/superizer/app/AppIcon;
+	public abstract fun title (Ljava/lang/String;)Ljava/lang/String;
+}
+
 public abstract interface class cx/m42/superizer/ActivationPort {
 	public abstract fun apply-0E7RQCE (Lcx/m42/superizer/activation/Activation;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun fromDeepLink (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -110,6 +115,7 @@ public abstract interface class cx/m42/superizer/Superizer {
 	public static final field Companion Lcx/m42/superizer/Superizer$Companion;
 	public abstract fun addToHome-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getActivateBanners ()Ljava/util/List;
+	public fun getActivateEntry ()Lcx/m42/superizer/ActivateEntry;
 	public abstract fun getActivation ()Lcx/m42/superizer/ActivationPort;
 	public abstract fun getBackup ()Lcx/m42/superizer/backup/BackupPort;
 	public fun getCodeScreens ()Ljava/util/Map;
@@ -137,6 +143,7 @@ public final class cx/m42/superizer/Superizer$Companion {
 
 public final class cx/m42/superizer/Superizer$DefaultImpls {
 	public static fun getActivateBanners (Lcx/m42/superizer/Superizer;)Ljava/util/List;
+	public static fun getActivateEntry (Lcx/m42/superizer/Superizer;)Lcx/m42/superizer/ActivateEntry;
 	public static fun getCodeScreens (Lcx/m42/superizer/Superizer;)Ljava/util/Map;
 }
 

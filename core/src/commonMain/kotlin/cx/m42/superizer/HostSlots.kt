@@ -1,6 +1,7 @@
 package cx.m42.superizer
 
 import androidx.compose.runtime.Composable
+import cx.m42.superizer.app.AppIcon
 
 /*
  * Where a host puts screens of its own into the shell (ssh-new 07 §2.4, D184).
@@ -56,4 +57,16 @@ public fun interface ActivateBanner {
     /** [open] shows one of the host's screens, with a back button to Activate. */
     @Composable
     public fun Content(superizer: Superizer, open: (HostScreen) -> Unit): Boolean
+}
+
+/**
+ * How the drawer's door to Activate looks, and what its bar says, when the host offers something
+ * there besides a code: Unitool's Premium. Without one, it is a QR glyph and "Activate".
+ */
+public interface ActivateEntry {
+    /** Drawn by the same pack as an app's icon: a named glyph ("star") or an SVG path. */
+    public val icon: AppIcon
+
+    /** The bar's title and the drawer button's label, in the host's words for [langTag]. */
+    public fun title(langTag: String): String
 }

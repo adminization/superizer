@@ -85,6 +85,9 @@ public interface Superizer {
     /** The host's blocks above the promo code on Activate. */
     public val activateBanners: List<ActivateBanner> get() = emptyList()
 
+    /** The host's own icon and title for Activate; null keeps the QR glyph and "Activate". */
+    public val activateEntry: ActivateEntry? get() = null
+
     /**
      * Host screens nothing lists, by [HostScreen.id]: a promo code that resolves to
      * [cx.m42.superizer.activation.ActivationResult.OpenHostScreen] opens one (Unitool idea/09).

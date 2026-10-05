@@ -19,6 +19,9 @@ import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cx.m42.superizer.app.AppIcon
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * The host's icon pack, drawn by hand. The library pulls in no icon dependency, and at this handful
@@ -175,6 +178,28 @@ public fun QrIcon(tint: Color, size: Dp = IconSize) {
     }
 }
 
+/** A five-pointed star, outlined: Premium, or anything else a host wants to call special. */
+@Composable
+public fun StarIcon(tint: Color, size: Dp = IconSize) {
+    Icon(size) { s ->
+        // The bottom points sit higher than the top one, so the middle is lowered a little to
+        // look centred in the box.
+        val outer = 0.42f
+        val inner = outer * 0.45f
+        val star = Path().apply {
+            for (i in 0 until 10) {
+                val r = if (i % 2 == 0) outer else inner
+                val angle = -PI / 2 + i * PI / 5
+                val x = s.x(0.5f + r * cos(angle).toFloat())
+                val y = s.y(0.54f + r * sin(angle).toFloat())
+                if (i == 0) moveTo(x, y) else lineTo(x, y)
+            }
+            close()
+        }
+        drawPath(star, tint, style = s.stroke)
+    }
+}
+
 /** A calculator: a body, a display and two rows of keys. */
 @Composable
 public fun CalculatorIcon(tint: Color, size: Dp = IconSize) {
@@ -215,6 +240,7 @@ public fun AppIconGlyph(icon: AppIcon, tint: Color, size: Dp = IconSize, fallbac
             "currency" -> CurrencyIcon(tint, size)
             "apps" -> AppsIcon(tint, size)
             "qr" -> QrIcon(tint, size)
+            "star" -> StarIcon(tint, size)
             "settings" -> SettingsIcon(tint, size)
             else -> LetterIcon(fallbackLetter, tint, size)
         }

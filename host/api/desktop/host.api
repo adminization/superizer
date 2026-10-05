@@ -79,6 +79,7 @@ public final class cx/m42/superizer/host/ServiceRegistry {
 public final class cx/m42/superizer/host/SuperizerBuilder {
 	public static final field $stable I
 	public final fun activateBanner (Lcx/m42/superizer/ActivateBanner;)V
+	public final fun activateEntry (Lcx/m42/superizer/ActivateEntry;)V
 	public final fun auth (Lcx/m42/superizer/runtime/AuthService;)V
 	public final fun backupCipher (Lcx/m42/superizer/backup/HostBackupCipher;)V
 	public final fun backupKeys (Lkotlin/jvm/functions/Function1;)V

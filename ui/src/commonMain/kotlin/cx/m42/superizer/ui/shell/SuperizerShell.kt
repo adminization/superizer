@@ -49,6 +49,7 @@ import cx.m42.superizer.runtime.LocalAppRuntime
 import cx.m42.superizer.theme.AppTheme
 import cx.m42.superizer.theme.SuperizerTheme
 import cx.m42.superizer.ui.components.AppButton
+import cx.m42.superizer.ui.components.AppIconGlyph
 import cx.m42.superizer.ui.components.AppScaffold
 import cx.m42.superizer.ui.components.ButtonSize
 import cx.m42.superizer.ui.components.ButtonVariant
@@ -346,7 +347,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                         }
 
                         is ShellDestination.Activate -> AppScaffold(
-                            title = strings.activate,
+                            title = superizer.activateEntry?.title(langTag) ?: strings.activate,
                             menu = menu,
                             onBack = { goBack(where.from) },
                             onHaptic = haptic,
@@ -533,8 +534,14 @@ private fun ShellFooter(superizer: Superizer, onActivate: () -> Unit, onSettings
             IconButton(onClick = { dismiss(); onSettings() }, label = hostStrings.settings) { tint ->
                 SettingsIcon(tint)
             }
-            IconButton(onClick = { dismiss(); onActivate() }, label = hostStrings.activate) { tint ->
-                QrIcon(tint)
+            // The host may call it something else (ActivateEntry): Unitool's door is Premium.
+            val entry = superizer.activateEntry
+            val langTag by superizer.settings.langTag.collectAsState()
+            IconButton(
+                onClick = { dismiss(); onActivate() },
+                label = entry?.title(langTag) ?: hostStrings.activate,
+            ) { tint ->
+                if (entry != null) AppIconGlyph(entry.icon, tint) else QrIcon(tint)
             }
         }
         // Which build this is — the first thing to ask for when a bug report comes in.

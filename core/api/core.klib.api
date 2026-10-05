@@ -594,6 +594,13 @@ abstract interface cx.m42.superizer.ssh/SshKeyring { // cx.m42.superizer.ssh/Ssh
     }
 }
 
+abstract interface cx.m42.superizer/ActivateEntry { // cx.m42.superizer/ActivateEntry|null[0]
+    abstract val icon // cx.m42.superizer/ActivateEntry.icon|{}icon[0]
+        abstract fun <get-icon>(): cx.m42.superizer.app/AppIcon // cx.m42.superizer/ActivateEntry.icon.<get-icon>|<get-icon>(){}[0]
+
+    abstract fun title(kotlin/String): kotlin/String // cx.m42.superizer/ActivateEntry.title|title(kotlin.String){}[0]
+}
+
 abstract interface cx.m42.superizer/ActivationPort { // cx.m42.superizer/ActivationPort|null[0]
     open val canScan // cx.m42.superizer/ActivationPort.canScan|{}canScan[0]
         open fun <get-canScan>(): kotlin/Boolean // cx.m42.superizer/ActivationPort.canScan.<get-canScan>|<get-canScan>(){}[0]
@@ -695,6 +702,8 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
         abstract fun <get-unlocked>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Set<cx.m42.superizer.app/AppId>> // cx.m42.superizer/Superizer.unlocked.<get-unlocked>|<get-unlocked>(){}[0]
     open val activateBanners // cx.m42.superizer/Superizer.activateBanners|{}activateBanners[0]
         open fun <get-activateBanners>(): kotlin.collections/List<cx.m42.superizer/ActivateBanner> // cx.m42.superizer/Superizer.activateBanners.<get-activateBanners>|<get-activateBanners>(){}[0]
+    open val activateEntry // cx.m42.superizer/Superizer.activateEntry|{}activateEntry[0]
+        open fun <get-activateEntry>(): cx.m42.superizer/ActivateEntry? // cx.m42.superizer/Superizer.activateEntry.<get-activateEntry>|<get-activateEntry>(){}[0]
     open val codeScreens // cx.m42.superizer/Superizer.codeScreens|{}codeScreens[0]
         open fun <get-codeScreens>(): kotlin.collections/Map<kotlin/String, cx.m42.superizer/HostScreen> // cx.m42.superizer/Superizer.codeScreens.<get-codeScreens>|<get-codeScreens>(){}[0]
 

@@ -22,6 +22,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runComposeUiTest
 import com.composeunstyled.Text
 import cx.m42.superizer.ActivateBanner
+import cx.m42.superizer.ActivateEntry
+import cx.m42.superizer.app.AppIcon
 import cx.m42.superizer.HomeBanner
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.HostSection
@@ -208,6 +210,32 @@ class HostSlotsTest {
         onNodeWithTag("host:keys").assertIsDisplayed()
         onNodeWithTag("keys:done").performClick()
         waitForIdle()
+        onNodeWithTag("activate:promo").assertIsDisplayed()
+    }
+
+    /** A host that sells something on Activate names the door after it: its icon, its words. */
+    @Test
+    fun anActivateEntryRenamesTheDrawerButtonAndTheBar() = runComposeUiTest {
+        val superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)) {
+            host(HostInfo("Slots", "0.1.0", "dev", Platform.Desktop, SuperizerContract.VERSION, debug = true))
+            register(ProbeApp())
+            home("probe")
+            activateEntry(
+                object : ActivateEntry {
+                    override val icon = AppIcon.Named("star")
+                    override fun title(langTag: String) = if (langTag.startsWith("ru")) "Премиум" else "Premium"
+                },
+            )
+        }.also { it.settings.chooseLanguage("en") }
+        setContent { SuperizerShell(superizer) }
+        waitForIdle()
+
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").assertDoesNotExist()
+        onNodeWithContentDescription("Premium").performClick()
+        waitForIdle()
+        onNodeWithText("Premium").assertIsDisplayed()
         onNodeWithTag("activate:promo").assertIsDisplayed()
     }
 }

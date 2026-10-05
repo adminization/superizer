@@ -1,6 +1,7 @@
 package cx.m42.superizer.host
 
 import cx.m42.superizer.ActivateBanner
+import cx.m42.superizer.ActivateEntry
 import cx.m42.superizer.ActivationPort
 import cx.m42.superizer.HomeBanner
 import cx.m42.superizer.HostScreen
@@ -130,6 +131,7 @@ public class SuperizerBuilder internal constructor() {
     internal val hostSections: MutableList<HostSection> = mutableListOf()
     internal val homeBanners: MutableList<HomeBanner> = mutableListOf()
     internal val activateBanners: MutableList<ActivateBanner> = mutableListOf()
+    internal var activateEntry: ActivateEntry? = null
     internal val codeScreens: LinkedHashMap<String, HostScreen> = LinkedHashMap()
     internal var scanner: (suspend () -> String?)? = null
     internal var secretBackgroundLimitMs: Long = DEFAULT_SECRET_BACKGROUND_LIMIT_MS
@@ -221,6 +223,11 @@ public class SuperizerBuilder internal constructor() {
     /** A block of the host's own above the promo code on Activate. */
     public fun activateBanner(banner: ActivateBanner) {
         activateBanners += banner
+    }
+
+    /** The host's own icon and title for Activate, in the drawer and on the bar. */
+    public fun activateEntry(entry: ActivateEntry) {
+        activateEntry = entry
     }
 
     public fun promoCodes(resolver: PromoCodeResolver) {
@@ -539,6 +546,7 @@ internal class SuperizerHost(
     override val hostSections: List<HostSection> = builder.hostSections.toList()
     override val homeBanners: List<HomeBanner> = builder.homeBanners.toList()
     override val activateBanners: List<ActivateBanner> = builder.activateBanners.toList()
+    override val activateEntry: ActivateEntry? = builder.activateEntry
     override val codeScreens: Map<String, HostScreen> = builder.codeScreens.toMap()
 
     private val router = PushRouter(
