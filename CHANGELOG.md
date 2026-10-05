@@ -12,11 +12,15 @@ unchanged: the additions have defaults and only a host's own screens use them.
   key from it, 3 under the key's passphrase. Null takes the best the device offers, as before; a
   level the device or the key cannot have is `ImportOutcome.Failed("level.unavailable")`.
 - `ImportOptions.biometricOnly`, `SshKeyInfo.biometricOnly`, `KeyringDevice.strongBiometric`: a key
-  in the chip that only a strong biometric opens — not the screen lock's PIN — and that a new
-  enrolment makes unusable (D245). Without such a biometric, `Failed("biometric.unavailable")`.
+  in the chip that only a strong biometric opens — a fingerprint on Android, Face ID or Touch ID on
+  iOS; not the screen lock's PIN or passcode — and that a new enrolment makes unusable (D245, D246).
+  Without such a biometric, `Failed("biometric.unavailable")`.
+- `SshKeyInfo.passphraseKept`: a level-2 key whose own passphrase is asked for too. A host can now
+  tell a key in the chip with a lock of its own from one only the screen lock guards (D247).
 - Three catalogue codes: `key.level3.chip-available` (Info) — a level-3 key on a device with a chip,
   told apart from one on a device without; `key.no-second-lock` (Attention) — a key in the chip
-  without its own passphrase, which whoever unlocks the device can use; `key.biometric-only` (Ok).
+  with neither a biometric nor its passphrase, which whoever unlocks the device can use;
+  `key.biometric-only` (Ok).
 
 ## 0.4.0 — contract 3
 

@@ -3159,7 +3159,7 @@ final class cx.m42.superizer.ssh/KeyringDevice { // cx.m42.superizer.ssh/Keyring
 }
 
 final class cx.m42.superizer.ssh/SshKeyInfo { // cx.m42.superizer.ssh/SshKeyInfo|null[0]
-    constructor <init>(cx.m42.superizer.ssh/KeyId, kotlin/String, kotlin/String, kotlin/String, kotlin/String, cx.m42.superizer.ssh/KeyStorage, cx.m42.superizer.ssh/UsePolicy, cx.m42.superizer.ssh/KeyOrigin, kotlin.collections/Set<cx.m42.superizer.ssh/KeyCapability>, kotlin/Long, kotlin/Boolean = ..., kotlin/Boolean = ...) // cx.m42.superizer.ssh/SshKeyInfo.<init>|<init>(cx.m42.superizer.ssh.KeyId;kotlin.String;kotlin.String;kotlin.String;kotlin.String;cx.m42.superizer.ssh.KeyStorage;cx.m42.superizer.ssh.UsePolicy;cx.m42.superizer.ssh.KeyOrigin;kotlin.collections.Set<cx.m42.superizer.ssh.KeyCapability>;kotlin.Long;kotlin.Boolean;kotlin.Boolean){}[0]
+    constructor <init>(cx.m42.superizer.ssh/KeyId, kotlin/String, kotlin/String, kotlin/String, kotlin/String, cx.m42.superizer.ssh/KeyStorage, cx.m42.superizer.ssh/UsePolicy, cx.m42.superizer.ssh/KeyOrigin, kotlin.collections/Set<cx.m42.superizer.ssh/KeyCapability>, kotlin/Long, kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // cx.m42.superizer.ssh/SshKeyInfo.<init>|<init>(cx.m42.superizer.ssh.KeyId;kotlin.String;kotlin.String;kotlin.String;kotlin.String;cx.m42.superizer.ssh.KeyStorage;cx.m42.superizer.ssh.UsePolicy;cx.m42.superizer.ssh.KeyOrigin;kotlin.collections.Set<cx.m42.superizer.ssh.KeyCapability>;kotlin.Long;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
 
     final val biometricOnly // cx.m42.superizer.ssh/SshKeyInfo.biometricOnly|{}biometricOnly[0]
         final fun <get-biometricOnly>(): kotlin/Boolean // cx.m42.superizer.ssh/SshKeyInfo.biometricOnly.<get-biometricOnly>|<get-biometricOnly>(){}[0]
@@ -3175,6 +3175,8 @@ final class cx.m42.superizer.ssh/SshKeyInfo { // cx.m42.superizer.ssh/SshKeyInfo
         final fun <get-label>(): kotlin/String // cx.m42.superizer.ssh/SshKeyInfo.label.<get-label>|<get-label>(){}[0]
     final val origin // cx.m42.superizer.ssh/SshKeyInfo.origin|{}origin[0]
         final fun <get-origin>(): cx.m42.superizer.ssh/KeyOrigin // cx.m42.superizer.ssh/SshKeyInfo.origin.<get-origin>|<get-origin>(){}[0]
+    final val passphraseKept // cx.m42.superizer.ssh/SshKeyInfo.passphraseKept|{}passphraseKept[0]
+        final fun <get-passphraseKept>(): kotlin/Boolean // cx.m42.superizer.ssh/SshKeyInfo.passphraseKept.<get-passphraseKept>|<get-passphraseKept>(){}[0]
     final val policy // cx.m42.superizer.ssh/SshKeyInfo.policy|{}policy[0]
         final fun <get-policy>(): cx.m42.superizer.ssh/UsePolicy // cx.m42.superizer.ssh/SshKeyInfo.policy.<get-policy>|<get-policy>(){}[0]
     final val publicKey // cx.m42.superizer.ssh/SshKeyInfo.publicKey|{}publicKey[0]
@@ -3190,6 +3192,7 @@ final class cx.m42.superizer.ssh/SshKeyInfo { // cx.m42.superizer.ssh/SshKeyInfo
     final fun component10(): kotlin/Long // cx.m42.superizer.ssh/SshKeyInfo.component10|component10(){}[0]
     final fun component11(): kotlin/Boolean // cx.m42.superizer.ssh/SshKeyInfo.component11|component11(){}[0]
     final fun component12(): kotlin/Boolean // cx.m42.superizer.ssh/SshKeyInfo.component12|component12(){}[0]
+    final fun component13(): kotlin/Boolean // cx.m42.superizer.ssh/SshKeyInfo.component13|component13(){}[0]
     final fun component2(): kotlin/String // cx.m42.superizer.ssh/SshKeyInfo.component2|component2(){}[0]
     final fun component3(): kotlin/String // cx.m42.superizer.ssh/SshKeyInfo.component3|component3(){}[0]
     final fun component4(): kotlin/String // cx.m42.superizer.ssh/SshKeyInfo.component4|component4(){}[0]
@@ -3198,7 +3201,7 @@ final class cx.m42.superizer.ssh/SshKeyInfo { // cx.m42.superizer.ssh/SshKeyInfo
     final fun component7(): cx.m42.superizer.ssh/UsePolicy // cx.m42.superizer.ssh/SshKeyInfo.component7|component7(){}[0]
     final fun component8(): cx.m42.superizer.ssh/KeyOrigin // cx.m42.superizer.ssh/SshKeyInfo.component8|component8(){}[0]
     final fun component9(): kotlin.collections/Set<cx.m42.superizer.ssh/KeyCapability> // cx.m42.superizer.ssh/SshKeyInfo.component9|component9(){}[0]
-    final fun copy(cx.m42.superizer.ssh/KeyId = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., cx.m42.superizer.ssh/KeyStorage = ..., cx.m42.superizer.ssh/UsePolicy = ..., cx.m42.superizer.ssh/KeyOrigin = ..., kotlin.collections/Set<cx.m42.superizer.ssh/KeyCapability> = ..., kotlin/Long = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): cx.m42.superizer.ssh/SshKeyInfo // cx.m42.superizer.ssh/SshKeyInfo.copy|copy(cx.m42.superizer.ssh.KeyId;kotlin.String;kotlin.String;kotlin.String;kotlin.String;cx.m42.superizer.ssh.KeyStorage;cx.m42.superizer.ssh.UsePolicy;cx.m42.superizer.ssh.KeyOrigin;kotlin.collections.Set<cx.m42.superizer.ssh.KeyCapability>;kotlin.Long;kotlin.Boolean;kotlin.Boolean){}[0]
+    final fun copy(cx.m42.superizer.ssh/KeyId = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., cx.m42.superizer.ssh/KeyStorage = ..., cx.m42.superizer.ssh/UsePolicy = ..., cx.m42.superizer.ssh/KeyOrigin = ..., kotlin.collections/Set<cx.m42.superizer.ssh/KeyCapability> = ..., kotlin/Long = ..., kotlin/Boolean = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): cx.m42.superizer.ssh/SshKeyInfo // cx.m42.superizer.ssh/SshKeyInfo.copy|copy(cx.m42.superizer.ssh.KeyId;kotlin.String;kotlin.String;kotlin.String;kotlin.String;cx.m42.superizer.ssh.KeyStorage;cx.m42.superizer.ssh.UsePolicy;cx.m42.superizer.ssh.KeyOrigin;kotlin.collections.Set<cx.m42.superizer.ssh.KeyCapability>;kotlin.Long;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.ssh/SshKeyInfo.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // cx.m42.superizer.ssh/SshKeyInfo.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // cx.m42.superizer.ssh/SshKeyInfo.toString|toString(){}[0]

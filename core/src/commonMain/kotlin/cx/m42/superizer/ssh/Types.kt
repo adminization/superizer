@@ -95,8 +95,9 @@ public data class KeyringDevice(
     /** The levels a key can be kept at here, right now. Always contains 3. */
     val levels: Set<Int> = setOf(3),
     /**
-     * A biometric of the strongest class is enrolled — Android's `BIOMETRIC_STRONG`: a fingerprint,
-     * or a face on the phones whose face unlock is that class — so a key can be bound to it alone.
+     * A biometric of the strongest class is enrolled — Android's `BIOMETRIC_STRONG` (a fingerprint,
+     * or a face on the phones whose face unlock is that class), Face ID or Touch ID on iOS — so a key
+     * can be bound to it alone.
      */
     val strongBiometric: Boolean = false,
 )
@@ -156,8 +157,10 @@ public data class SshKeyInfo(
     val createdAt: Long,
     /** False once the chip dropped the key — the screen lock was removed (01 §5.7). The public half stays. */
     val usable: Boolean = true,
-    /** Only a strong biometric opens it, not the screen lock's PIN; a new enrolment makes it unusable. */
+    /** Only a strong biometric opens it, not the screen lock's PIN or passcode; a new enrolment makes it unusable. */
     val biometricOnly: Boolean = false,
+    /** Level 2: the key's own passphrase is asked for too (01 §5.4). */
+    val passphraseKept: Boolean = false,
 )
 
 /** What a file is, before any passphrase (02 §5, §8). */
@@ -212,7 +215,7 @@ public data class ImportOptions(
     val comment: String? = null,
     /**
      * Level 2 only (01 §5.4): keep the file's passphrase as a second lock on every use. Level 3 has
-     * no other lock, so it is ignored there (05).
+     * no other lock, so it is ignored there (05). With [level] null it asks for level 2.
      */
     val keepPassphrase: Boolean = false,
     /**
@@ -224,8 +227,9 @@ public data class ImportOptions(
     val level: Int? = null,
     /**
      * Levels 1–2 where [KeyringDevice.strongBiometric]: only a strong biometric opens the key — the
-     * screen lock's PIN does not — and enrolling a new one makes the key unusable, so a person who
-     * knows the PIN cannot add their own finger to it. Elsewhere `Failed("biometric.unavailable")`.
+     * screen lock's PIN or passcode does not — and enrolling a new one makes the key unusable, so a
+     * person who knows the PIN cannot add their own finger or face to it. Elsewhere
+     * `Failed("biometric.unavailable")`.
      */
     val biometricOnly: Boolean = false,
 )
