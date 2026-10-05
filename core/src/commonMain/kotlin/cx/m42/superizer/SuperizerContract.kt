@@ -18,7 +18,11 @@ package cx.m42.superizer
  * 3 added `runtime.secrets` (values the host seals itself), `runtime.diagnostics` and
  * `AppManifest.backup` (Unitool ssh-new 05–07). An app that uses any of them asks for 3; one that
  * declares a backup policy has to, or the registry turns it away.
+ *
+ * 4 added `AppMetadata.secret` (Unitool idea/09): an app only a promo code opens, for one visit,
+ * and that no screen of the host lists. It has to ask for 4, or an older host would let a QR code
+ * unlock it onto Home.
  */
 public object SuperizerContract {
-    public const val VERSION: Int = 3
+    public const val VERSION: Int = 4
 }

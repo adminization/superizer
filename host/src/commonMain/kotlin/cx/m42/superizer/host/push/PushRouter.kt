@@ -202,7 +202,9 @@ public class PushRouter(
             return
         }
         val appId = AppId.parseOrNull(data["appId"])
-        if (appId == null || registry.get(appId) == null) {
+        // A secret app takes no pushes (its manifest is refused if it asks), and one aimed at it
+        // anyway is dropped as though the app did not exist — not as `Locked` (idea/09).
+        if (appId == null || registry.get(appId) == null || registry.isSecret(appId)) {
             drop(appId, "UnknownApp")
             return
         }

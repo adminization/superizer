@@ -84,6 +84,7 @@ public class AppRegistry(
             return "declares a backup policy but asks only for host contract ${manifest.minHostContract}; " +
                 "a backup policy needs $BACKUP_CONTRACT"
         }
+        secretRejection(manifest)?.let { return it }
         val missing = manifest.requires - host.services
         if (missing.isNotEmpty()) {
             return "host provides no ${missing.joinToString(", ") { it.name }}"
@@ -95,13 +96,36 @@ public class AppRegistry(
         return null
     }
 
+    /**
+     * A secret app (idea/09) is opened by a code and by nothing else, so whatever else could open
+     * it is a mistake in the manifest — caught here rather than as a notification on a lock screen.
+     */
+    private fun secretRejection(manifest: AppManifest): String? {
+        if (!manifest.metadata.secret) return null
+        // An older host does not know `secret`; with `hidden` it still keeps the app out of sight.
+        if (!manifest.metadata.hidden) return "declares secret but not hidden; secret implies hidden"
+        if (manifest.minHostContract < SECRET_CONTRACT) {
+            return "declares secret but asks only for host contract ${manifest.minHostContract}; " +
+                "secret needs $SECRET_CONTRACT"
+        }
+        if (manifest.deepLinks.isNotEmpty()) return "a secret app serves no deep links"
+        if (manifest.pushTopics.isNotEmpty()) return "a secret app takes no pushes"
+        return null
+    }
+
     public fun get(id: AppId): SuperizerApp<*>? = byId[id]
 
     public fun all(): List<SuperizerApp<*>> = byId.values.toList()
 
-    /** What All Apps and the drawer draw: everything not hidden, plus whatever has been unlocked. */
+    /** Whether [id] is a registered secret app (idea/09) — the question every host screen asks first. */
+    public fun isSecret(id: AppId?): Boolean = id != null && byId[id]?.metadata?.secret == true
+
+    /**
+     * What All Apps and the drawer draw: everything not hidden, plus whatever has been unlocked —
+     * never a secret app, whatever the unlock store says.
+     */
     public fun visible(unlocked: Set<AppId>): List<SuperizerApp<*>> =
-        all().filter { !it.metadata.hidden || it.id in unlocked }
+        all().filter { it.listed(unlocked) }
 
     public fun outcome(id: AppId): RegistrationOutcome? =
         _manifests.value.firstOrNull { it.first.id == id }?.second
@@ -116,5 +140,18 @@ public class AppRegistry(
 
         /** The contract that introduced `AppManifest.backup`, `runtime.secrets` and `runtime.diagnostics` (ssh-new 07). */
         const val BACKUP_CONTRACT = 3
+
+        /** The contract that introduced `AppMetadata.secret` (idea/09). */
+        const val SECRET_CONTRACT = 4
     }
+}
+
+/**
+ * Whether a person may see this app anywhere — the catalog, Home, the drawer, Settings (D8, idea/09).
+ * Hidden apps only once unlocked; secret ones never.
+ */
+public fun SuperizerApp<*>.listed(unlocked: Set<AppId>): Boolean = when {
+    metadata.secret -> false
+    metadata.hidden -> id in unlocked
+    else -> true
 }

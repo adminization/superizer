@@ -93,6 +93,8 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getActivateErrorUnsupported ()Ljava/lang/String;
 	public abstract fun getActivatePromoLabel ()Ljava/lang/String;
 	public abstract fun getActivateQrLabel ()Ljava/lang/String;
+	public abstract fun getActivateScan ()Ljava/lang/String;
+	public abstract fun getActivateScanNote ()Ljava/lang/String;
 	public abstract fun getAddApp ()Ljava/lang/String;
 	public abstract fun getAllApps ()Ljava/lang/String;
 	public abstract fun getBackAction ()Ljava/lang/String;
@@ -166,12 +168,16 @@ public final class cx/m42/superizer/ui/platform/BackHandler_desktopKt {
 	public static final fun SystemBackHandler (ZLkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
 }
 
+public final class cx/m42/superizer/ui/platform/RecentsPreview_desktopKt {
+	public static final fun RecentsPreview (ZLandroidx/compose/runtime/Composer;I)V
+}
+
 public final class cx/m42/superizer/ui/platform/SecureWindow_desktopKt {
 	public static final fun SecureWindow (ZLandroidx/compose/runtime/Composer;I)V
 }
 
 public final class cx/m42/superizer/ui/screens/ActivateScreenKt {
-	public static final fun ActivateScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ActivateScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class cx/m42/superizer/ui/screens/CatalogScreenKt {

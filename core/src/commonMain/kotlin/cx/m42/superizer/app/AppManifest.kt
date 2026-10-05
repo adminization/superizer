@@ -102,6 +102,12 @@ public data class AppMetadata(
     val hidden: Boolean = false,
     /** Free-form grouping for All Apps ("Tools", "Finance"). Null → ungrouped. */
     val category: String? = null,
+    /**
+     * Never listed, never unlocked, never on Home: only a code from the host's promo resolver opens
+     * it, and only for one visit (Unitool idea/09). Comes with [hidden] = true, so a host that has
+     * never heard of this field still keeps it out of sight, and needs `minHostContract = 4`.
+     */
+    val secret: Boolean = false,
 )
 
 /**

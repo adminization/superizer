@@ -61,7 +61,11 @@ public interface HostStrings {
     public val activatePromoLabel: String
     public val activateQrLabel: String
     public val activateApply: String
+    /** Under the QR field where the host has no camera. */
     public val activateCameraNote: String
+    public val activateScan: String
+    /** Under the QR field where it has one. */
+    public val activateScanNote: String
     public val activateErrorMalformed: String
     public val activateErrorUnsupported: String
     public val activateErrorUnknownApp: String
@@ -152,7 +156,9 @@ internal object HostStringsEn : HostStrings {
     override val activatePromoLabel = "Promo code"
     override val activateQrLabel = "QR contents"
     override val activateApply = "Apply"
-    override val activateCameraNote = "Scanning will come later; paste the text."
+    override val activateCameraNote = "There is no camera here; paste the text."
+    override val activateScan = "Scan a QR code"
+    override val activateScanNote = "Or paste the text it holds."
     override val activateErrorMalformed = "This is not an activation payload"
     override val activateErrorUnsupported = "This payload is from a newer version"
     override val activateErrorUnknownApp = "No such app in this build"
@@ -240,7 +246,9 @@ internal object HostStringsRu : HostStrings {
     override val activatePromoLabel = "Промокод"
     override val activateQrLabel = "Содержимое QR"
     override val activateApply = "Применить"
-    override val activateCameraNote = "Сканирование появится позже; вставьте текст."
+    override val activateCameraNote = "Камеры здесь нет — вставьте текст."
+    override val activateScan = "Сканировать QR-код"
+    override val activateScanNote = "Или вставьте текст, который в нём записан."
     override val activateErrorMalformed = "Это не QR активации"
     override val activateErrorUnsupported = "Этот код из более новой версии"
     override val activateErrorUnknownApp = "Такого приложения нет в этой сборке"

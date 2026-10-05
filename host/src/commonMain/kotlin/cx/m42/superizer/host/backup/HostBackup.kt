@@ -55,8 +55,10 @@ public class HostBackup(
     private val _lastBackupAt = MutableStateFlow(SafePrefs.get(HostKeys.BACKUP_AT)?.toLongOrNull())
     override val lastBackupAt: StateFlow<Long?> get() = _lastBackupAt.asStateFlow()
 
+    // A secret app's data goes into the backup like anyone's (idea/09, question 130) — it is simply
+    // not a line in what the person is shown: not in the preview, the plan or the report.
     override suspend fun preview(): BackupPreview = BackupPreview(
-        apps = appIds().map { preview(it) },
+        apps = appIds().filterNot { registry.isSecret(it) }.map { preview(it) },
         keys = runCatching { keyNames() }.getOrDefault(emptyList()),
     )
 
@@ -126,7 +128,7 @@ public class HostBackup(
             if (plain !== file) plain.fill(0)
         }
         if (bundle.schema > BackupBundle.SCHEMA) return BackupOutcome.Unreadable("newer-schema")
-        val apps = bundle.apps.map { (id, app) ->
+        val apps = bundle.apps.filterKeys { !isSecret(it) }.map { (id, app) ->
             AppPreview(id, app.storage.size, app.secrets.size, excluded = false)
         }
         return BackupOutcome.Ok(RestorePlan(bundle, apps))
@@ -139,9 +141,12 @@ public class HostBackup(
         reason: String,
     ): BackupOutcome<RestoreReport> {
         if (!confirm(reason)) return BackupOutcome.Cancelled
+        // Nobody can tick a secret app's line, because there is none: its data comes back with the
+        // rest, whatever was ticked.
+        val restoring = apps + plan.bundle.apps.keys.filter { isSecret(it) }
         // Sealed first, written after: a vault that refuses must leave every app as it was.
         val sealed = LinkedHashMap<String, Map<String, String>>()
-        for (id in apps) {
+        for (id in restoring) {
             val app = plan.bundle.apps[id] ?: continue
             sealed[id] = try {
                 app.secrets.mapValues { secrets.seal(it.value) }
@@ -150,7 +155,7 @@ public class HostBackup(
             }
         }
         val restored = mutableListOf<String>()
-        for (id in apps) {
+        for (id in restoring) {
             val app = plan.bundle.apps[id] ?: continue
             val appId = AppId.parseOrNull(id) ?: continue
             PrefsStorageService.erase(appId)
@@ -164,8 +169,10 @@ public class HostBackup(
             plan.bundle.settings.filterKeys { it in HostKeys.BACKED_UP }.forEach { (key, value) -> SafePrefs.put(key, value) }
         }
         val here = runCatching { keyNames() }.getOrDefault(emptyList()).map { it.fingerprint }.toSet()
-        return BackupOutcome.Ok(RestoreReport(restored, plan.bundle.keys.filter { it.fingerprint !in here }))
+        return BackupOutcome.Ok(RestoreReport(restored.filterNot { isSecret(it) }, plan.bundle.keys.filter { it.fingerprint !in here }))
     }
+
+    private fun isSecret(id: String): Boolean = registry.isSecret(AppId.parseOrNull(id))
 
     /** Every app with anything under either prefix, registered or not: data outlives a build that dropped its app. */
     private fun appIds(): List<AppId> {

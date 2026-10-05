@@ -1,5 +1,7 @@
 package cx.m42.superizer
 
+import cx.m42.superizer.event.SuperizerEvent
+
 import androidx.compose.runtime.Composable
 import cx.m42.superizer.app.AppConfigSpec
 import cx.m42.superizer.app.AppId
@@ -92,17 +94,26 @@ internal class ProbeApp(
     private val failOnLaunch: Boolean = false,
     fallbackToDefault: Boolean = true,
     protection: AppProtection = AppProtection(),
+    secret: Boolean = false,
+    pushTopics: Set<String> = emptySet(),
+    /** Registers a block in Settings from `setup()`. */
+    private val withSection: Boolean = false,
+    /** Records every event its `ctx.listener` hears into [heard]. */
+    private val listens: Boolean = false,
 ) : SuperizerApp<ProbeConfig>() {
 
     override val manifest: AppManifest = AppManifest(
         id = AppId(id),
         version = "1.0.0",
         minHostContract = minHostContract,
-        metadata = AppMetadata(title = localized("en" to "Probe"), hidden = hidden),
+        metadata = AppMetadata(title = localized("en" to "Probe"), hidden = hidden, secret = secret),
         requires = requires,
         deepLinks = deepLinks,
+        pushTopics = pushTopics,
         protection = protection,
     )
+
+    val heard: MutableList<SuperizerEvent> = mutableListOf()
 
     override val configSpec: AppConfigSpec<ProbeConfig> =
         AppConfigSpec(ProbeConfig.serializer(), ProbeConfig(), fallbackToDefault = fallbackToDefault)
@@ -116,6 +127,8 @@ internal class ProbeApp(
             }
         }
         registersUndeclaredLink?.let { path -> ctx.deepLink(path) { cx.m42.superizer.app.AppConfig.Empty } }
+        if (withSection) ctx.settingsSection { }
+        if (listens) ctx.listener { heard += it }
     }
 
     override fun launch(runtime: InstanceRuntime, config: ProbeConfig): AppInstance =

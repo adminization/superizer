@@ -120,10 +120,18 @@ public class DefaultHostRuntimeFactory(
     private val lifecycle: StateFlow<HostLifecycle> = PlatformLifecycle.state,
     private val secretsFor: (AppId) -> StorageService = { InMemorySecrets() },
     private val diagnosticsFor: (AppId) -> AppDiagnostics = { NoDiagnostics },
+    /** What each app hears of [events] — all of it, unless the host leaves something out (idea/09). */
+    private val eventsFor: (AppId) -> SharedFlow<SuperizerEvent> = { events },
+    /** Apps whose log nobody may read afterwards: a secret app in a release build (idea/09). */
+    private val quiet: (AppId) -> Boolean = { false },
 ) : HostRuntimeFactory {
 
     override fun createApp(appId: AppId, scope: CoroutineScope): AppRuntime {
-        val logger = ConsoleLogger("app:${appId.value}", logBuffer, verbose = hostInfo.debug)
+        val logger = if (quiet(appId)) {
+            SilentLogger
+        } else {
+            ConsoleLogger("app:${appId.value}", logBuffer, verbose = hostInfo.debug)
+        }
         return DefaultAppRuntime(
             appId = appId,
             host = hostInfo,
@@ -136,7 +144,7 @@ public class DefaultHostRuntimeFactory(
             push = pushFor(appId, logger),
             auth = auth,
             apps = apps,
-            events = events,
+            events = eventsFor(appId),
             lifecycle = lifecycle,
             clock = clock,
             scope = scope,

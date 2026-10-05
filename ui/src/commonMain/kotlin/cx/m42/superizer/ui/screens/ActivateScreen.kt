@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,8 +18,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
+import cx.m42.superizer.HostScreen
 import cx.m42.superizer.Superizer
 import cx.m42.superizer.activation.ActivationResult
 import cx.m42.superizer.app.AppId
@@ -26,6 +29,7 @@ import cx.m42.superizer.theme.AppTheme
 import cx.m42.superizer.ui.components.AppButton
 import cx.m42.superizer.ui.components.AppTextField
 import cx.m42.superizer.ui.components.ButtonSize
+import cx.m42.superizer.ui.components.ButtonVariant
 import cx.m42.superizer.ui.i18n.HostStrings
 import cx.m42.superizer.ui.i18n.hostStrings
 import kotlinx.coroutines.launch
@@ -43,6 +47,8 @@ public fun ActivateScreen(
     onActivated: (AppId) -> Unit,
     onHostCommand: (ActivationResult.Command) -> Unit,
     modifier: Modifier = Modifier,
+    /** A screen of the host's that only a code opens (`ActivationResult.OpenHostScreen`, idea/09). */
+    onHostScreen: (HostScreen) -> Unit = {},
 ) {
     val tokens = AppTheme
     val strings = hostStrings
@@ -68,6 +74,18 @@ public fun ActivateScreen(
                 onHostCommand(result.command)
             }
 
+            is ActivationResult.OpenHostScreen -> {
+                // The service already turned an id with no screen into UnknownCode; a screen missing
+                // here anyway is told the same way, rather than as a crash.
+                val screen = superizer.codeScreens[result.id]
+                if (screen == null) {
+                    error = strings.reasonText(ActivationResult.Reason.UnknownCode)
+                } else {
+                    error = null
+                    onHostScreen(screen)
+                }
+            }
+
             is ActivationResult.Rejected -> error = strings.reasonText(result.reason)
         }
     }
@@ -86,6 +104,12 @@ public fun ActivateScreen(
             onValueChange = { promo = it; error = null },
             placeholder = strings.activatePromoLabel,
             label = strings.activatePromoLabel,
+            // A code typed here must not come back as a suggestion to whoever types next — some
+            // open an app nobody else should know about (idea/09, D254).
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Characters,
+                autoCorrectEnabled = false,
+            ),
             modifier = Modifier.testTag("activate:promo"),
         )
 
@@ -93,6 +117,25 @@ public fun ActivateScreen(
 
         Text(text = strings.activateQrLabel, style = tokens.label, color = tokens.muted)
         Spacer(Modifier.height(6.dp))
+        // The camera reads the same text the field below takes, and it goes the same way — through
+        // `fromQr` — straight away: pointing at a code is the whole gesture.
+        if (superizer.activation.canScan) {
+            AppButton(
+                text = strings.activateScan,
+                size = ButtonSize.Default,
+                variant = ButtonVariant.Secondary,
+                modifier = Modifier.fillMaxWidth().testTag("activate:scan"),
+                onClick = {
+                    scope.launch {
+                        val text = superizer.activation.scan() ?: return@launch
+                        promo = ""
+                        payload = text
+                        handle(superizer.activation.fromQr(text))
+                    }
+                },
+            )
+            Spacer(Modifier.height(10.dp))
+        }
         AppTextField(
             value = payload,
             onValueChange = { payload = it; error = null },
@@ -104,7 +147,11 @@ public fun ActivateScreen(
         )
 
         Spacer(Modifier.height(8.dp))
-        Text(text = strings.activateCameraNote, style = tokens.footnote, color = tokens.muted)
+        Text(
+            text = if (superizer.activation.canScan) strings.activateScanNote else strings.activateCameraNote,
+            style = tokens.footnote,
+            color = tokens.muted,
+        )
 
         if (error != null) {
             Spacer(Modifier.height(12.dp))

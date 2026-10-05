@@ -3,6 +3,65 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.5.0 — contract 4
+
+Secret apps (Unitool notes idea/09, D248–D262): an app only a promo code opens, for one visit, and
+that no screen of the host lists. Contract 4 because an older host would let a QR code unlock one
+onto Home.
+
+### The contract (`core`)
+
+- `AppMetadata.secret`. Must come with `hidden = true` and `minHostContract = 4`, and with no deep
+  links and no push topics — the registry turns any other combination away.
+- `AppRegistry.isSecret(id)`, and `SuperizerApp.listed(unlocked)`: whether a person may see an app
+  anywhere. `AppRegistry.visible` never returns a secret app.
+- `AppHandler` writes no session snapshot for a secret app, takes no Settings block from it, and
+  a `ctx.listener` hears no other app's secret events.
+- `ActivationPort.canScan` / `scan()`, with defaults: the camera behind the Activate screen.
+
+### The host
+
+- The only door is `fromPromo`. It hands out the activation once, and `apply` opens the app only
+  for that very object. The app is never unlocked and never lands on Home. `fromQr`, `activate`
+  links, `app/<id>` links, pushes and `openApp` answer `UnknownApp`, as for an id that does not
+  exist.
+- On start, a secret app's old unlock and Home tile are forgotten (a build that turned a hidden
+  app secret).
+- Back after `secretBackgroundLimit` (default 5 minutes) in the background with a secret app open:
+  it is closed and the shell goes Home.
+- Kept out of `runtime.apps`, other apps' `runtime.events`, the backup preview, plan and report,
+  and the Storage & security report. Its data still goes into the backup and comes back with any
+  restore. In a release build it is also kept out of the Service Menu's events and log.
+- `SuperizerBuilder.qrScanner { … }` and `secretBackgroundLimit(millis)`.
+- `ActivationResult.OpenHostScreen(id)`, `SuperizerBuilder.hostScreen(screen)` and
+  `Superizer.codeScreens`: a host screen nothing lists — not Settings, not the menu — that only a
+  promo code opens. The Activate screen shows it with back to Home. A code for an id the host never
+  registered is answered as an unknown code. (Unitool moves SSH keys out of Settings this way, behind
+  the exact code `[ssh-keys]`.)
+- `HashedPromoCodes(salt, table)`: the promo table with SHA-256 hashes of the codes as keys
+  (`HashedPromoCodes.hash(salt, code)`), so a build carries none that `strings` would print. A host
+  command goes in the same table, which takes the Service Menu's code out of `serviceCode(…)`'s
+  plain string. SHA-256 is by hand in `commonMain`, checked against the standard vectors.
+- `PromoCode`: one comparison rule for both tables. A code in brackets — `{ssh-keys}`,
+  `[ssh-keys]` — matches only as written, with the surrounding spaces ignored. Any other code is
+  normalised as before. A bracketed input that matches no exact row is also tried normalised, so
+  `[SCI]` still finds `SCI`.
+
+### The shell (`ui`)
+
+- The Activate screen gets a "Scan a QR code" button when the host has a camera. The text goes
+  through `fromQr` straight away. The promo field no longer teaches the keyboard.
+- `RecentsPreview(hidden)`: keeps the screen out of the recents thumbnail without refusing
+  screenshots — `setRecentsScreenshotEnabled(false)` on Android 13+, the privacy cover on iOS.
+  `AppContainer` uses it for a secret app.
+- Settings show neither the block nor the lock row of an app the person cannot see — this also
+  covers a hidden app that is not yet unlocked. A release Service Menu does not list secret apps.
+
+### Apps
+
+- `SecretTestApp` (`secret-test`, code `SECRET-2026`) next to the bench app: a visit counter and
+  a list of where you will not find it.
+
 ## 0.4.1 — contract 3
 
 The person chooses where an SSH key lives (Unitool notes ssh-new 09, D237–D244). Contract 3 is

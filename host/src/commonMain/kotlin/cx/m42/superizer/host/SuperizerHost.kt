@@ -2,6 +2,7 @@ package cx.m42.superizer.host
 
 import cx.m42.superizer.ActivationPort
 import cx.m42.superizer.HomeBanner
+import cx.m42.superizer.HostScreen
 import cx.m42.superizer.HostSection
 import cx.m42.superizer.backup.BackupKeyName
 import cx.m42.superizer.backup.BackupPort
@@ -55,6 +56,7 @@ import cx.m42.superizer.lock.UserPresence
 import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.AppSession
+import cx.m42.superizer.registry.listed
 import cx.m42.superizer.runtime.AppResult
 import cx.m42.superizer.runtime.AuthService
 import cx.m42.superizer.runtime.Clock
@@ -126,6 +128,9 @@ public class SuperizerBuilder internal constructor() {
     internal var selfTest: SelfTestRunner? = null
     internal val hostSections: MutableList<HostSection> = mutableListOf()
     internal val homeBanners: MutableList<HomeBanner> = mutableListOf()
+    internal val codeScreens: LinkedHashMap<String, HostScreen> = LinkedHashMap()
+    internal var scanner: (suspend () -> String?)? = null
+    internal var secretBackgroundLimitMs: Long = DEFAULT_SECRET_BACKGROUND_LIMIT_MS
 
     public fun host(info: HostInfo) {
         hostInfo = info
@@ -197,6 +202,15 @@ public class SuperizerBuilder internal constructor() {
         hostSections += section
     }
 
+    /**
+     * A screen of the host's that nothing lists — not Settings, not the menu — and that a promo code
+     * resolving to `ActivationResult.OpenHostScreen(screen.id)` opens (Unitool idea/09).
+     */
+    public fun hostScreen(screen: HostScreen) {
+        require(screen.id !in codeScreens) { "duplicate host screen id: ${screen.id}" }
+        codeScreens[screen.id] = screen
+    }
+
     /** A line of the host's own above the tiles on Home. */
     public fun homeBanner(banner: HomeBanner) {
         homeBanners += banner
@@ -208,6 +222,23 @@ public class SuperizerBuilder internal constructor() {
 
     public fun promoCodes(table: Map<String, ActivationResult>) {
         promo = LocalPromoCodes(table)
+    }
+
+    /**
+     * The camera behind the Activate screen's scan button: reads one QR code and hands back its
+     * text, or null. None — the default, and what desktop and the web have — draws no button.
+     */
+    public fun qrScanner(scan: suspend () -> String?) {
+        scanner = scan
+    }
+
+    /**
+     * How long a secret app (idea/09) may sit in the background and still be there on return.
+     * Longer, and it is closed as the host comes back — the next visit is by code again.
+     */
+    public fun secretBackgroundLimit(millis: Long) {
+        require(millis >= 0) { "secretBackgroundLimit must not be negative" }
+        secretBackgroundLimitMs = millis
     }
 
     /** The one door into the Service Menu in a release build (D34). Null leaves it debug-only. */
@@ -337,9 +368,10 @@ internal class SuperizerHost(
             hostLogger.warn("addToHome(${id.value}) ignored: not registered")
             return
         }
-        if (app.metadata.hidden && id !in unlockStore.unlocked.value) {
-            // Home is not a way around D8: a tile for a locked app would be the reveal itself.
-            hostLogger.warn("addToHome(${id.value}) ignored: locked")
+        if (!app.listed(unlockStore.unlocked.value)) {
+            // Home is not a way around D8: a tile for a locked app would be the reveal itself, and a
+            // secret app never gets one at all (idea/09).
+            hostLogger.warn("addToHome(${shownId(id)}) ignored: locked")
             return
         }
         homeStore.add(id)
@@ -349,8 +381,16 @@ internal class SuperizerHost(
         homeStore.remove(id)
     }
 
+    /** An id as the host's log may print it: a release build's log is the Service Menu's, and names no secret app. */
+    private fun shownId(id: AppId): String = if (!declared.debug && registry.isSecret(id)) "…" else id.value
+
     /** D8 and D48 in one place: whatever reveals a hidden app also puts it on Home. */
     private fun reveal(id: AppId) {
+        if (registry.isSecret(id)) {
+            // Not even the Service Menu: a secret app is opened by its code, one visit at a time.
+            hostLogger.warn("unlock(${shownId(id)}) ignored: a secret app is never unlocked")
+            return
+        }
         unlockStore.unlock(id)
         homeStore.add(id)
     }
@@ -393,6 +433,10 @@ internal class SuperizerHost(
 
     private val appsView = RegistryView(registry, { handler }, unlockStore.unlocked)
 
+    /** The events an app may hear: none about a secret app but its own (idea/09). */
+    private fun eventsFor(appId: AppId): SharedFlow<SuperizerEvent> =
+        FilteredSharedFlow(events) { it.appId == appId || !registry.isSecret(it.appId) }
+
     private val runtimeFactory = DefaultHostRuntimeFactory(
         hostInfo = hostInfo,
         network = network,
@@ -402,6 +446,8 @@ internal class SuperizerHost(
         auth = builder.auth,
         apps = appsView,
         events = events,
+        eventsFor = ::eventsFor,
+        quiet = { appId -> !declared.debug && registry.isSecret(appId) },
         services = ServiceRegistry(services, builder.boundServices.toMap()),
         clock = builder.clock,
         pushFor = { appId, logger ->
@@ -436,6 +482,8 @@ internal class SuperizerHost(
         serviceCode = builder.serviceCode,
         json = json,
         onUnlock = ::reveal,
+        scanner = builder.scanner,
+        screens = builder.codeScreens.keys.toSet(),
     )
 
     private val lockController = AppLockController(
@@ -477,11 +525,13 @@ internal class SuperizerHost(
         runner = builder.selfTest,
         scope = scope,
         logger = hostLogger,
+        unlisted = registry::isSecret,
     )
     override val storage: StorageDiagnostics = diagnosticsHub
 
     override val hostSections: List<HostSection> = builder.hostSections.toList()
     override val homeBanners: List<HomeBanner> = builder.homeBanners.toList()
+    override val codeScreens: Map<String, HostScreen> = builder.codeScreens.toMap()
 
     private val router = PushRouter(
         registry = registry,
@@ -531,7 +581,13 @@ internal class SuperizerHost(
 
     init {
         builder.apps.forEach { registry.register(it) }
+        forgetSecretsRevealed()
         handler.observeLifecycle()
+        closeSecretAfterLongBackground(
+            builder.lifecycle ?: PlatformLifecycle.state,
+            builder.clock,
+            builder.secretBackgroundLimitMs,
+        )
         lockController.attach(scope)
         router.attach(scope)
         registrar.attach(scope)
@@ -539,12 +595,55 @@ internal class SuperizerHost(
         // the interesting part is always just before the end.
         scope.launch {
             _events.collect { event ->
+                // The Service Menu opens by a code in a release build, and that code is not the
+                // secret app's (idea/09): what a secret app did stays out of its list there.
+                if (!declared.debug && registry.isSecret(event.appId)) return@collect
                 recent.value = (recent.value + event).takeLast(RECENT_EVENTS)
             }
         }
         scope.launch { handler.enableAll() }
         // After the apps: a self-test on first run must not hold up the first frame's apps.
         scope.launch { runCatching { diagnosticsHub.onStart() }.onFailure { hostLogger.warn("diagnostics at start failed", it) } }
+    }
+
+    /**
+     * A build that turned a hidden app secret finds it unlocked and on Home from before (idea/09):
+     * both go, or the tile would outlive the decision that it must not exist.
+     */
+    private fun forgetSecretsRevealed() {
+        registry.all().filter { it.metadata.secret }.forEach { app ->
+            unlockStore.lock(app.id)
+            homeStore.remove(app.id)
+        }
+    }
+
+    /**
+     * Back from the background after [limitMs] or more with a secret app open: it is closed and the
+     * shell goes Home, so the next visit is by code again (idea/09, question 126). A short trip —
+     * copying something from another app — finds it where it was left.
+     */
+    private fun closeSecretAfterLongBackground(
+        lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>,
+        clock: Clock,
+        limitMs: Long,
+    ) {
+        scope.launch {
+            var leftAt: Long? = null
+            lifecycle.collect { now ->
+                when (now) {
+                    cx.m42.superizer.runtime.HostLifecycle.Background -> leftAt = clock.now()
+                    cx.m42.superizer.runtime.HostLifecycle.Foreground -> {
+                        val away = leftAt?.let { clock.now() - it }
+                        leftAt = null
+                        val open = handler.current.value?.app ?: return@collect
+                        if (open.metadata.secret && away != null && away >= limitMs) {
+                            handler.close(force = true)
+                            _commands.tryEmit(ShellCommand.Close)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -558,6 +657,8 @@ internal class SuperizerHost(
 
         override suspend fun openApp(id: AppId, config: AppConfig): Result<AppResult> {
             val target = registry.get(id) ?: return Result.failure(NavigationError.UnknownApp(id))
+            // A secret app is not there for anybody to ask for (idea/09): `Locked` would say it is.
+            if (target.metadata.secret) return Result.failure(NavigationError.UnknownApp(id))
             if (target.metadata.hidden && id !in unlockStore.unlocked.value) {
                 // An app cannot reveal a hidden app by asking for it (D8): if it could, the bench
                 // app would be a key to every locked door in the build.
@@ -584,6 +685,9 @@ internal class SuperizerHost(
         const val RECENT_EVENTS = 100
     }
 }
+
+/** Five minutes: long enough to copy a code from a message, short enough to count as leaving. */
+private const val DEFAULT_SECRET_BACKGROUND_LIMIT_MS: Long = 5L * 60 * 1000
 
 /** The session type the ports hand back, re-exported so a host file needs one import fewer. */
 public typealias HostSession = AppSession

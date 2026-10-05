@@ -1,5 +1,15 @@
 package cx.m42.superizer.fixture
 
+import androidx.compose.runtime.setValue
+
+import androidx.compose.runtime.getValue
+
+import androidx.compose.runtime.mutableStateOf
+
+import androidx.compose.ui.test.assertTextEquals
+
+import cx.m42.apps.testapp.SecretTestApp
+
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -170,6 +180,108 @@ class FixtureShellTest {
         onNodeWithTag("catalog:row-probe").assertIsDisplayed()
         // D8 holds in the catalog too: a row for a locked app would be the reveal itself.
         onNodeWithTag("catalog:row-test-app").assertDoesNotExist()
+    }
+
+    /**
+     * idea/09, the owner's journey: the code opens the secret app; back, and it is nowhere — not
+     * on Home, in the drawer or the catalog; the code again, and it is back with what it kept.
+     */
+    @Test
+    fun theSecretAppOpensByItsCodeForOneVisitAndLeavesNoTrace() = runComposeUiTest {
+        setContent { FixtureApp(fixture()) }
+        waitForIdle()
+        onNodeWithTag("home:tile-secret-test").assertDoesNotExist()
+
+        enterCode(SecretTestApp.PROMO_CODE)
+        onNodeWithTag("secret-test:root").assertIsDisplayed()
+        onNodeWithTag("secret-test:visits").assertTextEquals("Visit 1")
+
+        goHome()
+        onNodeWithTag("home:tile-secret-test").assertDoesNotExist()
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithText("Secret app").assertDoesNotExist()
+        onNodeWithText("All apps").performClick()
+        waitForIdle()
+        onNodeWithTag("catalog:row-test-app").assertDoesNotExist()
+        onNodeWithTag("catalog:row-secret-test").assertDoesNotExist()
+        onNodeWithTag("catalog:row-probe").assertIsDisplayed()
+
+        enterCode("secret 2026")
+        onNodeWithTag("secret-test:visits").assertTextEquals("Visit 2")
+    }
+
+    @Test
+    fun aReleaseServiceMenuDoesNotListTheSecretAppAndADebugOneDoes() = runComposeUiTest {
+        var superizer by mutableStateOf(
+            buildFixture(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined), debug = false)
+                .also { it.settings.chooseLanguage("en") },
+        )
+        setContent { FixtureApp(superizer) }
+        waitForIdle()
+        enterCode("SERVICE")
+        onNodeWithTag("service:app-test-app").assertExists()
+        onNodeWithTag("service:app-secret-test").assertDoesNotExist()
+
+        superizer = fixture()
+        waitForIdle()
+        enterCode("SERVICE")
+        onNodeWithTag("service:app-secret-test").assertExists()
+    }
+
+    @Test
+    fun theCameraReadsAQrCodeAndActivatesStraightAway() = runComposeUiTest {
+        val payload = """{"type":"app_activation","appId":"test-app"}"""
+        val superizer = buildFixture(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined), scanner = { payload })
+            .also { it.settings.chooseLanguage("en") }
+        setContent { FixtureApp(superizer) }
+        waitForIdle()
+
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:scan").performClick()
+        waitForIdle()
+
+        onNodeWithTag("test-app:root").assertIsDisplayed()
+    }
+
+    @Test
+    fun withoutACameraThereIsNoScanButtonAndAScannedSecretIdIsUnknown() = runComposeUiTest {
+        val superizer = buildFixture(
+            CoroutineScope(SupervisorJob() + Dispatchers.Unconfined),
+            scanner = { """{"type":"app_activation","appId":"secret-test"}""" },
+        ).also { it.settings.chooseLanguage("en") }
+        var host by mutableStateOf(fixture())
+        setContent { FixtureApp(host) }
+        waitForIdle()
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:scan").assertDoesNotExist()
+
+        host = superizer
+        waitForIdle()
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:scan").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:error").assertIsDisplayed()
+        onNodeWithTag("secret-test:root").assertDoesNotExist()
+    }
+
+    private fun ComposeUiTest.enterCode(code: String) {
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:promo").performTextInput(code)
+        onNodeWithTag("activate:apply").performClick()
+        waitForIdle()
     }
 
     private fun ComposeUiTest.unlockBenchApp() {

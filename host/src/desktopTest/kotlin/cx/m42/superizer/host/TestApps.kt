@@ -33,17 +33,20 @@ internal class StubApp(
     secureWindow: Boolean = false,
     backup: BackupPolicy = BackupPolicy.All,
     minContract: Int? = null,
+    /** A secret app (idea/09): hidden as well, and on contract 4. */
+    secret: Boolean = false,
 ) : SuperizerApp<StubConfig>() {
 
     override val manifest: AppManifest = AppManifest(
         id = AppId(id),
         version = "1.0.0",
         minHostContract = minContract ?: when {
+            secret -> 4
             backup != BackupPolicy.All -> 3
             lock != LockPolicy.Off || secureWindow -> 2
             else -> 1
         },
-        metadata = AppMetadata(title = localized("en" to id), hidden = hidden),
+        metadata = AppMetadata(title = localized("en" to id), hidden = hidden || secret, secret = secret),
         deepLinks = deepLinks,
         pushTopics = topics,
         protection = AppProtection(lock, secureWindow),

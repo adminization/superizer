@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -50,7 +50,16 @@ public class DiagnosticsHub(
     private val scope: CoroutineScope,
     private val logger: Logger? = null,
     private val json: Json = Json { ignoreUnknownKeys = true },
+    /** Apps no report may name: secret ones (idea/09). Their findings reach only the app itself. */
+    private val unlisted: (AppId) -> Boolean = { false },
 ) : StorageDiagnostics {
+
+    /**
+     * Findings about [unlisted] apps, out of [report]: Storage & security shows it and "copy report"
+     * hands it to whoever asked. The app still hears its own through `runtime.diagnostics`, and the
+     * host-wide findings — no vault, a broken one — already say what a plain-text count would.
+     */
+    private val _unlistedFindings = MutableStateFlow<List<Finding>>(emptyList())
 
     private val _report = MutableStateFlow(
         DiagnosticsReport(at = clock.now(), hostVersion = host.version, platform = host.platform, selfTest = storedSelfTest()),
@@ -81,12 +90,16 @@ public class DiagnosticsHub(
             hostVersion = host.version,
             platform = host.platform,
             device = DeviceFacts(facts = facts),
-            findings = findings.sortedByDescending { it.status },
+            findings = findings.filterNot { it.isUnlisted() }.sortedByDescending { it.status },
             selfTest = selfTest,
         )
+        _unlistedFindings.value = findings.filter { it.isUnlisted() }
         _report.value = next
         return next
     }
+
+    private fun Finding.isUnlisted(): Boolean =
+        (subject as? Subject.AppSecrets)?.let { s -> AppId.parseOrNull(s.appId)?.let(unlisted) } == true
 
     override suspend fun selfTest(withConfirmation: Boolean): DiagnosticsReport = running.withLock {
         val runner = runner ?: return@withLock inspect()
@@ -106,9 +119,9 @@ public class DiagnosticsHub(
 
     /** Findings that concern [appId]: its own secrets, and the host-wide ones about secrets and the device. */
     public fun forApp(appId: AppId): AppDiagnostics = object : AppDiagnostics {
-        override val findings: StateFlow<List<Finding>> = _report
-            .map { report -> report.findings.filter { it.concerns(appId) } }
-            .stateIn(scope, SharingStarted.Eagerly, _report.value.findings.filter { it.concerns(appId) })
+        override val findings: StateFlow<List<Finding>> = combine(_report, _unlistedFindings) { report, hidden ->
+            (report.findings + hidden).filter { it.concerns(appId) }
+        }.stateIn(scope, SharingStarted.Eagerly, (_report.value.findings + _unlistedFindings.value).filter { it.concerns(appId) })
     }
 
     /**

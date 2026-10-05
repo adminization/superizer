@@ -84,7 +84,9 @@ public fun ServiceMenuScreen(
             .testTag("service:root"),
     ) {
         Section(title = hostStrings.serviceApps) {
-            manifests.forEach { (manifest, outcome) ->
+            // A release build opens this screen by a code that is not the secret app's (idea/09):
+            // its row is a debug build's business only.
+            manifests.filter { (manifest, _) -> superizer.hostInfo.debug || !manifest.metadata.secret }.forEach { (manifest, outcome) ->
                 AppRow(
                     manifest = manifest,
                     outcome = outcome,
@@ -275,7 +277,8 @@ private fun AppRow(
         }
         Text(
             text = "v${manifest.version} · contract ≥ ${manifest.minHostContract}" +
-                (if (manifest.metadata.hidden) " · hidden" else "") +
+                (if (manifest.metadata.hidden && !manifest.metadata.secret) " · hidden" else "") +
+                (if (manifest.metadata.secret) " · secret" else "") +
                 (if (unlocked) " · unlocked" else ""),
             style = tokens.mono,
             color = tokens.muted,
@@ -314,12 +317,15 @@ private fun AppRow(
             }
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AppButton(
-                    text = if (unlocked) hostStrings.serviceLock else hostStrings.serviceUnlock,
-                    onClick = onToggleLock,
-                    size = ButtonSize.Sm,
-                    variant = ButtonVariant.Secondary,
-                )
+                // Nothing to unlock: a secret app is opened by its code, one visit at a time.
+                if (!manifest.metadata.secret) {
+                    AppButton(
+                        text = if (unlocked) hostStrings.serviceLock else hostStrings.serviceUnlock,
+                        onClick = onToggleLock,
+                        size = ButtonSize.Sm,
+                        variant = ButtonVariant.Secondary,
+                    )
+                }
                 AppButton(
                     text = hostStrings.serviceDisable,
                     onClick = onToggleEnabled,

@@ -30,8 +30,8 @@ public final class cx/m42/superizer/host/ConsoleLogger : cx/m42/superizer/runtim
 
 public final class cx/m42/superizer/host/DefaultHostRuntimeFactory : cx/m42/superizer/runtime/HostRuntimeFactory {
 	public static final field $stable I
-	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
-	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/NetworkService;Lcx/m42/superizer/host/LogBuffer;Lcx/m42/superizer/runtime/LocaleService;Lcx/m42/superizer/runtime/HapticsService;Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/AppsService;Lkotlinx/coroutines/flow/SharedFlow;Lcx/m42/superizer/host/ServiceRegistry;Lcx/m42/superizer/runtime/Clock;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun createApp-HNJm7k8 (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/AppRuntime;
 	public fun createInstance (Lcx/m42/superizer/runtime/AppRuntime;Lkotlinx/coroutines/CoroutineScope;)Lcx/m42/superizer/runtime/InstanceRuntime;
 }
@@ -88,6 +88,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun home ([Ljava/lang/String;)V
 	public final fun homeBanner (Lcx/m42/superizer/HomeBanner;)V
 	public final fun host (Lcx/m42/superizer/runtime/HostInfo;)V
+	public final fun hostScreen (Lcx/m42/superizer/HostScreen;)V
 	public final fun hostSection (Lcx/m42/superizer/HostSection;)V
 	public final fun httpClient (Lio/ktor/client/HttpClient;)V
 	public final fun languages ([Lcx/m42/superizer/LanguageOption;Ljava/lang/String;)V
@@ -98,8 +99,10 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun notifier (Lcx/m42/superizer/host/push/Notifier;)V
 	public final fun promoCodes (Lcx/m42/superizer/host/activation/PromoCodeResolver;)V
 	public final fun promoCodes (Ljava/util/Map;)V
+	public final fun qrScanner (Lkotlin/jvm/functions/Function1;)V
 	public final fun register (Lcx/m42/superizer/app/SuperizerApp;)V
 	public final fun scheme (Ljava/lang/String;)V
+	public final fun secretBackgroundLimit (J)V
 	public final fun secretVault (Lcx/m42/superizer/secrets/SecretVault;)V
 	public final fun selfTest (Lcx/m42/superizer/diagnostics/SelfTestRunner;)V
 	public final fun service (Lcx/m42/superizer/runtime/ServiceKey;Ljava/lang/Object;)V
@@ -120,12 +123,25 @@ public final class cx/m42/superizer/host/SystemClock : cx/m42/superizer/runtime/
 
 public final class cx/m42/superizer/host/activation/ActivationService : cx/m42/superizer/ActivationPort {
 	public static final field $stable I
-	public fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/activation/PromoCodeResolver;Lcx/m42/superizer/host/storage/UnlockStore;Lcx/m42/superizer/registry/AppHandler;Lkotlinx/coroutines/flow/MutableSharedFlow;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)V
-	public synthetic fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/activation/PromoCodeResolver;Lcx/m42/superizer/host/storage/UnlockStore;Lcx/m42/superizer/registry/AppHandler;Lkotlinx/coroutines/flow/MutableSharedFlow;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/activation/PromoCodeResolver;Lcx/m42/superizer/host/storage/UnlockStore;Lcx/m42/superizer/registry/AppHandler;Lkotlinx/coroutines/flow/MutableSharedFlow;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Ljava/util/Set;)V
+	public synthetic fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/activation/PromoCodeResolver;Lcx/m42/superizer/host/storage/UnlockStore;Lcx/m42/superizer/registry/AppHandler;Lkotlinx/coroutines/flow/MutableSharedFlow;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun apply-0E7RQCE (Lcx/m42/superizer/activation/Activation;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun fromDeepLink (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun fromPromo (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun fromQr (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getCanScan ()Z
+	public fun scan (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/activation/HashedPromoCodes : cx/m42/superizer/host/activation/PromoCodeResolver {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/host/activation/HashedPromoCodes$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+	public fun resolve (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/activation/HashedPromoCodes$Companion {
+	public final fun hash (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 }
 
 public final class cx/m42/superizer/host/activation/LocalPromoCodes : cx/m42/superizer/host/activation/PromoCodeResolver {
@@ -137,6 +153,13 @@ public final class cx/m42/superizer/host/activation/LocalPromoCodes : cx/m42/sup
 
 public final class cx/m42/superizer/host/activation/LocalPromoCodes$Companion {
 	public final fun normalise (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/host/activation/PromoCode {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/host/activation/PromoCode;
+	public final fun isExact (Ljava/lang/String;)Z
+	public final fun key (Ljava/lang/String;)Ljava/lang/String;
 }
 
 public abstract interface class cx/m42/superizer/host/activation/PromoCodeResolver {
@@ -169,8 +192,8 @@ public final class cx/m42/superizer/host/backup/HostBackup : cx/m42/superizer/ba
 
 public final class cx/m42/superizer/host/diagnostics/DiagnosticsHub : cx/m42/superizer/diagnostics/StorageDiagnostics {
 	public static final field $stable I
-	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/host/secrets/HostSecrets;Lkotlinx/coroutines/flow/StateFlow;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestRunner;Lkotlinx/coroutines/CoroutineScope;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;)V
-	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/host/secrets/HostSecrets;Lkotlinx/coroutines/flow/StateFlow;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestRunner;Lkotlinx/coroutines/CoroutineScope;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/host/secrets/HostSecrets;Lkotlinx/coroutines/flow/StateFlow;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestRunner;Lkotlinx/coroutines/CoroutineScope;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/HostInfo;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/host/secrets/HostSecrets;Lkotlinx/coroutines/flow/StateFlow;Ljava/util/List;Lcx/m42/superizer/diagnostics/SelfTestRunner;Lkotlinx/coroutines/CoroutineScope;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun exportText ()Ljava/lang/String;
 	public final fun forApp-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/diagnostics/AppDiagnostics;
 	public fun getReport ()Lkotlinx/coroutines/flow/StateFlow;

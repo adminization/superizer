@@ -83,6 +83,12 @@ public interface Superizer {
     public val homeBanners: List<HomeBanner>
 
     /**
+     * Host screens nothing lists, by [HostScreen.id]: a promo code that resolves to
+     * [cx.m42.superizer.activation.ActivationResult.OpenHostScreen] opens one (Unitool idea/09).
+     */
+    public val codeScreens: Map<String, HostScreen> get() = emptyMap()
+
+    /**
      * What an app asked the host to do about navigation (04). The shell collects these and moves;
      * the app never touches the shell's state, which is the rule in §19 made structural.
      */
@@ -133,8 +139,21 @@ public interface ActivationPort {
     public suspend fun fromPromo(code: String): ActivationResult
     public suspend fun fromDeepLink(url: String): ActivationResult
 
-    /** Unlock if hidden, emit `Activated(source)`, launch. */
+    /**
+     * Unlock if hidden, emit `Activated(source)`, launch. A secret app (idea/09) is never unlocked,
+     * and only the very [Activation] that [fromPromo] handed back opens it — once.
+     */
     public suspend fun apply(activation: Activation, source: String): Result<AppSession>
+
+    /** Whether [scan] has a camera behind it: the Activate screen draws its scan button from this. */
+    public val canScan: Boolean get() = false
+
+    /**
+     * Reads one QR code with the camera the host was built with and hands back its text — null when
+     * the person closed the scanner, refused the camera, or there is none. Text, not an activation:
+     * it goes through [fromQr] like anything pasted.
+     */
+    public suspend fun scan(): String? = null
 }
 
 /**

@@ -1,5 +1,13 @@
 package cx.m42.superizer.fixture
 
+import androidx.compose.ui.test.performTextClearance
+
+import androidx.compose.ui.test.performTextInput
+
+import cx.m42.superizer.host.activation.HashedPromoCodes
+
+import cx.m42.superizer.activation.ActivationResult
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -105,6 +113,58 @@ class HostSlotsTest {
         waitForIdle()
         onNodeWithTag("settings:host:keys").assertExists()
         onNodeWithTag("host:keys").assertDoesNotExist()
+    }
+
+    /**
+     * idea/09: a host screen that nothing lists — not Settings, not the menu — and that its code
+     * opens. Back from it is Home; the code was the way in.
+     */
+    @Test
+    fun aCodeOpensAHostScreenNothingListsAndBackIsHome() = runComposeUiTest {
+        val superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)) {
+            host(HostInfo("Slots", "0.1.0", "dev", Platform.Desktop, SuperizerContract.VERSION, debug = true))
+            register(ProbeApp())
+            home("probe")
+            hostScreen(detail)
+            promoCodes(
+                HashedPromoCodes(
+                    "slots:",
+                    mapOf(
+                        HashedPromoCodes.hash("slots:", "{keys}") to ActivationResult.OpenHostScreen("keys"),
+                        HashedPromoCodes.hash("slots:", "{nothing}") to ActivationResult.OpenHostScreen("nothing"),
+                    ),
+                ),
+            )
+        }.also { it.settings.chooseLanguage("en") }
+        setContent { SuperizerShell(superizer) }
+        waitForIdle()
+
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Settings").performClick()
+        waitForIdle()
+        onNodeWithTag("settings:host:keys").assertDoesNotExist()
+
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").performClick()
+        waitForIdle()
+        // A row for a screen this host does not have is a wrong code, not a crash.
+        onNodeWithTag("activate:promo").performTextInput("{nothing}")
+        onNodeWithTag("activate:apply").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:error").assertIsDisplayed()
+
+        onNodeWithTag("activate:promo").performTextClearance()
+        onNodeWithTag("activate:promo").performTextInput("{keys}")
+        onNodeWithTag("activate:apply").performClick()
+        waitForIdle()
+        onNodeWithTag("host:keys").assertIsDisplayed()
+        onNodeWithTag("keys:body").assertIsDisplayed()
+
+        onNodeWithTag("keys:done").performClick()
+        waitForIdle()
+        onNodeWithTag("home:tile-probe").assertIsDisplayed()
     }
 
     @Test

@@ -44,6 +44,7 @@ import cx.m42.superizer.app.AppChrome
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.registry.AppSession
 import cx.m42.superizer.registry.AppState
+import cx.m42.superizer.registry.listed
 import cx.m42.superizer.runtime.LocalAppRuntime
 import cx.m42.superizer.theme.AppTheme
 import cx.m42.superizer.theme.SuperizerTheme
@@ -59,6 +60,7 @@ import cx.m42.superizer.ui.components.SettingsIcon
 import cx.m42.superizer.ui.i18n.LocalHostStrings
 import cx.m42.superizer.ui.i18n.hostStrings
 import cx.m42.superizer.ui.i18n.hostStringsFor
+import cx.m42.superizer.ui.platform.RecentsPreview
 import cx.m42.superizer.ui.platform.SecureWindow
 import cx.m42.superizer.ui.platform.SystemBackHandler
 import cx.m42.superizer.ui.screens.ActivateScreen
@@ -184,8 +186,9 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
 
     val strings = hostStringsFor(langTag)
     val here = destination
-    // What this device may open (D8): the catalog lists it, and only the Service Menu sees more.
-    val visible = registered.filter { !it.metadata.hidden || it.id in unlocked }
+    // What this device may open (D8): the catalog lists it, and only the Service Menu sees more. A
+    // secret app is never here, whatever the unlock store says (idea/09).
+    val visible = registered.filter { it.listed(unlocked) }
     // What the user chose (D48), in the order they chose it. Filtered through `visible` rather than
     // trusted: the store keeps ids across builds and across a lock, and the shell is where a stale
     // id is skipped rather than drawn.
@@ -359,6 +362,9 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                                                 go(ShellDestination.ServiceMenu)
                                         }
                                     },
+                                    // Back from it is Home, as from an app a code opened: the code
+                                    // was the way in, not a page to return to (idea/09).
+                                    onHostScreen = { screen -> go(ShellDestination.Host(screen, ShellDestination.Home)) },
                                 )
                             }
                         }
@@ -469,6 +475,8 @@ private fun AppContainer(
     // D132: from the first frame of a protected app to its last, curtain included — a screenshot of
     // the curtain says which app is there, and the recents thumbnail is taken of whatever is on top.
     SecureWindow(active = app?.manifest?.protection?.secureWindow == true)
+    // A secret app's screen is not left behind as the recents thumbnail (idea/09, D253).
+    RecentsPreview(hidden = app?.metadata?.secret == true)
 
     AppScaffold(
         // The app's own title can be what it is hiding — the 2FA app titles an account's page with

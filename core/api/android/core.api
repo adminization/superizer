@@ -3,6 +3,13 @@ public abstract interface class cx/m42/superizer/ActivationPort {
 	public abstract fun fromDeepLink (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun fromPromo (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun fromQr (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getCanScan ()Z
+	public fun scan (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/ActivationPort$DefaultImpls {
+	public static fun getCanScan (Lcx/m42/superizer/ActivationPort;)Z
+	public static fun scan (Lcx/m42/superizer/ActivationPort;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class cx/m42/superizer/DiagnosticsPort {
@@ -100,6 +107,7 @@ public abstract interface class cx/m42/superizer/Superizer {
 	public abstract fun addToHome-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getActivation ()Lcx/m42/superizer/ActivationPort;
 	public abstract fun getBackup ()Lcx/m42/superizer/backup/BackupPort;
+	public fun getCodeScreens ()Ljava/util/Map;
 	public abstract fun getCommands ()Lkotlinx/coroutines/flow/SharedFlow;
 	public abstract fun getDiagnostics ()Lcx/m42/superizer/DiagnosticsPort;
 	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
@@ -120,6 +128,10 @@ public abstract interface class cx/m42/superizer/Superizer {
 }
 
 public final class cx/m42/superizer/Superizer$Companion {
+}
+
+public final class cx/m42/superizer/Superizer$DefaultImpls {
+	public static fun getCodeScreens (Lcx/m42/superizer/Superizer;)Ljava/util/Map;
 }
 
 public final class cx/m42/superizer/SuperizerContract {
@@ -163,6 +175,18 @@ public final class cx/m42/superizer/activation/ActivationResult$HostCommand : cx
 	public static synthetic fun copy$default (Lcx/m42/superizer/activation/ActivationResult$HostCommand;Lcx/m42/superizer/activation/ActivationResult$Command;ILjava/lang/Object;)Lcx/m42/superizer/activation/ActivationResult$HostCommand;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCommand ()Lcx/m42/superizer/activation/ActivationResult$Command;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/activation/ActivationResult$OpenHostScreen : cx/m42/superizer/activation/ActivationResult {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/activation/ActivationResult$OpenHostScreen;
+	public static synthetic fun copy$default (Lcx/m42/superizer/activation/ActivationResult$OpenHostScreen;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/activation/ActivationResult$OpenHostScreen;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -475,20 +499,22 @@ public final class cx/m42/superizer/app/AppManifestKt {
 public final class cx/m42/superizer/app/AppMetadata {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/superizer/app/AppMetadata$Companion;
-	public fun <init> (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;)V
-	public synthetic fun <init> (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;Z)V
+	public synthetic fun <init> (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lcx/m42/superizer/app/Localized;
 	public final fun component2 ()Lcx/m42/superizer/app/Localized;
 	public final fun component3 ()Lcx/m42/superizer/app/AppIcon;
 	public final fun component4 ()Z
 	public final fun component5 ()Ljava/lang/String;
-	public final fun copy (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;)Lcx/m42/superizer/app/AppMetadata;
-	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppMetadata;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/app/AppMetadata;
+	public final fun component6 ()Z
+	public final fun copy (Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;Z)Lcx/m42/superizer/app/AppMetadata;
+	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppMetadata;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/Localized;Lcx/m42/superizer/app/AppIcon;ZLjava/lang/String;ZILjava/lang/Object;)Lcx/m42/superizer/app/AppMetadata;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCategory ()Ljava/lang/String;
 	public final fun getDescription ()Lcx/m42/superizer/app/Localized;
 	public final fun getHidden ()Z
 	public final fun getIcon ()Lcx/m42/superizer/app/AppIcon;
+	public final fun getSecret ()Z
 	public final fun getTitle ()Lcx/m42/superizer/app/Localized;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -1952,9 +1978,14 @@ public final class cx/m42/superizer/registry/AppRegistry {
 	public final fun get-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/app/SuperizerApp;
 	public final fun getApps ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun getManifests ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun isSecret-EU_bkdE (Ljava/lang/String;)Z
 	public final fun outcome-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/registry/RegistrationOutcome;
 	public final fun register (Lcx/m42/superizer/app/SuperizerApp;)Z
 	public final fun visible (Ljava/util/Set;)Ljava/util/List;
+}
+
+public final class cx/m42/superizer/registry/AppRegistryKt {
+	public static final fun listed (Lcx/m42/superizer/app/SuperizerApp;Ljava/util/Set;)Z
 }
 
 public final class cx/m42/superizer/registry/AppSession {

@@ -28,6 +28,7 @@ import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.lock.AuthAvailability
 import cx.m42.superizer.lock.AuthOutcome
+import cx.m42.superizer.registry.listed
 import cx.m42.superizer.theme.AppTheme
 import cx.m42.superizer.ui.components.AppButton
 import cx.m42.superizer.ui.components.ButtonSize
@@ -57,6 +58,7 @@ public fun SettingsScreen(
     val langTag by superizer.settings.langTag.collectAsState()
     val haptics by superizer.settings.haptics.collectAsState()
     val sections by superizer.handler.settingsSections.collectAsState()
+    val unlocked by superizer.unlocked.collectAsState()
     val lock by superizer.lock.state.collectAsState()
 
     Column(
@@ -107,6 +109,9 @@ public fun SettingsScreen(
         // Each app's own block, under its own title. The host does not know what is in one.
         sections.forEach { (appId, section) ->
             val app = superizer.registry.get(appId) ?: return@forEach
+            // A hidden app's block waits for its unlock, or Settings would be the reveal (D8); a
+            // secret app never registers one (idea/09).
+            if (!app.listed(unlocked)) return@forEach
             // A protected app's block is drawn out here, outside its curtain (06 §5.4), so while
             // the curtain would be down the block is not drawn at all.
             if (lock.covers(appId)) return@forEach
@@ -140,7 +145,9 @@ private fun ProtectionSection(superizer: Superizer) {
     val strings = hostStrings
     val scope = rememberCoroutineScope()
 
-    val lockable = apps.filter { it.manifest.protection.lock != LockPolicy.Off }
+    val unlocked by superizer.unlocked.collectAsState()
+    // Only what the person can see elsewhere: a row for a locked or secret app names it (idea/09).
+    val lockable = apps.filter { it.manifest.protection.lock != LockPolicy.Off && it.listed(unlocked) }
     if (lockable.isEmpty() || lock.availability == AuthAvailability.Unsupported) return
     val canAsk = lock.availability == AuthAvailability.Available
 

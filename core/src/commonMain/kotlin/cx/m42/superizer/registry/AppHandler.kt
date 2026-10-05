@@ -295,7 +295,8 @@ public class AppHandler(
 
         setState(id, AppState.Closing)
         val snapshot = runCatching { session.instance.saveState() }.getOrNull()
-        if (keepSnapshot) {
+        // A secret app leaves no snapshot (idea/09): the next visit is by code, not by restore.
+        if (keepSnapshot && !session.app.secret) {
             snapshots.save(SessionSnapshot(id, session.app.kept(session.config), snapshot, clock.now()))
         } else {
             snapshots.clear()
@@ -349,7 +350,11 @@ public class AppHandler(
                 when (now) {
                     HostLifecycle.Background -> {
                         session?.instance?.onBackground()
-                        if (session != null) {
+                        if (session != null && session.app.secret) {
+                            // Not even yesterday's other screen: after a process death the host
+                            // starts on Home, and nothing hints at what was open.
+                            snapshots.clear()
+                        } else if (session != null) {
                             snapshots.save(
                                 SessionSnapshot(
                                     session.app.id,
@@ -417,6 +422,8 @@ public class AppHandler(
 
     private val SuperizerApp<*>.sensitive: Boolean get() = manifest.protection.sensitive
 
+    private val SuperizerApp<*>.secret: Boolean get() = metadata.secret
+
     @Suppress("UNCHECKED_CAST")
     private fun create(app: SuperizerApp<*>, runtime: InstanceRuntime, config: Any): AppInstance =
         (app as SuperizerApp<Any>).launch(runtime, config)
@@ -438,6 +445,11 @@ public class AppHandler(
         override val runtime: AppRuntime get() = slot.runtime
 
         override fun settingsSection(section: @Composable (runtime: AppRuntime) -> Unit) {
+            if (registry.isSecret(id)) {
+                // Settings are a screen everybody sees (idea/09): a secret app keeps its own inside.
+                slot.runtime.logger.warn("settingsSection ignored: a secret app has no block in Settings")
+                return
+            }
             slot.sections += section
             slot.disposers += Disposable { slot.sections.remove(section) }
         }
@@ -448,7 +460,10 @@ public class AppHandler(
         }
 
         override fun listener(handler: suspend (event: SuperizerEvent) -> Unit) {
-            val job = slot.scope.launch { events.collect { handler(it) } }
+            // What a secret app did is nobody else's business (idea/09); its own events it still hears.
+            val job = slot.scope.launch {
+                events.collect { if (it.appId == id || !registry.isSecret(it.appId)) handler(it) }
+            }
             slot.disposers += Disposable { job.cancel() }
         }
     }

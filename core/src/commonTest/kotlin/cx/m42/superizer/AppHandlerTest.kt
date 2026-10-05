@@ -355,6 +355,62 @@ class AppHandlerTest {
     }
 
     @Test
+    fun aSecretAppLeavesNoSnapshotInTheBackground(): TestResult = handlerTest { f ->
+        // idea/09: the next visit is by code, not by restore — and nothing in the prefs names it.
+        f.registry.register(ProbeApp(id = "other"))
+        f.registry.register(ProbeApp(id = "secret", secret = true, hidden = true, minHostContract = 4))
+        f.handler.enableAll()
+        f.handler.observeLifecycle()
+        f.handler.launch(AppId("other"))
+        f.handler.launch(AppId("secret"), force = true)
+        advanceUntilIdle()
+        assertEquals(AppId("other"), f.snapshots.snapshot?.appId, "the app left for the secret one kept its snapshot")
+
+        f.lifecycle.value = HostLifecycle.Background
+        advanceUntilIdle()
+
+        assertNull(f.snapshots.snapshot, "not the secret app's, and not yesterday's other screen either")
+    }
+
+    @Test
+    fun leavingASecretAppForAnotherKeepsNoSnapshotOfIt(): TestResult = handlerTest { f ->
+        f.registry.register(ProbeApp(id = "secret", secret = true, hidden = true, minHostContract = 4))
+        f.registry.register(ProbeApp(id = "other"))
+        f.handler.enableAll()
+
+        f.handler.launch(AppId("secret"), force = true)
+        f.handler.launch(AppId("other"))
+        advanceUntilIdle()
+
+        assertEquals(AppId("other"), f.handler.current.value?.app?.id)
+        assertNull(f.snapshots.snapshot)
+    }
+
+    @Test
+    fun aSecretAppGetsNoBlockInSettings(): TestResult = handlerTest { f ->
+        f.registry.register(ProbeApp(id = "plain", withSection = true))
+        f.registry.register(ProbeApp(id = "secret", secret = true, hidden = true, minHostContract = 4, withSection = true))
+        f.handler.enableAll()
+
+        assertEquals(listOf(AppId("plain")), f.handler.settingsSections.value.map { it.first })
+    }
+
+    @Test
+    fun otherAppsDoNotHearWhatASecretAppDid(): TestResult = handlerTest { f ->
+        val other = ProbeApp(id = "other", listens = true)
+        val secret = ProbeApp(id = "secret", secret = true, hidden = true, minHostContract = 4, listens = true)
+        f.registry.register(other)
+        f.registry.register(secret)
+        f.handler.enableAll()
+
+        f.handler.launch(AppId("secret"), force = true)
+        advanceUntilIdle()
+
+        assertTrue(other.heard.none { it.appId == AppId("secret") }, "heard: ${other.heard}")
+        assertTrue(secret.heard.any { it is SuperizerEvent.Launched && it.appId == AppId("secret") })
+    }
+
+    @Test
     fun aSecondLaunchWhileTheFirstIsStillLaunchingIsQueuedAndNotDropped(): TestResult = handlerTest { f ->
         f.registry.register(ProbeApp(id = "first"))
         f.registry.register(ProbeApp(id = "second"))

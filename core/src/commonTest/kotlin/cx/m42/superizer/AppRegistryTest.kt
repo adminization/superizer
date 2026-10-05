@@ -46,6 +46,40 @@ class AppRegistryTest {
     }
 
     @Test
+    fun aSecretAppIsHiddenAsksForContractFourAndHasNoDoorButItsCode() {
+        // idea/09: whatever else could open a secret app is a mistake in its manifest, and the
+        // mistake fails here — not as a notification on somebody's lock screen.
+        val registry = AppRegistry(testHost(), events)
+        val cases = mapOf(
+            "not-hidden" to ProbeApp(id = "not-hidden", secret = true, minHostContract = 4),
+            "old-contract" to ProbeApp(id = "old-contract", secret = true, hidden = true, minHostContract = 3),
+            "with-link" to ProbeApp(id = "with-link", secret = true, hidden = true, minHostContract = 4, deepLinks = setOf("open")),
+            "with-push" to ProbeApp(id = "with-push", secret = true, hidden = true, minHostContract = 4, pushTopics = setOf("news")),
+        )
+        cases.forEach { (id, app) ->
+            assertFalse(registry.register(app), id)
+            assertTrue(registry.outcome(AppId(id)) is RegistrationOutcome.Rejected, id)
+        }
+
+        assertTrue(registry.register(ProbeApp(id = "secret", secret = true, hidden = true, minHostContract = 4)))
+        assertTrue(registry.isSecret(AppId("secret")))
+        assertFalse(registry.isSecret(AppId("no-such-app")))
+        assertFalse(registry.isSecret(null))
+    }
+
+    @Test
+    fun aSecretAppIsNeverVisibleWhateverTheUnlockStoreSays() {
+        val registry = AppRegistry(testHost(), events)
+        registry.register(ProbeApp(id = "secret", secret = true, hidden = true, minHostContract = 4))
+        registry.register(ProbeApp(id = "hidden", hidden = true))
+        registry.register(ProbeApp(id = "plain"))
+
+        val unlocked = setOf(AppId("secret"), AppId("hidden"))
+        assertEquals(listOf(AppId("hidden"), AppId("plain")), registry.visible(unlocked).map { it.id })
+        assertEquals(listOf(AppId("plain")), registry.visible(emptySet()).map { it.id })
+    }
+
+    @Test
     fun anAppThatDeclaresProtectionMustAskForTheContractThatHasIt() {
         // D138: on a contract-1 host such a manifest would run with no lock. Refusing it on this
         // host as well is what makes the forgotten `minHostContract = 2` fail in the first test.

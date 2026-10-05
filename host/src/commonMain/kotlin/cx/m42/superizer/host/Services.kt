@@ -20,7 +20,11 @@ import cx.m42.superizer.runtime.ServiceKey
 import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.AppState
+import cx.m42.superizer.event.SuperizerEvent
+import kotlinx.coroutines.ExperimentalForInheritanceCoroutinesApi
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -87,6 +91,33 @@ public class ConsoleLogger(
         buffer.add(line)
         if (toConsole) println(line)
     }
+}
+
+/**
+ * What a secret app (idea/09) logs in a release build: nothing anybody can read afterwards. The
+ * Service Menu shows the log buffer, and the console is `adb logcat` — both would name it.
+ */
+internal object SilentLogger : Logger {
+    override fun debug(message: String, throwable: Throwable?): Unit = Unit
+    override fun info(message: String, throwable: Throwable?): Unit = Unit
+    override fun warn(message: String, throwable: Throwable?): Unit = Unit
+    override fun error(message: String, throwable: Throwable?): Unit = Unit
+}
+
+/**
+ * The host's event flow with some events left out — still a [SharedFlow], so an app's
+ * `runtime.events` keeps its type, and still the same subscription, so nothing arrives later or in
+ * another order than it does for the host (a `shareIn` would add a hop and its own buffer).
+ */
+@OptIn(ExperimentalForInheritanceCoroutinesApi::class)
+internal class FilteredSharedFlow(
+    private val upstream: SharedFlow<SuperizerEvent>,
+    private val keep: (SuperizerEvent) -> Boolean,
+) : SharedFlow<SuperizerEvent> {
+    override val replayCache: List<SuperizerEvent> get() = upstream.replayCache.filter(keep)
+
+    override suspend fun collect(collector: FlowCollector<SuperizerEvent>): Nothing =
+        upstream.collect { if (keep(it)) collector.emit(it) }
 }
 
 /**
@@ -205,6 +236,8 @@ public class RegistryView(
 
     private fun summary(id: AppId): AppSummary? {
         val app = registry.get(id) ?: return null
+        // Not there, as far as any app can tell (idea/09) — the same null a made-up id gets.
+        if (app.metadata.secret) return null
         return AppSummary(
             id = app.id,
             version = app.version,

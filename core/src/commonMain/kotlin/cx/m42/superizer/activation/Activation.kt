@@ -29,6 +29,13 @@ public sealed interface ActivationResult {
      */
     public data class HostCommand(val command: Command) : ActivationResult
 
+    /**
+     * A screen of the host's that no menu and no Settings lists (Unitool idea/09): the host
+     * registered it under [id] with `SuperizerBuilder.hostScreen`, and only a code opens it. An id
+     * the host has no screen for is answered as an unknown code — the code names nothing here.
+     */
+    public data class OpenHostScreen(val id: String) : ActivationResult
+
     public data class Rejected(val reason: Reason) : ActivationResult
 
     public enum class Reason { Malformed, UnsupportedSchema, UnknownApp, UnknownCode, Expired }

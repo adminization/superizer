@@ -591,10 +591,14 @@ abstract interface cx.m42.superizer.ssh/SshKeyring { // cx.m42.superizer.ssh/Ssh
 }
 
 abstract interface cx.m42.superizer/ActivationPort { // cx.m42.superizer/ActivationPort|null[0]
+    open val canScan // cx.m42.superizer/ActivationPort.canScan|{}canScan[0]
+        open fun <get-canScan>(): kotlin/Boolean // cx.m42.superizer/ActivationPort.canScan.<get-canScan>|<get-canScan>(){}[0]
+
     abstract suspend fun apply(cx.m42.superizer.activation/Activation, kotlin/String): kotlin/Result<cx.m42.superizer.registry/AppSession> // cx.m42.superizer/ActivationPort.apply|apply(cx.m42.superizer.activation.Activation;kotlin.String){}[0]
     abstract suspend fun fromDeepLink(kotlin/String): cx.m42.superizer.activation/ActivationResult // cx.m42.superizer/ActivationPort.fromDeepLink|fromDeepLink(kotlin.String){}[0]
     abstract suspend fun fromPromo(kotlin/String): cx.m42.superizer.activation/ActivationResult // cx.m42.superizer/ActivationPort.fromPromo|fromPromo(kotlin.String){}[0]
     abstract suspend fun fromQr(kotlin/String): cx.m42.superizer.activation/ActivationResult // cx.m42.superizer/ActivationPort.fromQr|fromQr(kotlin.String){}[0]
+    open suspend fun scan(): kotlin/String? // cx.m42.superizer/ActivationPort.scan|scan(){}[0]
 }
 
 abstract interface cx.m42.superizer/DiagnosticsPort { // cx.m42.superizer/DiagnosticsPort|null[0]
@@ -685,6 +689,8 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
         abstract fun <get-storage>(): cx.m42.superizer.diagnostics/StorageDiagnostics // cx.m42.superizer/Superizer.storage.<get-storage>|<get-storage>(){}[0]
     abstract val unlocked // cx.m42.superizer/Superizer.unlocked|{}unlocked[0]
         abstract fun <get-unlocked>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Set<cx.m42.superizer.app/AppId>> // cx.m42.superizer/Superizer.unlocked.<get-unlocked>|<get-unlocked>(){}[0]
+    open val codeScreens // cx.m42.superizer/Superizer.codeScreens|{}codeScreens[0]
+        open fun <get-codeScreens>(): kotlin.collections/Map<kotlin/String, cx.m42.superizer/HostScreen> // cx.m42.superizer/Superizer.codeScreens.<get-codeScreens>|<get-codeScreens>(){}[0]
 
     abstract suspend fun addToHome(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.addToHome|addToHome(cx.m42.superizer.app.AppId){}[0]
     abstract suspend fun removeFromHome(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.removeFromHome|removeFromHome(cx.m42.superizer.app.AppId){}[0]
@@ -876,6 +882,19 @@ sealed interface cx.m42.superizer.activation/ActivationResult { // cx.m42.superi
         final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.activation/ActivationResult.HostCommand.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // cx.m42.superizer.activation/ActivationResult.HostCommand.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // cx.m42.superizer.activation/ActivationResult.HostCommand.toString|toString(){}[0]
+    }
+
+    final class OpenHostScreen : cx.m42.superizer.activation/ActivationResult { // cx.m42.superizer.activation/ActivationResult.OpenHostScreen|null[0]
+        constructor <init>(kotlin/String) // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.<init>|<init>(kotlin.String){}[0]
+
+        final val id // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.id|{}id[0]
+            final fun <get-id>(): kotlin/String // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.id.<get-id>|<get-id>(){}[0]
+
+        final fun component1(): kotlin/String // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): cx.m42.superizer.activation/ActivationResult.OpenHostScreen // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.activation/ActivationResult.OpenHostScreen.toString|toString(){}[0]
     }
 
     final class Rejected : cx.m42.superizer.activation/ActivationResult { // cx.m42.superizer.activation/ActivationResult.Rejected|null[0]
@@ -2126,7 +2145,7 @@ final class cx.m42.superizer.app/AppManifest { // cx.m42.superizer.app/AppManife
 }
 
 final class cx.m42.superizer.app/AppMetadata { // cx.m42.superizer.app/AppMetadata|null[0]
-    constructor <init>(cx.m42.superizer.app/Localized, cx.m42.superizer.app/Localized? = ..., cx.m42.superizer.app/AppIcon = ..., kotlin/Boolean = ..., kotlin/String? = ...) // cx.m42.superizer.app/AppMetadata.<init>|<init>(cx.m42.superizer.app.Localized;cx.m42.superizer.app.Localized?;cx.m42.superizer.app.AppIcon;kotlin.Boolean;kotlin.String?){}[0]
+    constructor <init>(cx.m42.superizer.app/Localized, cx.m42.superizer.app/Localized? = ..., cx.m42.superizer.app/AppIcon = ..., kotlin/Boolean = ..., kotlin/String? = ..., kotlin/Boolean = ...) // cx.m42.superizer.app/AppMetadata.<init>|<init>(cx.m42.superizer.app.Localized;cx.m42.superizer.app.Localized?;cx.m42.superizer.app.AppIcon;kotlin.Boolean;kotlin.String?;kotlin.Boolean){}[0]
 
     final val category // cx.m42.superizer.app/AppMetadata.category|{}category[0]
         final fun <get-category>(): kotlin/String? // cx.m42.superizer.app/AppMetadata.category.<get-category>|<get-category>(){}[0]
@@ -2136,6 +2155,8 @@ final class cx.m42.superizer.app/AppMetadata { // cx.m42.superizer.app/AppMetada
         final fun <get-hidden>(): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.hidden.<get-hidden>|<get-hidden>(){}[0]
     final val icon // cx.m42.superizer.app/AppMetadata.icon|{}icon[0]
         final fun <get-icon>(): cx.m42.superizer.app/AppIcon // cx.m42.superizer.app/AppMetadata.icon.<get-icon>|<get-icon>(){}[0]
+    final val secret // cx.m42.superizer.app/AppMetadata.secret|{}secret[0]
+        final fun <get-secret>(): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.secret.<get-secret>|<get-secret>(){}[0]
     final val title // cx.m42.superizer.app/AppMetadata.title|{}title[0]
         final fun <get-title>(): cx.m42.superizer.app/Localized // cx.m42.superizer.app/AppMetadata.title.<get-title>|<get-title>(){}[0]
 
@@ -2144,7 +2165,8 @@ final class cx.m42.superizer.app/AppMetadata { // cx.m42.superizer.app/AppMetada
     final fun component3(): cx.m42.superizer.app/AppIcon // cx.m42.superizer.app/AppMetadata.component3|component3(){}[0]
     final fun component4(): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.component4|component4(){}[0]
     final fun component5(): kotlin/String? // cx.m42.superizer.app/AppMetadata.component5|component5(){}[0]
-    final fun copy(cx.m42.superizer.app/Localized = ..., cx.m42.superizer.app/Localized? = ..., cx.m42.superizer.app/AppIcon = ..., kotlin/Boolean = ..., kotlin/String? = ...): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.app/AppMetadata.copy|copy(cx.m42.superizer.app.Localized;cx.m42.superizer.app.Localized?;cx.m42.superizer.app.AppIcon;kotlin.Boolean;kotlin.String?){}[0]
+    final fun component6(): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.component6|component6(){}[0]
+    final fun copy(cx.m42.superizer.app/Localized = ..., cx.m42.superizer.app/Localized? = ..., cx.m42.superizer.app/AppIcon = ..., kotlin/Boolean = ..., kotlin/String? = ..., kotlin/Boolean = ...): cx.m42.superizer.app/AppMetadata // cx.m42.superizer.app/AppMetadata.copy|copy(cx.m42.superizer.app.Localized;cx.m42.superizer.app.Localized?;cx.m42.superizer.app.AppIcon;kotlin.Boolean;kotlin.String?;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppMetadata.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppMetadata.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // cx.m42.superizer.app/AppMetadata.toString|toString(){}[0]
@@ -2714,6 +2736,7 @@ final class cx.m42.superizer.registry/AppRegistry { // cx.m42.superizer.registry
 
     final fun all(): kotlin.collections/List<cx.m42.superizer.app/SuperizerApp<*>> // cx.m42.superizer.registry/AppRegistry.all|all(){}[0]
     final fun get(cx.m42.superizer.app/AppId): cx.m42.superizer.app/SuperizerApp<*>? // cx.m42.superizer.registry/AppRegistry.get|get(cx.m42.superizer.app.AppId){}[0]
+    final fun isSecret(cx.m42.superizer.app/AppId?): kotlin/Boolean // cx.m42.superizer.registry/AppRegistry.isSecret|isSecret(cx.m42.superizer.app.AppId?){}[0]
     final fun outcome(cx.m42.superizer.app/AppId): cx.m42.superizer.registry/RegistrationOutcome? // cx.m42.superizer.registry/AppRegistry.outcome|outcome(cx.m42.superizer.app.AppId){}[0]
     final fun register(cx.m42.superizer.app/SuperizerApp<*>): kotlin/Boolean // cx.m42.superizer.registry/AppRegistry.register|register(cx.m42.superizer.app.SuperizerApp<*>){}[0]
     final fun visible(kotlin.collections/Set<cx.m42.superizer.app/AppId>): kotlin.collections/List<cx.m42.superizer.app/SuperizerApp<*>> // cx.m42.superizer.registry/AppRegistry.visible|visible(kotlin.collections.Set<cx.m42.superizer.app.AppId>){}[0]
@@ -3434,6 +3457,7 @@ final const val cx.m42.superizer.ssh/MIN_PASSPHRASE // cx.m42.superizer.ssh/MIN_
 
 final val cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop|#static{}cx_m42_superizer_activation_Activation$stableprop[0]
 final val cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop|#static{}cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop[0]
+final val cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_OpenHostScreen$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_OpenHostScreen$stableprop|#static{}cx_m42_superizer_activation_ActivationResult_OpenHostScreen$stableprop[0]
 final val cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop|#static{}cx_m42_superizer_activation_ActivationResult_Rejected$stableprop[0]
 final val cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop|#static{}cx_m42_superizer_activation_ActivationResult_Success$stableprop[0]
 final val cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop // cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop|#static{}cx_m42_superizer_app_AppChrome$stableprop[0]
@@ -3616,6 +3640,7 @@ final val cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop // c
 final val cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenSettings$stableprop // cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenSettings$stableprop|#static{}cx_m42_superizer_ShellCommand_OpenSettings$stableprop[0]
 final val cx.m42.superizer/cx_m42_superizer_SuperizerContract$stableprop // cx.m42.superizer/cx_m42_superizer_SuperizerContract$stableprop|#static{}cx_m42_superizer_SuperizerContract$stableprop[0]
 
+final fun (cx.m42.superizer.app/SuperizerApp<*>).cx.m42.superizer.registry/listed(kotlin.collections/Set<cx.m42.superizer.app/AppId>): kotlin/Boolean // cx.m42.superizer.registry/listed|listed@cx.m42.superizer.app.SuperizerApp<*>(kotlin.collections.Set<cx.m42.superizer.app.AppId>){}[0]
 final fun (cx.m42.superizer.diagnostics/DiagnosticsCode).cx.m42.superizer.diagnostics/finding(cx.m42.superizer.diagnostics/Subject, kotlin.collections/Map<kotlin/String, kotlin/String> = ..., kotlin/String? = ...): cx.m42.superizer.diagnostics/Finding // cx.m42.superizer.diagnostics/finding|finding@cx.m42.superizer.diagnostics.DiagnosticsCode(cx.m42.superizer.diagnostics.Subject;kotlin.collections.Map<kotlin.String,kotlin.String>;kotlin.String?){}[0]
 final fun (kotlinx.serialization.json/JsonObject).cx.m42.superizer.app/asConfig(): cx.m42.superizer.app/AppConfig // cx.m42.superizer.app/asConfig|asConfig@kotlinx.serialization.json.JsonObject(){}[0]
 final fun (kotlinx.serialization.json/JsonObject).cx.m42.superizer.app/schemaVersion(kotlin/Int): kotlin/Int // cx.m42.superizer.app/schemaVersion|schemaVersion@kotlinx.serialization.json.JsonObject(kotlin.Int){}[0]
@@ -3623,6 +3648,7 @@ final fun (kotlinx.serialization.json/JsonObject).cx.m42.superizer.app/schemaVer
 final fun <#A: kotlin/Any> (cx.m42.superizer.runtime/AppRuntime).cx.m42.superizer.runtime/require(cx.m42.superizer.runtime/ServiceKey<#A>): #A // cx.m42.superizer.runtime/require|require@cx.m42.superizer.runtime.AppRuntime(cx.m42.superizer.runtime.ServiceKey<0:0>){0§<kotlin.Any>}[0]
 final fun cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_Activation$stableprop_getter|cx_m42_superizer_activation_Activation$stableprop_getter(){}[0]
 final fun cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop_getter|cx_m42_superizer_activation_ActivationResult_HostCommand$stableprop_getter(){}[0]
+final fun cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_OpenHostScreen$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_OpenHostScreen$stableprop_getter|cx_m42_superizer_activation_ActivationResult_OpenHostScreen$stableprop_getter(){}[0]
 final fun cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Rejected$stableprop_getter|cx_m42_superizer_activation_ActivationResult_Rejected$stableprop_getter(){}[0]
 final fun cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop_getter(): kotlin/Int // cx.m42.superizer.activation/cx_m42_superizer_activation_ActivationResult_Success$stableprop_getter|cx_m42_superizer_activation_ActivationResult_Success$stableprop_getter(){}[0]
 final fun cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop_getter(): kotlin/Int // cx.m42.superizer.app/cx_m42_superizer_app_AppChrome$stableprop_getter|cx_m42_superizer_app_AppChrome$stableprop_getter(){}[0]
