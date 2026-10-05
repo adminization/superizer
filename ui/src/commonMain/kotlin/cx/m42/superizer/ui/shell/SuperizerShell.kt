@@ -365,6 +365,8 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                                     // Back from it is Home, as from an app a code opened: the code
                                     // was the way in, not a page to return to (idea/09).
                                     onHostScreen = { screen -> go(ShellDestination.Host(screen, ShellDestination.Home)) },
+                                    // A banner's screen is a detour from this page, so back is here.
+                                    onBannerScreen = { screen -> go(ShellDestination.Host(screen, where)) },
                                 )
                             }
                         }

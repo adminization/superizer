@@ -389,6 +389,7 @@ final class cx.m42.superizer.host/ServiceRegistry { // cx.m42.superizer.host/Ser
 final class cx.m42.superizer.host/SuperizerBuilder { // cx.m42.superizer.host/SuperizerBuilder|null[0]
     final fun <#A1: kotlin/Any> service(cx.m42.superizer.runtime/ServiceKey<#A1>, #A1) // cx.m42.superizer.host/SuperizerBuilder.service|service(cx.m42.superizer.runtime.ServiceKey<0:0>;0:0){0§<kotlin.Any>}[0]
     final fun <#A1: kotlin/Any> service(cx.m42.superizer.runtime/ServiceKey<#A1>, kotlin/Function1<cx.m42.superizer.app/AppId, #A1>) // cx.m42.superizer.host/SuperizerBuilder.service|service(cx.m42.superizer.runtime.ServiceKey<0:0>;kotlin.Function1<cx.m42.superizer.app.AppId,0:0>){0§<kotlin.Any>}[0]
+    final fun activateBanner(cx.m42.superizer/ActivateBanner) // cx.m42.superizer.host/SuperizerBuilder.activateBanner|activateBanner(cx.m42.superizer.ActivateBanner){}[0]
     final fun auth(cx.m42.superizer.runtime/AuthService) // cx.m42.superizer.host/SuperizerBuilder.auth|auth(cx.m42.superizer.runtime.AuthService){}[0]
     final fun backupCipher(cx.m42.superizer.backup/HostBackupCipher) // cx.m42.superizer.host/SuperizerBuilder.backupCipher|backupCipher(cx.m42.superizer.backup.HostBackupCipher){}[0]
     final fun backupKeys(kotlin.coroutines/SuspendFunction0<kotlin.collections/List<cx.m42.superizer.backup/BackupKeyName>>) // cx.m42.superizer.host/SuperizerBuilder.backupKeys|backupKeys(kotlin.coroutines.SuspendFunction0<kotlin.collections.List<cx.m42.superizer.backup.BackupKeyName>>){}[0]

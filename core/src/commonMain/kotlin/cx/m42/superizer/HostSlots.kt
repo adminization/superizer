@@ -7,8 +7,9 @@ import androidx.compose.runtime.Composable
  *
  * The shell is the library's and a host cannot add a destination to a sealed hierarchy — so the
  * library offers slots instead of screens: a block in Settings, a whole screen behind it, a line on
- * Home. The host writes the content from the library's components and brings its own words; the
- * library draws the frame and nothing else. SSH keys, Storage & security and Backup are the first.
+ * Home, a block on Activate. The host writes the content from the library's components and brings
+ * its own words; the library draws the frame and nothing else. SSH keys, Storage & security and
+ * Backup are the first.
  */
 
 /** A block in Settings, after the host's own sections and before the apps'. */
@@ -43,6 +44,16 @@ public interface HostScreen {
  * honest with it. D179: a status of Unsafe or worse stays on Home until it is fixed.
  */
 public fun interface HomeBanner {
+    @Composable
+    public fun Content(superizer: Superizer, open: (HostScreen) -> Unit): Boolean
+}
+
+/**
+ * A block above the promo code on Activate: what the host has to say before a code is asked for —
+ * that the same thing can be bought, say. Returns whether it drew anything, as [HomeBanner] does.
+ */
+public fun interface ActivateBanner {
+    /** [open] shows one of the host's screens, with a back button to Activate. */
     @Composable
     public fun Content(superizer: Superizer, open: (HostScreen) -> Unit): Boolean
 }

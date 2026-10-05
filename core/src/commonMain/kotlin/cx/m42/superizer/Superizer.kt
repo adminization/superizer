@@ -82,6 +82,9 @@ public interface Superizer {
     /** The host's lines above the tiles on Home. */
     public val homeBanners: List<HomeBanner>
 
+    /** The host's blocks above the promo code on Activate. */
+    public val activateBanners: List<ActivateBanner> get() = emptyList()
+
     /**
      * Host screens nothing lists, by [HostScreen.id]: a promo code that resolves to
      * [cx.m42.superizer.activation.ActivationResult.OpenHostScreen] opens one (Unitool idea/09).

@@ -177,7 +177,7 @@ public final class cx/m42/superizer/ui/platform/SecureWindow_androidKt {
 }
 
 public final class cx/m42/superizer/ui/screens/ActivateScreenKt {
-	public static final fun ActivateScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ActivateScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class cx/m42/superizer/ui/screens/CatalogScreenKt {

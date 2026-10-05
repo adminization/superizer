@@ -3,6 +3,13 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## Unreleased
+
+- `ActivateBanner`, `SuperizerBuilder.activateBanner` and `Superizer.activateBanners`: a block of
+  the host's above the promo code on Activate, the fourth slot after `HostSection`, `HostScreen`
+  and `HomeBanner`. Unitool's Premium offer is the first. A screen the banner opens comes back to
+  Activate. The contract is unchanged, because apps never see the slot.
+
 ## 0.5.0 — contract 4
 
 Secret apps (Unitool notes idea/09, D248–D262): an app only a promo code opens, for one visit, and

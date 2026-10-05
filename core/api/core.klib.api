@@ -310,6 +310,10 @@ abstract fun interface cx.m42.superizer.runtime/HapticsService { // cx.m42.super
     abstract fun tick() // cx.m42.superizer.runtime/HapticsService.tick|tick(){}[0]
 }
 
+abstract fun interface cx.m42.superizer/ActivateBanner { // cx.m42.superizer/ActivateBanner|null[0]
+    abstract fun Content(cx.m42.superizer/Superizer, kotlin/Function1<cx.m42.superizer/HostScreen, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int): kotlin/Boolean // cx.m42.superizer/ActivateBanner.Content|Content(cx.m42.superizer.Superizer;kotlin.Function1<cx.m42.superizer.HostScreen,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
 abstract fun interface cx.m42.superizer/HomeBanner { // cx.m42.superizer/HomeBanner|null[0]
     abstract fun Content(cx.m42.superizer/Superizer, kotlin/Function1<cx.m42.superizer/HostScreen, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int): kotlin/Boolean // cx.m42.superizer/HomeBanner.Content|Content(cx.m42.superizer.Superizer;kotlin.Function1<cx.m42.superizer.HostScreen,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
 }
@@ -689,6 +693,8 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
         abstract fun <get-storage>(): cx.m42.superizer.diagnostics/StorageDiagnostics // cx.m42.superizer/Superizer.storage.<get-storage>|<get-storage>(){}[0]
     abstract val unlocked // cx.m42.superizer/Superizer.unlocked|{}unlocked[0]
         abstract fun <get-unlocked>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/Set<cx.m42.superizer.app/AppId>> // cx.m42.superizer/Superizer.unlocked.<get-unlocked>|<get-unlocked>(){}[0]
+    open val activateBanners // cx.m42.superizer/Superizer.activateBanners|{}activateBanners[0]
+        open fun <get-activateBanners>(): kotlin.collections/List<cx.m42.superizer/ActivateBanner> // cx.m42.superizer/Superizer.activateBanners.<get-activateBanners>|<get-activateBanners>(){}[0]
     open val codeScreens // cx.m42.superizer/Superizer.codeScreens|{}codeScreens[0]
         open fun <get-codeScreens>(): kotlin.collections/Map<kotlin/String, cx.m42.superizer/HostScreen> // cx.m42.superizer/Superizer.codeScreens.<get-codeScreens>|<get-codeScreens>(){}[0]
 

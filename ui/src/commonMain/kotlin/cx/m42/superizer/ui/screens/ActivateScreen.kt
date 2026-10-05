@@ -49,6 +49,8 @@ public fun ActivateScreen(
     modifier: Modifier = Modifier,
     /** A screen of the host's that only a code opens (`ActivationResult.OpenHostScreen`, idea/09). */
     onHostScreen: (HostScreen) -> Unit = {},
+    /** A screen a host's banner above the code opens ([cx.m42.superizer.ActivateBanner]). */
+    onBannerScreen: (HostScreen) -> Unit = {},
 ) {
     val tokens = AppTheme
     val strings = hostStrings
@@ -97,6 +99,11 @@ public fun ActivateScreen(
             .verticalScroll(rememberScrollState())
             .padding(20.dp),
     ) {
+        // The host's blocks first, above the code they are an alternative to.
+        superizer.activateBanners.forEach { banner ->
+            if (banner.Content(superizer, onBannerScreen)) Spacer(Modifier.height(20.dp))
+        }
+
         Text(text = strings.activatePromoLabel, style = tokens.label, color = tokens.muted)
         Spacer(Modifier.height(6.dp))
         AppTextField(

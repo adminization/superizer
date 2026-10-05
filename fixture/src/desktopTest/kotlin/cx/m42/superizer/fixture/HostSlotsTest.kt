@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -20,6 +21,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runComposeUiTest
 import com.composeunstyled.Text
+import cx.m42.superizer.ActivateBanner
 import cx.m42.superizer.HomeBanner
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.HostSection
@@ -36,6 +38,7 @@ import cx.m42.superizer.ui.shell.SuperizerShell
 import java.nio.file.Files
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertTrue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -83,12 +86,18 @@ class HostSlotsTest {
         true
     }
 
+    private val offer = ActivateBanner { _, open ->
+        AppButton(text = "Or buy it", onClick = { open(detail) }, modifier = Modifier.testTag("offer:buy"))
+        true
+    }
+
     private fun host(): Superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)) {
         host(HostInfo("Slots", "0.1.0", "dev", Platform.Desktop, SuperizerContract.VERSION, debug = true))
         register(ProbeApp())
         home("probe")
         hostSection(section)
         homeBanner(banner)
+        activateBanner(offer)
     }.also { it.settings.chooseLanguage("en") }
 
     @Test
@@ -179,5 +188,26 @@ class HostSlotsTest {
         onNodeWithTag("banner:storage").performClick()
         waitForIdle()
         onNodeWithTag("host:keys").assertIsDisplayed()
+    }
+
+    @Test
+    fun anActivateBannerSitsAboveThePromoCodeAndBackFromItsScreenIsActivate() = runComposeUiTest {
+        setContent { SuperizerShell(host()) }
+        waitForIdle()
+        onNodeWithContentDescription("Open menu").performClick()
+        waitForIdle()
+        onNodeWithContentDescription("Activate").performClick()
+        waitForIdle()
+
+        val offer = onNodeWithTag("offer:buy").assertIsDisplayed().getUnclippedBoundsInRoot()
+        val promo = onNodeWithTag("activate:promo").getUnclippedBoundsInRoot()
+        assertTrue(offer.bottom <= promo.top, "the banner is drawn above the promo code")
+
+        onNodeWithTag("offer:buy").performClick()
+        waitForIdle()
+        onNodeWithTag("host:keys").assertIsDisplayed()
+        onNodeWithTag("keys:done").performClick()
+        waitForIdle()
+        onNodeWithTag("activate:promo").assertIsDisplayed()
     }
 }
