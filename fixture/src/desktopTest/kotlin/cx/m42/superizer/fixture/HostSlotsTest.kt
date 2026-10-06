@@ -193,7 +193,7 @@ class HostSlotsTest {
     }
 
     @Test
-    fun anActivateBannerSitsAboveThePromoCodeAndBackFromItsScreenIsActivate() = runComposeUiTest {
+    fun anActivateBannerSitsAboveAFoldedPromoCodeAndBackFromItsScreenIsActivate() = runComposeUiTest {
         setContent { SuperizerShell(host()) }
         waitForIdle()
         onNodeWithContentDescription("Open menu").performClick()
@@ -201,16 +201,24 @@ class HostSlotsTest {
         onNodeWithContentDescription("Activate").performClick()
         waitForIdle()
 
+        // The offer comes first, and the code folds behind one link under it.
         val offer = onNodeWithTag("offer:buy").assertIsDisplayed().getUnclippedBoundsInRoot()
-        val promo = onNodeWithTag("activate:promo").getUnclippedBoundsInRoot()
+        onNodeWithTag("activate:promo").assertDoesNotExist()
+        onNodeWithTag("activate:qr").assertDoesNotExist()
+        onNodeWithTag("activate:have-code").performClick()
+        waitForIdle()
+        val promo = onNodeWithTag("activate:promo").assertIsDisplayed().getUnclippedBoundsInRoot()
         assertTrue(offer.bottom <= promo.top, "the banner is drawn above the promo code")
+        onNodeWithTag("activate:have-code").assertDoesNotExist()
 
         onNodeWithTag("offer:buy").performClick()
         waitForIdle()
         onNodeWithTag("host:keys").assertIsDisplayed()
         onNodeWithTag("keys:done").performClick()
         waitForIdle()
-        onNodeWithTag("activate:promo").assertIsDisplayed()
+        // Back is Activate, drawn afresh: the offer, and the code folded again.
+        onNodeWithTag("offer:buy").assertIsDisplayed()
+        onNodeWithTag("activate:have-code").assertIsDisplayed()
     }
 
     /** A host that sells something on Activate names the door after it: its icon, its words. */

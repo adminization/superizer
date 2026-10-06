@@ -1,13 +1,17 @@
 package cx.m42.superizer.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -16,8 +20,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
@@ -40,6 +47,9 @@ import kotlinx.coroutines.launch
  * No camera (D7). The contract of activation does not depend on one — a QR payload is a string,
  * and where the string came from is the platform's problem, not the model's. Saying so on the
  * screen is better than an empty viewfinder that never gets built.
+ *
+ * Where the host offers something above them (an [cx.m42.superizer.ActivateBanner]), both fields
+ * fold behind one "Have a promo code?" link.
  */
 @Composable
 public fun ActivateScreen(
@@ -59,6 +69,7 @@ public fun ActivateScreen(
     var promo by remember { mutableStateOf("") }
     var payload by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
+    var codeOpen by remember { mutableStateOf(false) }
 
     fun handle(result: ActivationResult) {
         when (result) {
@@ -100,8 +111,19 @@ public fun ActivateScreen(
             .padding(20.dp),
     ) {
         // The host's blocks first, above the code they are an alternative to.
+        var offered = false
         superizer.activateBanners.forEach { banner ->
-            if (banner.Content(superizer, onBannerScreen)) Spacer(Modifier.height(20.dp))
+            if (banner.Content(superizer, onBannerScreen)) {
+                offered = true
+                Spacer(Modifier.height(20.dp))
+            }
+        }
+
+        // Where the host offers something first, the code is the other way in. It folds behind one
+        // link, as a store's "Redeem code" does, and stays open once tapped.
+        if (offered && !codeOpen) {
+            HaveCodeLink(strings.activateHaveCode) { codeOpen = true }
+            return@Column
         }
 
         Text(text = strings.activatePromoLabel, style = tokens.label, color = tokens.muted)
@@ -188,6 +210,23 @@ public fun ActivateScreen(
                 }
             },
         )
+    }
+}
+
+/** A line of accent text that reads as a link, centred, at the platform's minimum tap height. */
+@Composable
+private fun HaveCodeLink(text: String, onClick: () -> Unit) {
+    val tokens = AppTheme
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 44.dp)
+            .clip(RoundedCornerShape(tokens.radius))
+            .clickable(role = Role.Button, onClick = onClick)
+            .testTag("activate:have-code"),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text = text, style = tokens.body, color = tokens.accent)
     }
 }
 

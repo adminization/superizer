@@ -58,6 +58,8 @@ public interface HostStrings {
     public fun settingsBuild(value: String): String
 
     // ------------------------------------------------------------------ activation
+    /** The link a code folds behind when the host offers something first (an ActivateBanner). */
+    public val activateHaveCode: String
     public val activatePromoLabel: String
     public val activateQrLabel: String
     public val activateApply: String
@@ -153,6 +155,7 @@ internal object HostStringsEn : HostStrings {
     override val settingsAbout = "About"
     override fun settingsBuild(value: String) = "Build $value"
 
+    override val activateHaveCode = "Have a promo code?"
     override val activatePromoLabel = "Promo code"
     override val activateQrLabel = "QR contents"
     override val activateApply = "Apply"
@@ -243,6 +246,7 @@ internal object HostStringsRu : HostStrings {
     override val settingsAbout = "О приложении"
     override fun settingsBuild(value: String) = "Сборка $value"
 
+    override val activateHaveCode = "Есть промокод?"
     override val activatePromoLabel = "Промокод"
     override val activateQrLabel = "Содержимое QR"
     override val activateApply = "Применить"

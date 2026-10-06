@@ -50,6 +50,8 @@ abstract interface cx.m42.superizer.ui.i18n/HostStrings { // cx.m42.superizer.ui
         abstract fun <get-activateErrorUnknownCode>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.activateErrorUnknownCode.<get-activateErrorUnknownCode>|<get-activateErrorUnknownCode>(){}[0]
     abstract val activateErrorUnsupported // cx.m42.superizer.ui.i18n/HostStrings.activateErrorUnsupported|{}activateErrorUnsupported[0]
         abstract fun <get-activateErrorUnsupported>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.activateErrorUnsupported.<get-activateErrorUnsupported>|<get-activateErrorUnsupported>(){}[0]
+    abstract val activateHaveCode // cx.m42.superizer.ui.i18n/HostStrings.activateHaveCode|{}activateHaveCode[0]
+        abstract fun <get-activateHaveCode>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.activateHaveCode.<get-activateHaveCode>|<get-activateHaveCode>(){}[0]
     abstract val activatePromoLabel // cx.m42.superizer.ui.i18n/HostStrings.activatePromoLabel|{}activatePromoLabel[0]
         abstract fun <get-activatePromoLabel>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.activatePromoLabel.<get-activatePromoLabel>|<get-activatePromoLabel>(){}[0]
     abstract val activateQrLabel // cx.m42.superizer.ui.i18n/HostStrings.activateQrLabel|{}activateQrLabel[0]

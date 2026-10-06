@@ -92,6 +92,7 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getActivateErrorUnknownApp ()Ljava/lang/String;
 	public abstract fun getActivateErrorUnknownCode ()Ljava/lang/String;
 	public abstract fun getActivateErrorUnsupported ()Ljava/lang/String;
+	public abstract fun getActivateHaveCode ()Ljava/lang/String;
 	public abstract fun getActivatePromoLabel ()Ljava/lang/String;
 	public abstract fun getActivateQrLabel ()Ljava/lang/String;
 	public abstract fun getActivateScan ()Ljava/lang/String;
