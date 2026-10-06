@@ -3,7 +3,7 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
-## Unreleased
+## 0.5.1
 
 - `ActivateBanner`, `SuperizerBuilder.activateBanner` and `Superizer.activateBanners`: a block of
   the host's above the promo code on Activate, the fourth slot after `HostSection`, `HostScreen`
@@ -13,6 +13,9 @@ changes incompatibly. A release that bumps one does not automatically bump the o
   used for the drawer button and the bar. Without one, Activate keeps the QR glyph and "Activate".
   Unitool calls it Premium, with a star.
 - `StarIcon`, and `AppIcon.Named("star")` in the glyph pack.
+- Activate with a banner above it shows the promo code and the QR field folded behind one "Have a
+  promo code?" link (`activate:have-code`). A tap opens them for the rest of the visit.
+  `HostStrings.activateHaveCode`.
 
 ## 0.5.0 — contract 4
 
