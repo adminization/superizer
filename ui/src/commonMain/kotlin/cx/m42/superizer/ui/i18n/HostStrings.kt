@@ -103,6 +103,16 @@ public interface HostStrings {
     /** The sheet's title when a change in Settings would weaken the lock. */
     public val settingsLockChange: String
 
+    // ------------------------------------------------------------------ notifications
+    public val settingsNotifications: String
+    public val notificationsOn: String
+    public val notificationsOff: String
+    /** A push app that only syncs (`PushUse.Silent`): it never shows anything. */
+    public val notificationsBackground: String
+    public val notificationsTurnOn: String
+    /** Refused for good: only the phone's own settings can turn notifications back on. */
+    public val notificationsOpenSettings: String
+
     // ------------------------------------------------------------------ failure
     public val errorTitle: String
     public val errorRetry: String
@@ -121,6 +131,7 @@ public interface HostStrings {
     public val serviceEvents: String
     public val serviceLog: String
     public val serviceSimulatePush: String
+    public val servicePushDevice: String
     public val serviceManifest: String
     public val serviceRejected: String
 }
@@ -194,6 +205,12 @@ internal object HostStringsEn : HostStrings {
     override val settingsLockNow = "Lock now"
     override val settingsNoScreenLock = "Turn on the device's screen lock first."
     override val settingsLockChange = "Change protection"
+    override val settingsNotifications = "Notifications"
+    override val notificationsOn = "On"
+    override val notificationsOff = "Off"
+    override val notificationsBackground = "In the background"
+    override val notificationsTurnOn = "Turn on notifications"
+    override val notificationsOpenSettings = "Open phone settings"
 
     override val errorTitle = "The app could not start"
     override val errorRetry = "Try again"
@@ -211,6 +228,7 @@ internal object HostStringsEn : HostStrings {
     override val serviceEvents = "Events"
     override val serviceLog = "Log"
     override val serviceSimulatePush = "Simulate push"
+    override val servicePushDevice = "Push device"
     override val serviceManifest = "Manifest"
     override val serviceRejected = "Rejected at registration"
 }
@@ -285,6 +303,12 @@ internal object HostStringsRu : HostStrings {
     override val settingsLockNow = "Заблокировать сейчас"
     override val settingsNoScreenLock = "Сначала включите блокировку экрана устройства."
     override val settingsLockChange = "Изменить защиту"
+    override val settingsNotifications = "Уведомления"
+    override val notificationsOn = "Включены"
+    override val notificationsOff = "Выключены"
+    override val notificationsBackground = "Фоном"
+    override val notificationsTurnOn = "Включить уведомления"
+    override val notificationsOpenSettings = "Открыть настройки телефона"
 
     override val errorTitle = "Приложение не запустилось"
     override val errorRetry = "Повторить"
@@ -302,6 +326,7 @@ internal object HostStringsRu : HostStrings {
     override val serviceEvents = "События"
     override val serviceLog = "Лог"
     override val serviceSimulatePush = "Отправить пуш"
+    override val servicePushDevice = "Устройство для пушей"
     override val serviceManifest = "Манифест"
     override val serviceRejected = "Отклонено при регистрации"
 }

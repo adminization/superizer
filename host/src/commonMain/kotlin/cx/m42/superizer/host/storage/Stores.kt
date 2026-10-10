@@ -56,6 +56,12 @@ public object HostKeys {
     public const val HOME: String = "host.home"
     public const val SESSION: String = "host.session"
     public const val TOPICS: String = "host.push.topics"
+
+    /** Push apps the person has started using (push-opt-in, D418). Rebuilt on restore, never carried. */
+    public const val PUSH_USED: String = "host.push.used"
+
+    /** This device's row on the push server: `d_…`, the sealed `ds_…`, what was last sent (D422). */
+    public const val PUSH_DEVICE: String = "host.push.device"
     public const val LOCK: String = "host.lock"
 
     /** A constant the host sealed with its vault on first run; opening it is the heartbeat (06 §2). */

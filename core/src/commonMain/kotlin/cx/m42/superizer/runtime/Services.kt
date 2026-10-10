@@ -177,7 +177,11 @@ public interface PushService {
     /** Transport present and permission granted. False on desktop and in the browser for now. */
     public val enabled: StateFlow<Boolean>
 
-    /** The system dialog where one exists (Android 13+); a no-op true elsewhere. */
+    /**
+     * The system dialog where one exists (Android 13+, iOS), for an app that wants to ask again in
+     * context. The host already asked when the person started using the app (push-opt-in, D420);
+     * an app whose manifest does not say `push = Alerts` gets false and a warning (D425).
+     */
     public suspend fun requestPermission(): Boolean
 
     /** Persisted by the host and re-applied after a token refresh, so `setup()` subscribes once. */

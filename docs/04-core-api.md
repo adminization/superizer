@@ -156,6 +156,7 @@ else falls back to a letter. `Path` is an SVG `d` attribute over a 24×24 viewBo
     val requires: Set<ServiceKey<*>> = emptySet(),
     val deepLinks: Set<String> = emptySet(),
     val pushTopics: Set<String> = emptySet(),
+    val push: PushUse = PushUse.None,      // None | Silent | Alerts (contract 5)
     val networkHosts: Set<String> = emptySet(),
 )
 ```
@@ -168,7 +169,8 @@ shows):
 | `minHostContract` | `<= HostInfo.contractVersion` |
 | `requires` | every key present in `HostInfo.services` |
 | `deepLinks` | each matches `[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)*` — no query, no scheme |
-| `pushTopics` | each matches `[A-Za-z0-9][A-Za-z0-9._-]*` |
+| `pushTopics` | each matches `[A-Za-z0-9][A-Za-z0-9._-]*`; any at all need `push` other than `None` |
+| `push` | anything but `None` needs `minHostContract >= 5`; never on a secret app |
 
 A duplicate `id` **throws** instead: two apps answering to one name is a build mistake, not a
 deployment fact.

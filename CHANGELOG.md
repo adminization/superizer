@@ -3,6 +3,56 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.6.0 — contract 5
+
+Push only for the apps that take it, and only once the person uses one (Unitool notes
+push-opt-in, D417–D430). Contract 5 because an older host would mint a token at start and never
+ask the question an app that draws notifications counts on.
+
+### The contract (`core`)
+
+- `AppManifest.push: PushUse` — `None` (default), `Silent` (data only, never draws, needs no
+  permission), `Alerts` (visible notifications). Anything but `None` needs `minHostContract = 5`;
+  `pushTopics` need `push` other than `None`; a secret app takes none. `AppRegistry.pushUse(id)`.
+- `PushPort` on `Superizer.push`: `used` (push apps the person has started using), `permission`
+  (`PushPermission`: `Granted`, `Off`, `Blocked`, `Unavailable`), `device` (`PushDeviceStatus`
+  for the Service Menu) and `enable()`. Defaults to `PushPort.None`.
+- `runtime.push.requestPermission()` answers false, with a warning, for an app that is not `Alerts`.
+
+### The host
+
+- Nothing about push happens at start any more. An app enters `used` when it is added from the
+  catalog, first opened (a tile, the catalog, a link, a hidden app's first visit) or restored from a
+  backup — not when an activation reveals it. Then, and only then, the host wakes FCM
+  (`PushTransport.activate()`), hands its topics to the transport, and for an `Alerts` app asks the
+  system's question straight away — no sheet of its own, no "not now". Taking the app off Home
+  unsubscribes its topics at the transport and keeps them in the store.
+- `PushTransport.activate()`, `permission()`, `openSettings()`; `PushControl` /
+  `PlatformPushControl` so the gate can be tested. Android no longer fetches a token in `init`; an
+  app sets `firebase_messaging_auto_init_enabled = false` in its manifest. iOS: `IosMessaging.activate()`
+  (new, the Swift bridge sets `isAutoInitEnabled`), and the APNs registration moved from the app
+  delegate into `activate()` — the app ships with `FirebaseMessagingAutoInitEnabled = NO`.
+- `SuperizerBuilder.pushServer(baseUrl)`: `DeviceRegistrar` registers this device with the Unitool
+  server (POST `/api/unitool/v1/devices` with the SHA-256 of a `ds_…` secret born and sealed here,
+  PUT `/devices/me` on every start and on a new token or set of apps, POST again on 401) and sends
+  `apps`, the push apps in use. The last one gone is one PUT with `apps: []`; the row stays.
+  Without a server it logs, as before.
+- `PushRouter`: data for an app nobody uses is dropped as `NotUsed` (a tap still opens it); a
+  `Silent` app never draws, whatever the payload says.
+- `HostKeys.PUSH_USED`, `HostKeys.PUSH_DEVICE`; neither is backed up.
+
+### The shell (`ui`)
+
+- Settings: "Notifications", a line per push app in use and one button — the system's question
+  while it can be asked, the phone's settings once it cannot. Absent where there is no push.
+- Service Menu: "Push device" — the `d_…` id, the token's head, permission, apps in use and what
+  the server last accepted.
+
+### The bench app
+
+- `push = PushUse.Alerts`, `minHostContract = 5`: its first visit is how a phone gets a token and a
+  row on the server to test against.
+
 ## 0.5.1
 
 - `ActivateBanner`, `SuperizerBuilder.activateBanner` and `Superizer.activateBanners`: a block of

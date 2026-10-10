@@ -4,6 +4,7 @@ import cx.m42.superizer.backup.BackupPolicy
 
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppManifest
+import cx.m42.superizer.app.PushUse
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.runtime.HostInfo
@@ -85,6 +86,7 @@ public class AppRegistry(
                 "a backup policy needs $BACKUP_CONTRACT"
         }
         secretRejection(manifest)?.let { return it }
+        pushRejection(manifest)?.let { return it }
         val missing = manifest.requires - host.services
         if (missing.isNotEmpty()) {
             return "host provides no ${missing.joinToString(", ") { it.name }}"
@@ -113,7 +115,27 @@ public class AppRegistry(
         return null
     }
 
+    /**
+     * Push (push-opt-in, D417): a contract-4 host has never heard of [AppManifest.push] and would run
+     * the app with a token minted at start and no question asked, and topics with no push to carry
+     * them are a manifest that says two things.
+     */
+    private fun pushRejection(manifest: AppManifest): String? {
+        if (manifest.push != PushUse.None && manifest.minHostContract < PUSH_CONTRACT) {
+            return "declares push but asks only for host contract ${manifest.minHostContract}; " +
+                "push needs $PUSH_CONTRACT"
+        }
+        if (manifest.pushTopics.isNotEmpty() && manifest.push == PushUse.None) {
+            return "declares push topics but push = None"
+        }
+        if (manifest.metadata.secret && manifest.push != PushUse.None) return "a secret app takes no pushes"
+        return null
+    }
+
     public fun get(id: AppId): SuperizerApp<*>? = byId[id]
+
+    /** What [id] declared about push; [PushUse.None] for an id nobody registered. */
+    public fun pushUse(id: AppId): PushUse = byId[id]?.manifest?.push ?: PushUse.None
 
     public fun all(): List<SuperizerApp<*>> = byId.values.toList()
 
@@ -143,6 +165,9 @@ public class AppRegistry(
 
         /** The contract that introduced `AppMetadata.secret` (idea/09). */
         const val SECRET_CONTRACT = 4
+
+        /** The contract that introduced `AppManifest.push` (push-opt-in, D417). */
+        const val PUSH_CONTRACT = 5
     }
 }
 

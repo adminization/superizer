@@ -38,6 +38,8 @@ import cx.m42.superizer.ui.components.RowDivider
 import cx.m42.superizer.ui.components.Section
 import cx.m42.superizer.ui.components.ToggleRow
 import cx.m42.superizer.ui.i18n.hostStrings
+import cx.m42.superizer.app.PushUse
+import cx.m42.superizer.push.PushPermission
 import kotlinx.coroutines.launch
 
 /**
@@ -95,6 +97,8 @@ public fun SettingsScreen(
         }
 
         ProtectionSection(superizer)
+
+        NotificationsSection(superizer)
 
         // The host's own blocks (07 §2.4): its keys, its storage, its backup. After the host's
         // settings and before any app's, because they are the host's and not an app's.
@@ -240,6 +244,68 @@ private fun ProtectionSection(superizer: Superizer) {
             size = ButtonSize.Default,
             modifier = Modifier.testTag("settings:lock-now"),
         )
+    }
+}
+
+/**
+ * "Notifications" (push-opt-in, D424): a line per push app the person uses, and the one thing they
+ * can do about it — turn notifications on. Nothing explains why an app wants them (owner's rule);
+ * the line says what is, the button does what it can: the system's question while there is one,
+ * the phone's settings once there is not. Absent where there is no push at all.
+ */
+@Composable
+private fun NotificationsSection(superizer: Superizer) {
+    val used by superizer.push.used.collectAsState()
+    val permission by superizer.push.permission.collectAsState()
+    val apps by superizer.registry.apps.collectAsState()
+    val unlocked by superizer.unlocked.collectAsState()
+    val langTag by superizer.settings.langTag.collectAsState()
+    val strings = hostStrings
+    val scope = rememberCoroutineScope()
+
+    val shown = apps.filter { it.id in used && it.listed(unlocked) }
+    if (shown.isEmpty() || permission == PushPermission.Unavailable) return
+    val granted = permission == PushPermission.Granted
+
+    Section(title = strings.settingsNotifications, modifier = Modifier.testTag("settings:notifications")) {
+        shown.forEachIndexed { index, app ->
+            if (index > 0) RowDivider()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("settings:push-${app.id.value}")
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = app.metadata.title.resolve(langTag),
+                    style = AppTheme.body,
+                    color = AppTheme.foreground,
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    text = when {
+                        app.manifest.push == PushUse.Silent -> strings.notificationsBackground
+                        granted -> strings.notificationsOn
+                        else -> strings.notificationsOff
+                    },
+                    style = AppTheme.body,
+                    color = AppTheme.muted,
+                )
+            }
+        }
+    }
+
+    if (!granted && shown.any { it.manifest.push == PushUse.Alerts }) {
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 20.dp)) {
+            AppButton(
+                text = if (permission == PushPermission.Blocked) strings.notificationsOpenSettings else strings.notificationsTurnOn,
+                onClick = { scope.launch { superizer.push.enable() } },
+                variant = ButtonVariant.Outline,
+                size = ButtonSize.Default,
+                modifier = Modifier.testTag("settings:push-enable"),
+            )
+        }
     }
 }
 

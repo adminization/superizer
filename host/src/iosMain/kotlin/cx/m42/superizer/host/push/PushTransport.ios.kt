@@ -1,14 +1,19 @@
 package cx.m42.superizer.host.push
 
+import cx.m42.superizer.push.PushPermission
 import kotlin.coroutines.resume
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
+import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
+import platform.UIKit.UIApplicationOpenSettingsURLString
 import platform.UIKit.registerForRemoteNotifications
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
 import platform.UserNotifications.UNAuthorizationOptionSound
+import platform.UserNotifications.UNAuthorizationStatusDenied
+import platform.UserNotifications.UNAuthorizationStatusNotDetermined
 import platform.UserNotifications.UNUserNotificationCenter
 import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
@@ -24,6 +29,12 @@ import platform.darwin.dispatch_get_main_queue
 public interface IosMessaging {
     public fun subscribe(topic: String)
     public fun unsubscribe(topic: String)
+
+    /**
+     * `Messaging.messaging().isAutoInitEnabled = true` (push-opt-in, D421). The app ships with
+     * `FirebaseMessagingAutoInitEnabled = NO`, so until this runs Firebase mints no token.
+     */
+    public fun activate()
 }
 
 /**
@@ -74,6 +85,42 @@ public actual object PushTransport {
             }
         }
         return granted
+    }
+
+    /** The stored answer, without a dialog: iOS asks once and remembers. */
+    public actual suspend fun permission(): PushPermission {
+        if (!available) return PushPermission.Unavailable
+        val status = suspendCancellableCoroutine { continuation ->
+            UNUserNotificationCenter.currentNotificationCenter().getNotificationSettingsWithCompletionHandler { settings ->
+                if (continuation.isActive) continuation.resume(settings?.authorizationStatus)
+            }
+        }
+        return when (status) {
+            UNAuthorizationStatusNotDetermined -> PushPermission.Off
+            UNAuthorizationStatusDenied -> PushPermission.Blocked
+            null -> PushPermission.Off
+            else -> PushPermission.Granted
+        }
+    }
+
+    /**
+     * The APNs registration that used to run in `didFinishLaunching`, and Firebase's own start. Asks
+     * for nothing: a token for silent delivery is always granted, and showing notifications is the
+     * separate question [requestPermission] asks.
+     */
+    public actual suspend fun activate() {
+        val bridge = messaging ?: return
+        bridge.activate()
+        dispatch_async(dispatch_get_main_queue()) {
+            UIApplication.sharedApplication.registerForRemoteNotifications()
+        }
+    }
+
+    /** iOS 15 has no public way to the notification page itself; the app's page holds it. */
+    public actual fun openSettings(): Boolean {
+        val settings = NSURL.URLWithString(UIApplicationOpenSettingsURLString) ?: return false
+        UIApplication.sharedApplication.openURL(settings, options = emptyMap<Any?, Any?>(), completionHandler = null)
+        return true
     }
 
     public actual suspend fun subscribeTopic(topic: String) {

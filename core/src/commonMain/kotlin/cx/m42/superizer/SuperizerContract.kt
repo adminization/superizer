@@ -22,7 +22,11 @@ package cx.m42.superizer
  * 4 added `AppMetadata.secret` (Unitool idea/09): an app only a promo code opens, for one visit,
  * and that no screen of the host lists. It has to ask for 4, or an older host would let a QR code
  * unlock it onto Home.
+ *
+ * 5 added `AppManifest.push` (Unitool push-opt-in, D417): whether an app takes pushes at all, and
+ * whether it draws them. An app that does has to ask for 5 — an older host would mint a token and
+ * never ask for the permission the app counts on.
  */
 public object SuperizerContract {
-    public const val VERSION: Int = 4
+    public const val VERSION: Int = 5
 }

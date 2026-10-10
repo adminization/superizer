@@ -39,7 +39,19 @@ import cx.m42.superizer.host.platform.PlatformScreen
 import cx.m42.superizer.host.platform.openExternalUrl
 import cx.m42.superizer.host.platform.openSecuritySettings
 import cx.m42.superizer.host.platform.platformDeviceAuthenticator
+import cx.m42.superizer.backup.BackupOutcome
+import cx.m42.superizer.backup.RestorePlan
+import cx.m42.superizer.backup.RestoreReport
+import cx.m42.superizer.host.push.DeviceApi
 import cx.m42.superizer.host.push.DeviceRegistrar
+import cx.m42.superizer.host.push.NetworkDeviceApi
+import cx.m42.superizer.host.push.PlatformPushControl
+import cx.m42.superizer.host.push.PushControl
+import cx.m42.superizer.host.push.PushGate
+import cx.m42.superizer.host.storage.HostKeys
+import cx.m42.superizer.push.PushDeviceStatus
+import cx.m42.superizer.push.PushPermission
+import cx.m42.superizer.push.PushPort
 import cx.m42.superizer.host.push.IncomingPush
 import cx.m42.superizer.host.push.Notifier
 import cx.m42.superizer.host.push.PendingRoute
@@ -79,7 +91,10 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
 /**
@@ -135,6 +150,9 @@ public class SuperizerBuilder internal constructor() {
     internal val codeScreens: LinkedHashMap<String, HostScreen> = LinkedHashMap()
     internal var scanner: (suspend () -> String?)? = null
     internal var secretBackgroundLimitMs: Long = DEFAULT_SECRET_BACKGROUND_LIMIT_MS
+    internal var pushServer: String? = null
+    internal var deviceApi: DeviceApi? = null
+    internal var pushControl: PushControl = PlatformPushControl
 
     public fun host(info: HostInfo) {
         hostInfo = info
@@ -287,6 +305,14 @@ public class SuperizerBuilder internal constructor() {
         auth = value
     }
 
+    /**
+     * The Unitool server this device registers with for push (push-opt-in, D422) — the base URL,
+     * `https://unitool.m42.cx`. None: the registrar only logs what it would have sent.
+     */
+    public fun pushServer(baseUrl: String) {
+        pushServer = baseUrl
+    }
+
     /** Draws a notification for a non-silent data message (13). None of the three targets has one. */
     public fun notifier(value: Notifier) {
         notifier = value
@@ -389,10 +415,13 @@ internal class SuperizerHost(
             return
         }
         homeStore.add(id)
+        // Added by the person's own hand: that is starting to use it (push-opt-in, D419).
+        pushGate.startUsing(listOf(id))
     }
 
     override suspend fun removeFromHome(id: AppId) {
         homeStore.remove(id)
+        pushGate.stopUsing(id)
     }
 
     /** An id as the host's log may print it: a release build's log is the Service Menu's, and names no secret app. */
@@ -412,6 +441,7 @@ internal class SuperizerHost(
     /** The inverse, and the only path that takes a tile away without the user's own long press. */
     private suspend fun conceal(id: AppId) {
         homeStore.remove(id)
+        pushGate.stopUsing(id)
         unlockStore.lock(id)
         // A locked app must not stay on screen or come back through its snapshot.
         if (handler.current.value?.app?.id == id) handler.close(force = true)
@@ -431,6 +461,9 @@ internal class SuperizerHost(
 
     private val topics = TopicStore(json)
     private val pushes = mutableMapOf<AppId, RoutedPush>()
+    private val pushControl: PushControl = builder.pushControl
+    private val pushGate: PushGate by lazy { PushGate(registry, topics, pushControl, hostLogger, json) }
+    private val pushEnabled = MutableStateFlow(false)
 
     private val _commands = MutableSharedFlow<ShellCommand>(replay = 0, extraBufferCapacity = 8)
     override val commands: SharedFlow<ShellCommand> = _commands.asSharedFlow()
@@ -466,7 +499,20 @@ internal class SuperizerHost(
         clock = builder.clock,
         pushFor = { appId, logger ->
             pushes.getOrPut(appId) {
-                RoutedPush(appId, registry.get(appId)?.manifest?.pushTopics.orEmpty(), topics, logger)
+                RoutedPush(
+                    appId = appId,
+                    declared = registry.get(appId)?.manifest?.pushTopics.orEmpty(),
+                    topics = topics,
+                    logger = logger,
+                    use = registry.pushUse(appId),
+                    control = pushControl,
+                    live = pushGate::isUsed,
+                    enabled = pushEnabled.asStateFlow(),
+                    ask = {
+                        pushGate.enable()
+                        pushGate.permission.value == PushPermission.Granted
+                    },
+                )
             }
         },
         navigationFor = { appId -> ShellNavigation(appId) },
@@ -528,7 +574,26 @@ internal class SuperizerHost(
             handler.forgetSnapshot(id)
         },
     )
-    override val backup: BackupPort = hostBackup
+    /**
+     * A restore brings push apps back in use at once (push-opt-in, D419): those whose data came back,
+     * and those on the restored Home — read from the bundle, since the store reads it only at start.
+     */
+    override val backup: BackupPort = object : BackupPort by hostBackup {
+        override suspend fun restore(
+            plan: RestorePlan,
+            apps: Set<String>,
+            settings: Boolean,
+            reason: String,
+        ): BackupOutcome<RestoreReport> = hostBackup.restore(plan, apps, settings, reason).also { outcome ->
+            if (outcome !is BackupOutcome.Ok) return@also
+            val home = if (settings) restoredHome(plan.bundle.settings[HostKeys.HOME]) else emptyList()
+            pushGate.startUsing(outcome.value.restored.mapNotNull(AppId::parseOrNull) + home)
+        }
+    }
+
+    private fun restoredHome(raw: String?): List<AppId> = raw?.let {
+        runCatching { json.decodeFromString(ListSerializer(String.serializer()), it) }.getOrNull()
+    }.orEmpty().mapNotNull(AppId::parseOrNull)
 
     private val diagnosticsHub: DiagnosticsHub = DiagnosticsHub(
         host = hostInfo,
@@ -560,9 +625,27 @@ internal class SuperizerHost(
         clock = builder.clock,
         scheme = builder.scheme,
         json = json,
+        used = pushGate::isUsed,
     )
 
-    private val registrar = DeviceRegistrar(builder.auth, hostLogger, { registry.all().map { it.id } })
+    private val registrar = DeviceRegistrar(
+        used = pushGate.used,
+        control = pushControl,
+        api = builder.deviceApi ?: builder.pushServer?.let { NetworkDeviceApi(network, it) },
+        seal = hostSecrets::seal,
+        open = hostSecrets::open,
+        appVersion = declared.version,
+        locale = { localeService.langTag.value },
+        clock = builder.clock,
+        logger = hostLogger,
+    )
+
+    override val push: PushPort = object : PushPort {
+        override val used: StateFlow<Set<AppId>> = pushGate.used
+        override val permission: StateFlow<PushPermission> = pushGate.permission
+        override val device: StateFlow<PushDeviceStatus> = registrar.status
+        override suspend fun enable() = pushGate.enable()
+    }
 
     private val recent = MutableStateFlow<List<SuperizerEvent>>(emptyList())
 
@@ -605,12 +688,26 @@ internal class SuperizerHost(
             builder.secretBackgroundLimitMs,
         )
         lockController.attach(scope)
+        // After registration, so the stored set is read against the apps this build has.
+        pushGate.attach(scope, builder.lifecycle ?: PlatformLifecycle.state)
+        scope.launch {
+            combine(pushGate.used, pushGate.permission) { used, permission ->
+                used.isNotEmpty() && permission == PushPermission.Granted
+            }.collect { pushEnabled.value = it }
+        }
         router.attach(scope)
         registrar.attach(scope)
         // The last hundred, because the Service Menu is read after something has gone wrong and
         // the interesting part is always just before the end.
         scope.launch {
             _events.collect { event ->
+                // Opened, by whatever door — a tile, the catalog, a link, a hidden app's first
+                // visit: the person has started using it (push-opt-in, D419).
+                when (event) {
+                    is SuperizerEvent.Launched -> pushGate.startUsing(listOf(event.appId))
+                    is SuperizerEvent.Restored -> pushGate.startUsing(listOf(event.appId))
+                    else -> Unit
+                }
                 // The Service Menu opens by a code in a release build, and that code is not the
                 // secret app's (idea/09): what a secret app did stays out of its list there.
                 if (!declared.debug && registry.isSecret(event.appId)) return@collect

@@ -84,7 +84,7 @@ Register it in a host (`register(HelloApp())`, `home("hello")`) and it is on Hom
 AppManifest(
     id = AppId("currency-converter"),      // kebab-case, checked in the constructor
     version = "1.0.0",                     // the app's own version, unrelated to the library's
-    minHostContract = 1,                   // oldest host this app tolerates
+    minHostContract = 5,                   // oldest host this app tolerates (5: push)
     metadata = AppMetadata(
         title = localized("en" to "Currency converter", "ru" to "Конвертер валют"),
         description = localized("en" to "ECB rates, works offline from cache"),
@@ -95,6 +95,7 @@ AppManifest(
     requires = setOf(CameraService.Key),   // optional services you cannot work without
     deepLinks = setOf("rate"),             // paths you serve; setup() must register each
     pushTopics = setOf("rates"),           // topics you may subscribe to
+    push = PushUse.Alerts,                 // None | Silent | Alerts — contract 5; the host asks
     networkHosts = setOf("api.frankfurter.app"),  // informational today
 )
 ```

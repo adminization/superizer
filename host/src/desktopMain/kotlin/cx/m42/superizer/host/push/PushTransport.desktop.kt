@@ -1,5 +1,6 @@
 package cx.m42.superizer.host.push
 
+import cx.m42.superizer.push.PushPermission
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -14,6 +15,12 @@ public actual object PushTransport {
     public actual fun deliverMessage(data: Map<String, String>): Unit = NoopPushTransport.deliverMessage(data)
 
     public actual suspend fun requestPermission(): Boolean = false
+
+    public actual suspend fun permission(): PushPermission = PushPermission.Unavailable
+
+    public actual suspend fun activate(): Unit = Unit
+
+    public actual fun openSettings(): Boolean = false
 
     public actual suspend fun subscribeTopic(topic: String): Unit = Unit
 

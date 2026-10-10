@@ -7,6 +7,7 @@ import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppInstance
 import cx.m42.superizer.app.AppManifest
 import cx.m42.superizer.app.AppMetadata
+import cx.m42.superizer.app.PushUse
 import cx.m42.superizer.app.AppSetupContext
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.app.localized
@@ -41,8 +42,8 @@ public class TestApp : SuperizerApp<TestConfig>() {
         id = AppId("test-app"),
         version = "1.0.0",
         // The Secrets and SSH keyring cards use `runtime.secrets`, `runtime.diagnostics` and the
-        // keyring, all contract 3.
-        minHostContract = 3,
+        // keyring, all contract 3; `push` is contract 5.
+        minHostContract = 5,
         metadata = AppMetadata(
             title = localized("en" to "Test App", "ru" to "Тестовое приложение"),
             description = localized(
@@ -55,6 +56,9 @@ public class TestApp : SuperizerApp<TestConfig>() {
         ),
         deepLinks = setOf("echo"),
         pushTopics = setOf("demo"),
+        // The one app in a Unitool build that asks for notifications: its first visit, by promo
+        // code, is how a phone gets a token and a row on the server to be tested against.
+        push = PushUse.Alerts,
         networkHosts = setOf("api.frankfurter.app"),
     )
 

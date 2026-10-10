@@ -151,6 +151,24 @@ public fun ServiceMenuScreen(
             }
         }
 
+        Section(title = hostStrings.servicePushDevice) {
+            val device by superizer.push.device.collectAsState()
+            val used by superizer.push.used.collectAsState()
+            val permission by superizer.push.permission.collectAsState()
+            Column(modifier = Modifier.fillMaxWidth().padding(12.dp).testTag("service:push-device")) {
+                // What the server knows, not what it was asked: the id it answered with, the apps it
+                // last accepted. Never the secret, and only the head of the token.
+                listOf(
+                    "device: ${device.deviceId ?: "—"}",
+                    "token: ${device.tokenHead?.let { "$it…" } ?: "—"}",
+                    "permission: $permission",
+                    "used: ${used.joinToString { it.value }.ifEmpty { "—" }}",
+                    "server apps: ${device.apps.joinToString().ifEmpty { "—" }}",
+                    "synced: ${device.syncedAt ?: "—"}" + (device.error?.let { ", error: $it" } ?: ""),
+                ).forEach { Text(text = it, style = tokens.mono, color = tokens.muted) }
+            }
+        }
+
         Section(title = hostStrings.serviceSimulatePush) {
             Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                 AppTextField(

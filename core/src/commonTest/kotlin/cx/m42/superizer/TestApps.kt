@@ -9,6 +9,7 @@ import cx.m42.superizer.app.AppInstance
 import cx.m42.superizer.app.AppManifest
 import cx.m42.superizer.app.AppProtection
 import cx.m42.superizer.app.AppMetadata
+import cx.m42.superizer.app.PushUse
 import cx.m42.superizer.app.AppSetupContext
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.app.localized
@@ -96,6 +97,7 @@ internal class ProbeApp(
     protection: AppProtection = AppProtection(),
     secret: Boolean = false,
     pushTopics: Set<String> = emptySet(),
+    push: PushUse = PushUse.None,
     /** Registers a block in Settings from `setup()`. */
     private val withSection: Boolean = false,
     /** Records every event its `ctx.listener` hears into [heard]. */
@@ -110,6 +112,7 @@ internal class ProbeApp(
         requires = requires,
         deepLinks = deepLinks,
         pushTopics = pushTopics,
+        push = push,
         protection = protection,
     )
 

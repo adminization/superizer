@@ -10,6 +10,7 @@ import cx.m42.superizer.app.AppManifest
 import cx.m42.superizer.app.AppProtection
 import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.app.AppMetadata
+import cx.m42.superizer.app.PushUse
 import cx.m42.superizer.app.AppSetupContext
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.app.localized
@@ -35,12 +36,15 @@ internal class StubApp(
     minContract: Int? = null,
     /** A secret app (idea/09): hidden as well, and on contract 4. */
     secret: Boolean = false,
+    /** Topics come with push (D417); Alerts unless a test says otherwise. */
+    push: PushUse = if (topics.isNotEmpty()) PushUse.Alerts else PushUse.None,
 ) : SuperizerApp<StubConfig>() {
 
     override val manifest: AppManifest = AppManifest(
         id = AppId(id),
         version = "1.0.0",
         minHostContract = minContract ?: when {
+            push != PushUse.None -> 5
             secret -> 4
             backup != BackupPolicy.All -> 3
             lock != LockPolicy.Off || secureWindow -> 2
@@ -49,6 +53,7 @@ internal class StubApp(
         metadata = AppMetadata(title = localized("en" to id), hidden = hidden || secret, secret = secret),
         deepLinks = deepLinks,
         pushTopics = topics,
+        push = push,
         protection = AppProtection(lock, secureWindow),
         backup = backup,
     )

@@ -3,11 +3,15 @@ package cx.m42.superizer.host.push
 import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.provider.Settings
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import cx.m42.superizer.host.platform.AndroidHost
+import cx.m42.superizer.host.storage.SafePrefs
+import cx.m42.superizer.push.PushPermission
 import kotlin.coroutines.resume
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.flow.SharedFlow
@@ -79,6 +83,9 @@ public actual object PushTransport {
         // — a hang with no error, in a function whose whole contract is to return a boolean.
         if (pending != null) return false
 
+        // Remembered so [permission] can tell "never asked" from "refused for good": the system
+        // answers both with no rationale, and only one of them still has a dialog behind it.
+        SafePrefs.put(ASKED_KEY, "1")
         val granted = suspendCancellableCoroutine { continuation ->
             pending = continuation
             continuation.invokeOnCancellation { pending = null }
@@ -103,6 +110,51 @@ public actual object PushTransport {
         if (continuation.isActive) {
             continuation.resume(grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED)
         }
+    }
+
+    /**
+     * Read without asking. Three answers hide in the system's API and come out in this order:
+     *
+     *  * notifications enabled — [PushPermission.Granted];
+     *  * below API 33, or the permission granted but notifications switched off in Settings — only
+     *    Settings can help, [PushPermission.Blocked];
+     *  * API 33+ without the permission — the dialog is still there unless we asked before and the
+     *    system no longer offers a rationale, which is how Android says "denied twice, never again".
+     */
+    public actual suspend fun permission(): PushPermission {
+        if (!available) return PushPermission.Unavailable
+        val context = AndroidHost.appContext ?: return PushPermission.Unavailable
+        if (notificationsEnabled(context)) return PushPermission.Granted
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return PushPermission.Blocked
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        if (context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) return PushPermission.Blocked
+        val activity = AndroidHost.currentActivity()
+        val rationale = activity?.shouldShowRequestPermissionRationale(permission) == true
+        return if (!rationale && SafePrefs.get(ASKED_KEY) != null) PushPermission.Blocked else PushPermission.Off
+    }
+
+    /**
+     * FCM was told not to start by itself (`firebase_messaging_auto_init_enabled = false` in the
+     * app's manifest), so until this runs there is no token and Google has heard nothing from this
+     * install. Firebase keeps the flag, so a later start wakes it again — after this host has
+     * asked, because the person still uses a push app.
+     */
+    public actual suspend fun activate() {
+        if (!available) return
+        runCatching { FirebaseMessaging.getInstance().isAutoInitEnabled = true }
+        refreshToken()
+    }
+
+    public actual fun openSettings(): Boolean {
+        val context = AndroidHost.appContext ?: return false
+        return runCatching {
+            context.startActivity(
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+            true
+        }.getOrDefault(false)
     }
 
     public actual suspend fun subscribeTopic(topic: String) {
@@ -136,21 +188,11 @@ public actual object PushTransport {
 
     private const val PLATFORM = "android"
     private const val REQUEST_CODE = 0x5075 // 'P','u'
+    private const val ASKED_KEY = "host.push.asked"
+
 
     private var pending: CancellableContinuation<Boolean>? = null
 
-    /**
-     * Last in the object body, not first, because an object initialises in declaration order: an
-     * `init` at the top runs before the properties below it exist. Nothing here reads them today,
-     * which is exactly why the ordering would have gone unnoticed until something did.
-     *
-     * The token usually exists long before anything asks for it — Firebase's own init provider runs
-     * before `Application.onCreate` — so asking here means the first read of [token] is already
-     * populated rather than null until a message happens to arrive.
-     */
-    init {
-        refreshToken()
-    }
 }
 
 /**

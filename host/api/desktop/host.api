@@ -101,6 +101,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun notifier (Lcx/m42/superizer/host/push/Notifier;)V
 	public final fun promoCodes (Lcx/m42/superizer/host/activation/PromoCodeResolver;)V
 	public final fun promoCodes (Ljava/util/Map;)V
+	public final fun pushServer (Ljava/lang/String;)V
 	public final fun qrScanner (Lkotlin/jvm/functions/Function1;)V
 	public final fun register (Lcx/m42/superizer/app/SuperizerApp;)V
 	public final fun scheme (Ljava/lang/String;)V
@@ -307,10 +308,93 @@ public final class cx/m42/superizer/host/platform/Platform_desktopKt {
 	public static final fun openExternalUrl (Ljava/lang/String;)Z
 }
 
+public abstract interface class cx/m42/superizer/host/push/DeviceApi {
+	public abstract fun register (Lcx/m42/superizer/host/push/DeviceBody;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun update (Ljava/lang/String;Lcx/m42/superizer/host/push/DeviceBody;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/push/DeviceBody {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/host/push/DeviceBody$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/host/push/DeviceBody;
+	public static synthetic fun copy$default (Lcx/m42/superizer/host/push/DeviceBody;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/host/push/DeviceBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getApps ()Ljava/util/List;
+	public final fun getLocale ()Ljava/lang/String;
+	public final fun getPlatform ()Ljava/lang/String;
+	public final fun getPushToken ()Ljava/lang/String;
+	public final fun getSecretHash ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class cx/m42/superizer/host/push/DeviceBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/host/push/DeviceBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcx/m42/superizer/host/push/DeviceBody;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcx/m42/superizer/host/push/DeviceBody;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class cx/m42/superizer/host/push/DeviceBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class cx/m42/superizer/host/push/DeviceCall {
+}
+
+public final class cx/m42/superizer/host/push/DeviceCall$Failed : cx/m42/superizer/host/push/DeviceCall {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcx/m42/superizer/host/push/DeviceCall$Failed;
+	public static synthetic fun copy$default (Lcx/m42/superizer/host/push/DeviceCall$Failed;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/host/push/DeviceCall$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/host/push/DeviceCall$Ok : cx/m42/superizer/host/push/DeviceCall {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lcx/m42/superizer/host/push/DeviceCall$Ok;
+	public static synthetic fun copy$default (Lcx/m42/superizer/host/push/DeviceCall$Ok;Ljava/lang/Object;ILjava/lang/Object;)Lcx/m42/superizer/host/push/DeviceCall$Ok;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/host/push/DeviceCall$Unauthorized : cx/m42/superizer/host/push/DeviceCall {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/host/push/DeviceCall$Unauthorized;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/host/push/DeviceRegistrar {
 	public static final field $stable I
-	public fun <init> (Lcx/m42/superizer/runtime/AuthService;Lcx/m42/superizer/runtime/Logger;Lkotlin/jvm/functions/Function0;)V
+	public fun <init> (Lkotlinx/coroutines/flow/StateFlow;Lcx/m42/superizer/host/push/PushControl;Lcx/m42/superizer/host/push/DeviceApi;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;J)V
+	public synthetic fun <init> (Lkotlinx/coroutines/flow/StateFlow;Lcx/m42/superizer/host/push/PushControl;Lcx/m42/superizer/host/push/DeviceApi;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lcx/m42/superizer/runtime/Clock;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun attach (Lkotlinx/coroutines/CoroutineScope;)V
+	public final fun getStatus ()Lkotlinx/coroutines/flow/StateFlow;
 }
 
 public final class cx/m42/superizer/host/push/IncomingPush {
@@ -325,6 +409,14 @@ public final class cx/m42/superizer/host/push/IncomingPush {
 	public final fun getTapped ()Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/host/push/NetworkDeviceApi : cx/m42/superizer/host/push/DeviceApi {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun register (Lcx/m42/superizer/host/push/DeviceBody;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun update (Ljava/lang/String;Lcx/m42/superizer/host/push/DeviceBody;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class cx/m42/superizer/host/push/NoopPushTransport {
@@ -351,6 +443,43 @@ public final class cx/m42/superizer/host/push/PendingRoute : cx/m42/superizer/Ro
 	public fun getRoute ()Lkotlinx/coroutines/flow/StateFlow;
 }
 
+public final class cx/m42/superizer/host/push/PlatformPushControl : cx/m42/superizer/host/push/PushControl {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/host/push/PlatformPushControl;
+	public fun activate (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getAvailable ()Z
+	public fun getToken ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun openSettings ()Z
+	public fun permission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun requestPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun subscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun unsubscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class cx/m42/superizer/host/push/PushControl {
+	public abstract fun activate (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getAvailable ()Z
+	public abstract fun getToken ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun openSettings ()Z
+	public abstract fun permission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun requestPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun subscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun unsubscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/push/PushGate {
+	public static final field $stable I
+	public fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/push/TopicStore;Lcx/m42/superizer/host/push/PushControl;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lcx/m42/superizer/host/push/TopicStore;Lcx/m42/superizer/host/push/PushControl;Lcx/m42/superizer/runtime/Logger;Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun attach (Lkotlinx/coroutines/CoroutineScope;Lkotlinx/coroutines/flow/StateFlow;)V
+	public final fun enable (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getPermission ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getUsed ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun isUsed-GGaiHfc (Ljava/lang/String;)Z
+	public final fun startUsing (Ljava/util/Collection;)V
+	public final fun stopUsing-GGaiHfc (Ljava/lang/String;)V
+}
+
 public final class cx/m42/superizer/host/push/PushRegistration {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
@@ -367,8 +496,8 @@ public final class cx/m42/superizer/host/push/PushRegistration {
 
 public final class cx/m42/superizer/host/push/PushRouter {
 	public static final field $stable I
-	public fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcx/m42/superizer/host/push/PendingRoute;Lcx/m42/superizer/host/push/Notifier;Lkotlinx/coroutines/flow/MutableSharedFlow;Lcx/m42/superizer/runtime/Clock;Ljava/lang/String;Lkotlinx/serialization/json/Json;)V
-	public synthetic fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcx/m42/superizer/host/push/PendingRoute;Lcx/m42/superizer/host/push/Notifier;Lkotlinx/coroutines/flow/MutableSharedFlow;Lcx/m42/superizer/runtime/Clock;Ljava/lang/String;Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcx/m42/superizer/host/push/PendingRoute;Lcx/m42/superizer/host/push/Notifier;Lkotlinx/coroutines/flow/MutableSharedFlow;Lcx/m42/superizer/runtime/Clock;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lcx/m42/superizer/registry/AppRegistry;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcx/m42/superizer/host/push/PendingRoute;Lcx/m42/superizer/host/push/Notifier;Lkotlinx/coroutines/flow/MutableSharedFlow;Lcx/m42/superizer/runtime/Clock;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun attach (Lkotlinx/coroutines/CoroutineScope;)V
 	public final fun route (Lcx/m42/superizer/host/push/IncomingPush;)V
 }
@@ -376,11 +505,14 @@ public final class cx/m42/superizer/host/push/PushRouter {
 public final class cx/m42/superizer/host/push/PushTransport {
 	public static final field $stable I
 	public static final field INSTANCE Lcx/m42/superizer/host/push/PushTransport;
+	public final fun activate (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun deliverMessage (Ljava/util/Map;)V
 	public final fun deliverTap (Ljava/util/Map;)V
 	public final fun getAvailable ()Z
 	public final fun getIncoming ()Lkotlinx/coroutines/flow/SharedFlow;
 	public final fun getToken ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun openSettings ()Z
+	public final fun permission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun requestPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun subscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun unsubscribeTopic (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -388,7 +520,8 @@ public final class cx/m42/superizer/host/push/PushTransport {
 
 public final class cx/m42/superizer/host/push/RoutedPush : cx/m42/superizer/runtime/PushService {
 	public static final field $stable I
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Set;Lcx/m42/superizer/host/push/TopicStore;Lcx/m42/superizer/runtime/Logger;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Set;Lcx/m42/superizer/host/push/TopicStore;Lcx/m42/superizer/runtime/Logger;Lcx/m42/superizer/app/PushUse;Lcx/m42/superizer/host/push/PushControl;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Set;Lcx/m42/superizer/host/push/TopicStore;Lcx/m42/superizer/runtime/Logger;Lcx/m42/superizer/app/PushUse;Lcx/m42/superizer/host/push/PushControl;Lkotlin/jvm/functions/Function1;Lkotlinx/coroutines/flow/StateFlow;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getEnabled ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun getMessages ()Lkotlinx/coroutines/flow/SharedFlow;
 	public fun getSubscriptions ()Lkotlinx/coroutines/flow/StateFlow;
@@ -405,6 +538,7 @@ public final class cx/m42/superizer/host/push/TopicStore {
 	public final fun add-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)V
 	public final fun all ()Ljava/util/Map;
 	public final fun clear-GGaiHfc (Ljava/lang/String;)V
+	public final fun current-GGaiHfc (Ljava/lang/String;)Ljava/util/Set;
 	public final fun of-GGaiHfc (Ljava/lang/String;)Lkotlinx/coroutines/flow/StateFlow;
 	public final fun qualified-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 	public final fun remove-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)V
@@ -447,6 +581,8 @@ public final class cx/m42/superizer/host/storage/HostKeys {
 	public static final field INSTANCE Lcx/m42/superizer/host/storage/HostKeys;
 	public static final field LANGUAGE Ljava/lang/String;
 	public static final field LOCK Ljava/lang/String;
+	public static final field PUSH_DEVICE Ljava/lang/String;
+	public static final field PUSH_USED Ljava/lang/String;
 	public static final field SELF_TEST Ljava/lang/String;
 	public static final field SESSION Ljava/lang/String;
 	public static final field TOPICS Ljava/lang/String;

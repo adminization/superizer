@@ -115,6 +115,11 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getLockedHint ()Ljava/lang/String;
 	public abstract fun getMenu ()Ljava/lang/String;
 	public abstract fun getNoApps ()Ljava/lang/String;
+	public abstract fun getNotificationsBackground ()Ljava/lang/String;
+	public abstract fun getNotificationsOff ()Ljava/lang/String;
+	public abstract fun getNotificationsOn ()Ljava/lang/String;
+	public abstract fun getNotificationsOpenSettings ()Ljava/lang/String;
+	public abstract fun getNotificationsTurnOn ()Ljava/lang/String;
 	public abstract fun getOnHome ()Ljava/lang/String;
 	public abstract fun getOpenMenu ()Ljava/lang/String;
 	public abstract fun getRemoveFromHome ()Ljava/lang/String;
@@ -126,6 +131,7 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getServiceLog ()Ljava/lang/String;
 	public abstract fun getServiceManifest ()Ljava/lang/String;
 	public abstract fun getServiceMenu ()Ljava/lang/String;
+	public abstract fun getServicePushDevice ()Ljava/lang/String;
 	public abstract fun getServiceRejected ()Ljava/lang/String;
 	public abstract fun getServiceReset ()Ljava/lang/String;
 	public abstract fun getServiceResetConfirm ()Ljava/lang/String;
@@ -145,6 +151,7 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getSettingsLockChange ()Ljava/lang/String;
 	public abstract fun getSettingsLockNow ()Ljava/lang/String;
 	public abstract fun getSettingsNoScreenLock ()Ljava/lang/String;
+	public abstract fun getSettingsNotifications ()Ljava/lang/String;
 	public abstract fun getSettingsProtection ()Ljava/lang/String;
 	public abstract fun getSettingsProtectionHint ()Ljava/lang/String;
 	public abstract fun getUngrouped ()Ljava/lang/String;

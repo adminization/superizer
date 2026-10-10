@@ -1,6 +1,7 @@
 package cx.m42.superizer
 
 import cx.m42.superizer.app.AppId
+import cx.m42.superizer.app.PushUse
 import cx.m42.superizer.app.AppProtection
 import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.event.SuperizerEvent
@@ -77,6 +78,28 @@ class AppRegistryTest {
         val unlocked = setOf(AppId("secret"), AppId("hidden"))
         assertEquals(listOf(AppId("hidden"), AppId("plain")), registry.visible(unlocked).map { it.id })
         assertEquals(listOf(AppId("plain")), registry.visible(emptySet()).map { it.id })
+    }
+
+    @Test
+    fun pushAsksForContractFiveAndTopicsComeOnlyWithPush() {
+        // push-opt-in, D417: a contract-4 host would mint a token at start and never ask; topics
+        // with push = None say two things at once.
+        val registry = AppRegistry(testHost(), events)
+        val cases = mapOf(
+            "old-contract" to ProbeApp(id = "old-contract", minHostContract = 4, push = PushUse.Alerts),
+            "topics-no-push" to ProbeApp(id = "topics-no-push", minHostContract = 5, pushTopics = setOf("news")),
+            "secret-push" to ProbeApp(id = "secret-push", secret = true, hidden = true, minHostContract = 5, push = PushUse.Silent),
+        )
+        cases.forEach { (id, app) ->
+            assertFalse(registry.register(app), id)
+            assertTrue(registry.outcome(AppId(id)) is RegistrationOutcome.Rejected, id)
+        }
+
+        assertTrue(registry.register(ProbeApp(id = "alerts", minHostContract = 5, push = PushUse.Alerts, pushTopics = setOf("news"))))
+        assertTrue(registry.register(ProbeApp(id = "silent", minHostContract = 5, push = PushUse.Silent)))
+        assertEquals(PushUse.Alerts, registry.pushUse(AppId("alerts")))
+        assertEquals(PushUse.Silent, registry.pushUse(AppId("silent")))
+        assertEquals(PushUse.None, registry.pushUse(AppId("no-such-app")))
     }
 
     @Test

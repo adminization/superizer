@@ -180,10 +180,12 @@ The listener runs on the app-level scope and is cancelled for you on disable.
 ## Push: subscribe once, receive always
 
 ```kotlin
-// manifest
+// manifest — push needs contract 5; Alerts if you draw notifications, Silent if you only sync
+minHostContract = 5,
+push = PushUse.Alerts,
 pushTopics = setOf("rates")
 
-// setup — persisted by the host, re-applied after a token refresh
+// setup — persisted by the host; reaches the transport only once the person uses the app
 ctx.runtime.scope.launch { ctx.runtime.push.subscribe("rates") }
 
 // anywhere with a runtime
@@ -196,7 +198,11 @@ runtime.scope.launch {
 ```
 
 Collect on the **app-level** scope (in `setup`) if the app must react while closed; on the instance
-scope if only the open screen cares. Ask for permission from a gesture, never at launch:
+scope if only the open screen cares.
+
+You do not ask for the permission: the host asks, once, the moment the person starts using an
+`Alerts` app — adds it from the catalog, opens it, restores it from a backup — and never at
+launch. Settings carries the way back if they said no. To ask again in context, from a gesture:
 
 ```kotlin
 AppButton("Enable notifications", onClick = { runtime.scope.launch { runtime.push.requestPermission() } })

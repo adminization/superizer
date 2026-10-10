@@ -36,6 +36,7 @@ public class CalculatorApp : SuperizerApp<CalculatorConfig>() {
     override val manifest = AppManifest(
         id = AppId("calculator"),
         version = "1.1.0",
+        minHostContract = 5,                         // push needs contract 5
         metadata = AppMetadata(
             title = localized("en" to "Calculator", "ru" to "Калькулятор"),
             icon = AppIcon.Named("calculator"),      // or AppIcon.Path("M4 4h16…") — your own SVG
@@ -43,6 +44,7 @@ public class CalculatorApp : SuperizerApp<CalculatorConfig>() {
         ),
         deepLinks = setOf("rate"),                   // paths you serve; setup() must register these
         pushTopics = setOf("rates"),                 // topics you may subscribe to
+        push = PushUse.Alerts,                       // draws notifications (contract 5)
     )
 
     override val configSpec = AppConfigSpec(CalculatorConfig.serializer(), CalculatorConfig())

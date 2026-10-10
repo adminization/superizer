@@ -1,5 +1,6 @@
 package cx.m42.superizer.host.push
 
+import cx.m42.superizer.push.PushPermission
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,10 +19,9 @@ public data class IncomingPush(val data: Map<String, String>, val tapped: Boolea
  * static — a `FirebaseMessagingService` is constructed by the system and has no route to a
  * composition — which is exactly the shape `agentiz/push` arrived at for the same reason.
  *
- * Every actual is a no-op today. That is the whole design: the router, the topic store, the
- * simulator in the Service Menu and the bench app's Push card all work against this, so adding FCM
- * later is one `actual` file and a `google-services.json` — and if it is not, step 9b was done
- * wrong.
+ * The router, the topic store, the simulator in the Service Menu and the bench app's Push card all
+ * work against this; Android and iOS speak FCM behind it, desktop and the web are no-ops. Callers
+ * other than tests go through [PushControl], so a test can stand in for the platform.
  */
 public expect object PushTransport {
     public val token: StateFlow<PushRegistration?>
@@ -35,6 +35,19 @@ public expect object PushTransport {
     public fun deliverMessage(data: Map<String, String>)
 
     public suspend fun requestPermission(): Boolean
+
+    /** What the system would answer now, without asking anything (push-opt-in, D424). */
+    public suspend fun permission(): PushPermission
+
+    /**
+     * Wakes FCM: the token, and on iOS the APNs registration it is minted from (push-opt-in, D421).
+     * Nothing calls it until the person starts using a push app, so a device that never does sends
+     * Google nothing. Idempotent.
+     */
+    public suspend fun activate()
+
+    /** The app's notification settings in the system's own Settings, for a [PushPermission.Blocked]. */
+    public fun openSettings(): Boolean
 
     public suspend fun subscribeTopic(topic: String)
 
@@ -66,4 +79,31 @@ public object NoopPushTransport {
     public fun deliverMessage(data: Map<String, String>) {
         incoming.tryEmit(IncomingPush(data, tapped = false))
     }
+}
+
+/**
+ * The platform's push, as the host's own classes use it: [PushTransport] behind an interface, so
+ * the gate and the registrar can be tested against a fake on desktop, where the transport is a no-op.
+ */
+public interface PushControl {
+    public val token: StateFlow<PushRegistration?>
+    public val available: Boolean
+    public suspend fun permission(): PushPermission
+    public suspend fun requestPermission(): Boolean
+    public suspend fun activate()
+    public suspend fun subscribeTopic(topic: String)
+    public suspend fun unsubscribeTopic(topic: String)
+    public fun openSettings(): Boolean
+}
+
+/** The real one. */
+public object PlatformPushControl : PushControl {
+    override val token: StateFlow<PushRegistration?> get() = PushTransport.token
+    override val available: Boolean get() = PushTransport.available
+    override suspend fun permission(): PushPermission = PushTransport.permission()
+    override suspend fun requestPermission(): Boolean = PushTransport.requestPermission()
+    override suspend fun activate(): Unit = PushTransport.activate()
+    override suspend fun subscribeTopic(topic: String): Unit = PushTransport.subscribeTopic(topic)
+    override suspend fun unsubscribeTopic(topic: String): Unit = PushTransport.unsubscribeTopic(topic)
+    override fun openSettings(): Boolean = PushTransport.openSettings()
 }

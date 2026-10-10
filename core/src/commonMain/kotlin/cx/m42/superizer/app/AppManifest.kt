@@ -111,6 +111,25 @@ public data class AppMetadata(
 )
 
 /**
+ * Whether an app takes pushes, and whether it draws them (Unitool push-opt-in, D417).
+ *
+ * The host asks for the notification permission, mints a token and registers the device with a
+ * server only once the person starts using an app that says something other than [None] — never
+ * at first start, and never for an app that only sits in the catalog.
+ */
+@Serializable
+public enum class PushUse {
+    /** No pushes. No token, no server, no question on this app's account. */
+    None,
+
+    /** Data messages only — a sync, a wake-up. Needs no permission anywhere and never draws one. */
+    Silent,
+
+    /** Visible notifications: the system's question (Android 13+, iOS) is asked for it. */
+    Alerts,
+}
+
+/**
  * Everything static the host may want to know before running a line of the app (D47).
  *
  * One serializable object rather than a scattering of fields: the registry validates it whole, the
@@ -136,8 +155,16 @@ public data class AppManifest(
      * handler for each — and for nothing else.
      */
     val deepLinks: Set<String> = emptySet(),
-    /** Push topics it subscribes to. The host's TopicStore refuses a subscribe to an undeclared one (13). */
+    /**
+     * Push topics it subscribes to. The host's TopicStore refuses a subscribe to an undeclared one
+     * (13). Any at all need [push] other than [PushUse.None].
+     */
     val pushTopics: Set<String> = emptySet(),
+    /**
+     * Whether it takes pushes (push-opt-in, D417). Anything but [PushUse.None] needs
+     * `minHostContract = 5`, for the same reason as [protection] (D138).
+     */
+    val push: PushUse = PushUse.None,
     /** Hosts it talks to. Informational here; the allowlist of a Tier 2 bridge later (10). */
     val networkHosts: Set<String> = emptySet(),
     /**

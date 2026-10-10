@@ -7,6 +7,7 @@ import cx.m42.superizer.backup.BackupPort
 import cx.m42.superizer.diagnostics.StorageDiagnostics
 import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.lock.AppLockPort
+import cx.m42.superizer.push.PushPort
 import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.AppSession
@@ -72,6 +73,9 @@ public interface Superizer {
 
     /** The host's backup (contract 3, ssh-new 05 §3.3). */
     public val backup: BackupPort
+
+    /** Which apps push is for, and whether the system shows it (contract 5, Unitool push-opt-in). */
+    public val push: PushPort get() = PushPort.None
 
     /** How secrets and keys are kept, as findings; the self-test (contract 3, ssh-new 06). */
     public val storage: StorageDiagnostics
