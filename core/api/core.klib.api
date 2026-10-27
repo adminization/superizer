@@ -11,6 +11,7 @@ final enum class cx.m42.superizer.app/LockPolicy : kotlin/Enum<cx.m42.superizer.
     enum entry OptionalOff // cx.m42.superizer.app/LockPolicy.OptionalOff|null[0]
     enum entry OptionalOn // cx.m42.superizer.app/LockPolicy.OptionalOn|null[0]
     enum entry Required // cx.m42.superizer.app/LockPolicy.Required|null[0]
+    enum entry WhileHolding // cx.m42.superizer.app/LockPolicy.WhileHolding|null[0]
 
     final val entries // cx.m42.superizer.app/LockPolicy.entries|#static{}entries[0]
         final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer.app/LockPolicy> // cx.m42.superizer.app/LockPolicy.entries.<get-entries>|<get-entries>#static(){}[0]
@@ -415,6 +416,16 @@ abstract interface cx.m42.superizer.lock/AppLockPort { // cx.m42.superizer.lock/
 abstract interface cx.m42.superizer.lock/DeviceAuthenticator { // cx.m42.superizer.lock/DeviceAuthenticator|null[0]
     abstract fun availability(cx.m42.superizer.lock/AuthStrength = ...): cx.m42.superizer.lock/AuthAvailability // cx.m42.superizer.lock/DeviceAuthenticator.availability|availability(cx.m42.superizer.lock.AuthStrength){}[0]
     abstract suspend fun authenticate(kotlin/String, kotlin/String? = ..., cx.m42.superizer.lock/AuthStrength = ...): cx.m42.superizer.lock/AuthOutcome // cx.m42.superizer.lock/DeviceAuthenticator.authenticate|authenticate(kotlin.String;kotlin.String?;cx.m42.superizer.lock.AuthStrength){}[0]
+}
+
+abstract interface cx.m42.superizer.lock/SecretHold { // cx.m42.superizer.lock/SecretHold|null[0]
+    abstract fun holding(kotlin/Boolean) // cx.m42.superizer.lock/SecretHold.holding|holding(kotlin.Boolean){}[0]
+    abstract suspend fun <#A1: kotlin/Any?> outside(kotlin.coroutines/SuspendFunction0<#A1>): #A1 // cx.m42.superizer.lock/SecretHold.outside|outside(kotlin.coroutines.SuspendFunction0<0:0>){0§<kotlin.Any?>}[0]
+
+    final object Companion { // cx.m42.superizer.lock/SecretHold.Companion|null[0]
+        final val Key // cx.m42.superizer.lock/SecretHold.Companion.Key|{}Key[0]
+            final fun <get-Key>(): cx.m42.superizer.runtime/ServiceKey<cx.m42.superizer.lock/SecretHold> // cx.m42.superizer.lock/SecretHold.Companion.Key.<get-Key>|<get-Key>(){}[0]
+    }
 }
 
 abstract interface cx.m42.superizer.lock/UserPresence { // cx.m42.superizer.lock/UserPresence|null[0]
@@ -2747,18 +2758,24 @@ final class cx.m42.superizer.diagnostics/SelfTestStep { // cx.m42.superizer.diag
 }
 
 final class cx.m42.superizer.lock/LockState { // cx.m42.superizer.lock/LockState|null[0]
-    constructor <init>(kotlin/Boolean = ..., cx.m42.superizer.lock/AuthAvailability = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin/Long = ..., kotlin.collections/Map<cx.m42.superizer.app/AppId, kotlin/Boolean> = ..., kotlin/Boolean = ...) // cx.m42.superizer.lock/LockState.<init>|<init>(kotlin.Boolean;cx.m42.superizer.lock.AuthAvailability;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.Long;kotlin.collections.Map<cx.m42.superizer.app.AppId,kotlin.Boolean>;kotlin.Boolean){}[0]
+    constructor <init>(kotlin/Boolean = ..., cx.m42.superizer.lock/AuthAvailability = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin/Long = ..., kotlin.collections/Map<cx.m42.superizer.app/AppId, kotlin/Boolean> = ..., kotlin/Boolean = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin/Boolean = ...) // cx.m42.superizer.lock/LockState.<init>|<init>(kotlin.Boolean;cx.m42.superizer.lock.AuthAvailability;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.Long;kotlin.collections.Map<cx.m42.superizer.app.AppId,kotlin.Boolean>;kotlin.Boolean;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.Boolean){}[0]
 
     final val availability // cx.m42.superizer.lock/LockState.availability|{}availability[0]
         final fun <get-availability>(): cx.m42.superizer.lock/AuthAvailability // cx.m42.superizer.lock/LockState.availability.<get-availability>|<get-availability>(){}[0]
+    final val away // cx.m42.superizer.lock/LockState.away|{}away[0]
+        final fun <get-away>(): kotlin/Boolean // cx.m42.superizer.lock/LockState.away.<get-away>|<get-away>(){}[0]
     final val choices // cx.m42.superizer.lock/LockState.choices|{}choices[0]
         final fun <get-choices>(): kotlin.collections/Map<cx.m42.superizer.app/AppId, kotlin/Boolean> // cx.m42.superizer.lock/LockState.choices.<get-choices>|<get-choices>(){}[0]
     final val graceMillis // cx.m42.superizer.lock/LockState.graceMillis|{}graceMillis[0]
         final fun <get-graceMillis>(): kotlin/Long // cx.m42.superizer.lock/LockState.graceMillis.<get-graceMillis>|<get-graceMillis>(){}[0]
     final val guarded // cx.m42.superizer.lock/LockState.guarded|{}guarded[0]
         final fun <get-guarded>(): kotlin.collections/Set<cx.m42.superizer.app/AppId> // cx.m42.superizer.lock/LockState.guarded.<get-guarded>|<get-guarded>(){}[0]
+    final val holding // cx.m42.superizer.lock/LockState.holding|{}holding[0]
+        final fun <get-holding>(): kotlin.collections/Set<cx.m42.superizer.app/AppId> // cx.m42.superizer.lock/LockState.holding.<get-holding>|<get-holding>(){}[0]
     final val open // cx.m42.superizer.lock/LockState.open|{}open[0]
         final fun <get-open>(): kotlin/Boolean // cx.m42.superizer.lock/LockState.open.<get-open>|<get-open>(){}[0]
+    final val present // cx.m42.superizer.lock/LockState.present|{}present[0]
+        final fun <get-present>(): kotlin.collections/Set<cx.m42.superizer.app/AppId> // cx.m42.superizer.lock/LockState.present.<get-present>|<get-present>(){}[0]
     final val prompting // cx.m42.superizer.lock/LockState.prompting|{}prompting[0]
         final fun <get-prompting>(): kotlin/Boolean // cx.m42.superizer.lock/LockState.prompting.<get-prompting>|<get-prompting>(){}[0]
 
@@ -2768,7 +2785,10 @@ final class cx.m42.superizer.lock/LockState { // cx.m42.superizer.lock/LockState
     final fun component4(): kotlin/Long // cx.m42.superizer.lock/LockState.component4|component4(){}[0]
     final fun component5(): kotlin.collections/Map<cx.m42.superizer.app/AppId, kotlin/Boolean> // cx.m42.superizer.lock/LockState.component5|component5(){}[0]
     final fun component6(): kotlin/Boolean // cx.m42.superizer.lock/LockState.component6|component6(){}[0]
-    final fun copy(kotlin/Boolean = ..., cx.m42.superizer.lock/AuthAvailability = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin/Long = ..., kotlin.collections/Map<cx.m42.superizer.app/AppId, kotlin/Boolean> = ..., kotlin/Boolean = ...): cx.m42.superizer.lock/LockState // cx.m42.superizer.lock/LockState.copy|copy(kotlin.Boolean;cx.m42.superizer.lock.AuthAvailability;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.Long;kotlin.collections.Map<cx.m42.superizer.app.AppId,kotlin.Boolean>;kotlin.Boolean){}[0]
+    final fun component7(): kotlin.collections/Set<cx.m42.superizer.app/AppId> // cx.m42.superizer.lock/LockState.component7|component7(){}[0]
+    final fun component8(): kotlin.collections/Set<cx.m42.superizer.app/AppId> // cx.m42.superizer.lock/LockState.component8|component8(){}[0]
+    final fun component9(): kotlin/Boolean // cx.m42.superizer.lock/LockState.component9|component9(){}[0]
+    final fun copy(kotlin/Boolean = ..., cx.m42.superizer.lock/AuthAvailability = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin/Long = ..., kotlin.collections/Map<cx.m42.superizer.app/AppId, kotlin/Boolean> = ..., kotlin/Boolean = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin.collections/Set<cx.m42.superizer.app/AppId> = ..., kotlin/Boolean = ...): cx.m42.superizer.lock/LockState // cx.m42.superizer.lock/LockState.copy|copy(kotlin.Boolean;cx.m42.superizer.lock.AuthAvailability;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.Long;kotlin.collections.Map<cx.m42.superizer.app.AppId,kotlin.Boolean>;kotlin.Boolean;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.collections.Set<cx.m42.superizer.app.AppId>;kotlin.Boolean){}[0]
     final fun covers(cx.m42.superizer.app/AppId): kotlin/Boolean // cx.m42.superizer.lock/LockState.covers|covers(cx.m42.superizer.app.AppId){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.lock/LockState.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // cx.m42.superizer.lock/LockState.hashCode|hashCode(){}[0]

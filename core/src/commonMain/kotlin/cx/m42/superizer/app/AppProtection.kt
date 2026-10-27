@@ -45,4 +45,12 @@ public enum class LockPolicy {
 
     /** Always on; Settings lists the app as locked and offers no switch. */
     Required,
+
+    /**
+     * No lock to come in, and the lock for as long as the app holds a secret on screen (Unitool
+     * cr-restore, D598): the app says when through [cx.m42.superizer.lock.SecretHold]. Then idle and
+     * the background put the curtain up rather than closing the app. Not in Settings — there is
+     * nothing for the person to choose. Contract 6.
+     */
+    WhileHolding,
 }

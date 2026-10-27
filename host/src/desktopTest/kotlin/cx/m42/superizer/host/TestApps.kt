@@ -44,6 +44,7 @@ internal class StubApp(
         id = AppId(id),
         version = "1.0.0",
         minHostContract = minContract ?: when {
+            lock == LockPolicy.WhileHolding -> 6
             push != PushUse.None -> 5
             secret -> 4
             backup != BackupPolicy.All -> 3

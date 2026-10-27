@@ -26,7 +26,11 @@ package cx.m42.superizer
  * 5 added `AppManifest.push` (Unitool push-opt-in, D417): whether an app takes pushes at all, and
  * whether it draws them. An app that does has to ask for 5 — an older host would mint a token and
  * never ask for the permission the app counts on.
+ *
+ * 6 added `LockPolicy.WhileHolding` and the `SecretHold` service (Unitool cr-restore, D598): no
+ * lock to come in, the lock for as long as the app holds a secret on screen. An app that declares
+ * it has to ask for 6 — an older host could not even decode the value.
  */
 public object SuperizerContract {
-    public const val VERSION: Int = 5
+    public const val VERSION: Int = 6
 }

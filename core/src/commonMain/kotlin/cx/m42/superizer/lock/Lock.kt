@@ -84,6 +84,35 @@ public interface UserPresence {
 }
 
 /**
+ * What a [cx.m42.superizer.app.LockPolicy.WhileHolding] app tells the host (Unitool cr-restore,
+ * D598): "I am holding a secret on screen now", and "the person is leaving through a system screen
+ * of mine, not walking away". A caller-bound optional service, contract 6.
+ *
+ * Holding is in memory only, like the unlock: after a process death nothing is held, because
+ * nothing is left to hold.
+ */
+public interface SecretHold {
+
+    /**
+     * True as soon as the app has something to protect, false once it has wiped it. Turning it on
+     * with the app in front asks nothing — the person is the one who just opened the secret — but
+     * from then on the screen is behind the lock: idle, the background or the screen going off
+     * put the curtain up instead of closing the app.
+     */
+    public fun holding(held: Boolean)
+
+    /**
+     * Runs [block] — a file picker, a "Save as" sheet — with the lock deaf to the app leaving and
+     * coming back meanwhile, and with no idle clock. The screen going off still closes the lock.
+     */
+    public suspend fun <T> outside(block: suspend () -> T): T
+
+    public companion object {
+        public val Key: ServiceKey<SecretHold> = ServiceKey("secret-hold")
+    }
+}
+
+/**
  * What the shell needs to know about the lock, and the handful of things it may do to it.
  *
  * One unlock for the whole host, held in memory only (D130): after a process death everything is
@@ -141,10 +170,19 @@ public data class LockState(
     val choices: Map<AppId, Boolean> = emptyMap(),
     /** The device's sheet is up. The shell does not put up a second one. */
     val prompting: Boolean = false,
+    /** `WhileHolding` apps holding a secret now ([SecretHold]); they are in [guarded] for as long. Contract 6. */
+    val holding: Set<AppId> = emptySet(),
+    /**
+     * Holding apps that started holding with the person in front, and nothing has closed the lock
+     * since: no curtain for them yet, though the host-wide lock is not [open]. Contract 6.
+     */
+    val present: Set<AppId> = emptySet(),
+    /** An app is [SecretHold.outside]: leaving and coming back are not judged. Contract 6. */
+    val away: Boolean = false,
 ) {
     /** Draw the curtain instead of [id]'s screen. */
     public fun covers(id: AppId): Boolean =
-        id in guarded && availability == AuthAvailability.Available && !open
+        id in guarded && availability == AuthAvailability.Available && !open && id !in present
 
     /** [id] wants a lock this device cannot give it: open it, under the host's banner (D140). */
     public fun unprotected(id: AppId): Boolean =

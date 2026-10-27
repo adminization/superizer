@@ -254,6 +254,116 @@ class AppLockTest {
         assertEquals(listOf("Unlock"), f.device.prompts)
     }
 
+    // ------------------------------------------------------------ WhileHolding (cr-restore D598)
+
+    private val held = AppId("held")
+
+    private fun holdingFixture(availability: AuthAvailability = AuthAvailability.Available) =
+        Fixture(listOf(StubApp("held", lock = LockPolicy.WhileHolding), StubApp("secret", lock = LockPolicy.Required)), availability)
+
+    @Test
+    fun aHoldingAppIsNotGuardedUntilItHoldsAndHoldingInFrontAsksNothing() = runTest {
+        val f = holdingFixture()
+        assertFalse(held in f.lock.state.value.guarded)
+        assertFalse(f.lock.state.value.covers(held))
+
+        f.lock.holdFor(held).holding(true)
+        assertTrue(held in f.lock.state.value.guarded)
+        assertFalse(f.lock.state.value.covers(held), "the person who just opened the secret is not asked")
+        assertFalse(f.lock.state.value.open, "and the rest of the host stays locked")
+        assertTrue(f.lock.state.value.covers(secret))
+        assertEquals(emptyList(), f.device.prompts)
+
+        f.lock.holdFor(held).holding(false)
+        assertFalse(held in f.lock.state.value.guarded)
+        assertFalse(f.lock.state.value.covers(held))
+    }
+
+    @Test
+    fun onceTheLockClosesAHeldSecretIsCurtainedAndTheLockOpensIt() = runTest {
+        val f = holdingFixture()
+        f.lock.holdFor(held).holding(true)
+        f.lock.lockNow()
+        assertTrue(f.lock.state.value.covers(held))
+
+        f.unlocked()
+        assertFalse(f.lock.state.value.covers(held))
+    }
+
+    @Test
+    fun leavingAHeldSecretGetsNoGrace() = runTest {
+        val f = holdingFixture()
+        f.lock.holdFor(held).holding(true)
+        f.away(seconds = 1)
+        assertTrue(f.lock.state.value.covers(held), "a minute's grace is not for a secret on screen")
+    }
+
+    @Test
+    fun withoutAHeldSecretTheGraceIsAsBefore() = runTest {
+        val f = holdingFixture().unlocked()
+        f.away(seconds = 1)
+        assertFalse(f.lock.state.value.covers(secret))
+    }
+
+    @Test
+    fun aPickerTheAppOpenedIsNotWalkingAway() = runTest {
+        val f = holdingFixture()
+        val hold = f.lock.holdFor(held)
+        hold.holding(true)
+        hold.outside {
+            assertTrue(f.lock.state.value.away)
+            f.away(seconds = 120)
+        }
+        assertFalse(f.lock.state.value.away)
+        assertFalse(f.lock.state.value.covers(held))
+    }
+
+    @Test
+    fun theScreenGoingOffStillLocksDuringAPicker() = runTest {
+        val f = holdingFixture()
+        val hold = f.lock.holdFor(held)
+        hold.holding(true)
+        hold.outside {
+            f.screenOff.tryEmit(Unit)
+            runCurrent()
+        }
+        assertTrue(f.lock.state.value.covers(held))
+    }
+
+    @Test
+    fun holdingStartedInTheBackgroundIsCurtainedAtOnce() = runTest {
+        val f = holdingFixture()
+        f.lifecycle.value = HostLifecycle.Background
+        f.lock.holdFor(held).holding(true)
+        assertTrue(f.lock.state.value.covers(held))
+    }
+
+    @Test
+    fun releaseLetsGoOfWhatAClosedAppHeld() = runTest {
+        val f = holdingFixture()
+        f.lock.holdFor(held).holding(true)
+        f.lock.release(held)
+        assertEquals(emptySet(), f.lock.state.value.holding)
+        assertEquals(emptySet(), f.lock.state.value.present)
+    }
+
+    @Test
+    fun onlyAWhileHoldingAppCanHold() = runTest {
+        val f = holdingFixture()
+        f.lock.holdFor(plain).holding(true)
+        f.lock.holdFor(secret).holding(true)
+        assertEquals(emptySet(), f.lock.state.value.holding)
+    }
+
+    @Test
+    fun withNoScreenLockAHeldSecretIsUnprotectedNotCovered() = runTest {
+        val f = holdingFixture(AuthAvailability.NoScreenLock)
+        f.lock.holdFor(held).holding(true)
+        f.lock.lockNow()
+        assertFalse(f.lock.state.value.covers(held))
+        assertTrue(f.lock.state.value.unprotected(held))
+    }
+
     @Test
     fun aDiscardedLinkToAProtectedAppIsLoggedWithoutItsQuery() {
         val events = MutableSharedFlow<SuperizerEvent>(replay = 8, extraBufferCapacity = 8)

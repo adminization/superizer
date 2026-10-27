@@ -66,6 +66,7 @@ import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.lock.AuthAvailability
 import cx.m42.superizer.lock.AuthStrength
 import cx.m42.superizer.lock.DeviceAuthenticator
+import cx.m42.superizer.lock.SecretHold
 import cx.m42.superizer.lock.UserPresence
 import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
@@ -405,7 +406,16 @@ internal class SuperizerHost(
         })
     }
 
-    override val hostInfo: HostInfo = declared.copy(services = services.keys + builder.boundServices.keys)
+    /**
+     * The caller-bound services: the host's own [SecretHold] (contract 6) next to whatever the
+     * builder declared. Offered everywhere — on a device with nothing to ask with, a held secret is
+     * closed rather than curtained, and the app needs to know nothing about which.
+     */
+    private val boundServices: Map<ServiceKey<*>, (AppId) -> Any> =
+        mapOf<ServiceKey<*>, (AppId) -> Any>(SecretHold.Key to { id: AppId -> lockController.holdFor(id) }) +
+            builder.boundServices
+
+    override val hostInfo: HostInfo = declared.copy(services = services.keys + boundServices.keys)
 
     private val _events = MutableSharedFlow<SuperizerEvent>(replay = 0, extraBufferCapacity = 64)
     override val events: SharedFlow<SuperizerEvent> = _events.asSharedFlow()
@@ -511,7 +521,7 @@ internal class SuperizerHost(
         events = events,
         eventsFor = ::eventsFor,
         quiet = { appId -> !declared.debug && registry.isSecret(appId) },
-        services = ServiceRegistry(services, builder.boundServices.toMap()),
+        services = ServiceRegistry(services, boundServices),
         clock = builder.clock,
         pushFor = { appId, logger ->
             pushes.getOrPut(appId) {
@@ -708,6 +718,7 @@ internal class SuperizerHost(
         )
         lockController.attach(scope)
         closeWhenIdle(builder.lifecycle ?: PlatformLifecycle.state, builder.idleLimitMs)
+        watchHeldSecrets(builder.lifecycle ?: PlatformLifecycle.state)
         // After registration, so the stored set is read against the apps this build has.
         pushGate.attach(scope, builder.lifecycle ?: PlatformLifecycle.state)
         scope.launch {
@@ -797,14 +808,24 @@ internal class SuperizerHost(
                 handler.current,
                 lifecycle,
                 touches,
-                lockController.state.map { it.guarded to it.prompting }.distinctUntilChanged(),
-            ) { session, now, _, (guarded, prompting) -> Watch(session?.app, now, guarded, prompting) }
+                lockController.state,
+            ) { session, now, touch, lock -> Watch(session?.app, now, touch, lock) }
+                .distinctUntilChanged()
                 .collectLatest { watch ->
                     val app = watch.app ?: return@collectLatest
-                    if (watch.lifecycle != cx.m42.superizer.runtime.HostLifecycle.Foreground || watch.prompting) return@collectLatest
-                    val locked = app.id in watch.guarded
+                    if (watch.lifecycle != cx.m42.superizer.runtime.HostLifecycle.Foreground || watch.lock.prompting || watch.lock.away) return@collectLatest
+                    val locked = app.id in watch.lock.guarded
                     if (!locked && !app.metadata.secret) return@collectLatest
+                    // A held secret (cr-restore D598) is curtained, not closed: the person comes back
+                    // to it through the lock. Already under the curtain, there is nothing to wait for.
+                    val curtain = app.id in watch.lock.holding && watch.lock.availability == AuthAvailability.Available
+                    if (curtain && watch.lock.covers(app.id)) return@collectLatest
                     delay(limitMs)
+                    if (curtain) {
+                        hostLogger.info("curtained ${shownId(app.id)}: idle")
+                        lockController.lockNow()
+                        return@collectLatest
+                    }
                     hostLogger.info("closed ${app.id.value}: idle")
                     // Closing changes `current`, which restarts this very block: the rest must not
                     // be cancelled with it, or the lock would stay open behind a closed app. The
@@ -819,11 +840,41 @@ internal class SuperizerHost(
         }
     }
 
+    /**
+     * What a held secret needs beyond the curtain (cr-restore D598): it is let go of when its app
+     * closes, whoever closed it, and on a device with nothing to lock with it does not wait in the
+     * background either — there would be no lock to come back through.
+     */
+    private fun watchHeldSecrets(lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>) {
+        scope.launch {
+            var last: AppId? = null
+            handler.current.collect { session ->
+                val now = session?.app?.id
+                if (last != null && last != now) lockController.release(last!!)
+                last = now
+            }
+        }
+        scope.launch {
+            lifecycle.collect { now ->
+                if (now != cx.m42.superizer.runtime.HostLifecycle.Background) return@collect
+                val state = lockController.state.value
+                val app = handler.current.value?.app ?: return@collect
+                if (app.id !in state.holding || state.away || state.availability == AuthAvailability.Available) return@collect
+                hostLogger.info("closed ${shownId(app.id)}: a held secret with nothing to lock it")
+                withContext(NonCancellable) {
+                    handler.close(force = true)
+                    _commands.tryEmit(ShellCommand.Close)
+                }
+            }
+        }
+    }
+
     private data class Watch(
         val app: SuperizerApp<*>?,
         val lifecycle: cx.m42.superizer.runtime.HostLifecycle,
-        val guarded: Set<AppId>,
-        val prompting: Boolean,
+        /** Every press is a new value, so that it starts the minute again. */
+        val touch: Long,
+        val lock: cx.m42.superizer.lock.LockState,
     )
 
     /**

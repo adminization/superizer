@@ -4,6 +4,7 @@ import cx.m42.superizer.backup.BackupPolicy
 
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppManifest
+import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.app.PushUse
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.event.SuperizerEvent
@@ -78,6 +79,11 @@ public class AppRegistry(
             // notice. Refusing it here too makes the mistake fail in the app's first test instead.
             return "declares protection but asks only for host contract ${manifest.minHostContract}; " +
                 "protection needs $PROTECTION_CONTRACT"
+        }
+        if (manifest.protection.lock == LockPolicy.WhileHolding && manifest.minHostContract < HOLDING_CONTRACT) {
+            // A contract-5 host has never heard of the value and could not even decode it.
+            return "locks while holding but asks only for host contract ${manifest.minHostContract}; " +
+                "that needs $HOLDING_CONTRACT"
         }
         if (manifest.backup != BackupPolicy.All && manifest.minHostContract < BACKUP_CONTRACT) {
             // The same mistake one field later (04 §9, Б10): a contract-2 host would back up what
@@ -168,6 +174,9 @@ public class AppRegistry(
 
         /** The contract that introduced `AppManifest.push` (push-opt-in, D417). */
         const val PUSH_CONTRACT = 5
+
+        /** The contract that introduced `LockPolicy.WhileHolding` and `SecretHold` (Unitool cr-restore, D598). */
+        const val HOLDING_CONTRACT = 6
     }
 }
 

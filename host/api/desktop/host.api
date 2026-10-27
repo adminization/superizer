@@ -213,8 +213,10 @@ public final class cx/m42/superizer/host/lock/AppLockController : cx/m42/superiz
 	public final fun attach (Lkotlinx/coroutines/CoroutineScope;)V
 	public final fun getPresence ()Lcx/m42/superizer/lock/UserPresence;
 	public fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun holdFor-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/lock/SecretHold;
 	public fun lockNow ()V
 	public fun openDeviceSettings ()Z
+	public final fun release-GGaiHfc (Ljava/lang/String;)V
 	public fun setEnabled-HNJm7k8 (Ljava/lang/String;Z)V
 	public fun setGrace (J)V
 	public fun unlock (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

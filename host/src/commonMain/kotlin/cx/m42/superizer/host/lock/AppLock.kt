@@ -11,6 +11,7 @@ import cx.m42.superizer.lock.AuthOutcome
 import cx.m42.superizer.lock.AuthStrength
 import cx.m42.superizer.lock.DeviceAuthenticator
 import cx.m42.superizer.lock.LockState
+import cx.m42.superizer.lock.SecretHold
 import cx.m42.superizer.lock.UserPresence
 import cx.m42.superizer.runtime.Clock
 import cx.m42.superizer.runtime.HostLifecycle
@@ -135,6 +136,48 @@ public class AppLockController(
 
     override fun openDeviceSettings(): Boolean = deviceSettings()
 
+    /**
+     * [SecretHold] for one app (cr-restore D598). Holding with the app in front asks nothing: the
+     * person is the one who just opened the secret, so the app is [LockState.present] until the
+     * lock next closes — and only then does the curtain come.
+     */
+    public fun holdFor(id: AppId): SecretHold = object : SecretHold {
+        override fun holding(held: Boolean) = setHolding(id, held)
+
+        override suspend fun <T> outside(block: suspend () -> T): T {
+            _state.update { it.copy(away = true) }
+            try {
+                return block()
+            } finally {
+                _state.update { it.copy(away = false) }
+                // Whatever the picker's coming and going looked like, it was not walking away.
+                leftAt = if (lifecycle.value == HostLifecycle.Background) clock.now() else null
+            }
+        }
+    }
+
+    /** [id] closed, however it closed: whatever it held went with it (cr-restore D598). */
+    public fun release(id: AppId) {
+        if (id in _state.value.holding) setHolding(id, false)
+    }
+
+    private fun setHolding(id: AppId, held: Boolean) {
+        val policy = apps.value.firstOrNull { it.id == id }?.manifest?.protection?.lock
+        if (policy != LockPolicy.WhileHolding) return
+        _state.update { state ->
+            if (held) {
+                val inFront = lifecycle.value == HostLifecycle.Foreground
+                state.copy(
+                    holding = state.holding + id,
+                    present = if (inFront && id !in state.holding) state.present + id else state.present,
+                )
+            } else {
+                state.copy(holding = state.holding - id, present = state.present - id)
+            }
+        }
+        recompute()
+    }
+
     // ------------------------------------------------------------------ internals
 
     /**
@@ -164,9 +207,13 @@ public class AppLockController(
     }
 
     private fun onBackground() {
-        if (!_state.value.prompting) {
+        val state = _state.value
+        if (!state.prompting) {
             if (!screenOn()) return close("screen off")
-            if (_state.value.graceMillis == 0L) return close("left the app")
+            if (state.graceMillis == 0L) return close("left the app")
+            // A secret held on screen gets no grace (cr-restore D598): back in only through the lock.
+            // Unless the app sent the person out itself, to a picker or a "Save as".
+            if (state.holding.isNotEmpty() && !state.away) return close("left a held secret")
         }
         leftAt = clock.now()
     }
@@ -175,7 +222,7 @@ public class AppLockController(
         // The screen lock is switched on and off in the system's settings, which is to say from
         // the background: this is the moment to find out whether the banner still holds (§5.8).
         refreshAvailability()
-        if (_state.value.prompting) return
+        if (_state.value.prompting || _state.value.away) return
         val left = leftAt ?: return
         leftAt = null
         if (clock.now() - left >= _state.value.graceMillis) close("away longer than the grace")
@@ -183,8 +230,10 @@ public class AppLockController(
 
     private fun close(why: String) {
         leftAt = null
-        if (!_state.value.open) return
-        _state.update { it.copy(open = false) }
+        val state = _state.value
+        if (!state.open && state.present.isEmpty()) return
+        // A held secret is "present" only until the lock next closes; from then on it is curtained.
+        _state.update { it.copy(open = false, present = emptySet()) }
         logger?.info("lock closed: $why")
     }
 
@@ -204,6 +253,7 @@ public class AppLockController(
                         LockPolicy.Required -> true
                         LockPolicy.OptionalOn -> state.choices[app.id] ?: true
                         LockPolicy.OptionalOff -> state.choices[app.id] ?: false
+                        LockPolicy.WhileHolding -> app.id in state.holding
                     }
                 }.map { it.id }.toSet(),
             )

@@ -148,8 +148,10 @@ final class cx.m42.superizer.host.lock/AppLockController : cx.m42.superizer.lock
         final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.lock/LockState> // cx.m42.superizer.host.lock/AppLockController.state.<get-state>|<get-state>(){}[0]
 
     final fun attach(kotlinx.coroutines/CoroutineScope) // cx.m42.superizer.host.lock/AppLockController.attach|attach(kotlinx.coroutines.CoroutineScope){}[0]
+    final fun holdFor(cx.m42.superizer.app/AppId): cx.m42.superizer.lock/SecretHold // cx.m42.superizer.host.lock/AppLockController.holdFor|holdFor(cx.m42.superizer.app.AppId){}[0]
     final fun lockNow() // cx.m42.superizer.host.lock/AppLockController.lockNow|lockNow(){}[0]
     final fun openDeviceSettings(): kotlin/Boolean // cx.m42.superizer.host.lock/AppLockController.openDeviceSettings|openDeviceSettings(){}[0]
+    final fun release(cx.m42.superizer.app/AppId) // cx.m42.superizer.host.lock/AppLockController.release|release(cx.m42.superizer.app.AppId){}[0]
     final fun setEnabled(cx.m42.superizer.app/AppId, kotlin/Boolean) // cx.m42.superizer.host.lock/AppLockController.setEnabled|setEnabled(cx.m42.superizer.app.AppId;kotlin.Boolean){}[0]
     final fun setGrace(kotlin/Long) // cx.m42.superizer.host.lock/AppLockController.setGrace|setGrace(kotlin.Long){}[0]
     final suspend fun unlock(kotlin/String, kotlin/String?): cx.m42.superizer.lock/AuthOutcome // cx.m42.superizer.host.lock/AppLockController.unlock|unlock(kotlin.String;kotlin.String?){}[0]

@@ -151,7 +151,10 @@ private fun ProtectionSection(superizer: Superizer) {
 
     val unlocked by superizer.unlocked.collectAsState()
     // Only what the person can see elsewhere: a row for a locked or secret app names it (idea/09).
-    val lockable = apps.filter { it.manifest.protection.lock != LockPolicy.Off && it.listed(unlocked) }
+    // `WhileHolding` has no row either: the app, not the person, decides when it is locked.
+    val lockable = apps.filter {
+        it.manifest.protection.lock != LockPolicy.Off && it.manifest.protection.lock != LockPolicy.WhileHolding && it.listed(unlocked)
+    }
     if (lockable.isEmpty() || lock.availability == AuthAvailability.Unsupported) return
     val canAsk = lock.availability == AuthAvailability.Available
 

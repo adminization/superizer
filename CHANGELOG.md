@@ -3,6 +3,32 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.7.0 — contract 6
+
+A lock that comes only with a secret on screen (Unitool notes cr-restore, D598). Contract 6
+because an older host could not even decode the new policy.
+
+### The contract (`core`)
+
+- `LockPolicy.WhileHolding`: no lock to come in; the lock for as long as the app says it holds a
+  secret. Needs `minHostContract = 6`. Settings has no row for it — the app decides, not the person.
+- `SecretHold`, a caller-bound optional service (`secret-hold`), offered by every host of contract
+  6. `holding(true)` as soon as the app has something to protect, `holding(false)` once it has
+  wiped it. `outside { … }` runs a picker or a "Save as" with the lock deaf to the app leaving and
+  coming back, and with no idle clock; the screen going off still locks.
+- `LockState.holding`, `present` and `away`. `covers(id)` is false for an app in `present`: it
+  started holding with the person in front, and nothing has closed the lock since.
+
+### The host
+
+- Holding with the app in front asks nothing. From then on idle (`idleLimit`) puts the curtain up
+  instead of closing the app, leaving the app locks at once whatever the grace, and the screen
+  going off locks as ever. The device's sheet takes the curtain down, and the app is as it was —
+  state kept in the instance, since `Content()` is not composed under the curtain.
+- An app that closes, however it closes, lets go of what it held.
+- On a device with nothing to lock with, a held secret is closed rather than kept: when idle, and
+  when the host goes to the background.
+
 ## 0.6.1
 
 - An idle secret app, or one behind the device's lock, is closed: a minute after the last press in

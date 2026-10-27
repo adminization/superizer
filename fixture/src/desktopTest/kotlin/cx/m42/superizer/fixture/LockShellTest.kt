@@ -38,6 +38,9 @@ import cx.m42.superizer.host.storage.PrefsStorage
 import cx.m42.superizer.host.storage.SafePrefs
 import cx.m42.superizer.lock.AuthAvailability
 import cx.m42.superizer.lock.AuthOutcome
+import cx.m42.superizer.lock.SecretHold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import cx.m42.superizer.runtime.HostInfo
 import cx.m42.superizer.runtime.HostLifecycle
 import cx.m42.superizer.runtime.InstanceRuntime
@@ -79,7 +82,8 @@ class LockShellTest {
         scheme("superizer")
         register(SafeApp())
         register(OpenerApp())
-        home("safe", "opener")
+        register(HoldApp())
+        home("safe", "opener", "hold")
         promoCodes(mapOf("SAFE" to ActivationResult.Success(Activation(AppId("safe"), SafeApp.config("promo")))))
         serviceCode("SERVICE")
         deviceAuthenticator(device)
@@ -258,6 +262,61 @@ class LockShellTest {
     }
 
     @Test
+    fun aWhileHoldingAppOpensWithoutTheLockAndIdleWithNothingHeldLeavesItOpen() = runComposeUiTest {
+        val superizer = host(idleMillis = 200)
+        setContent { FixtureApp(superizer) }
+        waitForIdle()
+        onNodeWithTag("home:tile-hold").performClick()
+        waitForIdle()
+        onNodeWithTag("hold:hold").assertIsDisplayed()
+        assertTrue(device.prompts.isEmpty())
+
+        Thread.sleep(500)
+        waitForIdle()
+        onNodeWithTag("hold:hold").assertIsDisplayed()
+    }
+
+    @Test
+    fun leftAloneAHeldSecretIsCurtainedNotClosedAndTheLockBringsItBack() = runComposeUiTest {
+        val superizer = host(idleMillis = 300)
+        setContent { FixtureApp(superizer) }
+        waitForIdle()
+        onNodeWithTag("home:tile-hold").performClick()
+        waitForIdle()
+        onNodeWithTag("hold:hold").performClick()
+        waitForIdle()
+        onNodeWithTag("hold:secret").assertIsDisplayed()
+        assertTrue(device.prompts.isEmpty(), "holding asks nothing")
+
+        waitUntil(timeoutMillis = 5_000) { superizer.lock.state.value.covers(AppId("hold")) }
+        waitForIdle()
+        onNodeWithTag("shell:lock").assertIsDisplayed()
+        onNodeWithTag("hold:secret").assertDoesNotExist()
+        assertTrue(superizer.handler.current.value?.app?.id == AppId("hold"), "still open under the curtain")
+
+        device.answer = AuthOutcome.Success
+        onNodeWithTag("shell:unlock").performClick()
+        waitForIdle()
+        onNodeWithTag("hold:secret").assertIsDisplayed()
+    }
+
+    @Test
+    fun closingAHoldingAppLetsGoOfItsSecret() = runComposeUiTest {
+        val superizer = host()
+        setContent { FixtureApp(superizer) }
+        waitForIdle()
+        onNodeWithTag("home:tile-hold").performClick()
+        waitForIdle()
+        onNodeWithTag("hold:hold").performClick()
+        waitForIdle()
+        assertTrue(AppId("hold") in superizer.lock.state.value.holding)
+
+        superizer.handler.close(force = true)
+        waitForIdle()
+        assertFalse(AppId("hold") in superizer.lock.state.value.holding)
+    }
+
+    @Test
     fun withNoScreenLockTheAppOpensUnderTheBanner() = runComposeUiTest {
         device.availability = AuthAvailability.NoScreenLock
         setContent { FixtureApp(host()) }
@@ -411,6 +470,40 @@ private class OpenerApp : SuperizerApp<Unit>() {
                     onClick = { scope.launch { app.navigation.openApp(AppId("safe")) } },
                     modifier = Modifier.testTag("opener:open-safe"),
                 )
+            }
+        }
+    }
+}
+
+/** A `WhileHolding` app (cr-restore D598): open to anyone, behind the lock once it holds a secret. */
+private class HoldApp : SuperizerApp<Unit>() {
+    override val manifest = AppManifest(
+        id = AppId("hold"),
+        version = "1.0.0",
+        minHostContract = 6,
+        metadata = AppMetadata(title = localized("en" to "Hold")),
+        protection = AppProtection(lock = LockPolicy.WhileHolding, secureWindow = true),
+    )
+
+    override val configSpec = AppConfigSpec.None
+
+    override fun launch(runtime: InstanceRuntime, config: Unit): AppInstance = object : AppInstance() {
+        // In the instance, not in `remember`: under the curtain `Content()` is not composed at all.
+        var held by androidx.compose.runtime.mutableStateOf(false)
+
+        @Composable
+        override fun Content() {
+            val app = LocalAppRuntime.current
+            Column {
+                AppButton(
+                    text = "Decrypt",
+                    onClick = {
+                        app.service(SecretHold.Key)!!.holding(true)
+                        held = true
+                    },
+                    modifier = Modifier.testTag("hold:hold"),
+                )
+                if (held) Text("the plaintext", modifier = Modifier.testTag("hold:secret"))
             }
         }
     }
