@@ -763,6 +763,7 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
 
     abstract suspend fun addToHome(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.addToHome|addToHome(cx.m42.superizer.app.AppId){}[0]
     abstract suspend fun removeFromHome(cx.m42.superizer.app/AppId) // cx.m42.superizer/Superizer.removeFromHome|removeFromHome(cx.m42.superizer.app.AppId){}[0]
+    open fun activity() // cx.m42.superizer/Superizer.activity|activity(){}[0]
 
     final object Companion // cx.m42.superizer/Superizer.Companion|null[0]
 }

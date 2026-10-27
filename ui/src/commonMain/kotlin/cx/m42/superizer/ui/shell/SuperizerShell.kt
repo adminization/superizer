@@ -32,6 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -253,7 +256,12 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                 )
             }
 
-            Box(modifier = modifier.fillMaxSize().background(AppTheme.menuBackground)) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(AppTheme.menuBackground)
+                    .reportingTouches(superizer),
+            ) {
                 // GitHub-app style screen changes: forward pushes the new screen in from the right
                 // while the old one recedes a third of the way left; back is the mirror image. The
                 // z-order flips with the direction, or a return would look like another push.
@@ -436,6 +444,20 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+ * Tells the host about every press, anywhere in the shell, the drawer included: an idle secret or
+ * locked app is closed by the host, and a person scrolling through it is not idle. Watched on the
+ * way down and never consumed, so nothing underneath notices.
+ */
+private fun Modifier.reportingTouches(superizer: Superizer): Modifier = pointerInput(superizer) {
+    awaitPointerEventScope {
+        while (true) {
+            val event = awaitPointerEvent(PointerEventPass.Initial)
+            if (event.type == PointerEventType.Press || event.type == PointerEventType.Scroll) superizer.activity()
         }
     }
 }

@@ -93,6 +93,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun hostScreen (Lcx/m42/superizer/HostScreen;)V
 	public final fun hostSection (Lcx/m42/superizer/HostSection;)V
 	public final fun httpClient (Lio/ktor/client/HttpClient;)V
+	public final fun idleLimit (J)V
 	public final fun languages ([Lcx/m42/superizer/LanguageOption;Ljava/lang/String;)V
 	public static synthetic fun languages$default (Lcx/m42/superizer/host/SuperizerBuilder;[Lcx/m42/superizer/LanguageOption;Ljava/lang/String;ILjava/lang/Object;)V
 	public final fun lifecycle (Lkotlinx/coroutines/flow/StateFlow;)V

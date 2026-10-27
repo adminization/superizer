@@ -84,15 +84,21 @@ import cx.m42.superizer.runtime.ServiceKey
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
@@ -150,6 +156,7 @@ public class SuperizerBuilder internal constructor() {
     internal val codeScreens: LinkedHashMap<String, HostScreen> = LinkedHashMap()
     internal var scanner: (suspend () -> String?)? = null
     internal var secretBackgroundLimitMs: Long = DEFAULT_SECRET_BACKGROUND_LIMIT_MS
+    internal var idleLimitMs: Long = DEFAULT_IDLE_LIMIT_MS
     internal var pushServer: String? = null
     internal var deviceApi: DeviceApi? = null
     internal var pushControl: PushControl = PlatformPushControl
@@ -271,6 +278,15 @@ public class SuperizerBuilder internal constructor() {
     public fun secretBackgroundLimit(millis: Long) {
         require(millis >= 0) { "secretBackgroundLimit must not be negative" }
         secretBackgroundLimitMs = millis
+    }
+
+    /**
+     * How long a secret app, or one behind the device's lock, may stay open with nobody touching
+     * the screen. Then it is closed, the lock with it, and the next look asks again. Zero: never.
+     */
+    public fun idleLimit(millis: Long) {
+        require(millis >= 0) { "idleLimit must not be negative" }
+        idleLimitMs = millis
     }
 
     /** The one door into the Service Menu in a release build (D34). Null leaves it debug-only. */
@@ -560,6 +576,9 @@ internal class SuperizerHost(
     )
     override val lock: AppLockPort = lockController
 
+    /** Bumped by every touch the shell reports; only its changing matters. Above `init`, which reads it. */
+    private val touches = MutableStateFlow(0L)
+
     private val hostBackup = HostBackup(
         host = hostInfo,
         clock = builder.clock,
@@ -688,6 +707,7 @@ internal class SuperizerHost(
             builder.secretBackgroundLimitMs,
         )
         lockController.attach(scope)
+        closeWhenIdle(builder.lifecycle ?: PlatformLifecycle.state, builder.idleLimitMs)
         // After registration, so the stored set is read against the apps this build has.
         pushGate.attach(scope, builder.lifecycle ?: PlatformLifecycle.state)
         scope.launch {
@@ -759,6 +779,53 @@ internal class SuperizerHost(
         }
     }
 
+    override fun activity() {
+        touches.value++
+    }
+
+    /**
+     * A secret app or one behind the lock, open in front with nobody touching the screen for
+     * [limitMs]: closed, the lock closed with it, and the shell goes Home. A phone put down on the
+     * table does not keep the codes up until the screen goes dark. Paused while the device's sheet
+     * is up — the person is answering it — and in the background, where the grace and the secret
+     * background limit already decide.
+     */
+    private fun closeWhenIdle(lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>, limitMs: Long) {
+        if (limitMs == 0L) return
+        scope.launch {
+            combine(
+                handler.current,
+                lifecycle,
+                touches,
+                lockController.state.map { it.guarded to it.prompting }.distinctUntilChanged(),
+            ) { session, now, _, (guarded, prompting) -> Watch(session?.app, now, guarded, prompting) }
+                .collectLatest { watch ->
+                    val app = watch.app ?: return@collectLatest
+                    if (watch.lifecycle != cx.m42.superizer.runtime.HostLifecycle.Foreground || watch.prompting) return@collectLatest
+                    val locked = app.id in watch.guarded
+                    if (!locked && !app.metadata.secret) return@collectLatest
+                    delay(limitMs)
+                    hostLogger.info("closed ${app.id.value}: idle")
+                    // Closing changes `current`, which restarts this very block: the rest must not
+                    // be cancelled with it, or the lock would stay open behind a closed app. The
+                    // app goes first: a lock closed over a live app would put the curtain up, and
+                    // the curtain asks.
+                    withContext(NonCancellable) {
+                        handler.close(force = true)
+                        if (locked) lockController.lockNow()
+                        _commands.tryEmit(ShellCommand.Close)
+                    }
+                }
+        }
+    }
+
+    private data class Watch(
+        val app: SuperizerApp<*>?,
+        val lifecycle: cx.m42.superizer.runtime.HostLifecycle,
+        val guarded: Set<AppId>,
+        val prompting: Boolean,
+    )
+
     /**
      * The four verbs of [NavigationService], and no fifth.
      *
@@ -801,6 +868,7 @@ internal class SuperizerHost(
 
 /** Five minutes: long enough to copy a code from a message, short enough to count as leaving. */
 private const val DEFAULT_SECRET_BACKGROUND_LIMIT_MS: Long = 5L * 60 * 1000
+private const val DEFAULT_IDLE_LIMIT_MS: Long = 60L * 1000
 
 /** The session type the ports hand back, re-exported so a host file needs one import fewer. */
 public typealias HostSession = AppSession

@@ -113,6 +113,7 @@ public final class cx/m42/superizer/ShellCommand$OpenSettings : cx/m42/superizer
 
 public abstract interface class cx/m42/superizer/Superizer {
 	public static final field Companion Lcx/m42/superizer/Superizer$Companion;
+	public fun activity ()V
 	public abstract fun addToHome-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getActivateBanners ()Ljava/util/List;
 	public fun getActivateEntry ()Lcx/m42/superizer/ActivateEntry;
@@ -143,6 +144,7 @@ public final class cx/m42/superizer/Superizer$Companion {
 }
 
 public final class cx/m42/superizer/Superizer$DefaultImpls {
+	public static fun activity (Lcx/m42/superizer/Superizer;)V
 	public static fun getActivateBanners (Lcx/m42/superizer/Superizer;)Ljava/util/List;
 	public static fun getActivateEntry (Lcx/m42/superizer/Superizer;)Lcx/m42/superizer/ActivateEntry;
 	public static fun getCodeScreens (Lcx/m42/superizer/Superizer;)Ljava/util/Map;

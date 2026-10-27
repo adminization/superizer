@@ -526,6 +526,7 @@ final class cx.m42.superizer.host/SuperizerBuilder { // cx.m42.superizer.host/Su
     final fun hostScreen(cx.m42.superizer/HostScreen) // cx.m42.superizer.host/SuperizerBuilder.hostScreen|hostScreen(cx.m42.superizer.HostScreen){}[0]
     final fun hostSection(cx.m42.superizer/HostSection) // cx.m42.superizer.host/SuperizerBuilder.hostSection|hostSection(cx.m42.superizer.HostSection){}[0]
     final fun httpClient(io.ktor.client/HttpClient) // cx.m42.superizer.host/SuperizerBuilder.httpClient|httpClient(io.ktor.client.HttpClient){}[0]
+    final fun idleLimit(kotlin/Long) // cx.m42.superizer.host/SuperizerBuilder.idleLimit|idleLimit(kotlin.Long){}[0]
     final fun languages(kotlin/Array<out cx.m42.superizer/LanguageOption>..., kotlin/String = ...) // cx.m42.superizer.host/SuperizerBuilder.languages|languages(kotlin.Array<out|cx.m42.superizer.LanguageOption>...;kotlin.String){}[0]
     final fun lifecycle(kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.runtime/HostLifecycle>) // cx.m42.superizer.host/SuperizerBuilder.lifecycle|lifecycle(kotlinx.coroutines.flow.StateFlow<cx.m42.superizer.runtime.HostLifecycle>){}[0]
     final fun lockStrength(cx.m42.superizer.lock/AuthStrength) // cx.m42.superizer.host/SuperizerBuilder.lockStrength|lockStrength(cx.m42.superizer.lock.AuthStrength){}[0]

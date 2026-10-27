@@ -68,6 +68,12 @@ public interface Superizer {
     /** The lock over protected apps (06): the curtain, the banner and the Settings section read it. */
     public val lock: AppLockPort
 
+    /**
+     * The person touched the screen. The shell calls it on every press; a secret app or one behind
+     * the lock is closed after `SuperizerBuilder.idleLimit` without one.
+     */
+    public fun activity() {}
+
     /** The vault behind every app's `runtime.secrets`, and moving them to another (contract 3, ssh-new 05 §3.2). */
     public val secrets: SecretsPort
 

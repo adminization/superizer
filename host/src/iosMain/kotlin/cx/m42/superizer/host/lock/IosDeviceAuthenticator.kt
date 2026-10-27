@@ -23,11 +23,18 @@ import platform.LocalAuthentication.LAErrorSystemCancel
 import platform.LocalAuthentication.LAErrorUserCancel
 import platform.LocalAuthentication.LAErrorUserFallback
 import platform.LocalAuthentication.LAPolicyDeviceOwnerAuthentication
+import platform.LocalAuthentication.LAPolicyDeviceOwnerAuthenticationWithBiometrics
 
 /**
- * `LocalAuthentication`: Face ID or Touch ID, and the device passcode when neither is enrolled or
- * neither worked (D129). The same policy for both strengths — every biometric iOS offers is what
- * Android calls Class 3, and the passcode is the passcode.
+ * `LocalAuthentication`: Face ID or Touch ID only, with no "Enter Passcode" on the sheet, whenever
+ * one is enrolled; the device passcode only on a phone with neither. A passcode is the thing a
+ * thief watches over a shoulder, and it opened 2FA and Passwords (Unitool .ai-notes/vault-auth §1).
+ * After too many failed faces the system locks biometry until the phone is unlocked with the
+ * passcode — at the lock screen, not here. The same policy for both strengths: every biometric iOS
+ * offers is what Android calls Class 3.
+ *
+ * Still a curtain over the screen (D128): someone with the passcode can enrol their own face in
+ * Settings. Keys bound to the current biometry set are vault-auth's job.
  *
  * The tries, the delays and the lockout are the system's, as on Android. What an app may add is
  * only the line under the sheet: [authenticate]'s title.
@@ -64,13 +71,27 @@ internal class IosDeviceAuthenticator(
     override suspend fun authenticate(title: String, subtitle: String?, strength: AuthStrength): AuthOutcome =
         suspendCancellableCoroutine { continuation ->
             val context = LAContext()
+            // Empty hides the sheet's fallback button, which would otherwise offer the passcode.
+            context.localizedFallbackTitle = ""
             // The reply arrives on a queue of LocalAuthentication's own; resuming from there is fine.
-            context.evaluatePolicy(LAPolicyDeviceOwnerAuthentication, localizedReason = title) { success, error ->
+            context.evaluatePolicy(policy(), localizedReason = title) { success, error ->
                 val outcome = if (success) AuthOutcome.Success else outcomeOf(error)
                 if (continuation.isActive) continuation.resume(outcome)
             }
             continuation.invokeOnCancellation { context.invalidate() }
         }
+
+    /**
+     * Biometrics when the phone has them enrolled — locked out included, so five failed faces end
+     * in "locked out" rather than in the passcode. The passcode only on a phone with no Face ID or
+     * Touch ID set up, where it is all there is.
+     */
+    private fun policy(): Long = memScoped {
+        val error = alloc<ObjCObjectVar<NSError?>>()
+        val biometry = LAContext().canEvaluatePolicy(LAPolicyDeviceOwnerAuthenticationWithBiometrics, error.ptr) ||
+            error.value?.code == LAErrorBiometryLockout
+        if (biometry) LAPolicyDeviceOwnerAuthenticationWithBiometrics else LAPolicyDeviceOwnerAuthentication
+    }
 
     private fun outcomeOf(error: NSError?): AuthOutcome {
         val message = error?.localizedDescription ?: "authentication failed"

@@ -73,7 +73,8 @@ class LockShellTest {
     private val device = FakeDeviceAuthenticator(answer = AuthOutcome.Cancelled)
     private val lifecycle = MutableStateFlow(HostLifecycle.Foreground)
 
-    private fun host(): Superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)) {
+    private fun host(idleMillis: Long? = null): Superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)) {
+        idleMillis?.let { idleLimit(it) }
         host(HostInfo("Fixture", "0.1.0", "dev", Platform.Desktop, SuperizerContract.VERSION, debug = true))
         scheme("superizer")
         register(SafeApp())
@@ -215,6 +216,45 @@ class LockShellTest {
         assertCovered()
         // The app is still open underneath; only its screen is withheld.
         assertTrue(superizer.handler.current.value?.app?.id == AppId("safe"))
+    }
+
+    @Test
+    fun everyPressReachesTheHost() = runComposeUiTest {
+        var presses = 0
+        val real = host()
+        val counting = object : Superizer by real {
+            override fun activity() {
+                presses++
+            }
+        }
+        setContent { FixtureApp(counting) }
+        waitForIdle()
+        onNodeWithTag("home:tile-opener").performClick()
+        waitForIdle()
+        assertTrue(presses > 0)
+    }
+
+    @Test
+    fun leftAloneTheUnlockedAppIsClosedAndTheNextLookAsksAgain() = runComposeUiTest {
+        val superizer = host(idleMillis = 300)
+        device.answer = AuthOutcome.Success
+        setContent { FixtureApp(superizer) }
+        waitForIdle()
+        onNodeWithTag("home:tile-safe").performClick()
+        waitForIdle()
+        onNodeWithTag("safe:secret").assertIsDisplayed()
+
+        // The host's delay ends on another thread, so wait for the whole of what it does.
+        waitUntil(timeoutMillis = 5_000) {
+            superizer.handler.current.value == null && !superizer.lock.state.value.open
+        }
+        waitForIdle()
+        onNodeWithTag("home:tile-safe").assertIsDisplayed()
+
+        // The next look asks again.
+        onNodeWithTag("home:tile-safe").performClick()
+        waitForIdle()
+        assertTrue(device.prompts.size == 2)
     }
 
     @Test

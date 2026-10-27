@@ -3,6 +3,21 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.6.1
+
+- An idle secret app, or one behind the device's lock, is closed: a minute after the last press in
+  the shell it goes away, the lock closes with it, and the shell goes Home, so the next look asks
+  again. Paused while the device's sheet is up and in the background, where the grace and the
+  secret background limit already decide. `SuperizerBuilder.idleLimit(millis)` changes the minute;
+  zero turns it off.
+- `Superizer.activity()`: the shell calls it on every press and scroll anywhere in its frame, the
+  drawer included. Watched on the way down and never consumed. A no-op by default.
+- iOS: the lock's sheet takes Face ID or Touch ID only, with no "Enter Passcode" on it, whenever
+  one is enrolled; the passcode only on a phone with neither. Too many failed faces end in "locked
+  out" until the phone is unlocked at the lock screen. Still a curtain, not a key: whoever has the
+  passcode can enrol a face in Settings.
+- The contract is unchanged: apps see none of it.
+
 ## 0.6.0 — contract 5
 
 Push only for the apps that take it, and only once the person uses one (Unitool notes
