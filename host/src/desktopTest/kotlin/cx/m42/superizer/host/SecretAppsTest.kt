@@ -12,6 +12,9 @@ import cx.m42.superizer.backup.RestoreReport
 import cx.m42.superizer.diagnostics.Subject
 import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.host.storage.PrefsStorage
+import cx.m42.superizer.lock.AuthAvailability
+import cx.m42.superizer.lock.AuthOutcome
+import cx.m42.superizer.lock.SecretHold
 import cx.m42.superizer.runtime.HostLifecycle
 import cx.m42.superizer.runtime.NavigationError
 import cx.m42.superizer.ssh.SshOutcome
@@ -45,6 +48,7 @@ class SecretAppsTest {
 
     private val fakeClock = FakeClock()
     private val lifecycle = MutableStateFlow(HostLifecycle.Foreground)
+    private val device = FakeDeviceAuthenticator()
 
     private fun host(
         debug: Boolean = true,
@@ -55,7 +59,7 @@ class SecretAppsTest {
         network(FakeNetwork())
         clock(fakeClock)
         lifecycle(this@SecretAppsTest.lifecycle)
-        deviceAuthenticator(FakeDeviceAuthenticator())
+        deviceAuthenticator(device)
         secretVault(FakeSecretVault())
         register(StubApp("alpha"))
         register(StubApp("vault", hidden = true, secret = vaultSecret))
@@ -223,27 +227,72 @@ class SecretAppsTest {
     // ------------------------------------------------------------ the background
 
     @Test
-    fun aLongStayInTheBackgroundClosesItAndTheShellGoesHome() = runBlocking<Unit> {
+    fun comingBackToItAtAllIsThroughTheLock() = runBlocking<Unit> {
+        val superizer = host()
+        val commands = mutableListOf<ShellCommand>()
+        val listening = CoroutineScope(Dispatchers.Unconfined)
+        listening.launch { superizer.commands.collect { commands += it } }
+        superizer.openByCode()
+        // Coming in by code asks nothing more.
+        assertFalse(superizer.lock.state.value.covers(AppId("vault")))
+
+        // Even a short trip — copying something from another app (secret-return D620).
+        lifecycle.value = HostLifecycle.Background
+        fakeClock.advance(seconds = 1)
+        lifecycle.value = HostLifecycle.Foreground
+        assertEquals(AppId("vault"), superizer.handler.current.value?.app?.id, "waiting under the curtain")
+        assertTrue(superizer.lock.state.value.covers(AppId("vault")))
+
+        assertEquals(AuthOutcome.Success, superizer.lock.unlock("Unlock"))
+        assertFalse(superizer.lock.state.value.covers(AppId("vault")))
+
+        // However long the trip: no 5-minute close any more (D623), the same curtain.
+        lifecycle.value = HostLifecycle.Background
+        fakeClock.advance(hours = 3)
+        lifecycle.value = HostLifecycle.Foreground
+        listening.cancel()
+        assertEquals(AppId("vault"), superizer.handler.current.value?.app?.id)
+        assertTrue(superizer.lock.state.value.covers(AppId("vault")))
+        assertEquals(emptyList(), commands)
+    }
+
+    @Test
+    fun withNothingToLockWithLeavingClosesItAndTheShellGoesHome() = runBlocking<Unit> {
+        device.availability = AuthAvailability.NoScreenLock
         val superizer = host()
         val commands = mutableListOf<ShellCommand>()
         val listening = CoroutineScope(Dispatchers.Unconfined)
         listening.launch { superizer.commands.collect { commands += it } }
         superizer.openByCode()
 
-        // A short trip — copying something from another app — finds it where it was left.
         lifecycle.value = HostLifecycle.Background
-        fakeClock.advance(minutes = 1)
-        lifecycle.value = HostLifecycle.Foreground
-        assertEquals(AppId("vault"), superizer.handler.current.value?.app?.id)
-        assertEquals(emptyList(), commands)
-
-        lifecycle.value = HostLifecycle.Background
-        fakeClock.advance(minutes = 6)
         lifecycle.value = HostLifecycle.Foreground
         listening.cancel()
 
         assertNull(superizer.handler.current.value)
         assertEquals(listOf<ShellCommand>(ShellCommand.Close), commands)
+    }
+
+    @Test
+    fun itsOwnPickerIsNotLeaving() = runBlocking<Unit> {
+        val superizer = host()
+        superizer.openByCode()
+        val hold = superizer.handler.appRuntime(AppId("vault"))!!.service(SecretHold.Key)!!
+
+        hold.outside {
+            lifecycle.value = HostLifecycle.Background
+            lifecycle.value = HostLifecycle.Foreground
+        }
+        assertFalse(superizer.lock.state.value.covers(AppId("vault")))
+    }
+
+    @Test
+    fun closedItLeavesNothingHeld() = runBlocking<Unit> {
+        val superizer = host()
+        superizer.openByCode()
+        superizer.handler.close(force = true)
+        assertEquals(emptySet(), superizer.lock.state.value.holding)
+        assertEquals(emptySet(), superizer.lock.state.value.guarded)
     }
 
     @Test

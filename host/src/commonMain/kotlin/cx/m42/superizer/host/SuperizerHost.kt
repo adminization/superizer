@@ -156,7 +156,6 @@ public class SuperizerBuilder internal constructor() {
     internal var activateEntry: ActivateEntry? = null
     internal val codeScreens: LinkedHashMap<String, HostScreen> = LinkedHashMap()
     internal var scanner: (suspend () -> String?)? = null
-    internal var secretBackgroundLimitMs: Long = DEFAULT_SECRET_BACKGROUND_LIMIT_MS
     internal var idleLimitMs: Long = DEFAULT_IDLE_LIMIT_MS
     internal var pushServer: String? = null
     internal var deviceApi: DeviceApi? = null
@@ -273,12 +272,13 @@ public class SuperizerBuilder internal constructor() {
     }
 
     /**
-     * How long a secret app (idea/09) may sit in the background and still be there on return.
-     * Longer, and it is closed as the host comes back — the next visit is by code again.
+     * Was how long a secret app (idea/09) could sit in the background and still be there on return.
+     * Now any return to an open secret app is through the lock, and with no lock on the device the
+     * app is closed as the host leaves (Unitool secret-return, D620–D623): there is nothing to set.
      */
+    @Deprecated("Any return to a secret app is through the lock now (secret-return D623); this does nothing.")
     public fun secretBackgroundLimit(millis: Long) {
         require(millis >= 0) { "secretBackgroundLimit must not be negative" }
-        secretBackgroundLimitMs = millis
     }
 
     /**
@@ -711,11 +711,6 @@ internal class SuperizerHost(
         builder.apps.forEach { registry.register(it) }
         forgetSecretsRevealed()
         handler.observeLifecycle()
-        closeSecretAfterLongBackground(
-            builder.lifecycle ?: PlatformLifecycle.state,
-            builder.clock,
-            builder.secretBackgroundLimitMs,
-        )
         lockController.attach(scope)
         closeWhenIdle(builder.lifecycle ?: PlatformLifecycle.state, builder.idleLimitMs)
         watchHeldSecrets(builder.lifecycle ?: PlatformLifecycle.state)
@@ -761,35 +756,6 @@ internal class SuperizerHost(
         }
     }
 
-    /**
-     * Back from the background after [limitMs] or more with a secret app open: it is closed and the
-     * shell goes Home, so the next visit is by code again (idea/09, question 126). A short trip —
-     * copying something from another app — finds it where it was left.
-     */
-    private fun closeSecretAfterLongBackground(
-        lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>,
-        clock: Clock,
-        limitMs: Long,
-    ) {
-        scope.launch {
-            var leftAt: Long? = null
-            lifecycle.collect { now ->
-                when (now) {
-                    cx.m42.superizer.runtime.HostLifecycle.Background -> leftAt = clock.now()
-                    cx.m42.superizer.runtime.HostLifecycle.Foreground -> {
-                        val away = leftAt?.let { clock.now() - it }
-                        leftAt = null
-                        val open = handler.current.value?.app ?: return@collect
-                        if (open.metadata.secret && away != null && away >= limitMs) {
-                            handler.close(force = true)
-                            _commands.tryEmit(ShellCommand.Close)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     override fun activity() {
         touches.value++
     }
@@ -798,8 +764,8 @@ internal class SuperizerHost(
      * A secret app or one behind the lock, open in front with nobody touching the screen for
      * [limitMs]: closed, the lock closed with it, and the shell goes Home. A phone put down on the
      * table does not keep the codes up until the screen goes dark. Paused while the device's sheet
-     * is up — the person is answering it — and in the background, where the grace and the secret
-     * background limit already decide.
+     * is up — the person is answering it — and in the background, where the grace and the lock on
+     * leaving a secret already decide.
      */
     private fun closeWhenIdle(lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>, limitMs: Long) {
         if (limitMs == 0L) return
@@ -818,7 +784,9 @@ internal class SuperizerHost(
                     if (!locked && !app.metadata.secret) return@collectLatest
                     // A held secret (cr-restore D598) is curtained, not closed: the person comes back
                     // to it through the lock. Already under the curtain, there is nothing to wait for.
-                    val curtain = app.id in watch.lock.holding && watch.lock.availability == AuthAvailability.Available
+                    // A secret app open is held too (D620), but idle still closes it unless it holds
+                    // something of its own: the next visit is by code, as ever.
+                    val curtain = lockController.holdsOwn(app.id) && watch.lock.availability == AuthAvailability.Available
                     if (curtain && watch.lock.covers(app.id)) return@collectLatest
                     delay(limitMs)
                     if (curtain) {
@@ -843,7 +811,9 @@ internal class SuperizerHost(
     /**
      * What a held secret needs beyond the curtain (cr-restore D598): it is let go of when its app
      * closes, whoever closed it, and on a device with nothing to lock with it does not wait in the
-     * background either — there would be no lock to come back through.
+     * background either — there would be no lock to come back through. A secret app open is held
+     * from launch to close (secret-return D620), so with no lock it is closed and the shell goes
+     * Home (D621).
      */
     private fun watchHeldSecrets(lifecycle: StateFlow<cx.m42.superizer.runtime.HostLifecycle>) {
         scope.launch {
@@ -851,6 +821,8 @@ internal class SuperizerHost(
             handler.current.collect { session ->
                 val now = session?.app?.id
                 if (last != null && last != now) lockController.release(last!!)
+                // A secret app is held for as long as it is open (secret-return D620).
+                if (now != null && now != last && session.app.metadata.secret) lockController.holdSecret(now)
                 last = now
             }
         }
@@ -917,8 +889,6 @@ internal class SuperizerHost(
     }
 }
 
-/** Five minutes: long enough to copy a code from a message, short enough to count as leaving. */
-private const val DEFAULT_SECRET_BACKGROUND_LIMIT_MS: Long = 5L * 60 * 1000
 private const val DEFAULT_IDLE_LIMIT_MS: Long = 60L * 1000
 
 /** The session type the ports hand back, re-exported so a host file needs one import fewer. */

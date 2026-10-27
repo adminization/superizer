@@ -3,6 +3,22 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.7.1
+
+A secret app is let back in only through the lock (Unitool notes secret-return, D620–D623). No
+contract change: the manifest is the same, only the host behaves differently.
+
+- A secret app open is held as a held secret is, from launch to close, whatever its policy. Coming
+  in by code asks nothing more than before; leaving it — another app, a dark screen, however short
+  the trip — puts the curtain up, and the device's sheet takes it down with the app as it was.
+  `SecretHold.outside` still keeps the app's own picker from counting as leaving.
+- On a device with nothing to lock with, a secret app is closed as the host leaves, and the shell
+  goes Home.
+- Idle still closes a secret app rather than curtaining it, unless it holds something of its own
+  through `SecretHold`.
+- `SuperizerBuilder.secretBackgroundLimit` is deprecated and does nothing: there is no five-minute
+  window any more.
+
 ## 0.7.0 — contract 6
 
 A lock that comes only with a secret on screen (Unitool notes cr-restore, D598). Contract 6

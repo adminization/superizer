@@ -75,6 +75,12 @@ public class AppLockController(
     /** When the app last left the front with the lock open, or null while it is in front. */
     private var leftAt: Long? = null
 
+    /** What apps said they hold through [SecretHold]; [LockState.holding] is these and [secretOpen]. */
+    private val ownHeld = mutableSetOf<AppId>()
+
+    /** The secret app open now: it holds its whole screen for as long as it is open (Unitool secret-return, D620). */
+    private var secretOpen: AppId? = null
+
     /** What this host asks apps to confirm through (D133). Registered only where there is something to ask with. */
     public val presence: UserPresence = object : UserPresence {
         override suspend fun confirm(reason: String): Boolean {
@@ -156,23 +162,53 @@ public class AppLockController(
         }
     }
 
+    /**
+     * A secret app was opened (Unitool secret-return, D620): it is held as a secret is, whatever its
+     * policy, until it closes. Coming in asks nothing more than its policy does; coming *back* — from
+     * another app, from a dark screen — is only through the lock, and with no lock on the device the
+     * host closes it instead.
+     */
+    internal fun holdSecret(id: AppId) {
+        secretOpen = id
+        publishHolding(id)
+    }
+
     /** [id] closed, however it closed: whatever it held went with it (cr-restore D598). */
     public fun release(id: AppId) {
-        if (id in _state.value.holding) setHolding(id, false)
+        ownHeld -= id
+        if (secretOpen == id) secretOpen = null
+        publishHolding(id)
     }
+
+    /** [id] said through [SecretHold] that it holds something — not merely that it is a secret app open. */
+    internal fun holdsOwn(id: AppId): Boolean = id in ownHeld
 
     private fun setHolding(id: AppId, held: Boolean) {
         val policy = apps.value.firstOrNull { it.id == id }?.manifest?.protection?.lock
         if (policy != LockPolicy.WhileHolding) return
+        if (held) ownHeld += id else ownHeld -= id
+        publishHolding(id)
+    }
+
+    /**
+     * [LockState.holding] for [id] from [ownHeld] and [secretOpen]: a secret app that wipes what it
+     * held is still a secret app open. Starting to hold with the app in front asks nothing — the
+     * person is the one who just opened it — unless the policy guards the app anyway, and asked on
+     * the way in for that.
+     */
+    private fun publishHolding(id: AppId) {
+        val held = id in ownHeld || id == secretOpen
         _state.update { state ->
-            if (held) {
-                val inFront = lifecycle.value == HostLifecycle.Foreground
-                state.copy(
-                    holding = state.holding + id,
-                    present = if (inFront && id !in state.holding) state.present + id else state.present,
-                )
-            } else {
-                state.copy(holding = state.holding - id, present = state.present - id)
+            when {
+                held && id !in state.holding -> {
+                    val inFront = lifecycle.value == HostLifecycle.Foreground
+                    state.copy(
+                        holding = state.holding + id,
+                        present = if (inFront && id !in state.guarded) state.present + id else state.present,
+                    )
+                }
+                !held && id in state.holding -> state.copy(holding = state.holding - id, present = state.present - id)
+                else -> state
             }
         }
         recompute()
@@ -211,8 +247,9 @@ public class AppLockController(
         if (!state.prompting) {
             if (!screenOn()) return close("screen off")
             if (state.graceMillis == 0L) return close("left the app")
-            // A secret held on screen gets no grace (cr-restore D598): back in only through the lock.
-            // Unless the app sent the person out itself, to a picker or a "Save as".
+            // A secret held on screen gets no grace (cr-restore D598), nor does a secret app open
+            // (secret-return D620): back in only through the lock. Unless the app sent the person
+            // out itself, to a picker or a "Save as".
             if (state.holding.isNotEmpty() && !state.away) return close("left a held secret")
         }
         leftAt = clock.now()
@@ -247,13 +284,14 @@ public class AppLockController(
     private fun recompute() {
         _state.update { state ->
             state.copy(
+                // Holding guards whatever the policy: a secret app open is held too (D620).
                 guarded = apps.value.filter { app ->
-                    when (app.manifest.protection.lock) {
+                    app.id in state.holding || when (app.manifest.protection.lock) {
                         LockPolicy.Off -> false
                         LockPolicy.Required -> true
                         LockPolicy.OptionalOn -> state.choices[app.id] ?: true
                         LockPolicy.OptionalOff -> state.choices[app.id] ?: false
-                        LockPolicy.WhileHolding -> app.id in state.holding
+                        LockPolicy.WhileHolding -> false
                     }
                 }.map { it.id }.toSet(),
             )
