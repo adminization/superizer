@@ -66,6 +66,10 @@ import cx.m42.superizer.ui.i18n.hostStrings
 import cx.m42.superizer.ui.i18n.hostStringsFor
 import cx.m42.superizer.ui.platform.RecentsPreview
 import cx.m42.superizer.ui.platform.SecureWindow
+import cx.m42.superizer.ui.platform.BackChain
+import cx.m42.superizer.ui.platform.BackPreviews
+import cx.m42.superizer.ui.platform.LocalBackChain
+import cx.m42.superizer.ui.platform.LocalBackPreviews
 import cx.m42.superizer.ui.platform.SystemBackHandler
 import cx.m42.superizer.ui.screens.ActivateScreen
 import cx.m42.superizer.ui.screens.CatalogScreen
@@ -115,7 +119,7 @@ private val MaxContentWidth = 480.dp
  * means registering an app — and nothing in this file changes at all, which is §24.
  */
 @Composable
-public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
+public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, swipeBack: Boolean = false) {
     val langTag by superizer.settings.langTag.collectAsState()
     val unlocked by superizer.unlocked.collectAsState()
     val home by superizer.home.collectAsState()
@@ -148,6 +152,18 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
      */
     suspend fun closeCurrent(onClosed: suspend () -> Unit) {
         if (superizer.handler.close()) onClosed() else vetoed = onClosed
+    }
+
+    /**
+     * Going to another context: the app is kept for the way back rather than closed, so only its veto
+     * is asked for here. Agreeing to the question does close it, which is what agreeing means.
+     */
+    fun switchContext(id: String) {
+        scope.launch {
+            val instance = superizer.handler.current.value?.instance
+            val agreed = instance == null || runCatching { instance.onCloseRequested() }.getOrDefault(true)
+            if (agreed) contextPort.switchTo(id) else vetoed = { contextPort.switchTo(id) }
+        }
     }
 
     suspend fun open(id: AppId) {
@@ -268,7 +284,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                     },
                     onBack = { previous ->
                         dismiss()
-                        contextPort.switchTo(previous.id)
+                        switchContext(previous.id)
                     },
                 )
             }
@@ -366,6 +382,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             haptic = haptic,
                             footer = footer,
                             header = header,
+                            swipeBack = swipeBack,
                             onBack = { scope.launch { closeCurrent { goBack(ShellDestination.Home) } } },
                             onRetry = { scope.launch { superizer.handler.launch(where.id, force = true) } },
                         )
@@ -464,7 +481,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                     onPick = { context ->
                         picking = false
                         closeDrawer()
-                        if (context.id != currentContext?.id) contextPort.switchTo(context.id)
+                        if (context.id != currentContext?.id) switchContext(context.id)
                     },
                     onOpen = { screen ->
                         picking = false
@@ -483,6 +500,21 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                         confirmText = strings.closeDialogConfirm,
                         dismissText = strings.closeDialogStay,
                         tag = "shell:close-dialog",
+                        saveText = strings.closeDialogSave.takeIf {
+                            superizer.handler.current.value?.instance?.canSaveBeforeClose == true
+                        },
+                        onSave = {
+                            vetoed = null
+                            scope.launch {
+                                val saved = superizer.handler.current.value?.instance?.saveBeforeClose() == true
+                                if (saved) {
+                                    superizer.handler.close(force = true)
+                                    ask()
+                                } else {
+                                    superizer.route.discard()
+                                }
+                            }
+                        },
                         onConfirm = {
                             vetoed = null
                             scope.launch {
@@ -540,6 +572,7 @@ private fun AppContainer(
     haptic: () -> Unit,
     footer: @Composable () -> Unit,
     header: (@Composable () -> Unit)?,
+    swipeBack: Boolean,
     onBack: () -> Unit,
     onRetry: () -> Unit,
 ) {
@@ -552,6 +585,9 @@ private fun AppContainer(
     val app = superizer.registry.get(id)
     val fallbackTitle = app?.metadata?.title?.resolve(langTag) ?: id.value
     val covered = lock.covers(id)
+    val backChain = remember(open?.instance) { BackChain() }
+    val previewScope = rememberCoroutineScope()
+    val backPreviews = remember(backChain) { BackPreviews(backChain, previewScope) }
 
     // D132: from the first frame of a protected app to its last, curtain included — a screenshot of
     // the curtain says which app is there, and the recents thumbnail is taken of whatever is on top.
@@ -559,13 +595,19 @@ private fun AppContainer(
     // A secret app's screen is not left behind as the recents thumbnail (idea/09, D253).
     RecentsPreview(hidden = app?.metadata?.secret == true)
 
+    // A screen a protected app shows is not to be kept in memory as a picture, or left to show under the curtain.
+    val pictured = swipeBack && app?.metadata?.secret != true && app?.manifest?.protection?.secureWindow != true
+    CompositionLocalProvider(LocalBackPreviews provides backPreviews.takeIf { pictured }) {
     AppScaffold(
         // The app's own title can be what it is hiding — the 2FA app titles an account's page with
         // the account — so under the curtain the bar says only which app this is.
         title = if (covered) fallbackTitle else chrome?.title ?: fallbackTitle,
         subtitle = if (covered) null else chrome?.subtitle,
         menu = menu,
-        onBack = onBack,
+        // Back unwinds inside the app first, and only what the app no longer claims closes it.
+        onBack = { if (!backChain.dispatch()) onBack() },
+        // Inside the app only: a swipe is too easy to make by accident to be what closes it.
+        onSwipeBack = if (swipeBack && backChain.active) ({ backChain.dispatch() }) else null,
         onHaptic = haptic,
         footer = footer,
         header = header,
@@ -590,7 +632,7 @@ private fun AppContainer(
 
                 else -> Column(modifier = Modifier.fillMaxSize()) {
                     if (lock.unprotected(id)) UnprotectedBanner(superizer.lock, lock.availability)
-                    CompositionLocalProvider(LocalAppRuntime provides open.runtime) {
+                    CompositionLocalProvider(LocalAppRuntime provides open.runtime, LocalBackChain provides backChain) {
                         Box(modifier = Modifier.fillMaxWidth().weight(1f).testTag("${id.value}:root")) {
                             open.instance.Content()
                         }
@@ -598,6 +640,7 @@ private fun AppContainer(
                 }
             }
         }
+    }
     }
 }
 
@@ -657,6 +700,8 @@ private fun HostDialog(
     tag: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
+    saveText: String? = null,
+    onSave: () -> Unit = {},
 ) {
     val tokens = AppTheme
     Box(
@@ -699,6 +744,15 @@ private fun HostDialog(
                     onClick = onConfirm,
                     variant = ButtonVariant.Destructive,
                     size = ButtonSize.Default,
+                )
+            }
+            if (saveText != null) {
+                Spacer(Modifier.height(12.dp))
+                AppButton(
+                    text = saveText,
+                    onClick = onSave,
+                    size = ButtonSize.Default,
+                    modifier = Modifier.fillMaxWidth().testTag("$tag:save"),
                 )
             }
         }

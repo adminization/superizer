@@ -2,9 +2,12 @@ package cx.m42.superizer.ui.components
 
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,17 +40,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.layer.GraphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
 import cx.m42.superizer.theme.AppTheme
 import cx.m42.superizer.ui.i18n.hostStrings
+import cx.m42.superizer.ui.platform.LocalBackPreviews
 import cx.m42.superizer.ui.platform.SystemBackHandler
+import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -89,6 +105,92 @@ private const val PushedFade = 0.4f
 
 /** Fling speed, in px/s, past which the drawer opens or closes regardless of how far it travelled. */
 private const val FlingVelocity = 400f
+
+/** How dark the uncovered screen starts, under the one still on top of it. */
+private const val UncoveredVeil = 0.35f
+
+/** How far in from the right edge a swipe back may start. The left edge is the drawer's. */
+private val SwipeBackEdgeWidth = 24.dp
+
+/** How much of the screen's width a slow swipe has to carry it to go back rather than spring home. */
+private const val SwipeBackThreshold = 1f / 3f
+
+/**
+ * The screen following a finger from the right edge. Only the current screen is composed: what the
+ * swipe uncovers is a picture of the one under it ([BackPreviews]), or the frame's backdrop if none.
+ */
+private class SwipeBackState(private val scope: kotlinx.coroutines.CoroutineScope) {
+    var offsetPx by mutableFloatStateOf(0f)
+        private set
+
+    /** What the shell says back means now; null while there is no step to go back to. */
+    var onSwipeBack: (() -> Unit)? = null
+
+    private var settleJob: Job? = null
+
+    fun started() {
+        settleJob?.cancel()
+        settleJob = null
+    }
+
+    fun drag(delta: Float, width: Float) {
+        offsetPx = (offsetPx + delta).coerceIn(-width, 0f)
+    }
+
+    fun settle(velocity: Float, width: Float) {
+        val back = velocity < -FlingVelocity || (velocity <= FlingVelocity && -offsetPx > width * SwipeBackThreshold)
+        val from = offsetPx
+        settleJob = scope.launch {
+            animate(from, if (back) -width else 0f, animationSpec = tween(180)) { value, _ -> offsetPx = value }
+            if (back) {
+                onSwipeBack?.invoke()
+                // Whatever back did, even asking first: the screen is on its place again.
+                offsetPx = 0f
+            }
+        }
+    }
+}
+
+/**
+ * Watches for a leftward swipe from the right edge, on the way down and consuming nothing until it
+ * is one: a strip laid over the card would take the taps of everything along that edge, the arrow
+ * in the top bar among them.
+ */
+private fun Modifier.swipeBack(state: SwipeBackState, closed: () -> Boolean): Modifier = pointerInput(state) {
+    awaitEachGesture {
+        val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+        if (state.onSwipeBack == null || !closed() || down.position.x < size.width - SwipeBackEdgeWidth.toPx()) {
+            return@awaitEachGesture
+        }
+        val width = size.width.toFloat()
+        val tracker = VelocityTracker()
+        tracker.addPosition(down.uptimeMillis, down.position)
+        var moved = Offset.Zero
+        var dragging = false
+        while (true) {
+            val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == down.id } ?: break
+            if (!change.pressed) break
+            tracker.addPosition(change.uptimeMillis, change.position)
+            val delta = change.positionChange()
+            if (dragging) {
+                state.drag(delta.x, width)
+                change.consume()
+            } else {
+                moved += delta
+                if (moved.getDistance() > viewConfiguration.touchSlop) {
+                    // A scroll, or a drag the other way: not ours, and not to be taken up again.
+                    if (moved.x >= 0f || abs(moved.x) < abs(moved.y)) return@awaitEachGesture
+                    dragging = true
+                    state.started()
+                    // What it took to tell a swipe from a tap counts, or the screen lags the finger.
+                    state.drag(moved.x, width)
+                    change.consume()
+                }
+            }
+        }
+        if (dragging) state.settle(tracker.calculateVelocity().x, width)
+    }
+}
 
 @Composable
 private fun rememberDrawerState(onHaptic: () -> Unit): DrawerState {
@@ -204,6 +306,7 @@ private class DrawerState(
  * screen right and scales it down to reveal the menu already sitting there, so the two feel like
  * one stack of cards rather than a panel flying in.
  *
+ * @param onSwipeBack what a swipe from the right edge does; null, the default, leaves the edge alone.
  * @param footer what sits under the menu's divider — the host's own actions and build stamp. A slot
  *   rather than a `BuildInfo` read, because the frame is library code and the stamp is the host's.
  * @param header what heads the menu in place of its "Menu" title — the shell's context switcher.
@@ -216,6 +319,7 @@ public fun AppScaffold(
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     onBack: (() -> Unit)? = null,
+    onSwipeBack: (() -> Unit)? = null,
     onHaptic: () -> Unit = {},
     footer: @Composable () -> Unit = {},
     header: (@Composable () -> Unit)? = null,
@@ -223,6 +327,12 @@ public fun AppScaffold(
 ) {
     val tokens = AppTheme
     val drawer = rememberDrawerState(onHaptic)
+    val scope = rememberCoroutineScope()
+    val swipe = remember(scope) { SwipeBackState(scope) }
+    SideEffect { swipe.onSwipeBack = onSwipeBack }
+    val previews = LocalBackPreviews.current
+    val recording = if (previews != null) rememberGraphicsLayer() else null
+    SideEffect { previews?.layer = recording }
 
     // An open drawer is the innermost thing back can dismiss, and it is registered here — deeper
     // in the tree than the shell's own handler — so it answers first (D12).
@@ -231,6 +341,7 @@ public fun AppScaffold(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .swipeBack(swipe, closed = { drawer.progress == 0f })
             // The backdrop the menu sits on. It shows through the rounded corners of the
             // pushed-back screen, so it is a shade darker than the card itself.
             .background(tokens.menuBackground),
@@ -238,7 +349,10 @@ public fun AppScaffold(
         // Drawn first, so it is genuinely behind the screen rather than over it.
         MenuPanel(drawer = drawer, entries = menu, header = header, footer = footer)
 
-        ContentSheet(drawer = drawer) {
+        val uncovered = previews?.uncovered
+        if (swipe.offsetPx < 0f && uncovered != null) UncoveredScreen(uncovered, swipe)
+
+        ContentSheet(drawer = drawer, swipe = swipe, recording = recording) {
             Column(modifier = Modifier.fillMaxSize()) {
                 TopBar(title = title, subtitle = subtitle, onBack = onBack, onOpenMenu = { drawer.open() })
                 // weight, not fillMaxSize: the content takes the height the bar leaves, which keeps
@@ -254,7 +368,23 @@ public fun AppScaffold(
 }
 
 @Composable
-private fun ContentSheet(drawer: DrawerState, content: @Composable () -> Unit) {
+private fun UncoveredScreen(picture: ImageBitmap, swipe: SwipeBackState) {
+    val veil = AppTheme.foreground
+    Canvas(modifier = Modifier.fillMaxSize().testTag("shell:back-preview")) {
+        drawImage(picture, dstSize = IntSize(size.width.roundToInt(), size.height.roundToInt()))
+        // Clearing as the screen on top leaves, so the one under it arrives at full strength.
+        val left = 1f + swipe.offsetPx / size.width
+        drawRect(color = veil, alpha = UncoveredVeil * left.coerceIn(0f, 1f))
+    }
+}
+
+@Composable
+private fun ContentSheet(
+    drawer: DrawerState,
+    swipe: SwipeBackState,
+    recording: GraphicsLayer?,
+    content: @Composable () -> Unit,
+) {
     // Read in composition and captured: the veil below is a draw-phase lambda, and a
     // CompositionLocal cannot be read from one.
     val background = AppTheme.background
@@ -262,20 +392,31 @@ private fun ContentSheet(drawer: DrawerState, content: @Composable () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .graphicsLayer {
-                val p = drawer.progress
-                translationX = drawer.offsetPx
-                // Shrink towards the left edge so the card pivots around the point the finger pulls
-                // from; scaling about the centre would make it drift away from the touch.
+                val swiped = if (size.width > 0f) (-swipe.offsetPx / size.width).coerceIn(0f, 1f) else 0f
+                val p = maxOf(drawer.progress, swiped)
+                translationX = drawer.offsetPx + swipe.offsetPx
+                // Shrink towards the edge the finger pulls from, so the card pivots around that point;
+                // scaling about the centre would make it drift away from the touch.
                 val scale = 1f - (1f - PushedScale) * p
                 scaleX = scale
                 scaleY = scale
-                transformOrigin = TransformOrigin(0f, 0.5f)
+                transformOrigin = TransformOrigin(if (swiped > 0f) 1f else 0f, 0.5f)
                 // Corners round off only as the card lifts: a full-screen sheet with rounded
                 // corners would show slivers of backdrop at rest.
                 shape = RoundedCornerShape(PushedCorner * p)
                 clip = true
                 shadowElevation = ShadowElevation.toPx() * p
             }
+            .then(
+                if (recording != null) {
+                    Modifier.drawWithContent {
+                        recording.record { this@drawWithContent.drawContent() }
+                        drawLayer(recording)
+                    }
+                } else {
+                    Modifier
+                },
+            )
             .background(background)
             .drawWithContent {
                 drawContent()

@@ -290,8 +290,11 @@ override fun Content() {
 }
 ```
 
-The host's top bar follows `chrome`; back unwinds inside you first and leaves the host only when you
-stop claiming it.
+The host's top bar follows `chrome`. Back unwinds inside you first, whichever way it was asked for:
+the platform's back, the arrow in the top bar, and the swipe from the right edge
+(`SuperizerShell(superizer, swipeBack = true)`) all go to the innermost enabled `SystemBackHandler`.
+The arrow leaves the app only when you stop claiming it; the swipe never does. Call
+`ScreenSteps(depth)` as well, and the swipe uncovers a picture of the screen below you.
 
 ---
 

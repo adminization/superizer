@@ -79,6 +79,7 @@ public interface HostStrings {
     public val closeDialogBody: String
     public val closeDialogConfirm: String
     public val closeDialogStay: String
+    public val closeDialogSave: String
 
     // ------------------------------------------------------------------ lock (06)
     /** The curtain's line under the app's name. */
@@ -183,6 +184,7 @@ internal object HostStringsEn : HostStrings {
     override val closeDialogBody = "It has unsaved changes."
     override val closeDialogConfirm = "Close"
     override val closeDialogStay = "Stay"
+    override val closeDialogSave = "Save and leave"
 
     override val locked = "Locked"
     override val lockedHint = "Confirm it is you: fingerprint, face or the screen lock."
@@ -281,6 +283,7 @@ internal object HostStringsRu : HostStrings {
     override val closeDialogBody = "В нём есть несохранённые изменения."
     override val closeDialogConfirm = "Закрыть"
     override val closeDialogStay = "Остаться"
+    override val closeDialogSave = "Сохранить и выйти"
 
     override val locked = "Заблокировано"
     override val lockedHint = "Подтвердите, что это вы: отпечаток, лицо или блокировка экрана."

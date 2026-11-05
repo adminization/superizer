@@ -111,6 +111,15 @@ public abstract class AppInstance {
      */
     public open suspend fun onCloseRequested(): Boolean = true
 
+    /** True when the host's question after a veto may offer to save. Read at the moment it asks. */
+    public open val canSaveBeforeClose: Boolean get() = false
+
+    /**
+     * "Save and leave" in the host's question. Returns once it is known: true and the host closes
+     * the app, false — refused, or invalid — and the person stays on the screen, which says why.
+     */
+    public open suspend fun saveBeforeClose(): Boolean = false
+
     /** Save what must survive. After this the instance is never composed again. */
     public open fun onClose() {}
 

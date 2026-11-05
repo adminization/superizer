@@ -7,4 +7,4 @@ import androidx.compose.runtime.Composable
  * belongs to a navigation controller, and the host is one screen with no controller to swipe.
  */
 @Composable
-public actual fun SystemBackHandler(enabled: Boolean, onBack: () -> Unit): Unit = Unit
+internal actual fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit): Unit = Unit

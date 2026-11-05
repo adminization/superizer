@@ -8,4 +8,4 @@ import androidx.compose.runtime.Composable
  * page, which is worse than back leaving the app.
  */
 @Composable
-public actual fun SystemBackHandler(enabled: Boolean, onBack: () -> Unit): Unit = Unit
+internal actual fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit): Unit = Unit

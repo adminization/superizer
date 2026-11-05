@@ -275,7 +275,8 @@ AppChrome(title = null /* → metadata.title */, subtitle = "scientific", canGoB
 ### `onCloseRequested`
 
 Return `false` and the host puts up **its own** dialog asking the user. Do not draw your own — a
-modal is global UI, and the host owns global UI.
+modal is global UI, and the host owns global UI. Override `canSaveBeforeClose` and `saveBeforeClose`
+and the dialog also offers to save first; a save that returns `false` keeps the app open.
 
 ---
 

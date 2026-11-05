@@ -9,5 +9,5 @@ import androidx.activity.compose.BackHandler as ActivityBackHandler
  * predictive-back animation as well.
  */
 @Composable
-public actual fun SystemBackHandler(enabled: Boolean, onBack: () -> Unit): Unit =
+internal actual fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit): Unit =
     ActivityBackHandler(enabled = enabled, onBack = onBack)

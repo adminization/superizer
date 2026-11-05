@@ -3,7 +3,20 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
-## 0.8.0 (unreleased)
+## 0.8.0
+
+Back walks an app's own screens. The arrow in the top bar closed the app from any depth, whatever
+`chrome.canGoBack` said, and on desktop and iOS no in-app back existed at all. No contract change.
+
+- The arrow now goes to the innermost enabled `SystemBackHandler` inside `Content()`, on every
+  platform, and closes the app only when nothing there claims back.
+- `SuperizerShell(superizer, swipeBack = true)`: a swipe from the right edge does the same step, but
+  never closes the app. Off by default. The screen shrinks as it does for the drawer, over a picture
+  of the one below, taken when the app stepped forward; an app says how deep it is with
+  `ScreenSteps(count)`. Without that, and for secret and secure-window apps, it uncovers the backdrop.
+- `AppInstance.canSaveBeforeClose` and `saveBeforeClose()`: the dialog after a veto can offer to save.
+- Switching context now asks the app's `onCloseRequested` too, from the drawer. The app still stays
+  for the way back when it agrees. A host switching on its own, by a hotkey, is not asked about.
 
 Contexts: what the whole host is pointed at — a server, an account — and a switcher for them at the
 top of the drawer, the way ChatGPT lists workspaces and GitHub lists accounts (RestoApp D6). No
