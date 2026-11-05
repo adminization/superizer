@@ -43,12 +43,45 @@ event ring buffer.
 | `auth(value: AuthService)` | `AnonymousAuth` | |
 | `notifier(value: Notifier)` | none | draws a notification for a non-silent data message: `fun interface { fun show(title: String?, body: String?, link: String) }` |
 | `lifecycle(value: StateFlow<HostLifecycle>)` | `PlatformLifecycle.state` | drive foreground/background by hand in a test |
+| `contexts(port: ContextPort)` | `ContextPort.Single` | what the host is pointed at — servers, accounts — and the switcher at the top of the drawer. See below. |
 
 A complete example is in [Getting started §3.4](01-getting-started.md#34-the-host-itself--commonmainmyhostkt).
 
 ```kotlin
 public typealias HostSession = AppSession   // re-exported, so a host file needs one import fewer
 ```
+
+### Contexts
+
+A context is what the whole host is pointed at: a server, an account, a workspace. The library
+draws the switcher — a row at the top of the drawer with the current one, a sheet from the bottom
+with the rest, as ChatGPT and GitHub switch accounts — and hands the host the id that was picked.
+What switching *means* is the host's.
+
+```kotlin
+public data class HostContext(val id: String, val title: String, val subtitle: String? = null)
+
+public interface ContextPort {
+    public val contexts: StateFlow<List<HostContext>>   // the person's order
+    public val current: StateFlow<HostContext?>
+    public fun switchTo(id: String)                     // the drawer is already closing
+    public fun previous(): HostContext? = null          // where a long press on the row goes
+    public fun title(langTag: String): String           // the sheet's heading: "Servers"
+    public val addScreen: HostScreen? get() = null      // the sheet's "+" row
+    public val manageScreen: HostScreen? get() = null   // the sheet's last row
+    public companion object { public val Single: ContextPort }
+}
+```
+
+`ContextPort.Single` — the default — is one context, the whole app: no row, no sheet, the drawer
+titled "Menu" and Home titled with `HostInfo.name`, exactly as before contexts existed. The switcher
+appears once there is more than one context, or one and an `addScreen`; Home is then titled with
+the current context and its subtitle.
+
+The pattern RestoApp uses: one `Superizer` per context, each built on that context's own storage
+and with its own apps, and a root composable that draws `key(active) { SuperizerShell(active) }`.
+Before letting go of one, drive its `lifecycle(...)` to `Background` so the open app writes its
+snapshot there — and comes back when the context does.
 
 ---
 
@@ -59,6 +92,7 @@ public typealias HostSession = AppSession   // re-exported, so a host file needs
 | Home — the chosen tiles, "+" to the catalog, long press to remove | `ui`, driven by `Superizer.home` |
 | All Apps — the catalog; a tap adds to Home or takes off | `ui`, driven by `registry.visible(unlocked)` |
 | The drawer — Home, every app on Home, All Apps, plus the footer | `AppScaffold` |
+| The context switcher — a row atop the drawer and a sheet, when the host has contexts | `SuperizerShell` + `ContextPort` |
 | Settings — language, haptics, **a block per app**, about, the 7-tap door | `SettingsScreen` + `handler.settingsSections` |
 | Activate — promo code and QR text | `ActivateScreen` + `ActivationPort` |
 | The Service Menu | `ServiceMenuScreen` + `DiagnosticsPort` |

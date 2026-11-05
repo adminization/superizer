@@ -3,6 +3,32 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.8.0 (unreleased)
+
+Contexts: what the whole host is pointed at — a server, an account — and a switcher for them at the
+top of the drawer, the way ChatGPT lists workspaces and GitHub lists accounts (RestoApp D6). No
+contract change: apps do not see contexts. A host that sets none has one context, the whole app,
+and its drawer and Home are exactly what they were.
+
+- `HostContext(id, title, subtitle)` and `ContextPort`: the list, the one in force, `switchTo(id)`,
+  `previous()`, the sheet's title, and an optional `addScreen` and `manageScreen`.
+  `ContextPort.Single` is the default; `Superizer.contexts` returns it unless the host set one.
+- `SuperizerBuilder.contexts(port)`.
+- The shell: with more than one context, or one and an `addScreen`, the drawer's "Menu" title gives
+  way to a row with the current context — a monogram, its name, its subtitle. A tap opens a sheet
+  from the bottom: every context with a tick on the current one, then "+" (`addScreen`) and the
+  manage row (`manageScreen`), each opened in the shell's frame like any `HostScreen`. A long press
+  on the row goes straight to `previous()`. Back, Escape and a tap on the scrim close the sheet.
+  Home is titled with the current context and its subtitle.
+- What switching means is the host's: the library hands it the id and closes the drawer.
+- `AppScaffold(header = …)`: a slot that takes the place of the drawer's "Menu" title. Null, the
+  default, keeps the title.
+- `Monogram(title, size)` in `ui.components`: one or two letters of a name on a square in the
+  chrome's colour.
+- `AppContractTest.provideServices(runtime)`: the TCK declared the services of `manifest.requires`
+  but put nothing behind them, so an app that calls `require(key)` in `launch` could not pass it at
+  all. A test now hands its fakes there; offering a key the manifest does not require fails.
+
 ## 0.7.1
 
 A secret app is let back in only through the lock (Unitool notes secret-return, D620–D623). No

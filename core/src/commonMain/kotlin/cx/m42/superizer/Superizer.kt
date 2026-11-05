@@ -105,6 +105,12 @@ public interface Superizer {
     public val codeScreens: Map<String, HostScreen> get() = emptyMap()
 
     /**
+     * What the host is pointed at and the switcher at the top of the drawer (RestoApp D6). A host
+     * that never set any has [ContextPort.Single]: one context, the whole app, and no switcher.
+     */
+    public val contexts: ContextPort get() = ContextPort.Single
+
+    /**
      * What an app asked the host to do about navigation (04). The shell collects these and moves;
      * the app never touches the shell's state, which is the rule in §19 made structural.
      */

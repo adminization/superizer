@@ -120,11 +120,17 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
     val unlocked by superizer.unlocked.collectAsState()
     val home by superizer.home.collectAsState()
     val registered by superizer.registry.apps.collectAsState()
+    val contextPort = superizer.contexts
+    val contexts by contextPort.contexts.collectAsState()
+    val currentContext by contextPort.current.collectAsState()
     val scope = rememberCoroutineScope()
 
     var destination by remember { mutableStateOf<ShellDestination>(ShellDestination.Home) }
     var navDirection by remember { mutableStateOf(NavDirection.Forward) }
     var vetoed by remember { mutableStateOf<(suspend () -> Unit)?>(null) }
+    // The context sheet (RestoApp D6), and how to close the drawer it was opened over.
+    var picking by remember { mutableStateOf(false) }
+    var closeDrawer by remember { mutableStateOf<() -> Unit>({}) }
 
     fun go(dest: ShellDestination) {
         navDirection = NavDirection.Forward
@@ -247,6 +253,27 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                 )
             }
 
+            // A host with contexts of its own gets a switcher where the drawer's title was; one
+            // without — Unitool — gets the title, exactly as before contexts existed.
+            val switchable = contexts.size > 1 || (currentContext != null && contextPort.addScreen != null)
+            val switcher: @Composable () -> Unit = {
+                val dismiss = LocalDrawerDismiss.current
+                ContextRow(
+                    port = contextPort,
+                    current = currentContext,
+                    langTag = langTag,
+                    onOpen = {
+                        closeDrawer = dismiss
+                        picking = true
+                    },
+                    onBack = { previous ->
+                        dismiss()
+                        contextPort.switchTo(previous.id)
+                    },
+                )
+            }
+            val header: (@Composable () -> Unit)? = switcher.takeIf { switchable }
+
             val haptic = superizer.hapticTick()
             val footer: @Composable () -> Unit = {
                 ShellFooter(
@@ -281,10 +308,13 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                 ) { where ->
                     when (where) {
                         ShellDestination.Home -> AppScaffold(
-                            title = superizer.hostInfo.name,
+                            // Home is the context's own: its name on the bar, its address under it.
+                            title = currentContext?.title ?: superizer.hostInfo.name,
+                            subtitle = currentContext?.subtitle,
                             menu = menu,
                             onHaptic = haptic,
                             footer = footer,
+                            header = header,
                         ) {
                             Capped {
                                 Column(modifier = Modifier.fillMaxSize()) {
@@ -312,6 +342,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             onBack = { goBack(where.from) },
                             onHaptic = haptic,
                             footer = footer,
+                            header = header,
                         ) {
                             Capped {
                                 CatalogScreen(
@@ -334,6 +365,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             langTag = langTag,
                             haptic = haptic,
                             footer = footer,
+                            header = header,
                             onBack = { scope.launch { closeCurrent { goBack(ShellDestination.Home) } } },
                             onRetry = { scope.launch { superizer.handler.launch(where.id, force = true) } },
                         )
@@ -344,6 +376,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             onBack = { goBack(where.from) },
                             onHaptic = haptic,
                             footer = footer,
+                            header = header,
                         ) {
                             Capped {
                                 SettingsScreen(
@@ -360,6 +393,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             onBack = { goBack(where.from) },
                             onHaptic = haptic,
                             footer = footer,
+                            header = header,
                         ) {
                             Capped {
                                 ActivateScreen(
@@ -386,6 +420,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             onBack = { goBack(where.from) },
                             onHaptic = haptic,
                             footer = footer,
+                            header = header,
                         ) {
                             // An import wizard is kept out of screenshots (T10); the flag goes with
                             // the screen, so leaving it takes the flag off again.
@@ -407,6 +442,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                             onBack = { goBack(ShellDestination.Home) },
                             onHaptic = haptic,
                             footer = footer,
+                            header = header,
                         ) {
                             Capped {
                                 ServiceMenuScreen(
@@ -417,6 +453,25 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier) {
                         }
                     }
                 }
+
+                ContextSheet(
+                    visible = picking,
+                    port = contextPort,
+                    contexts = contexts,
+                    current = currentContext,
+                    langTag = langTag,
+                    onDismiss = { picking = false },
+                    onPick = { context ->
+                        picking = false
+                        closeDrawer()
+                        if (context.id != currentContext?.id) contextPort.switchTo(context.id)
+                    },
+                    onOpen = { screen ->
+                        picking = false
+                        closeDrawer()
+                        go(ShellDestination.Host(screen, destination))
+                    },
+                )
 
                 // The app said no (03). The host asks, because a modal is global UI and an app that
                 // drew its own would be drawing over the host's frame.
@@ -484,6 +539,7 @@ private fun AppContainer(
     langTag: String,
     haptic: () -> Unit,
     footer: @Composable () -> Unit,
+    header: (@Composable () -> Unit)?,
     onBack: () -> Unit,
     onRetry: () -> Unit,
 ) {
@@ -512,6 +568,7 @@ private fun AppContainer(
         onBack = onBack,
         onHaptic = haptic,
         footer = footer,
+        header = header,
     ) {
         Capped {
             when {

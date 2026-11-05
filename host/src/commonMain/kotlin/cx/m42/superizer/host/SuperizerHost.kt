@@ -3,6 +3,7 @@ package cx.m42.superizer.host
 import cx.m42.superizer.ActivateBanner
 import cx.m42.superizer.ActivateEntry
 import cx.m42.superizer.ActivationPort
+import cx.m42.superizer.ContextPort
 import cx.m42.superizer.HomeBanner
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.HostSection
@@ -154,6 +155,7 @@ public class SuperizerBuilder internal constructor() {
     internal val homeBanners: MutableList<HomeBanner> = mutableListOf()
     internal val activateBanners: MutableList<ActivateBanner> = mutableListOf()
     internal var activateEntry: ActivateEntry? = null
+    internal var contexts: ContextPort = ContextPort.Single
     internal val codeScreens: LinkedHashMap<String, HostScreen> = LinkedHashMap()
     internal var scanner: (suspend () -> String?)? = null
     internal var idleLimitMs: Long = DEFAULT_IDLE_LIMIT_MS
@@ -253,6 +255,14 @@ public class SuperizerBuilder internal constructor() {
     /** The host's own icon and title for Activate, in the drawer and on the bar. */
     public fun activateEntry(entry: ActivateEntry) {
         activateEntry = entry
+    }
+
+    /**
+     * What the host is pointed at — servers, accounts — and so the switcher at the top of the
+     * drawer. Without it the whole app is one context and the drawer has no switcher.
+     */
+    public fun contexts(port: ContextPort) {
+        contexts = port
     }
 
     public fun promoCodes(resolver: PromoCodeResolver) {
@@ -641,6 +651,7 @@ internal class SuperizerHost(
     override val homeBanners: List<HomeBanner> = builder.homeBanners.toList()
     override val activateBanners: List<ActivateBanner> = builder.activateBanners.toList()
     override val activateEntry: ActivateEntry? = builder.activateEntry
+    override val contexts: ContextPort = builder.contexts
     override val codeScreens: Map<String, HostScreen> = builder.codeScreens.toMap()
 
     private val router = PushRouter(

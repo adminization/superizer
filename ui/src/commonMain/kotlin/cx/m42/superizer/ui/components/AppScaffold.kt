@@ -206,6 +206,8 @@ private class DrawerState(
  *
  * @param footer what sits under the menu's divider — the host's own actions and build stamp. A slot
  *   rather than a `BuildInfo` read, because the frame is library code and the stamp is the host's.
+ * @param header what heads the menu in place of its "Menu" title — the shell's context switcher.
+ *   Null keeps the title, which is what every host without contexts gets.
  */
 @Composable
 public fun AppScaffold(
@@ -216,6 +218,7 @@ public fun AppScaffold(
     onBack: (() -> Unit)? = null,
     onHaptic: () -> Unit = {},
     footer: @Composable () -> Unit = {},
+    header: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     val tokens = AppTheme
@@ -233,7 +236,7 @@ public fun AppScaffold(
             .background(tokens.menuBackground),
     ) {
         // Drawn first, so it is genuinely behind the screen rather than over it.
-        MenuPanel(drawer = drawer, entries = menu, footer = footer)
+        MenuPanel(drawer = drawer, entries = menu, header = header, footer = footer)
 
         ContentSheet(drawer = drawer) {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -381,6 +384,7 @@ private fun TopBar(title: String, subtitle: String?, onBack: (() -> Unit)?, onOp
 private fun BoxScope.MenuPanel(
     drawer: DrawerState,
     entries: List<MenuEntry>,
+    header: (@Composable () -> Unit)?,
     footer: @Composable () -> Unit,
 ) {
     if (drawer.progress <= 0f) return
@@ -407,12 +411,18 @@ private fun BoxScope.MenuPanel(
         ) {
             // No close button: the pushed-aside screen is always on show and always dismisses on
             // tap, so a second way out would only crowd the header.
-            Text(
-                text = hostStrings.menu,
-                style = tokens.title,
-                color = tokens.foreground,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
-            )
+            if (header != null) {
+                // The context switcher (RestoApp D6) says where you are, which is more than "Menu"
+                // does — so it takes the title's place rather than sitting under it.
+                DismissingFooter(onDismiss = { drawer.close() }, footer = header)
+            } else {
+                Text(
+                    text = hostStrings.menu,
+                    style = tokens.title,
+                    color = tokens.foreground,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+                )
+            }
             Spacer(Modifier.height(8.dp))
 
             entries.forEach { entry -> MenuRow(entry = entry, onDismiss = { drawer.close() }) }

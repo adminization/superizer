@@ -127,11 +127,18 @@ data class MenuEntry(
     onBack: (() -> Unit)? = null,
     onHaptic: () -> Unit = {},
     footer: @Composable () -> Unit = {},
+    header: (@Composable () -> Unit)? = null,   // in place of the drawer's "Menu" title
     content: @Composable () -> Unit,
 )
 
 val LocalDrawerDismiss: ProvidableCompositionLocal<() -> Unit>
+
+@Composable fun Monogram(title: String, modifier: Modifier = Modifier, size: Dp = 40.dp)
 ```
+
+`header` is how the shell puts the context switcher where the title was; `LocalDrawerDismiss` is
+provided to it as to the footer. `Monogram` is one or two letters of a name on a square in the
+chrome's colour — what a server or an account looks like without a picture.
 
 A fixed top bar with a burger on the left and the content below it. The drawer does not slide over
 the screen — it lies underneath; opening pushes the whole screen right and scales it to 0.94, so the
@@ -234,6 +241,7 @@ Text changes with the language; tags do not. The convention is `<owner>:<element
 | `service:root`, `service:app-<appId>`, `service:config`, `service:push`, `service:push-send`, `service:events`, `service:log`, `service:confirm-reset` | the Service Menu |
 | `host:error` | the failed-launch screen |
 | `shell:close-dialog` | the veto dialog (on the scrim, which owns the merged semantics) |
+| `context:row`, `context:sheet`, `context:item-<id>`, `context:add`, `context:manage` | the context switcher: the drawer's row, the sheet, a context in it (selected = current), its "+" and manage rows |
 
 The drawer's controls are found by content description — `"Open menu"`, `"Back"`, `"Settings"`,
 `"Activate"` — because they are icon buttons and a label is what a screen reader needs anyway.

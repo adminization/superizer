@@ -59,6 +59,13 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
     /** A config a test can open the app with when the default would not exercise anything. */
     protected open val sampleConfig: AppConfig get() = AppConfig.Empty
 
+    /**
+     * Hands the fake host's implementations of what `manifest.requires` names: the TCK declares those
+     * keys and offers nothing behind them, so an app that calls `require(key)` in `launch` needs its
+     * test to put a fake there. Nothing beyond the manifest is offered either way.
+     */
+    protected open fun provideServices(runtime: FakeAppRuntime) {}
+
     @Test
     public fun theDefaultConfigDecodes() {
         val decoded = app.configSpec.decode(AppConfig.Empty)
@@ -92,7 +99,9 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
 
     @Test
     public fun setupRegistersOnlyWhatTheManifestDeclares() {
-        val recorder = RecordingSetupContext(FakeAppRuntime(app.id, TestScope()))
+        val recorder = RecordingSetupContext(
+            FakeAppRuntime(app.id, TestScope(), declaredServices = app.manifest.requires).also(::provideServices),
+        )
         app.setup(recorder)
         val undeclared = recorder.deepLinks - app.manifest.deepLinks
         assertEquals(emptySet(), undeclared, "setup() registered deep links the manifest does not declare")
@@ -209,7 +218,11 @@ public abstract class AppContractTest(private val app: SuperizerApp<*>) {
         // Exactly what the manifest declares, and nothing more: `require(key)` on an undeclared
         // key must fail here rather than find something a generous fake happened to offer.
         declaredServices = app.manifest.requires,
-    )
+    ).also { runtime ->
+        provideServices(runtime)
+        val extra = runtime.services.keys - app.manifest.requires
+        check(extra.isEmpty()) { "provideServices() offered what the manifest does not require: $extra" }
+    }
 
     @Suppress("UNCHECKED_CAST")
     private fun create(runtime: InstanceRuntime): AppInstance {
