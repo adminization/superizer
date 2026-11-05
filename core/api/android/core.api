@@ -21,6 +21,27 @@ public final class cx/m42/superizer/ActivationPort$DefaultImpls {
 	public static fun scan (Lcx/m42/superizer/ActivationPort;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public abstract interface class cx/m42/superizer/ContextPort {
+	public static final field Companion Lcx/m42/superizer/ContextPort$Companion;
+	public fun getAddScreen ()Lcx/m42/superizer/HostScreen;
+	public abstract fun getContexts ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getCurrent ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun getManageScreen ()Lcx/m42/superizer/HostScreen;
+	public fun previous ()Lcx/m42/superizer/HostContext;
+	public abstract fun switchTo (Ljava/lang/String;)V
+	public abstract fun title (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ContextPort$Companion {
+	public final fun getSingle ()Lcx/m42/superizer/ContextPort;
+}
+
+public final class cx/m42/superizer/ContextPort$DefaultImpls {
+	public static fun getAddScreen (Lcx/m42/superizer/ContextPort;)Lcx/m42/superizer/HostScreen;
+	public static fun getManageScreen (Lcx/m42/superizer/ContextPort;)Lcx/m42/superizer/HostScreen;
+	public static fun previous (Lcx/m42/superizer/ContextPort;)Lcx/m42/superizer/HostContext;
+}
+
 public abstract interface class cx/m42/superizer/DiagnosticsPort {
 	public abstract fun getLog ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getRecentEvents ()Lkotlinx/coroutines/flow/StateFlow;
@@ -32,6 +53,23 @@ public abstract interface class cx/m42/superizer/DiagnosticsPort {
 
 public abstract interface class cx/m42/superizer/HomeBanner {
 	public abstract fun Content (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)Z
+}
+
+public final class cx/m42/superizer/HostContext {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/HostContext;
+	public static synthetic fun copy$default (Lcx/m42/superizer/HostContext;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/HostContext;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getSubtitle ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class cx/m42/superizer/HostScreen {
@@ -121,6 +159,7 @@ public abstract interface class cx/m42/superizer/Superizer {
 	public abstract fun getBackup ()Lcx/m42/superizer/backup/BackupPort;
 	public fun getCodeScreens ()Ljava/util/Map;
 	public abstract fun getCommands ()Lkotlinx/coroutines/flow/SharedFlow;
+	public fun getContexts ()Lcx/m42/superizer/ContextPort;
 	public abstract fun getDiagnostics ()Lcx/m42/superizer/DiagnosticsPort;
 	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
 	public abstract fun getHandler ()Lcx/m42/superizer/registry/AppHandler;
@@ -148,6 +187,7 @@ public final class cx/m42/superizer/Superizer$DefaultImpls {
 	public static fun getActivateBanners (Lcx/m42/superizer/Superizer;)Ljava/util/List;
 	public static fun getActivateEntry (Lcx/m42/superizer/Superizer;)Lcx/m42/superizer/ActivateEntry;
 	public static fun getCodeScreens (Lcx/m42/superizer/Superizer;)Ljava/util/Map;
+	public static fun getContexts (Lcx/m42/superizer/Superizer;)Lcx/m42/superizer/ContextPort;
 	public static fun getPush (Lcx/m42/superizer/Superizer;)Lcx/m42/superizer/push/PushPort;
 }
 
@@ -451,6 +491,7 @@ public abstract class cx/m42/superizer/app/AppInstance {
 	public fun <init> ()V
 	public abstract fun Content (Landroidx/compose/runtime/Composer;I)V
 	public fun dispose ()V
+	public fun getCanSaveBeforeClose ()Z
 	public fun getChrome ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun onBackground ()V
 	public fun onClose ()V
@@ -458,6 +499,7 @@ public abstract class cx/m42/superizer/app/AppInstance {
 	public fun onForeground ()V
 	public fun onLaunch (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun restore (Lkotlinx/serialization/json/JsonObject;)V
+	public fun saveBeforeClose (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun saveState ()Lkotlinx/serialization/json/JsonObject;
 }
 

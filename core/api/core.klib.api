@@ -675,6 +675,26 @@ abstract interface cx.m42.superizer/ActivationPort { // cx.m42.superizer/Activat
     open suspend fun scan(): kotlin/String? // cx.m42.superizer/ActivationPort.scan|scan(){}[0]
 }
 
+abstract interface cx.m42.superizer/ContextPort { // cx.m42.superizer/ContextPort|null[0]
+    abstract val contexts // cx.m42.superizer/ContextPort.contexts|{}contexts[0]
+        abstract fun <get-contexts>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<cx.m42.superizer/HostContext>> // cx.m42.superizer/ContextPort.contexts.<get-contexts>|<get-contexts>(){}[0]
+    abstract val current // cx.m42.superizer/ContextPort.current|{}current[0]
+        abstract fun <get-current>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer/HostContext?> // cx.m42.superizer/ContextPort.current.<get-current>|<get-current>(){}[0]
+    open val addScreen // cx.m42.superizer/ContextPort.addScreen|{}addScreen[0]
+        open fun <get-addScreen>(): cx.m42.superizer/HostScreen? // cx.m42.superizer/ContextPort.addScreen.<get-addScreen>|<get-addScreen>(){}[0]
+    open val manageScreen // cx.m42.superizer/ContextPort.manageScreen|{}manageScreen[0]
+        open fun <get-manageScreen>(): cx.m42.superizer/HostScreen? // cx.m42.superizer/ContextPort.manageScreen.<get-manageScreen>|<get-manageScreen>(){}[0]
+
+    abstract fun switchTo(kotlin/String) // cx.m42.superizer/ContextPort.switchTo|switchTo(kotlin.String){}[0]
+    abstract fun title(kotlin/String): kotlin/String // cx.m42.superizer/ContextPort.title|title(kotlin.String){}[0]
+    open fun previous(): cx.m42.superizer/HostContext? // cx.m42.superizer/ContextPort.previous|previous(){}[0]
+
+    final object Companion { // cx.m42.superizer/ContextPort.Companion|null[0]
+        final val Single // cx.m42.superizer/ContextPort.Companion.Single|{}Single[0]
+            final fun <get-Single>(): cx.m42.superizer/ContextPort // cx.m42.superizer/ContextPort.Companion.Single.<get-Single>|<get-Single>(){}[0]
+    }
+}
+
 abstract interface cx.m42.superizer/DiagnosticsPort { // cx.m42.superizer/DiagnosticsPort|null[0]
     abstract val log // cx.m42.superizer/DiagnosticsPort.log|{}log[0]
         abstract fun <get-log>(): kotlinx.coroutines.flow/StateFlow<kotlin.collections/List<kotlin/String>> // cx.m42.superizer/DiagnosticsPort.log.<get-log>|<get-log>(){}[0]
@@ -769,6 +789,8 @@ abstract interface cx.m42.superizer/Superizer { // cx.m42.superizer/Superizer|nu
         open fun <get-activateEntry>(): cx.m42.superizer/ActivateEntry? // cx.m42.superizer/Superizer.activateEntry.<get-activateEntry>|<get-activateEntry>(){}[0]
     open val codeScreens // cx.m42.superizer/Superizer.codeScreens|{}codeScreens[0]
         open fun <get-codeScreens>(): kotlin.collections/Map<kotlin/String, cx.m42.superizer/HostScreen> // cx.m42.superizer/Superizer.codeScreens.<get-codeScreens>|<get-codeScreens>(){}[0]
+    open val contexts // cx.m42.superizer/Superizer.contexts|{}contexts[0]
+        open fun <get-contexts>(): cx.m42.superizer/ContextPort // cx.m42.superizer/Superizer.contexts.<get-contexts>|<get-contexts>(){}[0]
     open val push // cx.m42.superizer/Superizer.push|{}push[0]
         open fun <get-push>(): cx.m42.superizer.push/PushPort // cx.m42.superizer/Superizer.push.<get-push>|<get-push>(){}[0]
 
@@ -2081,6 +2103,8 @@ abstract class <#A: kotlin/Any> cx.m42.superizer.app/SuperizerApp { // cx.m42.su
 abstract class cx.m42.superizer.app/AppInstance { // cx.m42.superizer.app/AppInstance|null[0]
     constructor <init>() // cx.m42.superizer.app/AppInstance.<init>|<init>(){}[0]
 
+    open val canSaveBeforeClose // cx.m42.superizer.app/AppInstance.canSaveBeforeClose|{}canSaveBeforeClose[0]
+        open fun <get-canSaveBeforeClose>(): kotlin/Boolean // cx.m42.superizer.app/AppInstance.canSaveBeforeClose.<get-canSaveBeforeClose>|<get-canSaveBeforeClose>(){}[0]
     open val chrome // cx.m42.superizer.app/AppInstance.chrome|{}chrome[0]
         open fun <get-chrome>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer.app/AppChrome> // cx.m42.superizer.app/AppInstance.chrome.<get-chrome>|<get-chrome>(){}[0]
 
@@ -2093,6 +2117,7 @@ abstract class cx.m42.superizer.app/AppInstance { // cx.m42.superizer.app/AppIns
     open fun saveState(): kotlinx.serialization.json/JsonObject? // cx.m42.superizer.app/AppInstance.saveState|saveState(){}[0]
     open suspend fun onCloseRequested(): kotlin/Boolean // cx.m42.superizer.app/AppInstance.onCloseRequested|onCloseRequested(){}[0]
     open suspend fun onLaunch() // cx.m42.superizer.app/AppInstance.onLaunch|onLaunch(){}[0]
+    open suspend fun saveBeforeClose(): kotlin/Boolean // cx.m42.superizer.app/AppInstance.saveBeforeClose|saveBeforeClose(){}[0]
 }
 
 final class <#A: kotlin/Any> cx.m42.superizer.app/AppConfigSpec { // cx.m42.superizer.app/AppConfigSpec|null[0]
@@ -3410,6 +3435,25 @@ final class cx.m42.superizer.ssh/UseRecord { // cx.m42.superizer.ssh/UseRecord|n
     }
 }
 
+final class cx.m42.superizer/HostContext { // cx.m42.superizer/HostContext|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String? = ...) // cx.m42.superizer/HostContext.<init>|<init>(kotlin.String;kotlin.String;kotlin.String?){}[0]
+
+    final val id // cx.m42.superizer/HostContext.id|{}id[0]
+        final fun <get-id>(): kotlin/String // cx.m42.superizer/HostContext.id.<get-id>|<get-id>(){}[0]
+    final val subtitle // cx.m42.superizer/HostContext.subtitle|{}subtitle[0]
+        final fun <get-subtitle>(): kotlin/String? // cx.m42.superizer/HostContext.subtitle.<get-subtitle>|<get-subtitle>(){}[0]
+    final val title // cx.m42.superizer/HostContext.title|{}title[0]
+        final fun <get-title>(): kotlin/String // cx.m42.superizer/HostContext.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String // cx.m42.superizer/HostContext.component1|component1(){}[0]
+    final fun component2(): kotlin/String // cx.m42.superizer/HostContext.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // cx.m42.superizer/HostContext.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String? = ...): cx.m42.superizer/HostContext // cx.m42.superizer/HostContext.copy|copy(kotlin.String;kotlin.String;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer/HostContext.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer/HostContext.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer/HostContext.toString|toString(){}[0]
+}
+
 final class cx.m42.superizer/LanguageOption { // cx.m42.superizer/LanguageOption|null[0]
     constructor <init>(kotlin/String, kotlin/String) // cx.m42.superizer/LanguageOption.<init>|<init>(kotlin.String;kotlin.String){}[0]
 
@@ -3755,6 +3799,7 @@ final val cx.m42.superizer.ssh/cx_m42_superizer_ssh_UsePolicy_Session$stableprop
 final val cx.m42.superizer.ssh/cx_m42_superizer_ssh_UsePolicy_Session_$serializer$stableprop // cx.m42.superizer.ssh/cx_m42_superizer_ssh_UsePolicy_Session_$serializer$stableprop|#static{}cx_m42_superizer_ssh_UsePolicy_Session_$serializer$stableprop[0]
 final val cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord$stableprop // cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord$stableprop|#static{}cx_m42_superizer_ssh_UseRecord$stableprop[0]
 final val cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord_$serializer$stableprop // cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord_$serializer$stableprop|#static{}cx_m42_superizer_ssh_UseRecord_$serializer$stableprop[0]
+final val cx.m42.superizer/cx_m42_superizer_HostContext$stableprop // cx.m42.superizer/cx_m42_superizer_HostContext$stableprop|#static{}cx_m42_superizer_HostContext$stableprop[0]
 final val cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop // cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop|#static{}cx_m42_superizer_LanguageOption$stableprop[0]
 final val cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop // cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop|#static{}cx_m42_superizer_ShellCommand_Close$stableprop[0]
 final val cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop // cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop|#static{}cx_m42_superizer_ShellCommand_OpenApp$stableprop[0]
@@ -3945,6 +3990,7 @@ final fun cx.m42.superizer.ssh/cx_m42_superizer_ssh_UsePolicy_Session$stableprop
 final fun cx.m42.superizer.ssh/cx_m42_superizer_ssh_UsePolicy_Session_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.ssh/cx_m42_superizer_ssh_UsePolicy_Session_$serializer$stableprop_getter|cx_m42_superizer_ssh_UsePolicy_Session_$serializer$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord$stableprop_getter(): kotlin/Int // cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord$stableprop_getter|cx_m42_superizer_ssh_UseRecord$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord_$serializer$stableprop_getter(): kotlin/Int // cx.m42.superizer.ssh/cx_m42_superizer_ssh_UseRecord_$serializer$stableprop_getter|cx_m42_superizer_ssh_UseRecord_$serializer$stableprop_getter(){}[0]
+final fun cx.m42.superizer/cx_m42_superizer_HostContext$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_HostContext$stableprop_getter|cx_m42_superizer_HostContext$stableprop_getter(){}[0]
 final fun cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_LanguageOption$stableprop_getter|cx_m42_superizer_LanguageOption$stableprop_getter(){}[0]
 final fun cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_ShellCommand_Close$stableprop_getter|cx_m42_superizer_ShellCommand_Close$stableprop_getter(){}[0]
 final fun cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop_getter(): kotlin/Int // cx.m42.superizer/cx_m42_superizer_ShellCommand_OpenApp$stableprop_getter|cx_m42_superizer_ShellCommand_OpenApp$stableprop_getter(){}[0]

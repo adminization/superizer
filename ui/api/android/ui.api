@@ -1,5 +1,5 @@
 public final class cx/m42/superizer/ui/components/AppScaffoldKt {
-	public static final fun AppScaffold (Ljava/lang/String;Ljava/util/List;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AppScaffold (Ljava/lang/String;Ljava/util/List;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getLocalDrawerDismiss ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
@@ -28,7 +28,7 @@ public final class cx/m42/superizer/ui/components/ComposableSingletons$AppScaffo
 	public static final field INSTANCE Lcx/m42/superizer/ui/components/ComposableSingletons$AppScaffoldKt;
 	public fun <init> ()V
 	public final fun getLambda$-1013826200$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$-833960681$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-199165854$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$895078435$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 }
 
@@ -67,6 +67,10 @@ public final class cx/m42/superizer/ui/components/MenuEntry {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class cx/m42/superizer/ui/components/MonogramKt {
+	public static final fun Monogram-6a0pyJM (Ljava/lang/String;Landroidx/compose/ui/Modifier;FLandroidx/compose/runtime/Composer;II)V
+}
+
 public final class cx/m42/superizer/ui/components/WidgetsKt {
 	public static final fun AppButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;ZLcx/m42/superizer/ui/components/ButtonVariant;Lcx/m42/superizer/ui/components/ButtonSize;Landroidx/compose/runtime/Composer;II)V
 	public static final fun AppTextField-V-95POc (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZFLandroidx/compose/ui/text/TextStyle;Landroidx/compose/foundation/text/KeyboardOptions;Landroidx/compose/runtime/Composer;II)V
@@ -103,6 +107,7 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getCatalogHint ()Ljava/lang/String;
 	public abstract fun getCloseDialogBody ()Ljava/lang/String;
 	public abstract fun getCloseDialogConfirm ()Ljava/lang/String;
+	public abstract fun getCloseDialogSave ()Ljava/lang/String;
 	public abstract fun getCloseDialogStay ()Ljava/lang/String;
 	public abstract fun getCloseDialogTitle ()Ljava/lang/String;
 	public abstract fun getErrorBack ()Ljava/lang/String;
@@ -173,7 +178,8 @@ public final class cx/m42/superizer/ui/i18n/HostStringsKt {
 	public static final fun hostStringsFor (Ljava/lang/String;)Lcx/m42/superizer/ui/i18n/HostStrings;
 }
 
-public final class cx/m42/superizer/ui/platform/BackHandler_androidKt {
+public final class cx/m42/superizer/ui/platform/BackHandlerKt {
+	public static final fun ScreenSteps (ILandroidx/compose/runtime/Composer;I)V
 	public static final fun SystemBackHandler (ZLkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
 }
 
@@ -207,6 +213,13 @@ public final class cx/m42/superizer/ui/screens/ServiceMenuScreenKt {
 
 public final class cx/m42/superizer/ui/screens/SettingsScreenKt {
 	public static final fun SettingsScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitcherKt {
+	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitcherKt;
+	public fun <init> ()V
+	public final fun getLambda$-2060967418$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-2090437091$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class cx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShellKt {
@@ -297,6 +310,6 @@ public final class cx/m42/superizer/ui/shell/ShellDestination$Settings : cx/m42/
 }
 
 public final class cx/m42/superizer/ui/shell/SuperizerShellKt {
-	public static final fun SuperizerShell (Lcx/m42/superizer/Superizer;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SuperizerShell (Lcx/m42/superizer/Superizer;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
 }
 

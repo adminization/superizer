@@ -10,6 +10,7 @@ public abstract class cx/m42/superizer/testing/AppContractTest {
 	protected fun getSampleConfig-SJ6N8HE ()Lkotlinx/serialization/json/JsonObject;
 	protected fun getStateFixtures ()Ljava/util/List;
 	public final fun launchingIsCheapAndTouchesNoNetworkBeforeTheFirstFrame ()V
+	protected fun provideServices (Lcx/m42/superizer/testing/FakeAppRuntime;)V
 	public final fun setupRegistersOnlyWhatTheManifestDeclares ()V
 	public final fun theDefaultConfigDecodes ()V
 	public final fun theManifestSurvivesARoundTripThroughJson ()V

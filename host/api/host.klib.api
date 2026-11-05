@@ -519,6 +519,7 @@ final class cx.m42.superizer.host/SuperizerBuilder { // cx.m42.superizer.host/Su
     final fun backupCipher(cx.m42.superizer.backup/HostBackupCipher) // cx.m42.superizer.host/SuperizerBuilder.backupCipher|backupCipher(cx.m42.superizer.backup.HostBackupCipher){}[0]
     final fun backupKeys(kotlin.coroutines/SuspendFunction0<kotlin.collections/List<cx.m42.superizer.backup/BackupKeyName>>) // cx.m42.superizer.host/SuperizerBuilder.backupKeys|backupKeys(kotlin.coroutines.SuspendFunction0<kotlin.collections.List<cx.m42.superizer.backup.BackupKeyName>>){}[0]
     final fun clock(cx.m42.superizer.runtime/Clock) // cx.m42.superizer.host/SuperizerBuilder.clock|clock(cx.m42.superizer.runtime.Clock){}[0]
+    final fun contexts(cx.m42.superizer/ContextPort) // cx.m42.superizer.host/SuperizerBuilder.contexts|contexts(cx.m42.superizer.ContextPort){}[0]
     final fun deviceAuthenticator(cx.m42.superizer.lock/DeviceAuthenticator) // cx.m42.superizer.host/SuperizerBuilder.deviceAuthenticator|deviceAuthenticator(cx.m42.superizer.lock.DeviceAuthenticator){}[0]
     final fun diagnosticsSource(cx.m42.superizer.diagnostics/DiagnosticsSource) // cx.m42.superizer.host/SuperizerBuilder.diagnosticsSource|diagnosticsSource(cx.m42.superizer.diagnostics.DiagnosticsSource){}[0]
     final fun home(kotlin.collections/List<cx.m42.superizer.app/AppId>) // cx.m42.superizer.host/SuperizerBuilder.home|home(kotlin.collections.List<cx.m42.superizer.app.AppId>){}[0]

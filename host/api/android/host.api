@@ -84,6 +84,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun backupCipher (Lcx/m42/superizer/backup/HostBackupCipher;)V
 	public final fun backupKeys (Lkotlin/jvm/functions/Function1;)V
 	public final fun clock (Lcx/m42/superizer/runtime/Clock;)V
+	public final fun contexts (Lcx/m42/superizer/ContextPort;)V
 	public final fun deviceAuthenticator (Lcx/m42/superizer/lock/DeviceAuthenticator;)V
 	public final fun diagnosticsSource (Lcx/m42/superizer/diagnostics/DiagnosticsSource;)V
 	public final fun home (Ljava/util/List;)V
