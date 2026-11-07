@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +38,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
@@ -551,9 +553,9 @@ private fun Modifier.reportingTouches(superizer: Superizer): Modifier = pointerI
 
 /** D36: every destination's content sits in a column of at most [MaxContentWidth], centred. */
 @Composable
-private fun Capped(content: @Composable () -> Unit) {
+private fun Capped(capped: Boolean = true, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-        Box(modifier = Modifier.widthIn(max = MaxContentWidth).fillMaxSize()) { content() }
+        Box(modifier = Modifier.widthIn(max = if (capped) MaxContentWidth else Dp.Unspecified).fillMaxSize()) { content() }
     }
 }
 
@@ -597,6 +599,12 @@ private fun AppContainer(
 
     // A screen a protected app shows is not to be kept in memory as a picture, or left to show under the curtain.
     val pictured = swipeBack && app?.metadata?.secret != true && app?.manifest?.protection?.secureWindow != true
+    // The session is gone before this screen has finished sliding off, and a relaunch takes it away for a
+    // moment too. What it asked for stands until there is another, or a bar flashes up in between.
+    var askedFullscreen by remember { mutableStateOf(false) }
+    SideEffect { if (chrome != null) askedFullscreen = chrome.fullscreen }
+    // The curtain and the error screen are the host's, and they need its frame to get out by.
+    val fullscreen = (chrome?.fullscreen ?: askedFullscreen) && !covered && states[id] != AppState.Failed
     CompositionLocalProvider(LocalBackPreviews provides backPreviews.takeIf { pictured }) {
     AppScaffold(
         // The app's own title can be what it is hiding — the 2FA app titles an account's page with
@@ -607,12 +615,13 @@ private fun AppContainer(
         // Back unwinds inside the app first, and only what the app no longer claims closes it.
         onBack = { if (!backChain.dispatch()) onBack() },
         // Inside the app only: a swipe is too easy to make by accident to be what closes it.
-        onSwipeBack = if (swipeBack && backChain.active) ({ backChain.dispatch() }) else null,
+        onSwipeBack = if (swipeBack && backChain.active && !fullscreen) ({ backChain.dispatch() }) else null,
         onHaptic = haptic,
         footer = footer,
         header = header,
+        fullscreen = fullscreen,
     ) {
-        Capped {
+        Capped(capped = !fullscreen) {
             when {
                 // D31: a failed launch is the host's screen to draw. The app is not involved —
                 // it may not even have been constructed.

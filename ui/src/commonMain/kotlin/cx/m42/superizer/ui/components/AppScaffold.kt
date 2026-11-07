@@ -30,6 +30,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -311,6 +312,9 @@ private class DrawerState(
  *   rather than a `BuildInfo` read, because the frame is library code and the stamp is the host's.
  * @param header what heads the menu in place of its "Menu" title — the shell's context switcher.
  *   Null keeps the title, which is what every host without contexts gets.
+ * @param fullscreen the whole screen is the content's, edge to edge: no bar, no menu, no drawer swipe
+ *   and no padding for the safe area. The content stays where it is in the tree, so an app that goes
+ *   in and out of it keeps what it remembered.
  */
 @Composable
 public fun AppScaffold(
@@ -323,6 +327,7 @@ public fun AppScaffold(
     onHaptic: () -> Unit = {},
     footer: @Composable () -> Unit = {},
     header: (@Composable () -> Unit)? = null,
+    fullscreen: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val tokens = AppTheme
@@ -338,6 +343,9 @@ public fun AppScaffold(
     // in the tree than the shell's own handler — so it answers first (D12).
     SystemBackHandler(enabled = drawer.progress > 0f) { drawer.close() }
 
+    // Nothing is left to close an open drawer with once the bar and the gesture surface are gone.
+    LaunchedEffect(fullscreen) { if (fullscreen && drawer.progress > 0f) drawer.close() }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -347,14 +355,14 @@ public fun AppScaffold(
             .background(tokens.menuBackground),
     ) {
         // Drawn first, so it is genuinely behind the screen rather than over it.
-        MenuPanel(drawer = drawer, entries = menu, header = header, footer = footer)
+        if (!fullscreen) MenuPanel(drawer = drawer, entries = menu, header = header, footer = footer)
 
         val uncovered = previews?.uncovered
         if (swipe.offsetPx < 0f && uncovered != null) UncoveredScreen(uncovered, swipe)
 
-        ContentSheet(drawer = drawer, swipe = swipe, recording = recording) {
+        ContentSheet(drawer = drawer, swipe = swipe, recording = recording, fullscreen = fullscreen) {
             Column(modifier = Modifier.fillMaxSize()) {
-                TopBar(title = title, subtitle = subtitle, onBack = onBack, onOpenMenu = { drawer.open() })
+                if (!fullscreen) TopBar(title = title, subtitle = subtitle, onBack = onBack, onOpenMenu = { drawer.open() })
                 // weight, not fillMaxSize: the content takes the height the bar leaves, which keeps
                 // a scrolling list from running under it.
                 Box(modifier = Modifier.fillMaxWidth().weight(1f)) { content() }
@@ -363,7 +371,7 @@ public fun AppScaffold(
 
         // Last, so it sits above the card it drives — and outside it, so the card's scale cannot
         // distort the finger deltas.
-        DrawerGestureSurface(drawer = drawer)
+        if (!fullscreen) DrawerGestureSurface(drawer = drawer)
     }
 }
 
@@ -383,6 +391,7 @@ private fun ContentSheet(
     drawer: DrawerState,
     swipe: SwipeBackState,
     recording: GraphicsLayer?,
+    fullscreen: Boolean,
     content: @Composable () -> Unit,
 ) {
     // Read in composition and captured: the veil below is a draw-phase lambda, and a
@@ -425,8 +434,8 @@ private fun ContentSheet(
             },
     ) {
         // Padded here, not on the frame: the card is what the user reads, and it is the thing that
-        // has to clear the status bar and the home indicator.
-        Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+        // has to clear the status bar and the home indicator. Full screen, the app clears them itself.
+        Box(modifier = Modifier.fillMaxSize().then(if (fullscreen) Modifier else Modifier.windowInsetsPadding(WindowInsets.safeDrawing))) {
             content()
         }
     }

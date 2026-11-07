@@ -1,5 +1,5 @@
 public final class cx/m42/superizer/ui/components/AppScaffoldKt {
-	public static final fun AppScaffold (Ljava/lang/String;Ljava/util/List;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun AppScaffold (Ljava/lang/String;Ljava/util/List;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ZLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
 	public static final fun getLocalDrawerDismiss ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
@@ -28,7 +28,7 @@ public final class cx/m42/superizer/ui/components/ComposableSingletons$AppScaffo
 	public static final field INSTANCE Lcx/m42/superizer/ui/components/ComposableSingletons$AppScaffoldKt;
 	public fun <init> ()V
 	public final fun getLambda$-1013826200$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$-199165854$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1143458750$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$895078435$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 }
 

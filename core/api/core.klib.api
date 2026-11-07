@@ -2177,10 +2177,12 @@ final class cx.m42.superizer.activation/Activation { // cx.m42.superizer.activat
 }
 
 final class cx.m42.superizer.app/AppChrome { // cx.m42.superizer.app/AppChrome|null[0]
-    constructor <init>(kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...) // cx.m42.superizer.app/AppChrome.<init>|<init>(kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+    constructor <init>(kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // cx.m42.superizer.app/AppChrome.<init>|<init>(kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.Boolean){}[0]
 
     final val canGoBack // cx.m42.superizer.app/AppChrome.canGoBack|{}canGoBack[0]
         final fun <get-canGoBack>(): kotlin/Boolean // cx.m42.superizer.app/AppChrome.canGoBack.<get-canGoBack>|<get-canGoBack>(){}[0]
+    final val fullscreen // cx.m42.superizer.app/AppChrome.fullscreen|{}fullscreen[0]
+        final fun <get-fullscreen>(): kotlin/Boolean // cx.m42.superizer.app/AppChrome.fullscreen.<get-fullscreen>|<get-fullscreen>(){}[0]
     final val subtitle // cx.m42.superizer.app/AppChrome.subtitle|{}subtitle[0]
         final fun <get-subtitle>(): kotlin/String? // cx.m42.superizer.app/AppChrome.subtitle.<get-subtitle>|<get-subtitle>(){}[0]
     final val title // cx.m42.superizer.app/AppChrome.title|{}title[0]
@@ -2189,7 +2191,8 @@ final class cx.m42.superizer.app/AppChrome { // cx.m42.superizer.app/AppChrome|n
     final fun component1(): kotlin/String? // cx.m42.superizer.app/AppChrome.component1|component1(){}[0]
     final fun component2(): kotlin/String? // cx.m42.superizer.app/AppChrome.component2|component2(){}[0]
     final fun component3(): kotlin/Boolean // cx.m42.superizer.app/AppChrome.component3|component3(){}[0]
-    final fun copy(kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ...): cx.m42.superizer.app/AppChrome // cx.m42.superizer.app/AppChrome.copy|copy(kotlin.String?;kotlin.String?;kotlin.Boolean){}[0]
+    final fun component4(): kotlin/Boolean // cx.m42.superizer.app/AppChrome.component4|component4(){}[0]
+    final fun copy(kotlin/String? = ..., kotlin/String? = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): cx.m42.superizer.app/AppChrome // cx.m42.superizer.app/AppChrome.copy|copy(kotlin.String?;kotlin.String?;kotlin.Boolean;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.app/AppChrome.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // cx.m42.superizer.app/AppChrome.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // cx.m42.superizer.app/AppChrome.toString|toString(){}[0]

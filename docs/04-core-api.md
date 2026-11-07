@@ -63,6 +63,7 @@ public data class AppChrome(
     val title: String? = null,      // null → metadata.title
     val subtitle: String? = null,
     val canGoBack: Boolean = false, // true while the app has somewhere to go back to inside itself
+    val fullscreen: Boolean = false, // the whole screen is the app's: no bar, no drawer, no cap, no safe-area padding
 )
 ```
 

@@ -3,6 +3,14 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## Unreleased
+
+`AppChrome.fullscreen`: an app can have the whole screen, edge to edge — no top bar, no drawer or its
+swipe, no width cap, no padding for the safe area. `AppScaffold` takes the same flag. The lock curtain
+and the error screen keep the frame. No contract change: a host that predates it draws its ordinary
+frame around the app. Source-compatible, but `AppChrome` and `AppScaffold` changed signature, so a
+module built against an earlier version has to be rebuilt.
+
 ## 0.8.0
 
 Back walks an app's own screens. The arrow in the top bar closed the app from any depth, whatever

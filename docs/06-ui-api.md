@@ -128,6 +128,7 @@ data class MenuEntry(
     onHaptic: () -> Unit = {},
     footer: @Composable () -> Unit = {},
     header: (@Composable () -> Unit)? = null,   // in place of the drawer's "Menu" title
+    fullscreen: Boolean = false,                // the whole screen is the content's: no bar, no drawer, no safe-area padding
     content: @Composable () -> Unit,
 )
 

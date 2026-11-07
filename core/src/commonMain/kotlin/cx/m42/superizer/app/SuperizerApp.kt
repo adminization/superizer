@@ -138,6 +138,13 @@ public data class AppChrome(
     val subtitle: String? = null,
     /** True while the app has somewhere to go back to inside itself; the host then routes back to it. */
     val canGoBack: Boolean = false,
+    /**
+     * True: the whole screen is the app's, edge to edge — a feed of cards, a player, a camera. No top
+     * bar, no drawer, no width cap and no padding for the safe area, so the app draws its own way out
+     * (`navigation.close`) and clears the status bar itself. A host that predates this draws its
+     * ordinary frame around the app.
+     */
+    val fullscreen: Boolean = false,
 )
 
 /**
