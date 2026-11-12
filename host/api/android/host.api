@@ -80,6 +80,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public static final field $stable I
 	public final fun activateBanner (Lcx/m42/superizer/ActivateBanner;)V
 	public final fun activateEntry (Lcx/m42/superizer/ActivateEntry;)V
+	public final fun appFolders (Ljava/lang/String;)V
 	public final fun auth (Lcx/m42/superizer/runtime/AuthService;)V
 	public final fun backupCipher (Lcx/m42/superizer/backup/HostBackupCipher;)V
 	public final fun backupKeys (Lkotlin/jvm/functions/Function1;)V
@@ -263,6 +264,17 @@ public final class cx/m42/superizer/host/lock/LockStore {
 	public synthetic fun <init> (Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun load ()Lcx/m42/superizer/host/lock/LockSettings;
 	public final fun save (Lcx/m42/superizer/host/lock/LockSettings;)V
+}
+
+public final class cx/m42/superizer/host/net/KtorFileDownloader : cx/m42/superizer/runtime/FileDownloader {
+	public static final field $stable I
+	public static final field Companion Lcx/m42/superizer/host/net/KtorFileDownloader$Companion;
+	public static final field TIMEOUT_MS J
+	public fun <init> (Lio/ktor/client/HttpClient;)V
+	public fun download (Ljava/lang/String;JLjava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/host/net/KtorFileDownloader$Companion {
 }
 
 public final class cx/m42/superizer/host/net/KtorNetworkService : cx/m42/superizer/runtime/NetworkService {

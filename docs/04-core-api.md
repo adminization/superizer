@@ -377,6 +377,37 @@ No credentials are injected — read `auth.session` and set the header yourself.
 no retries, non-2xx is a value and not a throw. Only a transport failure throws, as
 `NetworkException`.
 
+### Optional services for files (0.8.2)
+
+Reached with `runtime.service(Key)`; null where the host has none, so an app draws the button only when it answers.
+
+```kotlin
+public interface AppFolder {                        // ServiceKey("app-folder")
+    public val location: String                     // a path; on iOS "<host>/<app id>", as Files shows it
+    public suspend fun list(): List<FolderFile>     // what is there, whoever put it there; hidden files left out
+    public suspend fun read(name: String): ByteArray?
+    public suspend fun write(name: String, bytes: ByteArray)   // whole or not at all
+    public suspend fun delete(name: String): Boolean
+    public companion object { public fun checkName(name: String) }   // no / \ :, nothing hidden, ≤ 255
+}
+public data class FolderFile(val name: String, val size: Long, val modified: Long)
+
+public interface FileDownloader {                   // ServiceKey("file-downloader")
+    public suspend fun download(url: String, maxBytes: Long, headers: Map<String, String> = emptyMap()): ByteArray
+}
+public class DownloadTooLarge(public val maxBytes: Long) : Exception
+
+public fun interface QrScanner {                    // ServiceKey("qr-scanner")
+    public suspend fun scan(): String?              // the code's text, or null when the camera was closed
+}
+```
+
+`AppFolder` is a folder the person sees: Files on iOS, a file manager on desktop. What it outlives is the platform's
+rule — a reinstall on desktop, offloading and a restored backup on iOS; deleting the app deletes it on iOS and
+Android. `FileDownloader` keeps the network's rules (no credentials added, non-2xx is `NetworkException` with the
+status) and adds a limit the app sets, checked against the declared length and against the bytes as they come.
+`testing` has `FakeAppFolder`, `FakeDownloader` and `FakeQrScanner`.
+
 ### `Logger`, `AnalyticsService`
 
 ```kotlin

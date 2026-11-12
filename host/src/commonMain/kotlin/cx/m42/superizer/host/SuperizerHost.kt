@@ -32,8 +32,11 @@ import cx.m42.superizer.event.SuperizerEvent
 import cx.m42.superizer.host.activation.ActivationService
 import cx.m42.superizer.host.activation.LocalPromoCodes
 import cx.m42.superizer.host.activation.PromoCodeResolver
+import cx.m42.superizer.host.files.HostAppFolder
+import cx.m42.superizer.host.files.platformFileIo
 import cx.m42.superizer.host.lock.AppLockController
 import cx.m42.superizer.host.lock.LockStore
+import cx.m42.superizer.host.net.KtorFileDownloader
 import cx.m42.superizer.host.net.KtorNetworkService
 import cx.m42.superizer.host.platform.PlatformLifecycle
 import cx.m42.superizer.host.platform.PlatformScreen
@@ -73,15 +76,18 @@ import cx.m42.superizer.registry.AppHandler
 import cx.m42.superizer.registry.AppRegistry
 import cx.m42.superizer.registry.AppSession
 import cx.m42.superizer.registry.listed
+import cx.m42.superizer.runtime.AppFolder
 import cx.m42.superizer.runtime.AppResult
 import cx.m42.superizer.runtime.AuthService
 import cx.m42.superizer.runtime.Clock
+import cx.m42.superizer.runtime.FileDownloader
 import cx.m42.superizer.runtime.HapticsService
 import cx.m42.superizer.runtime.HostInfo
 import cx.m42.superizer.runtime.Logger
 import cx.m42.superizer.runtime.NavigationError
 import cx.m42.superizer.runtime.NavigationService
 import cx.m42.superizer.runtime.NetworkService
+import cx.m42.superizer.runtime.QrScanner
 import cx.m42.superizer.runtime.ServiceKey
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
@@ -158,6 +164,8 @@ public class SuperizerBuilder internal constructor() {
     internal var contexts: ContextPort = ContextPort.Single
     internal val codeScreens: LinkedHashMap<String, HostScreen> = LinkedHashMap()
     internal var scanner: (suspend () -> String?)? = null
+    internal var folderRoot: String? = null
+    internal var foldersOff: Boolean = false
     internal var idleLimitMs: Long = DEFAULT_IDLE_LIMIT_MS
     internal var pushServer: String? = null
     internal var deviceApi: DeviceApi? = null
@@ -282,6 +290,16 @@ public class SuperizerBuilder internal constructor() {
     }
 
     /**
+     * Where the apps' folders go (`AppFolder`, 0.8.2): `<root>/<app id>`. Unset, the platform decides —
+     * `<documents>/<host name>` on desktop, the host's Documents on iOS, its external files dir on Android, none on
+     * the web. A test points it at a temp dir; null offers no folder at all.
+     */
+    public fun appFolders(root: String?) {
+        folderRoot = root
+        foldersOff = root == null
+    }
+
+    /**
      * Was how long a secret app (idea/09) could sit in the background and still be there on return.
      * Now any return to an open secret app is through the lock, and with no lock on the device the
      * app is closed as the host leaves (Unitool secret-return, D620–D623): there is nothing to set.
@@ -402,6 +420,13 @@ internal class SuperizerHost(
     private val authenticator: DeviceAuthenticator =
         builder.authenticator ?: platformDeviceAuthenticator(declared.debug, hostLogger)
 
+    /** The host's HTTP client; none when the builder substituted the whole network, as a test does. */
+    private val client: HttpClient? = if (builder.network == null) {
+        builder.httpClient ?: KtorNetworkService.defaultClient()
+    } else {
+        null
+    }
+
     /**
      * Confirmation for apps (D133), offered wherever the platform can ask at all. A device with no
      * screen lock *can*, once somebody sets one, so it gets the service too; desktop and the web
@@ -414,6 +439,17 @@ internal class SuperizerHost(
         declaredServices + (UserPresence.Key to object : UserPresence {
             override suspend fun confirm(reason: String): Boolean = lockController.presence.confirm(reason)
         })
+    } + hostServices(builder)
+
+    /**
+     * What the host has anyway and offers apps too (0.8.2), unless the builder declared its own: the camera behind
+     * Activate as [QrScanner], and files over [client] as [FileDownloader].
+     */
+    private fun hostServices(builder: SuperizerBuilder): Map<ServiceKey<*>, Any> = buildMap {
+        val scan = builder.scanner
+        if (scan != null && QrScanner.Key !in builder.services) put(QrScanner.Key, QrScanner { scan() })
+        val http = client
+        if (http != null && FileDownloader.Key !in builder.services) put(FileDownloader.Key, KtorFileDownloader(http))
     }
 
     /**
@@ -423,7 +459,16 @@ internal class SuperizerHost(
      */
     private val boundServices: Map<ServiceKey<*>, (AppId) -> Any> =
         mapOf<ServiceKey<*>, (AppId) -> Any>(SecretHold.Key to { id: AppId -> lockController.holdFor(id) }) +
-            builder.boundServices
+            folders(builder) + builder.boundServices
+
+    /** Each app's own [AppFolder] (0.8.2), where the platform has files and the builder did not turn them off. */
+    private fun folders(builder: SuperizerBuilder): Map<ServiceKey<*>, (AppId) -> Any> {
+        val io = platformFileIo() ?: return emptyMap()
+        if (builder.foldersOff || AppFolder.Key in builder.services) return emptyMap()
+        val root = builder.folderRoot
+        val name = declared.name
+        return mapOf(AppFolder.Key to { id: AppId -> HostAppFolder(id, name, root, io) })
+    }
 
     override val hostInfo: HostInfo = declared.copy(services = services.keys + boundServices.keys)
 
@@ -488,11 +533,6 @@ internal class SuperizerHost(
     override val settings: HostSettingsPort = localeService
     override val haptics: HapticsService = PlatformHaptics(localeService.haptics)
 
-    private val client: HttpClient? = if (builder.network == null) {
-        builder.httpClient ?: KtorNetworkService.defaultClient()
-    } else {
-        null
-    }
     private val network: NetworkService = builder.network ?: KtorNetworkService(client!!)
 
     private val topics = TopicStore(json)

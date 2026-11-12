@@ -3,6 +3,25 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.8.2
+
+Files for apps: a folder of each app's own that the person sees, files over HTTP as bytes, and the camera behind
+Activate. Three optional services (D19), each offered by the builder unless the host registered its own. No contract
+change and only additions to the ABI: an app asks with `runtime.service(Key)` and draws nothing where the answer is
+null, so it runs on an older host as before. The English app's reader (app-learn `apps/books`) needs them to download
+books.
+
+- `AppFolder` (`app-folder`) and `FolderFile`: `<root>/<app id>`, flat, created on the first write, written whole. On
+  desktop `<documents>/<host name>` (`XDG_DOCUMENTS_DIR` on Linux), on iOS the host's Documents, on Android its external
+  files dir; none on the web. `SuperizerBuilder.appFolders(root)` moves them, `appFolders(null)` turns them off.
+  On iOS the person reaches the folder in Files only when the host's `Info.plist` sets `UIFileSharingEnabled` and
+  `LSSupportsOpeningDocumentsInPlace` (05).
+- `FileDownloader` (`file-downloader`) and `DownloadTooLarge`: a GET for bytes with a limit the app names, two minutes
+  for the whole of it. `host` has `KtorFileDownloader`, registered on the host's own client; a host that substitutes
+  `network(…)` gets none, as before it reached nothing.
+- `QrScanner` (`qr-scanner`): what `qrScanner { … }` set for Activate, now offered to apps too.
+- `testing`: `FakeAppFolder`, `FakeDownloader`, `FakeQrScanner`.
+
 ## 0.8.1
 
 `AppChrome.fullscreen`: an app can have the whole screen, edge to edge — no top bar, no drawer or its

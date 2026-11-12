@@ -44,8 +44,29 @@ event ring buffer.
 | `notifier(value: Notifier)` | none | draws a notification for a non-silent data message: `fun interface { fun show(title: String?, body: String?, link: String) }` |
 | `lifecycle(value: StateFlow<HostLifecycle>)` | `PlatformLifecycle.state` | drive foreground/background by hand in a test |
 | `contexts(port: ContextPort)` | `ContextPort.Single` | what the host is pointed at — servers, accounts — and the switcher at the top of the drawer. See below. |
+| `qrScanner(scan: suspend () -> String?)` | none | the camera behind Activate's scan button. Since 0.8.2 apps get it too, as `QrScanner`. |
+| `appFolders(root: String?)` | the platform's | where each app's `AppFolder` goes: `<root>/<app id>`. Unset: `<documents>/<host name>` on desktop, the host's Documents on iOS, its external files dir on Android, none on the web. `null` offers no folders. See below. |
 
 A complete example is in [Getting started §3.4](01-getting-started.md#34-the-host-itself--commonmainmyhostkt).
+
+### What a host offers apps without being asked (0.8.2)
+
+Three optional services come with the builder, each unless the host registered its own under the same key:
+
+| Service | When | What it is |
+|---|---|---|
+| `AppFolder` | wherever the platform has files and `appFolders(null)` was not called | a folder per app, `<root>/<app id>`, that the person sees too |
+| `FileDownloader` | when the host has its own HTTP client, i.e. `network(…)` was not substituted | `KtorFileDownloader` on that client: bytes, a size limit, two minutes |
+| `QrScanner` | when `qrScanner { … }` was set | the same camera as Activate |
+
+On iOS the folder shows in Files › On My iPhone › the host only when the host's `Info.plist` says so:
+
+```xml
+<key>UIFileSharingEnabled</key><true/>
+<key>LSSupportsOpeningDocumentsInPlace</key><true/>
+```
+
+Without the two keys the folder still works — the app reads and writes it — but the person cannot reach it.
 
 ```kotlin
 public typealias HostSession = AppSession   // re-exported, so a host file needs one import fewer
