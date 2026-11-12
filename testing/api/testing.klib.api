@@ -55,6 +55,25 @@ final class cx.m42.superizer.testing/FakeAppDiagnostics : cx.m42.superizer.diagn
         final fun <get-findings>(): kotlinx.coroutines.flow/MutableStateFlow<kotlin.collections/List<cx.m42.superizer.diagnostics/Finding>> // cx.m42.superizer.testing/FakeAppDiagnostics.findings.<get-findings>|<get-findings>(){}[0]
 }
 
+final class cx.m42.superizer.testing/FakeAppFolder : cx.m42.superizer.runtime/AppFolder { // cx.m42.superizer.testing/FakeAppFolder|null[0]
+    constructor <init>(kotlin/String = ..., kotlin/Function0<kotlin/Long> = ...) // cx.m42.superizer.testing/FakeAppFolder.<init>|<init>(kotlin.String;kotlin.Function0<kotlin.Long>){}[0]
+
+    final val files // cx.m42.superizer.testing/FakeAppFolder.files|{}files[0]
+        final fun <get-files>(): kotlin.collections/HashMap<kotlin/String, kotlin/ByteArray> // cx.m42.superizer.testing/FakeAppFolder.files.<get-files>|<get-files>(){}[0]
+    final val location // cx.m42.superizer.testing/FakeAppFolder.location|{}location[0]
+        final fun <get-location>(): kotlin/String // cx.m42.superizer.testing/FakeAppFolder.location.<get-location>|<get-location>(){}[0]
+
+    final var failWrites // cx.m42.superizer.testing/FakeAppFolder.failWrites|{}failWrites[0]
+        final fun <get-failWrites>(): kotlin/Boolean // cx.m42.superizer.testing/FakeAppFolder.failWrites.<get-failWrites>|<get-failWrites>(){}[0]
+        final fun <set-failWrites>(kotlin/Boolean) // cx.m42.superizer.testing/FakeAppFolder.failWrites.<set-failWrites>|<set-failWrites>(kotlin.Boolean){}[0]
+
+    final fun put(kotlin/String, kotlin/ByteArray, kotlin/Long = ...) // cx.m42.superizer.testing/FakeAppFolder.put|put(kotlin.String;kotlin.ByteArray;kotlin.Long){}[0]
+    final suspend fun delete(kotlin/String): kotlin/Boolean // cx.m42.superizer.testing/FakeAppFolder.delete|delete(kotlin.String){}[0]
+    final suspend fun list(): kotlin.collections/List<cx.m42.superizer.runtime/FolderFile> // cx.m42.superizer.testing/FakeAppFolder.list|list(){}[0]
+    final suspend fun read(kotlin/String): kotlin/ByteArray? // cx.m42.superizer.testing/FakeAppFolder.read|read(kotlin.String){}[0]
+    final suspend fun write(kotlin/String, kotlin/ByteArray) // cx.m42.superizer.testing/FakeAppFolder.write|write(kotlin.String;kotlin.ByteArray){}[0]
+}
+
 final class cx.m42.superizer.testing/FakeAppRuntime : cx.m42.superizer.runtime/InstanceRuntime { // cx.m42.superizer.testing/FakeAppRuntime|null[0]
     constructor <init>(cx.m42.superizer.app/AppId = ..., kotlinx.coroutines/CoroutineScope, kotlin/String = ..., kotlin/Boolean = ..., kotlin.collections/Set<cx.m42.superizer.runtime/ServiceKey<*>> = ...) // cx.m42.superizer.testing/FakeAppRuntime.<init>|<init>(cx.m42.superizer.app.AppId;kotlinx.coroutines.CoroutineScope;kotlin.String;kotlin.Boolean;kotlin.collections.Set<cx.m42.superizer.runtime.ServiceKey<*>>){}[0]
 
@@ -149,6 +168,17 @@ final class cx.m42.superizer.testing/FakeDeviceAuthenticator : cx.m42.superizer.
     final suspend fun authenticate(kotlin/String, kotlin/String?, cx.m42.superizer.lock/AuthStrength): cx.m42.superizer.lock/AuthOutcome // cx.m42.superizer.testing/FakeDeviceAuthenticator.authenticate|authenticate(kotlin.String;kotlin.String?;cx.m42.superizer.lock.AuthStrength){}[0]
 }
 
+final class cx.m42.superizer.testing/FakeDownloader : cx.m42.superizer.runtime/FileDownloader { // cx.m42.superizer.testing/FakeDownloader|null[0]
+    constructor <init>() // cx.m42.superizer.testing/FakeDownloader.<init>|<init>(){}[0]
+
+    final val calls // cx.m42.superizer.testing/FakeDownloader.calls|{}calls[0]
+        final fun <get-calls>(): kotlin.collections/MutableList<kotlin/Pair<kotlin/String, kotlin/Long>> // cx.m42.superizer.testing/FakeDownloader.calls.<get-calls>|<get-calls>(){}[0]
+
+    final fun fail(kotlin/String, kotlin/Int? = ...) // cx.m42.superizer.testing/FakeDownloader.fail|fail(kotlin.String;kotlin.Int?){}[0]
+    final fun respond(kotlin/String, kotlin/ByteArray) // cx.m42.superizer.testing/FakeDownloader.respond|respond(kotlin.String;kotlin.ByteArray){}[0]
+    final suspend fun download(kotlin/String, kotlin/Long, kotlin.collections/Map<kotlin/String, kotlin/String>): kotlin/ByteArray // cx.m42.superizer.testing/FakeDownloader.download|download(kotlin.String;kotlin.Long;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+}
+
 final class cx.m42.superizer.testing/FakeFilePicker : cx.m42.superizer.runtime/FilePicker { // cx.m42.superizer.testing/FakeFilePicker|null[0]
     constructor <init>(cx.m42.superizer.runtime/PickedFile? = ...) // cx.m42.superizer.testing/FakeFilePicker.<init>|<init>(cx.m42.superizer.runtime.PickedFile?){}[0]
 
@@ -213,6 +243,19 @@ final class cx.m42.superizer.testing/FakePush : cx.m42.superizer.runtime/PushSer
     final suspend fun requestPermission(): kotlin/Boolean // cx.m42.superizer.testing/FakePush.requestPermission|requestPermission(){}[0]
     final suspend fun subscribe(kotlin/String) // cx.m42.superizer.testing/FakePush.subscribe|subscribe(kotlin.String){}[0]
     final suspend fun unsubscribe(kotlin/String) // cx.m42.superizer.testing/FakePush.unsubscribe|unsubscribe(kotlin.String){}[0]
+}
+
+final class cx.m42.superizer.testing/FakeQrScanner : cx.m42.superizer.runtime/QrScanner { // cx.m42.superizer.testing/FakeQrScanner|null[0]
+    constructor <init>(kotlin/String? = ...) // cx.m42.superizer.testing/FakeQrScanner.<init>|<init>(kotlin.String?){}[0]
+
+    final var next // cx.m42.superizer.testing/FakeQrScanner.next|{}next[0]
+        final fun <get-next>(): kotlin/String? // cx.m42.superizer.testing/FakeQrScanner.next.<get-next>|<get-next>(){}[0]
+        final fun <set-next>(kotlin/String?) // cx.m42.superizer.testing/FakeQrScanner.next.<set-next>|<set-next>(kotlin.String?){}[0]
+    final var scans // cx.m42.superizer.testing/FakeQrScanner.scans|{}scans[0]
+        final fun <get-scans>(): kotlin/Int // cx.m42.superizer.testing/FakeQrScanner.scans.<get-scans>|<get-scans>(){}[0]
+        final fun <set-scans>(kotlin/Int) // cx.m42.superizer.testing/FakeQrScanner.scans.<set-scans>|<set-scans>(kotlin.Int){}[0]
+
+    final suspend fun scan(): kotlin/String? // cx.m42.superizer.testing/FakeQrScanner.scan|scan(){}[0]
 }
 
 final class cx.m42.superizer.testing/FakeSecretVault : cx.m42.superizer.secrets/SecretVault { // cx.m42.superizer.testing/FakeSecretVault|null[0]
@@ -419,16 +462,19 @@ final object cx.m42.superizer.testing/LeakScanner { // cx.m42.superizer.testing/
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop|#static{}cx_m42_superizer_testing_AppTestScope$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_Canary$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_Canary$stableprop|#static{}cx_m42_superizer_testing_Canary$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppDiagnostics$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppDiagnostics$stableprop|#static{}cx_m42_superizer_testing_FakeAppDiagnostics$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppFolder$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppFolder$stableprop|#static{}cx_m42_superizer_testing_FakeAppFolder$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop|#static{}cx_m42_superizer_testing_FakeAppRuntime$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop|#static{}cx_m42_superizer_testing_FakeApps$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop|#static{}cx_m42_superizer_testing_FakeAuth$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop|#static{}cx_m42_superizer_testing_FakeClock$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop|#static{}cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDownloader$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDownloader$stableprop|#static{}cx_m42_superizer_testing_FakeDownloader$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeFilePicker$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeFilePicker$stableprop|#static{}cx_m42_superizer_testing_FakeFilePicker$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop|#static{}cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop|#static{}cx_m42_superizer_testing_FakeLocale$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop|#static{}cx_m42_superizer_testing_FakeNetwork$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop|#static{}cx_m42_superizer_testing_FakePush$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop|#static{}cx_m42_superizer_testing_FakeQrScanner$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop|#static{}cx_m42_superizer_testing_FakeSecretVault$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop|#static{}cx_m42_superizer_testing_FakeSecrets$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop|#static{}cx_m42_superizer_testing_FakeSshKeyring$stableprop[0]
@@ -448,16 +494,19 @@ final fun cx.m42.superizer.testing/appSummary(kotlin/String, cx.m42.superizer.ap
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_AppTestScope$stableprop_getter|cx_m42_superizer_testing_AppTestScope$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_Canary$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_Canary$stableprop_getter|cx_m42_superizer_testing_Canary$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppDiagnostics$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppDiagnostics$stableprop_getter|cx_m42_superizer_testing_FakeAppDiagnostics$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppFolder$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppFolder$stableprop_getter|cx_m42_superizer_testing_FakeAppFolder$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAppRuntime$stableprop_getter|cx_m42_superizer_testing_FakeAppRuntime$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeApps$stableprop_getter|cx_m42_superizer_testing_FakeApps$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeAuth$stableprop_getter|cx_m42_superizer_testing_FakeAuth$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeClock$stableprop_getter|cx_m42_superizer_testing_FakeClock$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop_getter|cx_m42_superizer_testing_FakeDeviceAuthenticator$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDownloader$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeDownloader$stableprop_getter|cx_m42_superizer_testing_FakeDownloader$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeFilePicker$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeFilePicker$stableprop_getter|cx_m42_superizer_testing_FakeFilePicker$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter|cx_m42_superizer_testing_FakeHostRuntimeFactory$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stableprop_getter|cx_m42_superizer_testing_FakeLocale$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter|cx_m42_superizer_testing_FakeNetwork$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter|cx_m42_superizer_testing_FakePush$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop_getter|cx_m42_superizer_testing_FakeQrScanner$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop_getter|cx_m42_superizer_testing_FakeSecretVault$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop_getter|cx_m42_superizer_testing_FakeSecrets$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop_getter|cx_m42_superizer_testing_FakeSshKeyring$stableprop_getter(){}[0]

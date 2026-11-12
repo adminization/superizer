@@ -58,6 +58,23 @@ public final class cx/m42/superizer/testing/FakeAppDiagnostics : cx/m42/superize
 	public synthetic fun getFindings ()Lkotlinx/coroutines/flow/StateFlow;
 }
 
+public final class cx/m42/superizer/testing/FakeAppFolder : cx/m42/superizer/runtime/AppFolder {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun delete (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getFailWrites ()Z
+	public final fun getFiles ()Ljava/util/LinkedHashMap;
+	public fun getLocation ()Ljava/lang/String;
+	public fun list (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun put (Ljava/lang/String;[BJ)V
+	public static synthetic fun put$default (Lcx/m42/superizer/testing/FakeAppFolder;Ljava/lang/String;[BJILjava/lang/Object;)V
+	public fun read (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setFailWrites (Z)V
+	public fun write (Ljava/lang/String;[BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class cx/m42/superizer/testing/FakeAppRuntime : cx/m42/superizer/runtime/InstanceRuntime {
 	public static final field $stable I
 	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineScope;Ljava/lang/String;ZLjava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -146,6 +163,16 @@ public final class cx/m42/superizer/testing/FakeDeviceAuthenticator : cx/m42/sup
 	public final fun setAvailability (Lcx/m42/superizer/lock/AuthAvailability;)V
 }
 
+public final class cx/m42/superizer/testing/FakeDownloader : cx/m42/superizer/runtime/FileDownloader {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun download (Ljava/lang/String;JLjava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun fail (Ljava/lang/String;Ljava/lang/Integer;)V
+	public static synthetic fun fail$default (Lcx/m42/superizer/testing/FakeDownloader;Ljava/lang/String;Ljava/lang/Integer;ILjava/lang/Object;)V
+	public final fun getCalls ()Ljava/util/List;
+	public final fun respond (Ljava/lang/String;[B)V
+}
+
 public final class cx/m42/superizer/testing/FakeFilePicker : cx/m42/superizer/runtime/FilePicker {
 	public static final field $stable I
 	public fun <init> ()V
@@ -208,6 +235,18 @@ public final class cx/m42/superizer/testing/FakePush : cx/m42/superizer/runtime/
 	public final fun setPermissionGranted (Z)V
 	public fun subscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun unsubscribe (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/testing/FakeQrScanner : cx/m42/superizer/runtime/QrScanner {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getNext ()Ljava/lang/String;
+	public final fun getScans ()I
+	public fun scan (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setNext (Ljava/lang/String;)V
+	public final fun setScans (I)V
 }
 
 public final class cx/m42/superizer/testing/FakeSecretVault : cx/m42/superizer/secrets/SecretVault {
