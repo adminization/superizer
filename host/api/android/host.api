@@ -573,6 +573,12 @@ public final class cx/m42/superizer/host/push/TopicStore {
 	public final fun remove-HNJm7k8 (Ljava/lang/String;Ljava/lang/String;)V
 }
 
+public final class cx/m42/superizer/host/reminders/ReminderReceiver : android/content/BroadcastReceiver {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun onReceive (Landroid/content/Context;Landroid/content/Intent;)V
+}
+
 public final class cx/m42/superizer/host/secrets/HostSecrets : cx/m42/superizer/secrets/SecretsPort {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/superizer/host/secrets/HostSecrets$Companion;

@@ -2571,6 +2571,20 @@ public final class cx/m42/superizer/runtime/NetworkService$DefaultImpls {
 	public static synthetic fun post$default (Lcx/m42/superizer/runtime/NetworkService;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
+public final class cx/m42/superizer/runtime/PendingReminder {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()J
+	public final fun copy (Ljava/lang/String;J)Lcx/m42/superizer/runtime/PendingReminder;
+	public static synthetic fun copy$default (Lcx/m42/superizer/runtime/PendingReminder;Ljava/lang/String;JILjava/lang/Object;)Lcx/m42/superizer/runtime/PendingReminder;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAtEpochMillis ()J
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/runtime/PickedFile {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;[B)V
@@ -2622,6 +2636,19 @@ public abstract interface class cx/m42/superizer/runtime/QrScanner {
 }
 
 public final class cx/m42/superizer/runtime/QrScanner$Companion {
+	public final fun getKey ()Lcx/m42/superizer/runtime/ServiceKey;
+}
+
+public abstract interface class cx/m42/superizer/runtime/Reminders {
+	public static final field Companion Lcx/m42/superizer/runtime/Reminders$Companion;
+	public abstract fun cancel (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun enable (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun pending (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun permission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun schedule (Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class cx/m42/superizer/runtime/Reminders$Companion {
 	public final fun getKey ()Lcx/m42/superizer/runtime/ServiceKey;
 }
 

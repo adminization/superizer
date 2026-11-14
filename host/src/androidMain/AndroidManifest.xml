@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   The host library's own manifest. Everything here is merged into any app that depends on
-  `superizer:host`, which is why it holds exactly two things and not one more.
+  `superizer:host`, which is why each line here says what it is for.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -21,6 +21,12 @@
     -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!--
+      Local reminders (0.9.0): alarms are wiped by a reboot, so the receiver below re-arms them.
+      Nothing is sent anywhere; this only lets the host hear that the phone started.
+    -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application>
         <!--
           FCM's entry point. The system constructs it by name, so it is public and must not be
@@ -33,6 +39,16 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <!-- A reminder's alarm, and the boot or update that took every alarm with it. -->
+        <receiver
+            android:name="cx.m42.superizer.host.reminders.ReminderReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

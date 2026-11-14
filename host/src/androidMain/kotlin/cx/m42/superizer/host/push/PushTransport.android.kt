@@ -1,19 +1,12 @@
 package cx.m42.superizer.host.push
 
-import android.Manifest
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.provider.Settings
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import cx.m42.superizer.host.platform.AndroidHost
-import cx.m42.superizer.host.storage.SafePrefs
 import cx.m42.superizer.push.PushPermission
 import kotlin.coroutines.resume
-import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -52,85 +45,29 @@ public actual object PushTransport {
     public actual fun deliverMessage(data: Map<String, String>): Unit = NoopPushTransport.deliverMessage(data)
 
     /**
-     * Asks for POST_NOTIFICATIONS, and reports whether notifications can actually be shown.
-     *
-     * Three different questions hide behind one boolean, and they are answered in this order:
-     *
-     *  * **Already allowed** — true, without a dialog. `areNotificationsEnabled()` covers both the
-     *    runtime permission and the user having switched the app's notifications off in system
-     *    settings, which is a state no permission check would see.
-     *  * **Below API 33** — the permission does not exist, so a `false` here means the user turned
-     *    notifications off by hand. Prompting is impossible and would be wrong anyway.
-     *  * **API 33+, not yet granted** — the system dialog, which needs an Activity. The host
-     *    activity registers itself through [AndroidHost.init] and forwards the result to
-     *    [onPermissionResult]; without that forwarding this suspends until cancelled, which is why
-     *    a missing Activity returns false instead of hanging.
-     *
-     * Every `false` above means "notifications cannot be shown", not "the user said no". The two
-     * are worth distinguishing in a UI, and this signature cannot — a caller that needs to tell
-     * them apart should read the system setting itself rather than infer it from here.
+     * Asks for POST_NOTIFICATIONS ([NotificationPermission.request]), and fetches the token once
+     * notifications can be shown. Every `false` means "notifications cannot be shown", not "the
+     * user said no".
      */
     public actual suspend fun requestPermission(): Boolean {
-        val context = AndroidHost.appContext ?: return false
-        if (notificationsEnabled(context)) {
-            refreshToken()
-            return true
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return false
-        val activity = AndroidHost.currentActivity() ?: return false
-        // One dialog at a time. A second caller would overwrite `pending`, and the first would then
-        // suspend for the life of the process waiting for a result that is handed to somebody else
-        // — a hang with no error, in a function whose whole contract is to return a boolean.
-        if (pending != null) return false
-
-        // Remembered so [permission] can tell "never asked" from "refused for good": the system
-        // answers both with no rationale, and only one of them still has a dialog behind it.
-        SafePrefs.put(ASKED_KEY, "1")
-        val granted = suspendCancellableCoroutine { continuation ->
-            pending = continuation
-            continuation.invokeOnCancellation { pending = null }
-            activity.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
-        }
+        val granted = NotificationPermission.request()
         if (granted) refreshToken()
         return granted
     }
 
     /**
-     * Forwarded by the host activity from `onRequestPermissionsResult`.
-     *
-     * A plain static hand-off rather than `registerForActivityResult`, because this object is
-     * reached from a `FirebaseMessagingService` and from the router, neither of which has an
-     * activity or a composition — the same reason the seam is an object and not a class. Ignoring
-     * a request code that is not ours means the host can forward every result blindly.
+     * Forwarded by the host activity from `onRequestPermissionsResult`, for push and local
+     * reminders alike. Ignoring a request code that is not ours means the host can forward every
+     * result blindly.
      */
     public fun onPermissionResult(requestCode: Int, grantResults: IntArray) {
-        if (requestCode != REQUEST_CODE) return
-        val continuation = pending ?: return
-        pending = null
-        if (continuation.isActive) {
-            continuation.resume(grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED)
-        }
+        NotificationPermission.onResult(requestCode, grantResults)
     }
 
-    /**
-     * Read without asking. Three answers hide in the system's API and come out in this order:
-     *
-     *  * notifications enabled — [PushPermission.Granted];
-     *  * below API 33, or the permission granted but notifications switched off in Settings — only
-     *    Settings can help, [PushPermission.Blocked];
-     *  * API 33+ without the permission — the dialog is still there unless we asked before and the
-     *    system no longer offers a rationale, which is how Android says "denied twice, never again".
-     */
+    /** Read without asking: [NotificationPermission.state], or Unavailable with no Firebase. */
     public actual suspend fun permission(): PushPermission {
         if (!available) return PushPermission.Unavailable
-        val context = AndroidHost.appContext ?: return PushPermission.Unavailable
-        if (notificationsEnabled(context)) return PushPermission.Granted
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return PushPermission.Blocked
-        val permission = Manifest.permission.POST_NOTIFICATIONS
-        if (context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) return PushPermission.Blocked
-        val activity = AndroidHost.currentActivity()
-        val rationale = activity?.shouldShowRequestPermissionRationale(permission) == true
-        return if (!rationale && SafePrefs.get(ASKED_KEY) != null) PushPermission.Blocked else PushPermission.Off
+        return NotificationPermission.state()
     }
 
     /**
@@ -181,17 +118,7 @@ public actual object PushTransport {
         }
     }
 
-    private fun notificationsEnabled(context: Context): Boolean {
-        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-        return manager?.areNotificationsEnabled() == true
-    }
-
     private const val PLATFORM = "android"
-    private const val REQUEST_CODE = 0x5075 // 'P','u'
-    private const val ASKED_KEY = "host.push.asked"
-
-
-    private var pending: CancellableContinuation<Boolean>? = null
 
 }
 

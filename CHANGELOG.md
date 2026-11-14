@@ -3,6 +3,29 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.9.0
+
+Local reminders: a notification the phone shows by itself at a time the app names, with no server and no push token
+(Unitool's fasting app, `.ai-notes/fasting`). An optional service (D19), bound per app; no contract change, the ABI
+only grows.
+
+- `Reminders` (`reminders`), `PendingReminder`: `permission`, `enable`, `schedule(id, at, title, body)`, `cancel`,
+  `pending`. The same id replaces; ids are namespaced by app id. Nothing is kept while notifications are off.
+- iOS: `UNUserNotificationCenter` with a time-interval trigger; a tap reaches `deliverTap` like a push.
+- Android: `AlarmManager.setAndAllowWhileIdle` (no `SCHEDULE_EXACT_ALARM`, so minutes late in Doze), a list in the
+  host's own preferences, `ReminderReceiver` that draws them in a «Reminders» channel and re-arms them after
+  `BOOT_COMPLETED` / `MY_PACKAGE_REPLACED`. New in the library's manifest: `RECEIVE_BOOT_COMPLETED`. The icon is the
+  host's `cx.m42.superizer.notification_icon` meta-data, else its launcher icon.
+- The notification question is asked without push: on Android without fetching an FCM token, on iOS without
+  registering for remote notifications — so push-opt-in (D418) holds for an app that only sets reminders.
+  `PushTransport` asks through the same code, unchanged in behaviour.
+- `testing`: `FakeReminders`.
+
+Also first released here (16ce162, whose own publish stopped on the flaky
+`LockShellTest.leftAloneTheUnlockedAppIsClosedAndTheNextLookAsksAgain`): contexts in groups —
+`HostContext.parent`, `HostContext.status` (`ContextStatus`), `ContextPort.addScreens`, and the sheet opens scrolled
+to the context in force.
+
 ## 0.8.2
 
 Files for apps: a folder of each app's own that the person sees, files over HTTP as bytes, and the camera behind

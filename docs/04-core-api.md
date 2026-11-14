@@ -408,6 +408,24 @@ Android. `FileDownloader` keeps the network's rules (no credentials added, non-2
 status) and adds a limit the app sets, checked against the declared length and against the bytes as they come.
 `testing` has `FakeAppFolder`, `FakeDownloader` and `FakeQrScanner`.
 
+### `Reminders` (0.9.0)
+
+```kotlin
+public interface Reminders {                        // ServiceKey("reminders"), one per app
+    suspend fun permission(): PushPermission        // Granted, Off, Blocked
+    suspend fun enable(): PushPermission            // the system's question, or its settings
+    suspend fun schedule(id: String, atEpochMillis: Long, title: String, body: String): Boolean
+    suspend fun cancel(id: String)
+    suspend fun pending(): List<PendingReminder>    // soonest first
+}
+```
+
+A notification the phone shows by itself at a time: no server, no token, nothing leaves the device. iOS keeps it in
+`UNUserNotificationCenter`; Android arms `AlarmManager.setAndAllowWhileIdle` and re-arms after a reboot — not exact
+to the minute in Doze. Absent on desktop and the web. The same `id` replaces; `schedule` returns false and keeps
+nothing while notifications are not allowed. A tap opens the app, through the same door as a push tap. Asking
+registers nothing for push. `testing` has `FakeReminders` (`advanceTo`, `waiting`, `shown`).
+
 ### `Logger`, `AnalyticsService`
 
 ```kotlin

@@ -1,20 +1,12 @@
 package cx.m42.superizer.host.push
 
 import cx.m42.superizer.push.PushPermission
-import kotlin.coroutines.resume
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 import platform.UIKit.UIApplicationOpenSettingsURLString
 import platform.UIKit.registerForRemoteNotifications
-import platform.UserNotifications.UNAuthorizationOptionAlert
-import platform.UserNotifications.UNAuthorizationOptionBadge
-import platform.UserNotifications.UNAuthorizationOptionSound
-import platform.UserNotifications.UNAuthorizationStatusDenied
-import platform.UserNotifications.UNAuthorizationStatusNotDetermined
-import platform.UserNotifications.UNUserNotificationCenter
 import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
 
@@ -71,13 +63,7 @@ public actual object PushTransport {
      * stored decision without a dialog, which is the same contract Android's version keeps.
      */
     public actual suspend fun requestPermission(): Boolean {
-        val granted = suspendCancellableCoroutine { continuation ->
-            UNUserNotificationCenter.currentNotificationCenter().requestAuthorizationWithOptions(
-                UNAuthorizationOptionAlert or UNAuthorizationOptionBadge or UNAuthorizationOptionSound,
-            ) { granted, _ ->
-                if (continuation.isActive) continuation.resume(granted)
-            }
-        }
+        val granted = NotificationPermission.request()
         if (granted && available) {
             // UIKit is main-thread only, and the answer above arrives on a queue of its own.
             dispatch_async(dispatch_get_main_queue()) {
@@ -90,17 +76,7 @@ public actual object PushTransport {
     /** The stored answer, without a dialog: iOS asks once and remembers. */
     public actual suspend fun permission(): PushPermission {
         if (!available) return PushPermission.Unavailable
-        val status = suspendCancellableCoroutine { continuation ->
-            UNUserNotificationCenter.currentNotificationCenter().getNotificationSettingsWithCompletionHandler { settings ->
-                if (continuation.isActive) continuation.resume(settings?.authorizationStatus)
-            }
-        }
-        return when (status) {
-            UNAuthorizationStatusNotDetermined -> PushPermission.Off
-            UNAuthorizationStatusDenied -> PushPermission.Blocked
-            null -> PushPermission.Off
-            else -> PushPermission.Granted
-        }
+        return NotificationPermission.state()
     }
 
     /**

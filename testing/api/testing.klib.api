@@ -258,6 +258,53 @@ final class cx.m42.superizer.testing/FakeQrScanner : cx.m42.superizer.runtime/Qr
     final suspend fun scan(): kotlin/String? // cx.m42.superizer.testing/FakeQrScanner.scan|scan(){}[0]
 }
 
+final class cx.m42.superizer.testing/FakeReminders : cx.m42.superizer.runtime/Reminders { // cx.m42.superizer.testing/FakeReminders|null[0]
+    constructor <init>(cx.m42.superizer.push/PushPermission = ..., kotlin/Boolean = ..., kotlin/Long = ...) // cx.m42.superizer.testing/FakeReminders.<init>|<init>(cx.m42.superizer.push.PushPermission;kotlin.Boolean;kotlin.Long){}[0]
+
+    final val shown // cx.m42.superizer.testing/FakeReminders.shown|{}shown[0]
+        final fun <get-shown>(): kotlin.collections/MutableList<cx.m42.superizer.testing/FakeReminders.Reminder> // cx.m42.superizer.testing/FakeReminders.shown.<get-shown>|<get-shown>(){}[0]
+    final val waiting // cx.m42.superizer.testing/FakeReminders.waiting|{}waiting[0]
+        final fun <get-waiting>(): kotlin.collections/HashMap<kotlin/String, cx.m42.superizer.testing/FakeReminders.Reminder> // cx.m42.superizer.testing/FakeReminders.waiting.<get-waiting>|<get-waiting>(){}[0]
+
+    final var asked // cx.m42.superizer.testing/FakeReminders.asked|{}asked[0]
+        final fun <get-asked>(): kotlin/Int // cx.m42.superizer.testing/FakeReminders.asked.<get-asked>|<get-asked>(){}[0]
+    final var grantOnAsk // cx.m42.superizer.testing/FakeReminders.grantOnAsk|{}grantOnAsk[0]
+        final fun <get-grantOnAsk>(): kotlin/Boolean // cx.m42.superizer.testing/FakeReminders.grantOnAsk.<get-grantOnAsk>|<get-grantOnAsk>(){}[0]
+        final fun <set-grantOnAsk>(kotlin/Boolean) // cx.m42.superizer.testing/FakeReminders.grantOnAsk.<set-grantOnAsk>|<set-grantOnAsk>(kotlin.Boolean){}[0]
+    final var permission // cx.m42.superizer.testing/FakeReminders.permission|{}permission[0]
+        final fun <get-permission>(): cx.m42.superizer.push/PushPermission // cx.m42.superizer.testing/FakeReminders.permission.<get-permission>|<get-permission>(){}[0]
+        final fun <set-permission>(cx.m42.superizer.push/PushPermission) // cx.m42.superizer.testing/FakeReminders.permission.<set-permission>|<set-permission>(cx.m42.superizer.push.PushPermission){}[0]
+
+    final fun advanceTo(kotlin/Long) // cx.m42.superizer.testing/FakeReminders.advanceTo|advanceTo(kotlin.Long){}[0]
+    final suspend fun cancel(kotlin/String) // cx.m42.superizer.testing/FakeReminders.cancel|cancel(kotlin.String){}[0]
+    final suspend fun enable(): cx.m42.superizer.push/PushPermission // cx.m42.superizer.testing/FakeReminders.enable|enable(){}[0]
+    final suspend fun pending(): kotlin.collections/List<cx.m42.superizer.runtime/PendingReminder> // cx.m42.superizer.testing/FakeReminders.pending|pending(){}[0]
+    final suspend fun permission(): cx.m42.superizer.push/PushPermission // cx.m42.superizer.testing/FakeReminders.permission|permission(){}[0]
+    final suspend fun schedule(kotlin/String, kotlin/Long, kotlin/String, kotlin/String): kotlin/Boolean // cx.m42.superizer.testing/FakeReminders.schedule|schedule(kotlin.String;kotlin.Long;kotlin.String;kotlin.String){}[0]
+
+    final class Reminder { // cx.m42.superizer.testing/FakeReminders.Reminder|null[0]
+        constructor <init>(kotlin/String, kotlin/Long, kotlin/String, kotlin/String) // cx.m42.superizer.testing/FakeReminders.Reminder.<init>|<init>(kotlin.String;kotlin.Long;kotlin.String;kotlin.String){}[0]
+
+        final val atEpochMillis // cx.m42.superizer.testing/FakeReminders.Reminder.atEpochMillis|{}atEpochMillis[0]
+            final fun <get-atEpochMillis>(): kotlin/Long // cx.m42.superizer.testing/FakeReminders.Reminder.atEpochMillis.<get-atEpochMillis>|<get-atEpochMillis>(){}[0]
+        final val body // cx.m42.superizer.testing/FakeReminders.Reminder.body|{}body[0]
+            final fun <get-body>(): kotlin/String // cx.m42.superizer.testing/FakeReminders.Reminder.body.<get-body>|<get-body>(){}[0]
+        final val id // cx.m42.superizer.testing/FakeReminders.Reminder.id|{}id[0]
+            final fun <get-id>(): kotlin/String // cx.m42.superizer.testing/FakeReminders.Reminder.id.<get-id>|<get-id>(){}[0]
+        final val title // cx.m42.superizer.testing/FakeReminders.Reminder.title|{}title[0]
+            final fun <get-title>(): kotlin/String // cx.m42.superizer.testing/FakeReminders.Reminder.title.<get-title>|<get-title>(){}[0]
+
+        final fun component1(): kotlin/String // cx.m42.superizer.testing/FakeReminders.Reminder.component1|component1(){}[0]
+        final fun component2(): kotlin/Long // cx.m42.superizer.testing/FakeReminders.Reminder.component2|component2(){}[0]
+        final fun component3(): kotlin/String // cx.m42.superizer.testing/FakeReminders.Reminder.component3|component3(){}[0]
+        final fun component4(): kotlin/String // cx.m42.superizer.testing/FakeReminders.Reminder.component4|component4(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/Long = ..., kotlin/String = ..., kotlin/String = ...): cx.m42.superizer.testing/FakeReminders.Reminder // cx.m42.superizer.testing/FakeReminders.Reminder.copy|copy(kotlin.String;kotlin.Long;kotlin.String;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.testing/FakeReminders.Reminder.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.testing/FakeReminders.Reminder.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.testing/FakeReminders.Reminder.toString|toString(){}[0]
+    }
+}
+
 final class cx.m42.superizer.testing/FakeSecretVault : cx.m42.superizer.secrets/SecretVault { // cx.m42.superizer.testing/FakeSecretVault|null[0]
     constructor <init>(kotlin/String = ...) // cx.m42.superizer.testing/FakeSecretVault.<init>|<init>(kotlin.String){}[0]
 
@@ -475,6 +522,8 @@ final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stablepro
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop|#static{}cx_m42_superizer_testing_FakeNetwork$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop|#static{}cx_m42_superizer_testing_FakePush$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop|#static{}cx_m42_superizer_testing_FakeQrScanner$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders$stableprop|#static{}cx_m42_superizer_testing_FakeReminders$stableprop[0]
+final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders_Reminder$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders_Reminder$stableprop|#static{}cx_m42_superizer_testing_FakeReminders_Reminder$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop|#static{}cx_m42_superizer_testing_FakeSecretVault$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop|#static{}cx_m42_superizer_testing_FakeSecrets$stableprop[0]
 final val cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop|#static{}cx_m42_superizer_testing_FakeSshKeyring$stableprop[0]
@@ -507,6 +556,8 @@ final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeLocale$stablepro
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeNetwork$stableprop_getter|cx_m42_superizer_testing_FakeNetwork$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakePush$stableprop_getter|cx_m42_superizer_testing_FakePush$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeQrScanner$stableprop_getter|cx_m42_superizer_testing_FakeQrScanner$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders$stableprop_getter|cx_m42_superizer_testing_FakeReminders$stableprop_getter(){}[0]
+final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders_Reminder$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeReminders_Reminder$stableprop_getter|cx_m42_superizer_testing_FakeReminders_Reminder$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecretVault$stableprop_getter|cx_m42_superizer_testing_FakeSecretVault$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSecrets$stableprop_getter|cx_m42_superizer_testing_FakeSecrets$stableprop_getter(){}[0]
 final fun cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop_getter(): kotlin/Int // cx.m42.superizer.testing/cx_m42_superizer_testing_FakeSshKeyring$stableprop_getter|cx_m42_superizer_testing_FakeSshKeyring$stableprop_getter(){}[0]

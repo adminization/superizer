@@ -621,6 +621,19 @@ abstract interface cx.m42.superizer.runtime/PushService { // cx.m42.superizer.ru
     abstract suspend fun unsubscribe(kotlin/String) // cx.m42.superizer.runtime/PushService.unsubscribe|unsubscribe(kotlin.String){}[0]
 }
 
+abstract interface cx.m42.superizer.runtime/Reminders { // cx.m42.superizer.runtime/Reminders|null[0]
+    abstract suspend fun cancel(kotlin/String) // cx.m42.superizer.runtime/Reminders.cancel|cancel(kotlin.String){}[0]
+    abstract suspend fun enable(): cx.m42.superizer.push/PushPermission // cx.m42.superizer.runtime/Reminders.enable|enable(){}[0]
+    abstract suspend fun pending(): kotlin.collections/List<cx.m42.superizer.runtime/PendingReminder> // cx.m42.superizer.runtime/Reminders.pending|pending(){}[0]
+    abstract suspend fun permission(): cx.m42.superizer.push/PushPermission // cx.m42.superizer.runtime/Reminders.permission|permission(){}[0]
+    abstract suspend fun schedule(kotlin/String, kotlin/Long, kotlin/String, kotlin/String): kotlin/Boolean // cx.m42.superizer.runtime/Reminders.schedule|schedule(kotlin.String;kotlin.Long;kotlin.String;kotlin.String){}[0]
+
+    final object Companion { // cx.m42.superizer.runtime/Reminders.Companion|null[0]
+        final val Key // cx.m42.superizer.runtime/Reminders.Companion.Key|{}Key[0]
+            final fun <get-Key>(): cx.m42.superizer.runtime/ServiceKey<cx.m42.superizer.runtime/Reminders> // cx.m42.superizer.runtime/Reminders.Companion.Key.<get-Key>|<get-Key>(){}[0]
+    }
+}
+
 abstract interface cx.m42.superizer.runtime/StorageService { // cx.m42.superizer.runtime/StorageService|null[0]
     abstract suspend fun get(kotlin/String): kotlin/String? // cx.m42.superizer.runtime/StorageService.get|get(kotlin.String){}[0]
     abstract suspend fun keys(): kotlin.collections/Set<kotlin/String> // cx.m42.superizer.runtime/StorageService.keys|keys(){}[0]
@@ -3141,6 +3154,22 @@ final class cx.m42.superizer.runtime/NetworkResponse { // cx.m42.superizer.runti
     final fun toString(): kotlin/String // cx.m42.superizer.runtime/NetworkResponse.toString|toString(){}[0]
 }
 
+final class cx.m42.superizer.runtime/PendingReminder { // cx.m42.superizer.runtime/PendingReminder|null[0]
+    constructor <init>(kotlin/String, kotlin/Long) // cx.m42.superizer.runtime/PendingReminder.<init>|<init>(kotlin.String;kotlin.Long){}[0]
+
+    final val atEpochMillis // cx.m42.superizer.runtime/PendingReminder.atEpochMillis|{}atEpochMillis[0]
+        final fun <get-atEpochMillis>(): kotlin/Long // cx.m42.superizer.runtime/PendingReminder.atEpochMillis.<get-atEpochMillis>|<get-atEpochMillis>(){}[0]
+    final val id // cx.m42.superizer.runtime/PendingReminder.id|{}id[0]
+        final fun <get-id>(): kotlin/String // cx.m42.superizer.runtime/PendingReminder.id.<get-id>|<get-id>(){}[0]
+
+    final fun component1(): kotlin/String // cx.m42.superizer.runtime/PendingReminder.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // cx.m42.superizer.runtime/PendingReminder.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/Long = ...): cx.m42.superizer.runtime/PendingReminder // cx.m42.superizer.runtime/PendingReminder.copy|copy(kotlin.String;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.runtime/PendingReminder.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // cx.m42.superizer.runtime/PendingReminder.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // cx.m42.superizer.runtime/PendingReminder.toString|toString(){}[0]
+}
+
 final class cx.m42.superizer.runtime/PickedFile { // cx.m42.superizer.runtime/PickedFile|null[0]
     constructor <init>(kotlin/String, kotlin/ByteArray) // cx.m42.superizer.runtime/PickedFile.<init>|<init>(kotlin.String;kotlin.ByteArray){}[0]
 
@@ -3833,6 +3862,7 @@ final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Veto
 final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop|#static{}cx_m42_superizer_runtime_NetworkException$stableprop[0]
 final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop|#static{}cx_m42_superizer_runtime_NetworkRequest$stableprop[0]
 final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop|#static{}cx_m42_superizer_runtime_NetworkResponse$stableprop[0]
+final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_PendingReminder$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PendingReminder$stableprop|#static{}cx_m42_superizer_runtime_PendingReminder$stableprop[0]
 final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_PickedFile$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PickedFile$stableprop|#static{}cx_m42_superizer_runtime_PickedFile$stableprop[0]
 final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop|#static{}cx_m42_superizer_runtime_PushMessage$stableprop[0]
 final val cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop // cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop|#static{}cx_m42_superizer_runtime_ServiceKey$stableprop[0]
@@ -4027,6 +4057,7 @@ final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NavigationError_Veto
 final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkException$stableprop_getter|cx_m42_superizer_runtime_NetworkException$stableprop_getter(){}[0]
 final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkRequest$stableprop_getter|cx_m42_superizer_runtime_NetworkRequest$stableprop_getter(){}[0]
 final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_NetworkResponse$stableprop_getter|cx_m42_superizer_runtime_NetworkResponse$stableprop_getter(){}[0]
+final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_PendingReminder$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PendingReminder$stableprop_getter|cx_m42_superizer_runtime_PendingReminder$stableprop_getter(){}[0]
 final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_PickedFile$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PickedFile$stableprop_getter|cx_m42_superizer_runtime_PickedFile$stableprop_getter(){}[0]
 final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_PushMessage$stableprop_getter|cx_m42_superizer_runtime_PushMessage$stableprop_getter(){}[0]
 final fun cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop_getter(): kotlin/Int // cx.m42.superizer.runtime/cx_m42_superizer_runtime_ServiceKey$stableprop_getter|cx_m42_superizer_runtime_ServiceKey$stableprop_getter(){}[0]

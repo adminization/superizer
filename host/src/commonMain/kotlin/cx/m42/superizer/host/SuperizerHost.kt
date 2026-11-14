@@ -37,6 +37,8 @@ import cx.m42.superizer.host.files.platformFileIo
 import cx.m42.superizer.host.lock.AppLockController
 import cx.m42.superizer.host.lock.LockStore
 import cx.m42.superizer.host.net.KtorFileDownloader
+import cx.m42.superizer.host.reminders.HostReminders
+import cx.m42.superizer.host.reminders.platformReminders
 import cx.m42.superizer.host.net.KtorNetworkService
 import cx.m42.superizer.host.platform.PlatformLifecycle
 import cx.m42.superizer.host.platform.PlatformScreen
@@ -88,6 +90,7 @@ import cx.m42.superizer.runtime.NavigationError
 import cx.m42.superizer.runtime.NavigationService
 import cx.m42.superizer.runtime.NetworkService
 import cx.m42.superizer.runtime.QrScanner
+import cx.m42.superizer.runtime.Reminders
 import cx.m42.superizer.runtime.ServiceKey
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
@@ -459,7 +462,15 @@ internal class SuperizerHost(
      */
     private val boundServices: Map<ServiceKey<*>, (AppId) -> Any> =
         mapOf<ServiceKey<*>, (AppId) -> Any>(SecretHold.Key to { id: AppId -> lockController.holdFor(id) }) +
-            folders(builder) + builder.boundServices
+            folders(builder) + reminders(builder) + builder.boundServices
+
+    /** Each app's own [Reminders] (0.9.0), where the platform shows notifications by itself. */
+    private fun reminders(builder: SuperizerBuilder): Map<ServiceKey<*>, (AppId) -> Any> {
+        val platform = platformReminders() ?: return emptyMap()
+        if (Reminders.Key in builder.services) return emptyMap()
+        val scheme = builder.scheme
+        return mapOf(Reminders.Key to { id: AppId -> HostReminders(id, platform, scheme) })
+    }
 
     /** Each app's own [AppFolder] (0.8.2), where the platform has files and the builder did not turn them off. */
     private fun folders(builder: SuperizerBuilder): Map<ServiceKey<*>, (AppId) -> Any> {

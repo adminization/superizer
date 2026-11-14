@@ -68,6 +68,17 @@ On iOS the folder shows in Files › On My iPhone › the host only when the hos
 
 Without the two keys the folder still works — the app reads and writes it — but the person cannot reach it.
 
+Since 0.9.0 a fourth, `Reminders`, on Android and iOS unless the host registered its own. Nothing to set up on iOS
+beyond the app delegate a push host already has (the tap goes to `deliverTap`). On Android the library's manifest
+brings `RECEIVE_BOOT_COMPLETED` and `ReminderReceiver`; the host names the status-bar icon, or gets its launcher icon:
+
+```xml
+<meta-data android:name="cx.m42.superizer.notification_icon" android:resource="@drawable/ic_notification" />
+```
+
+A tap arrives at the launcher activity as push-shaped extras (`schemaVersion`, `appId`, `link`), which the activity
+already hands to `PushTransport.deliverTap`. Reminders have a channel of their own, «Reminders».
+
 ```kotlin
 public typealias HostSession = AppSession   // re-exported, so a host file needs one import fewer
 ```
