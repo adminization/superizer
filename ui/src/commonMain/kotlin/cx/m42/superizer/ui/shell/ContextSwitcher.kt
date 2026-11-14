@@ -48,6 +48,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
@@ -57,6 +58,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
 import cx.m42.superizer.ContextPort
+import cx.m42.superizer.ContextStatus
 import cx.m42.superizer.HostContext
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.theme.AppTheme
@@ -207,23 +209,36 @@ internal fun BoxScope.ContextSheet(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
             )
 
-            Column(modifier = Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState())) {
+            // A long list — a cloud account with twenty servers — scrolls inside the sheet, and opens on the one in force.
+            val scroll = rememberScrollState()
+            val ids = remember(contexts) { contexts.map { it.id } }
+            val parents = remember(contexts) { ids.toSet() }
+            val rowHeight = with(LocalDensity.current) { ITEM_HEIGHT.roundToPx() }
+            // Once, when the sheet opens — never while it is open: a list refreshed by the host (a cloud account re-read
+            // its servers) must not move the row under the person's finger.
+            LaunchedEffect(visible) {
+                val index = ids.indexOf(current?.id)
+                if (visible && index > 0) scroll.scrollTo((index - 1).coerceAtLeast(0) * rowHeight)
+            }
+            Column(modifier = Modifier.heightIn(max = 460.dp).testTag("context:list").verticalScroll(scroll)) {
                 contexts.forEach { context ->
                     ContextItem(
                         context = context,
                         selected = context.id == current?.id,
+                        nested = context.parent != null && context.parent in parents,
                         onClick = { onPick(context) },
                     )
                 }
             }
 
-            val add = port.addScreen
+            val adds = port.addScreens
             val manage = port.manageScreen
-            if (add != null || manage != null) {
+            if (adds.isNotEmpty() || manage != null) {
                 Divider(modifier = Modifier.padding(vertical = 8.dp))
             }
-            add?.let { screen ->
-                ActionRow(label = screen.title(langTag), tag = "context:add", onClick = { onOpen(screen) }) { tint ->
+            adds.forEachIndexed { index, screen ->
+                val tag = if (index == 0) "context:add" else "context:add-${screen.id}"
+                ActionRow(label = screen.title(langTag), tag = tag, onClick = { onOpen(screen) }) { tint ->
                     PlusIcon(tint)
                 }
             }
@@ -236,30 +251,46 @@ internal fun BoxScope.ContextSheet(
     }
 }
 
+/** The height of one row, for scrolling the sheet to the context in force. */
+private val ITEM_HEIGHT = 60.dp
+
+/** A context; [nested] — one of its parent's, drawn under it with a guide line and a smaller mark. */
 @Composable
-private fun ContextItem(context: HostContext, selected: Boolean, onClick: () -> Unit) {
+private fun ContextItem(context: HostContext, selected: Boolean, nested: Boolean, onClick: () -> Unit) {
     val tokens = AppTheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(start = if (nested) 36.dp else 8.dp, end = 8.dp)
+            .heightIn(min = if (nested) 48.dp else ITEM_HEIGHT)
             .clip(RoundedCornerShape(tokens.radius))
             .clickable(role = Role.Button, onClick = onClick)
             .semantics { this.selected = selected }
-            .padding(horizontal = 12.dp, vertical = 10.dp)
+            .padding(horizontal = 12.dp, vertical = if (nested) 6.dp else 10.dp)
             .testTag("context:item-${context.id}"),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Monogram(title = context.title, size = 40.dp)
+        if (nested) {
+            Box(modifier = Modifier.width(2.dp).size(width = 2.dp, height = 28.dp).background(tokens.border))
+            Spacer(Modifier.width(10.dp))
+        }
+        Monogram(title = context.title, size = if (nested) 28.dp else 40.dp)
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = context.title,
-                style = if (selected) tokens.body.copy(fontWeight = FontWeight.SemiBold) else tokens.body,
-                color = tokens.foreground,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = context.title,
+                    style = if (selected) tokens.body.copy(fontWeight = FontWeight.SemiBold) else tokens.body,
+                    color = tokens.foreground,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+                context.status?.let { status ->
+                    Spacer(Modifier.width(8.dp))
+                    StatusBadge(status)
+                }
+            }
             context.subtitle?.let {
                 Text(
                     text = it,
@@ -295,6 +326,27 @@ private fun ActionRow(label: String, tag: String, onClick: () -> Unit, icon: @Co
         Spacer(Modifier.width(12.dp))
         Text(text = label, style = tokens.body, color = tokens.foreground)
     }
+}
+
+@Composable
+private fun StatusBadge(status: ContextStatus) {
+    val tokens = AppTheme
+    val tint = when (status.tone) {
+        "success" -> Color(0xFF2E7D32)
+        "warning" -> Color(0xFFB26A00)
+        "danger" -> Color(0xFFC62828)
+        else -> tokens.muted
+    }
+    Text(
+        text = status.text,
+        style = tokens.label.copy(fontWeight = FontWeight.SemiBold),
+        color = tint,
+        maxLines = 1,
+        modifier = Modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(tint.copy(alpha = 0.12f))
+            .padding(horizontal = 6.dp, vertical = 1.dp),
+    )
 }
 
 /** ⌃ over ⌄: "there is a list behind this", the way a workspace picker says it. */

@@ -218,7 +218,7 @@ public final class cx/m42/superizer/ui/screens/SettingsScreenKt {
 public final class cx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitcherKt {
 	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitcherKt;
 	public fun <init> ()V
-	public final fun getLambda$-2060967418$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1123850247$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-2090437091$cx_m42_superizer_ui ()Lkotlin/jvm/functions/Function3;
 }
 

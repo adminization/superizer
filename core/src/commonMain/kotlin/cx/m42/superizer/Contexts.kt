@@ -24,7 +24,18 @@ public data class HostContext(
     val title: String,
     /** One line under the name — an address, an account. */
     val subtitle: String? = null,
+    /**
+     * The context this one belongs to — a server of a cloud account: the switcher draws it right under its parent,
+     * indented, so the account and its servers read as one group, and either can be picked. It must come after the
+     * parent in [ContextPort.contexts]; a parent the list does not have makes it an ordinary row.
+     */
+    val parent: String? = null,
+    /** A short state of it next to the name — «работает», «остановлен» — and its tone; null: nothing. */
+    val status: ContextStatus? = null,
 )
+
+/** A state of a context the switcher shows as a small badge. [tone]: `success`, `warning`, `danger`, `info`. */
+public data class ContextStatus(val text: String, val tone: String? = null)
 
 /** Which contexts the host has, which one is in force, and the doors to add and manage them. */
 public interface ContextPort {
@@ -48,6 +59,12 @@ public interface ContextPort {
 
     /** A screen that adds one more — the sheet's "+" row reads its title. Null: no such row. */
     public val addScreen: HostScreen? get() = null
+
+    /**
+     * Every "+" row of the sheet, in order — "Connect a server", "Connect a cloud account". The first is the one tagged
+     * `context:add`, the others `context:add-<screen id>`. By default just [addScreen].
+     */
+    public val addScreens: List<HostScreen> get() = listOfNotNull(addScreen)
 
     /** A screen that renames, reorders and removes them — the sheet's last row. Null: no such row. */
     public val manageScreen: HostScreen? get() = null

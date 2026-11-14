@@ -273,7 +273,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
 
             // A host with contexts of its own gets a switcher where the drawer's title was; one
             // without — Unitool — gets the title, exactly as before contexts existed.
-            val switchable = contexts.size > 1 || (currentContext != null && contextPort.addScreen != null)
+            val switchable = contexts.size > 1 || (currentContext != null && contextPort.addScreens.isNotEmpty())
             val switcher: @Composable () -> Unit = {
                 val dismiss = LocalDrawerDismiss.current
                 ContextRow(
