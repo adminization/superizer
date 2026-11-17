@@ -52,7 +52,6 @@ import cx.m42.superizer.registry.AppState
 import cx.m42.superizer.registry.listed
 import cx.m42.superizer.runtime.LocalAppRuntime
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.theme.SuperizerTheme
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.QrCode
 import com.composables.icons.lucide.Settings
@@ -225,7 +224,8 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
     // id is skipped rather than drawn.
     val onHome = home.mapNotNull { id -> visible.firstOrNull { it.id == id } }
 
-    SuperizerTheme {
+    val themeMode by superizer.settings.theme.collectAsState()
+    HostTheme(themeMode) {
         CompositionLocalProvider(LocalHostStrings provides strings) {
 
             // Back means what the top bar's arrow means. Registered above the screens, so an open

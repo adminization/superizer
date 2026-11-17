@@ -150,7 +150,18 @@ public interface HostSettingsPort {
     public fun chooseLanguage(tag: String)
     public val haptics: StateFlow<Boolean>
     public fun setHaptics(enabled: Boolean)
+
+    /** Light, dark, or whatever the device is set to. Defaults to [ThemeMode.System]. */
+    public val theme: StateFlow<ThemeMode> get() = FollowSystem
+
+    /** Remembered on this device; the whole tree repaints on the next frame. */
+    public fun chooseTheme(mode: ThemeMode) {}
 }
+
+/** How the host is drawn: as the device is set (the default), or always light, or always dark. */
+public enum class ThemeMode { System, Light, Dark }
+
+private val FollowSystem: StateFlow<ThemeMode> = kotlinx.coroutines.flow.MutableStateFlow(ThemeMode.System)
 
 /**
  * The four doors into the same room (06): a QR payload, a promo code, a deep link, and applying

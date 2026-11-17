@@ -114,7 +114,7 @@ snapshot there — and comes back when the context does.
 | All Apps — the catalog; a tap adds to Home or takes off | `ui`, driven by `registry.visible(unlocked)` |
 | The drawer — Home, every app on Home, All Apps, plus the footer | `AppScaffold` |
 | The context switcher — a row atop the drawer and a sheet, when the host has contexts | `SuperizerShell` + `ContextPort` |
-| Settings — language, haptics, **a block per app**, about, the 7-tap door | `SettingsScreen` + `handler.settingsSections` |
+| Settings — language, appearance (system / light / dark), haptics, **a block per app**, about, the 7-tap door | `SettingsScreen` + `handler.settingsSections` |
 | Activate — promo code and QR text | `ActivateScreen` + `ActivationPort` |
 | The Service Menu | `ServiceMenuScreen` + `DiagnosticsPort` |
 | The app container, the error screen, the veto dialog | `SuperizerShell` |
@@ -148,7 +148,7 @@ public so a *different* host can reuse one.
 |---|---|
 | `PrefsStorage` | the `expect object` every platform implements: `get/put/remove/keys`. Desktop: a properties file under `~/.superizer` (`useDirectory(File)` to move it). Android: `MODE_PRIVATE` shared prefs (`initPrefs(context)` first). Web: `localStorage`. |
 | `SafePrefs` | the same, with every call guarded — a browser with site data blocked is "nothing was saved", not a crash. **Use this, not `PrefsStorage`.** |
-| `HostKeys` | `host.language`, `host.haptics`, `host.unlocked`, `host.home`, `host.session`, `host.push.topics` — a namespace no app prefix can reach |
+| `HostKeys` | `host.language`, `host.haptics`, `host.theme`, `host.unlocked`, `host.home`, `host.session`, `host.push.topics` — a namespace no app prefix can reach |
 | `UnlockStore` | which hidden apps this device has unlocked; `unlock`, `lock`, `unlocked: StateFlow` |
 | `HomeStore(defaults)` | the user's ordered Home set; absent = first run → defaults, present-but-empty = a choice to keep |
 | `PrefsSnapshotStore` | the one `SessionSnapshot`; a snapshot an older build wrote and this one cannot parse means the same as no snapshot |

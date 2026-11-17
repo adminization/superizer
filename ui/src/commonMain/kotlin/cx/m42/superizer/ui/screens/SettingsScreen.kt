@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.Superizer
+import cx.m42.superizer.ThemeMode
 import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.lock.AuthAvailability
@@ -60,6 +61,7 @@ public fun SettingsScreen(
     val tokens = AppTheme
     val langTag by superizer.settings.langTag.collectAsState()
     val haptics by superizer.settings.haptics.collectAsState()
+    val theme by superizer.settings.theme.collectAsState()
     val sections by superizer.handler.settingsSections.collectAsState()
     val unlocked by superizer.unlocked.collectAsState()
     val lock by superizer.lock.state.collectAsState()
@@ -80,6 +82,23 @@ public fun SettingsScreen(
                     // Written through the host's settings, so the choice is remembered on this
                     // device and the whole tree repaints in the new language on the next frame.
                     onClick = { superizer.settings.chooseLanguage(option.tag) },
+                )
+            }
+        }
+
+        HostGroup(title = hostStrings.settingsTheme, modifier = Modifier.testTag("settings:theme")) {
+            val strings = hostStrings
+            listOf(
+                ThemeMode.System to strings.settingsThemeSystem,
+                ThemeMode.Light to strings.settingsThemeLight,
+                ThemeMode.Dark to strings.settingsThemeDark,
+            ).forEachIndexed { index, (mode, title) ->
+                if (index > 0) ItemSeparator()
+                ChoiceItem(
+                    title = title,
+                    selected = theme == mode,
+                    modifier = Modifier.testTag("settings:theme-${mode.name.lowercase()}"),
+                    onClick = { superizer.settings.chooseTheme(mode) },
                 )
             }
         }

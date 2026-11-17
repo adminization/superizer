@@ -65,6 +65,7 @@ public final class cx/m42/superizer/theme/Tokens {
 public final class cx/m42/superizer/theme/TokensKt {
 	public static final fun SuperizerTheme (Lcx/m42/superizer/theme/Tokens;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getAppTheme (Landroidx/compose/runtime/Composer;I)Lcx/m42/superizer/theme/Tokens;
+	public static final fun getDarkTokens ()Lcx/m42/superizer/theme/Tokens;
 	public static final fun getLightTokens ()Lcx/m42/superizer/theme/Tokens;
 	public static final fun getLocalTokens ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }

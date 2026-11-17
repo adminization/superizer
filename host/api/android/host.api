@@ -10,9 +10,11 @@ public final class cx/m42/superizer/host/AppLocaleService : cx/m42/superizer/Hos
 	public static final field $stable I
 	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
 	public fun chooseLanguage (Ljava/lang/String;)V
+	public fun chooseTheme (Lcx/m42/superizer/ThemeMode;)V
 	public fun getHaptics ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun getLangTag ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun getLanguages ()Ljava/util/List;
+	public fun getTheme ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun pick (Ljava/util/Map;Ljava/lang/Object;)Ljava/lang/Object;
 	public final fun refreshFromDevice ()V
 	public fun setHaptics (Z)V
@@ -614,6 +616,7 @@ public final class cx/m42/superizer/host/storage/HostKeys {
 	public static final field PUSH_USED Ljava/lang/String;
 	public static final field SELF_TEST Ljava/lang/String;
 	public static final field SESSION Ljava/lang/String;
+	public static final field THEME Ljava/lang/String;
 	public static final field TOPICS Ljava/lang/String;
 	public static final field UNLOCKED Ljava/lang/String;
 	public final fun getBACKED_UP ()Ljava/util/List;

@@ -66,7 +66,7 @@ public data class Tokens(
     val mono: TextStyle,
 )
 
-/** The one set that exists today. A dark set is a second value of [Tokens], not a second component. */
+/** The light set. The dark one, [DarkTokens], is a second value of [Tokens], not a second component. */
 public val LightTokens: Tokens = Tokens(
     background = Color(0xFFFFFFFF),
     foreground = Color(0xFF09090B),
@@ -102,7 +102,31 @@ public val LightTokens: Tokens = Tokens(
     ),
 )
 
-public val LocalTokens: ProvidableCompositionLocal<Tokens> = staticCompositionLocalOf { LightTokens }
+/**
+ * The dark set: the same scale, zinc greys turned over, and the state colours GitHub's dark theme
+ * uses — lighter, so they still read on a near-black page. Cards are a step lighter than the page,
+ * the menu behind a pushed screen a step darker, as in the light set.
+ */
+public val DarkTokens: Tokens = LightTokens.copy(
+    background = Color(0xFF09090B),
+    foreground = Color(0xFFFAFAFA),
+    primary = Color(0xFFFAFAFA),
+    primaryForeground = Color(0xFF18181B),
+    muted = Color(0xFFA1A1AA),
+    border = Color(0xFF27272A),
+    surface = Color(0xFF18181B),
+    menuBackground = Color(0xFF000000),
+    pageBackground = Color(0xFF09090B),
+    danger = Color(0xFFF85149),
+    success = Color(0xFF3FB950),
+    warning = Color(0xFFD29922),
+    disabled = Color(0xFF52525B),
+    accent = Color(0xFF4493F8),
+    accentSubtle = Color(0xFF12233D),
+    dangerSubtle = Color(0xFF3A1618),
+)
+
+public val LocalTokens:ProvidableCompositionLocal<Tokens> = staticCompositionLocalOf { LightTokens }
 
 /**
  * Read as `AppTheme.foreground` inside any composable — short enough to use at every call site,

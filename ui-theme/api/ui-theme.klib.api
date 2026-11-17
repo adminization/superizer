@@ -99,6 +99,8 @@ final class cx.m42.superizer.theme/Tokens { // cx.m42.superizer.theme/Tokens|nul
 
 final val cx.m42.superizer.theme/AppTheme // cx.m42.superizer.theme/AppTheme|{}AppTheme[0]
     final fun <get-AppTheme>(androidx.compose.runtime/Composer?, kotlin/Int): cx.m42.superizer.theme/Tokens // cx.m42.superizer.theme/AppTheme.<get-AppTheme>|<get-AppTheme>(androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final val cx.m42.superizer.theme/DarkTokens // cx.m42.superizer.theme/DarkTokens|{}DarkTokens[0]
+    final fun <get-DarkTokens>(): cx.m42.superizer.theme/Tokens // cx.m42.superizer.theme/DarkTokens.<get-DarkTokens>|<get-DarkTokens>(){}[0]
 final val cx.m42.superizer.theme/LightTokens // cx.m42.superizer.theme/LightTokens|{}LightTokens[0]
     final fun <get-LightTokens>(): cx.m42.superizer.theme/Tokens // cx.m42.superizer.theme/LightTokens.<get-LightTokens>|<get-LightTokens>(){}[0]
 final val cx.m42.superizer.theme/LocalTokens // cx.m42.superizer.theme/LocalTokens|{}LocalTokens[0]

@@ -159,6 +159,10 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getSettingsNotifications ()Ljava/lang/String;
 	public abstract fun getSettingsProtection ()Ljava/lang/String;
 	public abstract fun getSettingsProtectionHint ()Ljava/lang/String;
+	public fun getSettingsTheme ()Ljava/lang/String;
+	public fun getSettingsThemeDark ()Ljava/lang/String;
+	public fun getSettingsThemeLight ()Ljava/lang/String;
+	public fun getSettingsThemeSystem ()Ljava/lang/String;
 	public abstract fun getUngrouped ()Ljava/lang/String;
 	public abstract fun getUnlock ()Ljava/lang/String;
 	public abstract fun getUnlockPromptSubtitle ()Ljava/lang/String;
@@ -168,6 +172,13 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun settingsBuild (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun unlockPrompt (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun version (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/ui/i18n/HostStrings$DefaultImpls {
+	public static fun getSettingsTheme (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
+	public static fun getSettingsThemeDark (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
+	public static fun getSettingsThemeLight (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
+	public static fun getSettingsThemeSystem (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
 }
 
 public final class cx/m42/superizer/ui/i18n/HostStringsKt {
@@ -221,6 +232,10 @@ public final class cx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitche
 	public fun <init> ()V
 	public final fun getLambda$-1123850247$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-2090437091$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class cx/m42/superizer/ui/shell/HostThemeKt {
+	public static final fun HostTheme (Lcx/m42/superizer/ThemeMode;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
 }
 
 public abstract interface class cx/m42/superizer/ui/shell/ShellDestination {

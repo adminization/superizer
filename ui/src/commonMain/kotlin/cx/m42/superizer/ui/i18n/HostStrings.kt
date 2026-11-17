@@ -54,6 +54,11 @@ public interface HostStrings {
     public val settingsLanguageHint: String
     public val settingsHaptics: String
     public val settingsHapticsHint: String
+    /** The theme picker (light, dark, as the device is set). English by default, for older tables. */
+    public val settingsTheme: String get() = "Appearance"
+    public val settingsThemeSystem: String get() = "System"
+    public val settingsThemeLight: String get() = "Light"
+    public val settingsThemeDark: String get() = "Dark"
     public val settingsAbout: String
     public fun settingsBuild(value: String): String
 
@@ -263,6 +268,10 @@ internal object HostStringsRu : HostStrings {
     override val settingsLanguageHint = "Язык интерфейса на этом устройстве"
     override val settingsHaptics = "Вибрация"
     override val settingsHapticsHint = "Короткий отклик при нажатии клавиши"
+    override val settingsTheme = "Оформление"
+    override val settingsThemeSystem = "Системное"
+    override val settingsThemeLight = "Светлое"
+    override val settingsThemeDark = "Тёмное"
     override val settingsAbout = "О приложении"
     override fun settingsBuild(value: String) = "Сборка $value"
 

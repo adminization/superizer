@@ -31,6 +31,14 @@ the existing modules only grows: nothing that compiled against 0.8.2 stops compi
   draws its own «Back» only where there is none.
 - `IconButton` has a second form with a content slot, for a glyph that is not an `ImageVector` (an
   app's `AppIconGlyph`); the slot draws in `LocalContentColor`.
+- A dark theme, chosen in Settings («Оформление» / Appearance: System, Light, Dark; System is the
+  default and follows the device). `HostSettingsPort.theme` / `chooseTheme(ThemeMode)`, stored under
+  `HostKeys.THEME` (`host.theme`); both have defaults, so another implementation still compiles.
+  `DarkTokens` is the dark `Tokens`; `HostTheme(mode)` gives both `AppTheme` and the kit the chosen set
+  and tells the window: iOS's `overrideUserInterfaceStyle` (status bar, keyboard, system sheets),
+  Android's bar glyphs. The shell wraps itself in it; a host drawing a screen of its own outside the
+  shell wraps that in it too. An app that reads its colours from `AppTheme` or `Kit.colors` needs
+  nothing.
 
 ## 0.8.2
 
