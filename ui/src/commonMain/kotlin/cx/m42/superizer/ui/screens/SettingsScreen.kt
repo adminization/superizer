@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,30 +16,33 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.Superizer
+import cx.m42.superizer.ThemeMode
 import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.lock.AuthAvailability
 import cx.m42.superizer.lock.AuthOutcome
 import cx.m42.superizer.registry.listed
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.AppButton
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
-import cx.m42.superizer.ui.components.ChoiceRow
-import cx.m42.superizer.ui.components.RowDivider
-import cx.m42.superizer.ui.components.Section
-import cx.m42.superizer.ui.components.ToggleRow
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
+import cx.m42.superizer.kit.ChoiceItem
+import cx.m42.superizer.kit.Item
+import cx.m42.superizer.kit.ItemSeparator
+import cx.m42.superizer.kit.SwitchItem
+import cx.m42.superizer.kit.TextVariant
+import cx.m42.superizer.ui.components.HostGroup
 import cx.m42.superizer.ui.i18n.hostStrings
 import cx.m42.superizer.app.PushUse
 import cx.m42.superizer.push.PushPermission
 import kotlinx.coroutines.launch
+import cx.m42.superizer.kit.Text as KitText
 
 /**
  * Everything the host lets a person decide — deliberately little — plus whatever the installed apps
@@ -59,6 +61,7 @@ public fun SettingsScreen(
     val tokens = AppTheme
     val langTag by superizer.settings.langTag.collectAsState()
     val haptics by superizer.settings.haptics.collectAsState()
+    val theme by superizer.settings.theme.collectAsState()
     val sections by superizer.handler.settingsSections.collectAsState()
     val unlocked by superizer.unlocked.collectAsState()
     val lock by superizer.lock.state.collectAsState()
@@ -70,11 +73,11 @@ public fun SettingsScreen(
             .verticalScroll(rememberScrollState())
             .padding(vertical = 16.dp),
     ) {
-        Section(title = hostStrings.settingsLanguage, hint = hostStrings.settingsLanguageHint) {
+        HostGroup(title = hostStrings.settingsLanguage, hint = hostStrings.settingsLanguageHint) {
             superizer.settings.languages.forEachIndexed { index, option ->
-                if (index > 0) RowDivider()
-                ChoiceRow(
-                    label = option.nativeName,
+                if (index > 0) ItemSeparator()
+                ChoiceItem(
+                    title = option.nativeName,
                     selected = langTag.substringBefore('-') == option.tag,
                     // Written through the host's settings, so the choice is remembered on this
                     // device and the whole tree repaints in the new language on the next frame.
@@ -83,9 +86,26 @@ public fun SettingsScreen(
             }
         }
 
-        Section(title = hostStrings.settingsHaptics, hint = hostStrings.settingsHapticsHint) {
-            ToggleRow(
-                label = hostStrings.settingsHaptics,
+        HostGroup(title = hostStrings.settingsTheme, modifier = Modifier.testTag("settings:theme")) {
+            val strings = hostStrings
+            listOf(
+                ThemeMode.System to strings.settingsThemeSystem,
+                ThemeMode.Light to strings.settingsThemeLight,
+                ThemeMode.Dark to strings.settingsThemeDark,
+            ).forEachIndexed { index, (mode, title) ->
+                if (index > 0) ItemSeparator()
+                ChoiceItem(
+                    title = title,
+                    selected = theme == mode,
+                    modifier = Modifier.testTag("settings:theme-${mode.name.lowercase()}"),
+                    onClick = { superizer.settings.chooseTheme(mode) },
+                )
+            }
+        }
+
+        HostGroup(title = hostStrings.settingsHaptics, hint = hostStrings.settingsHapticsHint) {
+            SwitchItem(
+                title = hostStrings.settingsHaptics,
                 checked = haptics,
                 onCheckedChange = { value ->
                     superizer.settings.setHaptics(value)
@@ -103,7 +123,7 @@ public fun SettingsScreen(
         // The host's own blocks (07 §2.4): its keys, its storage, its backup. After the host's
         // settings and before any app's, because they are the host's and not an app's.
         superizer.hostSections.forEach { section ->
-            Section(title = section.title(langTag)) {
+            HostGroup(title = section.title(langTag)) {
                 Column(modifier = Modifier.fillMaxWidth().testTag("settings:host:${section.id}")) {
                     section.Content(superizer, onOpenHostScreen)
                 }
@@ -119,7 +139,7 @@ public fun SettingsScreen(
             // A protected app's block is drawn out here, outside its curtain (06 §5.4), so while
             // the curtain would be down the block is not drawn at all.
             if (lock.covers(appId)) return@forEach
-            Section(title = app.metadata.title.resolve(langTag)) {
+            HostGroup(title = app.metadata.title.resolve(langTag)) {
                 Column(modifier = Modifier.fillMaxWidth().testTag("settings:section-${appId.value}")) {
                     val runtime = superizer.handler.appRuntime(appId)
                     if (runtime != null) section(runtime)
@@ -127,7 +147,7 @@ public fun SettingsScreen(
             }
         }
 
-        Section(title = hostStrings.settingsAbout) {
+        HostGroup(title = hostStrings.settingsAbout) {
             BuildRow(superizer = superizer, onOpenServiceMenu = onOpenServiceMenu)
         }
     }
@@ -169,30 +189,25 @@ private fun ProtectionSection(superizer: Superizer) {
         }
     }
 
-    Section(
+    HostGroup(
         title = strings.settingsProtection,
         hint = if (canAsk) strings.settingsProtectionHint else strings.settingsNoScreenLock,
         modifier = Modifier.testTag("settings:protection"),
     ) {
         lockable.forEachIndexed { index, app ->
-            if (index > 0) RowDivider()
+            if (index > 0) ItemSeparator()
             val title = app.metadata.title.resolve(langTag)
             when (app.manifest.protection.lock) {
                 // No switch, because there is nothing to switch (D139): the row says so instead.
-                LockPolicy.Required -> Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("settings:lock-${app.id.value}")
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(text = title, style = AppTheme.body, color = AppTheme.foreground, modifier = Modifier.weight(1f))
-                    Text(text = strings.settingsLockAlways, style = AppTheme.body, color = AppTheme.muted)
-                }
+                LockPolicy.Required -> Item(
+                    title = title,
+                    modifier = Modifier.testTag("settings:lock-${app.id.value}"),
+                    trailing = { KitText(strings.settingsLockAlways, variant = TextVariant.Muted) },
+                )
                 else -> {
                     val on = app.id in lock.guarded
-                    ToggleRow(
-                        label = title,
+                    SwitchItem(
+                        title = title,
                         checked = on,
                         enabled = canAsk,
                         modifier = Modifier.testTag("settings:lock-${app.id.value}"),
@@ -211,22 +226,22 @@ private fun ProtectionSection(superizer: Superizer) {
 
     if (!canAsk) {
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 20.dp)) {
-            AppButton(
+            Button(
                 text = strings.setUpScreenLock,
                 onClick = { superizer.lock.openDeviceSettings() },
                 variant = ButtonVariant.Outline,
-                size = ButtonSize.Default,
+                size = ButtonSize.Lg,
                 modifier = Modifier.testTag("settings:set-up-lock"),
             )
         }
         return
     }
 
-    Section(title = strings.settingsLockAfter) {
+    HostGroup(title = strings.settingsLockAfter) {
         AppLockPort.GraceChoices.forEachIndexed { index, millis ->
-            if (index > 0) RowDivider()
-            ChoiceRow(
-                label = strings.lockGrace(millis),
+            if (index > 0) ItemSeparator()
+            ChoiceItem(
+                title = strings.lockGrace(millis),
                 selected = lock.graceMillis == millis,
                 onClick = {
                     if (millis <= lock.graceMillis) {
@@ -240,11 +255,11 @@ private fun ProtectionSection(superizer: Superizer) {
     }
 
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 20.dp)) {
-        AppButton(
+        Button(
             text = strings.settingsLockNow,
             onClick = { superizer.lock.lockNow() },
-            variant = ButtonVariant.Secondary,
-            size = ButtonSize.Default,
+            variant = ButtonVariant.Outline,
+            size = ButtonSize.Lg,
             modifier = Modifier.testTag("settings:lock-now"),
         )
     }
@@ -270,42 +285,33 @@ private fun NotificationsSection(superizer: Superizer) {
     if (shown.isEmpty() || permission == PushPermission.Unavailable) return
     val granted = permission == PushPermission.Granted
 
-    Section(title = strings.settingsNotifications, modifier = Modifier.testTag("settings:notifications")) {
+    HostGroup(title = strings.settingsNotifications, modifier = Modifier.testTag("settings:notifications")) {
         shown.forEachIndexed { index, app ->
-            if (index > 0) RowDivider()
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("settings:push-${app.id.value}")
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = app.metadata.title.resolve(langTag),
-                    style = AppTheme.body,
-                    color = AppTheme.foreground,
-                    modifier = Modifier.weight(1f),
-                )
-                Text(
-                    text = when {
-                        app.manifest.push == PushUse.Silent -> strings.notificationsBackground
-                        granted -> strings.notificationsOn
-                        else -> strings.notificationsOff
-                    },
-                    style = AppTheme.body,
-                    color = AppTheme.muted,
-                )
-            }
+            if (index > 0) ItemSeparator()
+            Item(
+                title = app.metadata.title.resolve(langTag),
+                modifier = Modifier.testTag("settings:push-${app.id.value}"),
+                trailing = {
+                    KitText(
+                        when {
+                            app.manifest.push == PushUse.Silent -> strings.notificationsBackground
+                            granted -> strings.notificationsOn
+                            else -> strings.notificationsOff
+                        },
+                        variant = TextVariant.Muted,
+                    )
+                },
+            )
         }
     }
 
     if (!granted && shown.any { it.manifest.push == PushUse.Alerts }) {
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 20.dp)) {
-            AppButton(
+            Button(
                 text = if (permission == PushPermission.Blocked) strings.notificationsOpenSettings else strings.notificationsTurnOn,
                 onClick = { scope.launch { superizer.push.enable() } },
                 variant = ButtonVariant.Outline,
-                size = ButtonSize.Default,
+                size = ButtonSize.Lg,
                 modifier = Modifier.testTag("settings:push-enable"),
             )
         }

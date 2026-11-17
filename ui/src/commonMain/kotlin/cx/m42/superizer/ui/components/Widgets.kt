@@ -1,3 +1,7 @@
+// Every widget here is deprecated in favour of ui-kit (docs/06-ui-api.md, "Moving to ui-kit"). They keep
+// working unchanged until a major release removes them; this file still calls its own.
+@file:Suppress("DEPRECATION")
+
 package cx.m42.superizer.ui.components
 
 import androidx.compose.animation.core.animateDpAsState
@@ -40,15 +44,28 @@ import cx.m42.superizer.theme.AppTheme
  * Visual weight of a button. [Destructive] is a *tint*, not a filled red button: a row's own title
  * has to stay the loudest thing in it.
  */
+@Deprecated(
+    "Use cx.m42.superizer.kit.ButtonVariant. Default, Secondary, Outline and Ghost are the same; Destructive there is " +
+        "filled red, not a tint; Accent has no counterpart — use Default, or a Badge/Alert with the Info variant.",
+)
 public enum class ButtonVariant { Default, Outline, Secondary, Ghost, Destructive, Accent }
 
 /** [Lg] is the page-sized button; [Sm] is the one that fits inside a row. */
+@Deprecated("Use cx.m42.superizer.kit.ButtonSize: Sm, Default and Lg (48 dp). The old Lg was taller; Lg is the nearest.")
 public enum class ButtonSize { Sm, Default, Lg }
 
 /**
  * A button on the Compose Unstyled primitive, styled to the host's monochrome look — the one place
  * a button's colours are decided, so no screen has to pick them.
  */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Button. Its default size is ButtonSize.Default (40 dp), not Lg; it also has loading and leadingIcon.",
+    ReplaceWith(
+        "Button(text = text, onClick = onClick, modifier = modifier, variant = variant.toKit(), size = size.toKit(), enabled = enabled)",
+        "cx.m42.superizer.kit.Button",
+        "cx.m42.superizer.ui.components.toKit",
+    ),
+)
 @Composable
 public fun AppButton(
     text: String,
@@ -99,6 +116,10 @@ public fun AppButton(
 }
 
 /** A 44.dp round tap target — the platform minimum — wrapping a hand-drawn glyph. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.IconButton(icon = Lucide.X, contentDescription = label, onClick = onClick, enabled = enabled): " +
+        "it takes an ImageVector (Lucide is included) instead of a lambda that draws a glyph.",
+)
 @Composable
 public fun IconButton(
     onClick: () -> Unit,
@@ -120,12 +141,17 @@ public fun IconButton(
     }
 }
 
+@Deprecated("Use cx.m42.superizer.kit.Separator.", ReplaceWith("Separator(modifier = modifier)", "cx.m42.superizer.kit.Separator"))
 @Composable
 public fun Divider(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxWidth().height(1.dp).background(AppTheme.border))
 }
 
 /** A titled block of rows: the one structural unit of every list-of-unlike-things screen. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.ItemGroup. It has no outer padding: the screen decides the gaps (Arrangement.spacedBy, Kit.spacing).",
+    ReplaceWith("ItemGroup(modifier = modifier, title = title, description = hint) { content() }", "cx.m42.superizer.kit.ItemGroup"),
+)
 @Composable
 public fun Section(
     title: String,
@@ -162,6 +188,10 @@ public fun Section(
 }
 
 /** One of a set of mutually exclusive choices; the chosen one carries the tick. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.ChoiceItem.",
+    ReplaceWith("ChoiceItem(title = label, selected = selected, onClick = onClick)", "cx.m42.superizer.kit.ChoiceItem"),
+)
 @Composable
 public fun ChoiceRow(label: String, selected: Boolean, onClick: () -> Unit) {
     val tokens = AppTheme
@@ -178,6 +208,13 @@ public fun ChoiceRow(label: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 /** A row carrying a switch, with the whole row as its tap target. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.SwitchItem.",
+    ReplaceWith(
+        "SwitchItem(title = label, checked = checked, onCheckedChange = onCheckedChange, modifier = modifier, enabled = enabled)",
+        "cx.m42.superizer.kit.SwitchItem",
+    ),
+)
 @Composable
 public fun ToggleRow(
     label: String,
@@ -210,6 +247,11 @@ public fun ToggleRow(
  * pack is hand-drawn — the library takes no Material dependency and this is the only control of
  * its kind it needs.
  */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Switch. With onCheckedChange = null it only shows the state, as this one did; pass a callback " +
+        "to make it its own tap target.",
+    ReplaceWith("Switch(checked = checked, onCheckedChange = null, contentDescription = label)", "cx.m42.superizer.kit.Switch"),
+)
 @Composable
 public fun Switch(checked: Boolean, label: String) {
     val tokens = AppTheme
@@ -234,6 +276,7 @@ public fun Switch(checked: Boolean, label: String) {
     }
 }
 
+@Deprecated("Use cx.m42.superizer.kit.ItemSeparator.", ReplaceWith("ItemSeparator()", "cx.m42.superizer.kit.ItemSeparator"))
 @Composable
 public fun RowDivider() {
     Spacer(
@@ -251,6 +294,15 @@ public fun RowDivider() {
  * On `BasicTextField` rather than on a Material one for the reason the whole pack exists: there is
  * no Material dependency here, and a field is a border, a cursor and a text style.
  */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Input, with cx.m42.superizer.kit.Field around it for a visible caption. minHeight has no counterpart: " +
+        "use minLines, or Modifier.heightIn. password = true replaces a hand-made secret field.",
+    ReplaceWith(
+        "Input(value = value, onValueChange = onValueChange, modifier = modifier, placeholder = placeholder, " +
+            "label = label, singleLine = singleLine, keyboardOptions = keyboardOptions, textStyle = textStyle)",
+        "cx.m42.superizer.kit.Input",
+    ),
+)
 @Composable
 public fun AppTextField(
     value: String,
@@ -294,4 +346,26 @@ public fun AppTextField(
             modifier = modifier.fillMaxWidth().semantics { contentDescription = label },
         )
     }
+}
+
+/**
+ * The bridge [AppButton]'s replacement goes through, so an IDE quick-fix keeps a button's variant
+ * instead of dropping it. Once replaced, write the kit's value directly.
+ */
+@Deprecated("Write cx.m42.superizer.kit.ButtonVariant.<value> directly.")
+public fun ButtonVariant.toKit(): cx.m42.superizer.kit.ButtonVariant = when (this) {
+    ButtonVariant.Default -> cx.m42.superizer.kit.ButtonVariant.Default
+    ButtonVariant.Outline -> cx.m42.superizer.kit.ButtonVariant.Outline
+    ButtonVariant.Secondary -> cx.m42.superizer.kit.ButtonVariant.Secondary
+    ButtonVariant.Ghost -> cx.m42.superizer.kit.ButtonVariant.Ghost
+    ButtonVariant.Destructive -> cx.m42.superizer.kit.ButtonVariant.Destructive
+    ButtonVariant.Accent -> cx.m42.superizer.kit.ButtonVariant.Default
+}
+
+/** As [ButtonVariant.toKit], for the size. */
+@Deprecated("Write cx.m42.superizer.kit.ButtonSize.<value> directly.")
+public fun ButtonSize.toKit(): cx.m42.superizer.kit.ButtonSize = when (this) {
+    ButtonSize.Sm -> cx.m42.superizer.kit.ButtonSize.Sm
+    ButtonSize.Default -> cx.m42.superizer.kit.ButtonSize.Default
+    ButtonSize.Lg -> cx.m42.superizer.kit.ButtonSize.Lg
 }

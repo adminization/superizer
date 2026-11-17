@@ -32,6 +32,7 @@ dependencyResolutionManagement {
 // knows both.
 include(":core")
 include(":ui-theme")
+include(":ui-kit")
 include(":ui")
 include(":host")
 include(":testing")

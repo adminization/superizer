@@ -1,6 +1,7 @@
 package cx.m42.apps.testapp
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +28,7 @@ import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.app.localized
 import cx.m42.superizer.runtime.InstanceRuntime
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.Section
+import cx.m42.superizer.kit.ItemGroup
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -121,9 +122,11 @@ private fun SecretTestScreen(instance: SecretTestInstance) {
             .fillMaxSize()
             .background(tokens.pageBackground)
             .verticalScroll(rememberScrollState())
-            .padding(vertical = 16.dp),
+            .padding(vertical = 16.dp)
+            .padding(horizontal = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        Section(title = strings.visitTitle) {
+        ItemGroup(title = strings.visitTitle) {
             Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                 Text(
                     text = strings.visit(visits),
@@ -140,7 +143,7 @@ private fun SecretTestScreen(instance: SecretTestInstance) {
                 )
             }
         }
-        Section(title = strings.hiddenTitle) {
+        ItemGroup(title = strings.hiddenTitle) {
             Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                 strings.hiddenLines.forEach { line ->
                     Text(text = "• $line", style = tokens.body, color = tokens.foreground)
@@ -148,7 +151,7 @@ private fun SecretTestScreen(instance: SecretTestInstance) {
                 }
             }
         }
-        Section(title = strings.keptTitle) {
+        ItemGroup(title = strings.keptTitle) {
             Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                 Text(text = strings.kept, style = tokens.body, color = tokens.foreground)
                 Spacer(Modifier.height(8.dp))

@@ -52,17 +52,19 @@ import cx.m42.superizer.registry.AppState
 import cx.m42.superizer.registry.listed
 import cx.m42.superizer.runtime.LocalAppRuntime
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.theme.SuperizerTheme
-import cx.m42.superizer.ui.components.AppButton
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.QrCode
+import com.composables.icons.lucide.Settings
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
+import cx.m42.superizer.kit.Icon
+import cx.m42.superizer.kit.IconButton
+import cx.m42.superizer.kit.LocalContentColor
 import cx.m42.superizer.ui.components.AppIconGlyph
 import cx.m42.superizer.ui.components.AppScaffold
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
-import cx.m42.superizer.ui.components.IconButton
 import cx.m42.superizer.ui.components.LocalDrawerDismiss
 import cx.m42.superizer.ui.components.MenuEntry
-import cx.m42.superizer.ui.components.QrIcon
-import cx.m42.superizer.ui.components.SettingsIcon
 import cx.m42.superizer.ui.i18n.LocalHostStrings
 import cx.m42.superizer.ui.i18n.hostStrings
 import cx.m42.superizer.ui.i18n.hostStringsFor
@@ -222,7 +224,8 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
     // id is skipped rather than drawn.
     val onHome = home.mapNotNull { id -> visible.firstOrNull { it.id == id } }
 
-    SuperizerTheme {
+    val themeMode by superizer.settings.theme.collectAsState()
+    HostTheme(themeMode) {
         CompositionLocalProvider(LocalHostStrings provides strings) {
 
             // Back means what the top bar's arrow means. Registered above the screens, so an open
@@ -662,17 +665,15 @@ private fun ShellFooter(superizer: Superizer, onActivate: () -> Unit, onSettings
             modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = { dismiss(); onSettings() }, label = hostStrings.settings) { tint ->
-                SettingsIcon(tint)
-            }
+            IconButton(Lucide.Settings, contentDescription = hostStrings.settings, onClick = { dismiss(); onSettings() })
             // The host may call it something else (ActivateEntry): Unitool's door is Premium.
             val entry = superizer.activateEntry
             val langTag by superizer.settings.langTag.collectAsState()
             IconButton(
+                contentDescription = entry?.title(langTag) ?: hostStrings.activate,
                 onClick = { dismiss(); onActivate() },
-                label = entry?.title(langTag) ?: hostStrings.activate,
-            ) { tint ->
-                if (entry != null) AppIconGlyph(entry.icon, tint) else QrIcon(tint)
+            ) {
+                if (entry != null) AppIconGlyph(entry.icon, LocalContentColor.current) else Icon(Lucide.QrCode, contentDescription = null)
             }
         }
         // Which build this is — the first thing to ask for when a bug report comes in.
@@ -741,26 +742,26 @@ private fun HostDialog(
             Text(text = body, style = tokens.body, color = tokens.muted)
             Spacer(Modifier.height(16.dp))
             Row {
-                AppButton(
+                Button(
                     text = dismissText,
                     onClick = onDismiss,
                     variant = ButtonVariant.Outline,
-                    size = ButtonSize.Default,
+                    size = ButtonSize.Lg,
                 )
                 Spacer(Modifier.width(12.dp))
-                AppButton(
+                Button(
                     text = confirmText,
                     onClick = onConfirm,
                     variant = ButtonVariant.Destructive,
-                    size = ButtonSize.Default,
+                    size = ButtonSize.Lg,
                 )
             }
             if (saveText != null) {
                 Spacer(Modifier.height(12.dp))
-                AppButton(
+                Button(
                     text = saveText,
                     onClick = onSave,
-                    size = ButtonSize.Default,
+                    size = ButtonSize.Lg,
                     modifier = Modifier.fillMaxWidth().testTag("$tag:save"),
                 )
             }

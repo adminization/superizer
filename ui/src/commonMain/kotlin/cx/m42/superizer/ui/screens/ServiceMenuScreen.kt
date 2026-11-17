@@ -33,11 +33,11 @@ import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.AppManifest
 import cx.m42.superizer.registry.RegistrationOutcome
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.AppButton
-import cx.m42.superizer.ui.components.AppTextField
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
-import cx.m42.superizer.ui.components.Section
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
+import cx.m42.superizer.kit.Input
+import cx.m42.superizer.ui.components.HostGroup
 import cx.m42.superizer.ui.i18n.hostStrings
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -83,7 +83,7 @@ public fun ServiceMenuScreen(
             .padding(vertical = 16.dp)
             .testTag("service:root"),
     ) {
-        Section(title = hostStrings.serviceApps) {
+        HostGroup(title = hostStrings.serviceApps) {
             // A release build opens this screen by a code that is not the secret app's (idea/09):
             // its row is a debug build's business only.
             manifests.filter { (manifest, _) -> superizer.hostInfo.debug || !manifest.metadata.secret }.forEach { (manifest, outcome) ->
@@ -138,20 +138,20 @@ public fun ServiceMenuScreen(
             Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                 Text(text = hostStrings.serviceRunWithConfig, style = tokens.label, color = tokens.muted)
                 Spacer(Modifier.height(6.dp))
-                AppTextField(
+                Input(
                     value = configText,
                     onValueChange = { configText = it },
                     placeholder = "{}",
                     label = "service:config",
                     singleLine = false,
-                    minHeight = 72.dp,
+                    minLines = 3,
                     textStyle = tokens.mono,
                     modifier = Modifier.testTag("service:config"),
                 )
             }
         }
 
-        Section(title = hostStrings.servicePushDevice) {
+        HostGroup(title = hostStrings.servicePushDevice) {
             val device by superizer.push.device.collectAsState()
             val used by superizer.push.used.collectAsState()
             val permission by superizer.push.permission.collectAsState()
@@ -169,20 +169,20 @@ public fun ServiceMenuScreen(
             }
         }
 
-        Section(title = hostStrings.serviceSimulatePush) {
+        HostGroup(title = hostStrings.serviceSimulatePush) {
             Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                AppTextField(
+                Input(
                     value = pushText,
                     onValueChange = { pushText = it },
                     placeholder = SAMPLE_PUSH,
                     label = "service:push",
                     singleLine = false,
-                    minHeight = 96.dp,
+                    minLines = 4,
                     textStyle = tokens.mono,
                     modifier = Modifier.testTag("service:push"),
                 )
                 Spacer(Modifier.height(8.dp))
-                AppButton(
+                Button(
                     text = hostStrings.serviceSimulatePush,
                     size = ButtonSize.Sm,
                     variant = ButtonVariant.Secondary,
@@ -203,7 +203,7 @@ public fun ServiceMenuScreen(
             }
         }
 
-        Section(title = hostStrings.serviceEvents) {
+        HostGroup(title = hostStrings.serviceEvents) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -231,7 +231,7 @@ public fun ServiceMenuScreen(
             }
         }
 
-        Section(title = hostStrings.serviceLog) {
+        HostGroup(title = hostStrings.serviceLog) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -325,8 +325,8 @@ private fun AppRow(
             )
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AppButton(text = hostStrings.serviceRun, onClick = onRun, size = ButtonSize.Sm)
-                AppButton(
+                Button(text = hostStrings.serviceRun, onClick = onRun, size = ButtonSize.Sm)
+                Button(
                     text = hostStrings.serviceRunWithConfig,
                     onClick = onRunWithConfig,
                     size = ButtonSize.Sm,
@@ -337,20 +337,20 @@ private fun AppRow(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 // Nothing to unlock: a secret app is opened by its code, one visit at a time.
                 if (!manifest.metadata.secret) {
-                    AppButton(
+                    Button(
                         text = if (unlocked) hostStrings.serviceLock else hostStrings.serviceUnlock,
                         onClick = onToggleLock,
                         size = ButtonSize.Sm,
                         variant = ButtonVariant.Secondary,
                     )
                 }
-                AppButton(
+                Button(
                     text = hostStrings.serviceDisable,
                     onClick = onToggleEnabled,
                     size = ButtonSize.Sm,
                     variant = ButtonVariant.Secondary,
                 )
-                AppButton(
+                Button(
                     text = hostStrings.serviceReset,
                     onClick = onReset,
                     size = ButtonSize.Sm,
@@ -376,13 +376,13 @@ private fun ConfirmReset(onConfirm: () -> Unit, onDismiss: () -> Unit) {
         Text(text = hostStrings.serviceResetConfirm, style = tokens.body, color = tokens.danger)
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            AppButton(
+            Button(
                 text = hostStrings.closeDialogStay,
                 onClick = onDismiss,
                 size = ButtonSize.Sm,
                 variant = ButtonVariant.Secondary,
             )
-            AppButton(
+            Button(
                 text = hostStrings.serviceReset,
                 onClick = onConfirm,
                 size = ButtonSize.Sm,

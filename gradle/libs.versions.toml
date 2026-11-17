@@ -3,6 +3,8 @@ kotlin = "2.4.10"
 composeMultiplatform = "1.11.1"
 agp = "8.13.2"
 composeUnstyled = "1.36.1"
+# The icon set of ui-kit: Lucide, as Compose ImageVectors, on every target Superizer has.
+iconsLucide = "2.2.1"
 androidxActivityCompose = "1.13.0"
 androidxLifecycle = "2.10.0"
 # The lock's sheet (06): BiometricPrompt, and the FragmentActivity it has to be shown from. 1.1.0 is
@@ -29,6 +31,7 @@ compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", v
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
 compose-unstyled = { module = "com.composables:core", version.ref = "composeUnstyled" }
+icons-lucide = { module = "com.composables:icons-lucide-cmp", version.ref = "iconsLucide" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "androidxLifecycle" }

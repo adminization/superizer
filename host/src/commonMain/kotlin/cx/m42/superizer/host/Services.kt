@@ -2,6 +2,7 @@ package cx.m42.superizer.host
 
 import cx.m42.superizer.HostSettingsPort
 import cx.m42.superizer.LanguageOption
+import cx.m42.superizer.ThemeMode
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.host.platform.deviceLanguageTag
 import cx.m42.superizer.host.platform.platformHapticTick
@@ -170,6 +171,21 @@ public class AppLocaleService(
     override fun setHaptics(enabled: Boolean) {
         _haptics.value = enabled
         SafePrefs.put(HostKeys.HAPTICS, if (enabled) "on" else "off")
+    }
+
+    private val _theme = MutableStateFlow(
+        when (SafePrefs.get(HostKeys.THEME)) {
+            "light" -> ThemeMode.Light
+            "dark" -> ThemeMode.Dark
+            else -> ThemeMode.System
+        },
+    )
+    override val theme: StateFlow<ThemeMode> get() = _theme.asStateFlow()
+
+    override fun chooseTheme(mode: ThemeMode) {
+        _theme.value = mode
+        // "system" is stored rather than the key removed, so the choice reads the same in a backup.
+        SafePrefs.put(HostKeys.THEME, mode.name.lowercase())
     }
 
     /** Pins a language for a test, bypassing both the device and the stored choice. */

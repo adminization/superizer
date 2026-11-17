@@ -321,6 +321,18 @@ final enum class cx.m42.superizer.ssh/KeyOperation : kotlin/Enum<cx.m42.superize
     final fun values(): kotlin/Array<cx.m42.superizer.ssh/KeyOperation> // cx.m42.superizer.ssh/KeyOperation.values|values#static(){}[0]
 }
 
+final enum class cx.m42.superizer/ThemeMode : kotlin/Enum<cx.m42.superizer/ThemeMode> { // cx.m42.superizer/ThemeMode|null[0]
+    enum entry Dark // cx.m42.superizer/ThemeMode.Dark|null[0]
+    enum entry Light // cx.m42.superizer/ThemeMode.Light|null[0]
+    enum entry System // cx.m42.superizer/ThemeMode.System|null[0]
+
+    final val entries // cx.m42.superizer/ThemeMode.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer/ThemeMode> // cx.m42.superizer/ThemeMode.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): cx.m42.superizer/ThemeMode // cx.m42.superizer/ThemeMode.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<cx.m42.superizer/ThemeMode> // cx.m42.superizer/ThemeMode.values|values#static(){}[0]
+}
+
 abstract fun interface cx.m42.superizer.app/Disposable { // cx.m42.superizer.app/Disposable|null[0]
     abstract fun dispose() // cx.m42.superizer.app/Disposable.dispose|dispose(){}[0]
 }
@@ -782,9 +794,12 @@ abstract interface cx.m42.superizer/HostSettingsPort { // cx.m42.superizer/HostS
         abstract fun <get-langTag>(): kotlinx.coroutines.flow/StateFlow<kotlin/String> // cx.m42.superizer/HostSettingsPort.langTag.<get-langTag>|<get-langTag>(){}[0]
     abstract val languages // cx.m42.superizer/HostSettingsPort.languages|{}languages[0]
         abstract fun <get-languages>(): kotlin.collections/List<cx.m42.superizer/LanguageOption> // cx.m42.superizer/HostSettingsPort.languages.<get-languages>|<get-languages>(){}[0]
+    open val theme // cx.m42.superizer/HostSettingsPort.theme|{}theme[0]
+        open fun <get-theme>(): kotlinx.coroutines.flow/StateFlow<cx.m42.superizer/ThemeMode> // cx.m42.superizer/HostSettingsPort.theme.<get-theme>|<get-theme>(){}[0]
 
     abstract fun chooseLanguage(kotlin/String) // cx.m42.superizer/HostSettingsPort.chooseLanguage|chooseLanguage(kotlin.String){}[0]
     abstract fun setHaptics(kotlin/Boolean) // cx.m42.superizer/HostSettingsPort.setHaptics|setHaptics(kotlin.Boolean){}[0]
+    open fun chooseTheme(cx.m42.superizer/ThemeMode) // cx.m42.superizer/HostSettingsPort.chooseTheme|chooseTheme(cx.m42.superizer.ThemeMode){}[0]
 }
 
 abstract interface cx.m42.superizer/RoutePort { // cx.m42.superizer/RoutePort|null[0]

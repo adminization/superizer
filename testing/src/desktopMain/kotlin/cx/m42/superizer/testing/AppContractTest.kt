@@ -1,3 +1,7 @@
+// runComposeUiTest (v1) is deprecated since Compose 1.11. Its v2 runs effects on a different dispatcher,
+// which an app's own tests would feel, so moving to it is its own change.
+@file:Suppress("DEPRECATION")
+
 package cx.m42.superizer.testing
 
 import androidx.compose.runtime.CompositionLocalProvider

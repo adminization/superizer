@@ -19,11 +19,12 @@ plugins {
 val allowedProjectDependencies = mapOf(
     ":core" to emptySet<String>(),
     ":ui-theme" to setOf(":core"),
-    ":ui" to setOf(":core", ":ui-theme"),
+    ":ui-kit" to emptySet<String>(),
+    ":ui" to setOf(":core", ":ui-theme", ":ui-kit"),
     ":host" to setOf(":core"),
     ":testing" to setOf(":core", ":ui"),
-    ":apps:test-app" to setOf(":core", ":ui-theme", ":ui", ":testing"),
-    ":fixture" to setOf(":core", ":ui-theme", ":ui", ":host", ":testing", ":apps:test-app"),
+    ":apps:test-app" to setOf(":core", ":ui-theme", ":ui-kit", ":ui", ":testing"),
+    ":fixture" to setOf(":core", ":ui-theme", ":ui-kit", ":ui", ":host", ":testing", ":apps:test-app"),
 )
 
 val checkDependencyRules by tasks.registering {

@@ -34,7 +34,7 @@ import cx.m42.superizer.host.build
 import cx.m42.superizer.host.storage.PrefsStorage
 import cx.m42.superizer.runtime.HostInfo
 import cx.m42.superizer.runtime.Platform
-import cx.m42.superizer.ui.components.AppButton
+import cx.m42.superizer.kit.Button
 import cx.m42.superizer.ui.i18n.LocalDiagnosticsStrings
 import cx.m42.superizer.ui.shell.SuperizerShell
 import java.nio.file.Files
@@ -64,7 +64,7 @@ class HostSlotsTest {
         @Composable
         override fun Content(superizer: Superizer, back: () -> Unit, open: (HostScreen) -> Unit) {
             Text("the host's own screen", modifier = Modifier.testTag("keys:body"))
-            AppButton(text = "Done", onClick = back, modifier = Modifier.testTag("keys:done"))
+            Button(text = "Done", onClick = back, modifier = Modifier.testTag("keys:done"))
         }
     }
 
@@ -74,13 +74,13 @@ class HostSlotsTest {
 
         @Composable
         override fun Content(superizer: Superizer, open: (HostScreen) -> Unit) {
-            AppButton(text = "Manage keys", onClick = { open(detail) }, modifier = Modifier.testTag("keys:manage"))
+            Button(text = "Manage keys", onClick = { open(detail) }, modifier = Modifier.testTag("keys:manage"))
         }
     }
 
     private val banner = HomeBanner { _, open ->
         // A banner in the host's words — here, whatever words the host provided for a code.
-        AppButton(
+        Button(
             text = LocalDiagnosticsStrings.current.title(DiagnosticsCode.VaultMissing.id),
             onClick = { open(detail) },
             modifier = Modifier.testTag("banner:storage"),
@@ -89,7 +89,7 @@ class HostSlotsTest {
     }
 
     private val offer = ActivateBanner { _, open ->
-        AppButton(text = "Or buy it", onClick = { open(detail) }, modifier = Modifier.testTag("offer:buy"))
+        Button(text = "Or buy it", onClick = { open(detail) }, modifier = Modifier.testTag("offer:buy"))
         true
     }
 

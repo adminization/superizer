@@ -112,10 +112,17 @@ public abstract interface class cx/m42/superizer/HostSection {
 
 public abstract interface class cx/m42/superizer/HostSettingsPort {
 	public abstract fun chooseLanguage (Ljava/lang/String;)V
+	public fun chooseTheme (Lcx/m42/superizer/ThemeMode;)V
 	public abstract fun getHaptics ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getLangTag ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getLanguages ()Ljava/util/List;
+	public fun getTheme ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun setHaptics (Z)V
+}
+
+public final class cx/m42/superizer/HostSettingsPort$DefaultImpls {
+	public static fun chooseTheme (Lcx/m42/superizer/HostSettingsPort;Lcx/m42/superizer/ThemeMode;)V
+	public static fun getTheme (Lcx/m42/superizer/HostSettingsPort;)Lkotlinx/coroutines/flow/StateFlow;
 }
 
 public final class cx/m42/superizer/LanguageOption {
@@ -216,6 +223,15 @@ public final class cx/m42/superizer/SuperizerContract {
 	public static final field $stable I
 	public static final field INSTANCE Lcx/m42/superizer/SuperizerContract;
 	public static final field VERSION I
+}
+
+public final class cx/m42/superizer/ThemeMode : java/lang/Enum {
+	public static final field Dark Lcx/m42/superizer/ThemeMode;
+	public static final field Light Lcx/m42/superizer/ThemeMode;
+	public static final field System Lcx/m42/superizer/ThemeMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ThemeMode;
+	public static fun values ()[Lcx/m42/superizer/ThemeMode;
 }
 
 public final class cx/m42/superizer/activation/Activation {

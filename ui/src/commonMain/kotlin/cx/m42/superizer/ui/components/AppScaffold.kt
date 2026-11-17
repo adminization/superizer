@@ -59,7 +59,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.composables.icons.lucide.ChevronLeft
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Menu
 import com.composeunstyled.Text
+import cx.m42.superizer.kit.IconButton
+import cx.m42.superizer.kit.Separator
 import cx.m42.superizer.theme.AppTheme
 import cx.m42.superizer.ui.i18n.hostStrings
 import cx.m42.superizer.ui.platform.LocalBackPreviews
@@ -492,7 +497,7 @@ private fun TopBar(title: String, subtitle: String?, onBack: (() -> Unit)?, onOp
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = onOpenMenu, label = hostStrings.openMenu) { tint -> BurgerIcon(tint) }
+            IconButton(Lucide.Menu, contentDescription = hostStrings.openMenu, onClick = onOpenMenu)
 
             Column(modifier = Modifier.weight(1f).padding(horizontal = 8.dp)) {
                 Text(
@@ -516,10 +521,10 @@ private fun TopBar(title: String, subtitle: String?, onBack: (() -> Unit)?, onOp
             // Back is the screen's own affordance, not the menu's, so it stays on the bar — but
             // only where there is somewhere to go back to.
             if (onBack != null) {
-                IconButton(onClick = onBack, label = hostStrings.backAction) { tint -> BackIcon(tint) }
+                IconButton(Lucide.ChevronLeft, contentDescription = hostStrings.backAction, onClick = onBack)
             }
         }
-        Divider()
+        Separator()
     }
 }
 
@@ -580,7 +585,7 @@ private fun BoxScope.MenuPanel(
 
         // Pinned to the bottom of the panel rather than to the end of the scrolling list: a footer
         // that scrolls away is one you have to hunt for.
-        Divider()
+        Separator()
         Box(modifier = Modifier.fillMaxWidth()) {
             DismissingFooter(onDismiss = { drawer.close() }, footer = footer)
         }

@@ -1,11 +1,87 @@
-# `ui` and `ui-theme` API reference
+# `ui`, `ui-kit` and `ui-theme` API reference
 
 `cx.m42.superizer:ui-theme:0.1.0` — design tokens only, so a third-party component set can match a
 host without taking on its components.
-`cx.m42.superizer:ui:0.1.0` — components, the scaffold, the host screens, the shell.
+`cx.m42.superizer:ui-kit:0.1.0` — the component kit: shadcn/ui-style building blocks with a light and
+a dark theme. It depends on nothing of Superizer's and is what an app draws with (§0).
+`cx.m42.superizer:ui:0.1.0` — the scaffold, the host screens, the shell, and the old widgets (§2, §3),
+which are deprecated in favour of the kit. It exports `ui-kit`.
 
 An app depends on both. An app that draws with them looks like it belongs — in this host and in any
 other.
+
+---
+
+## 0. The kit (`cx.m42.superizer.kit`)
+
+The components an app draws with. On `compose.foundation` only — no Material, no compose-unstyled —
+with icons from Lucide (`com.composables:icons-lucide-cmp`, exported).
+
+```kotlin
+@Composable fun KitTheme(
+    dark: Boolean = false,
+    colors: KitColors = if (dark) DarkKitColors else LightKitColors,
+    typography: KitTypography = kitTypography(), spacing: KitSpacing = KitSpacing(), shapes: KitShapes = KitShapes(),
+    content: @Composable () -> Unit,
+)
+object Kit { val colors; val typography; val spacing; val shapes }   // Kit.colors.primary, Kit.spacing.lg
+fun kitTypography(fontFamily: FontFamily = FontFamily.Default): KitTypography
+```
+
+`KitColors` names colours in pairs, as shadcn/ui does: `background`/`foreground`, `card`/`onCard`,
+`primary`/`onPrimary`, `secondary`, `muted`/`mutedForeground`, `accent`, `destructive`, `success`,
+`warning`, `info` (the blue of "this needs a person"), `border`, `input`, `ring`, `scrim`. The greys
+are `LightTokens`' own, so a screen drawn with the kit sits next to the shell without a seam.
+
+The shell does not call `KitTheme`, and an app does not either: without it the kit draws in
+`LightKitColors` with the default font, which is what the shell looks like. A host that wants a font
+or the dark set for its apps wraps `SuperizerShell` in `KitTheme(...)` once; the shell's own chrome
+still reads `Tokens` until it moves to the kit.
+
+On the web Compose has no system fonts: a host with Russian text passes a family that has Cyrillic
+to `kitTypography(...)` (Inter from its resources, say).
+
+| Component | What it is |
+|---|---|
+| `Text(text, variant = TextVariant.P, color, …)` | the type scale: `H1`–`H4`, `P`, `Lead`, `Large`, `Small`, `Muted`, `Mono`. `Muted` stays muted inside any container |
+| `Icon(imageVector, contentDescription, size, tint)` | an `ImageVector` in the content colour; `KitIconSize` = 20 dp |
+| `Button(text, onClick, variant, size, enabled, loading, leadingIcon)` | also `Button(onClick, …) { content }`. `ButtonVariant`: `Default`, `Secondary`, `Outline`, `Ghost`, `Destructive`, `Link`; `ButtonSize`: `Sm` 32, `Default` 40, `Lg` 48 dp |
+| `IconButton(icon, contentDescription, onClick, variant = Ghost)` | a 44 dp target at least; a second form takes a content slot for a glyph that is not an `ImageVector`, drawn in `LocalContentColor` |
+| `Card(modifier, onClick = null) { … }` | a bordered block; with `onClick` one tap target |
+| `Badge(text, variant, dot)` | `Default`, `Secondary`, `Outline`, `Destructive`, `Success`, `Warning`, `Info` |
+| `Alert(title, description, variant, icon)` | a message that stays until its cause is gone |
+| `Input(value, onValueChange, modifier, placeholder, label, password, isInvalid, leadingIcon, trailing, …)` | the modifier lands on the editable node, so a `testTag` names what a test types into; `password` also turns the keyboard's learning off |
+| `Field(label, description, error) { control }` | a visible caption, a hint, an error |
+| `Switch(checked, onCheckedChange)`, `Checkbox(checked, onCheckedChange)` | `null` for the callback leaves the tap to the row around it |
+| `ItemGroup(title, description) { … }`, `Item(title, description, onClick, leading, trailing)`, `SwitchItem`, `ChoiceItem`, `ItemSeparator()` | a settings screen |
+| `Tabs(items, selectedIndex, onSelect)` | a segmented filter; scrolls sideways when it does not fit |
+| `Avatar(name, size, shape)`, `initialsOf(name)` | initials on a fill; `AvatarShape.Square` for places, `Circle` for people |
+| `Separator(orientation, inset)`, `Progress(value)`, `Spinner()`, `Skeleton(modifier)` | |
+
+### Moving to ui-kit
+
+The widgets of §2 and the glyphs of §3 are `@Deprecated`. They keep working unchanged until a major
+release removes them. Each deprecation names its replacement, and where the call maps one to one the
+IDE offers it as a quick fix (`ReplaceWith`):
+
+| Deprecated (`ui.components`) | Use (`kit`) | Notes |
+|---|---|---|
+| `AppButton(text, onClick, …)` | `Button(text, onClick, …)` | the quick fix writes `variant.toKit()` / `size.toKit()` to keep the old values; then write the kit's value directly. The old default size was `Lg`, the kit's is `Default` |
+| `ButtonVariant` | `kit.ButtonVariant` | `Destructive` is filled red now, not a tint; `Accent` has no counterpart (`Default`, or an `Info` badge/alert) |
+| `ButtonSize` | `kit.ButtonSize` | |
+| `IconButton(onClick, label) { tint -> Glyph(tint) }` | `IconButton(Lucide.X, contentDescription = label, onClick)`, or `IconButton(contentDescription = label, onClick = onClick) { Glyph(LocalContentColor.current) }` for an `AppIconGlyph` | by hand |
+| `AppTextField` | `Input`, inside a `Field` for a caption | `minHeight` → `minLines` or `Modifier.heightIn` |
+| `Section(title, hint) { … }` | `ItemGroup(title = …, description = …) { … }` | no outer padding: the screen sets the gaps |
+| `ToggleRow` | `SwitchItem` | |
+| `ChoiceRow` | `ChoiceItem` | |
+| `Switch(checked, label)` | `Switch(checked, onCheckedChange = null, contentDescription = label)` | |
+| `RowDivider()` / `Divider()` | `ItemSeparator()` / `Separator()` | |
+| `Monogram(title)` | `Avatar(name = title, shape = AvatarShape.Square)` | the quick fix keeps the old black fill |
+| `BurgerIcon`, `BackIcon`, `SettingsIcon`, `CheckIcon`, `BackspaceIcon`, `PlusIcon`, `AppsIcon`, `QrIcon`, `StarIcon`, `CalculatorIcon`, `CurrencyIcon` | `Icon(Lucide.Menu / ChevronLeft / Settings / Check / Delete / Plus / LayoutGrid / QrCode / Star / Calculator / Banknote, …)` | |
+| `IconSize` | `KitIconSize` | |
+
+Not deprecated: `AppTheme`/`Tokens` (the shell still reads them), `AppScaffold`, `MenuEntry`, the
+shell and the host screens, and `AppIconGlyph`, which draws an app's contract icon.
 
 ---
 
@@ -51,7 +127,9 @@ app, the token is missing and should be added here rather than invented there.
 
 ---
 
-## 2. Widgets (`cx.m42.superizer.ui.components`)
+## 2. Widgets (`cx.m42.superizer.ui.components`) — deprecated
+
+Use the kit (§0); the table in "Moving to ui-kit" maps each of these to its replacement.
 
 ```kotlin
 @Composable fun AppButton(
@@ -87,7 +165,9 @@ Service Menu are built out of nothing else.
 
 ---
 
-## 3. Icons
+## 3. Icons — glyphs deprecated, `AppIconGlyph` not
+
+For an icon in an app use `kit.Icon` with Lucide (§0).
 
 ```kotlin
 @Composable fun AppIconGlyph(icon: AppIcon, tint: Color, size: Dp = IconSize, fallbackLetter: Char = '?')

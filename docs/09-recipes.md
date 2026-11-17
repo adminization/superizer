@@ -205,7 +205,7 @@ You do not ask for the permission: the host asks, once, the moment the person st
 launch. Settings carries the way back if they said no. To ask again in context, from a gesture:
 
 ```kotlin
-AppButton("Enable notifications", onClick = { runtime.scope.launch { runtime.push.requestPermission() } })
+Button("Enable notifications", onClick = { runtime.scope.launch { runtime.push.requestPermission() } })
 ```
 
 ---

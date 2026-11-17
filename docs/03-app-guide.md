@@ -290,16 +290,18 @@ goes inside it.** An app that draws its own top bar is fighting the shell.
 internal fun ConverterScreen(instance: ConverterInstance) {
     val runtime = LocalAppRuntime.current          // the same InstanceRuntime, for deep composables
     val strings = converterStrings(runtime.locale.langTag.collectAsState().value)
-    val tokens = AppTheme                          // colours and type; never invent your own
+    // Colours, type and gaps come from the kit (Kit.colors, Kit.spacing); never invent your own.
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text(strings.title, style = tokens.header, color = tokens.foreground)
-        AppTextField(
-            value = amount,
-            onValueChange = { amount = it },
-            modifier = Modifier.testTag("currency-converter:amount"),
-        )
-        AppButton(
+    Column(Modifier.fillMaxSize().padding(Kit.spacing.lg), verticalArrangement = Arrangement.spacedBy(Kit.spacing.md)) {
+        Text(strings.title, variant = TextVariant.H3)
+        Field(strings.amount) {
+            Input(
+                value = amount,
+                onValueChange = { amount = it },
+                modifier = Modifier.testTag("currency-converter:amount"),
+            )
+        }
+        Button(
             text = strings.convert,
             onClick = { instance.convert() },
             modifier = Modifier.testTag("currency-converter:convert"),
@@ -308,9 +310,11 @@ internal fun ConverterScreen(instance: ConverterInstance) {
 }
 ```
 
-Use [the widgets in `ui`](06-ui-api.md) — `AppButton`, `AppTextField`, `Section`, `ChoiceRow`,
-`ToggleRow`, `Switch`, `Divider`, `RowDivider`, `IconButton` — and the tokens in `ui-theme`. An app
-built out of them looks like it belongs, in this host and in any other.
+Use [the kit](06-ui-api.md#0-the-kit-cxm42superizerkit) — `Text`, `Button`, `Input` and `Field`,
+`Card`, `Badge`, `Alert`, `Tabs`, `ItemGroup` with `Item`, `SwitchItem` and `ChoiceItem`, `Icon` with
+Lucide. An app built out of them looks like it belongs, in this host and in any other. The widgets
+in `ui.components` (`AppButton`, `AppTextField`, `Section`, …) are deprecated; the guide maps each
+to its replacement.
 
 ### Test tags
 
@@ -434,7 +438,7 @@ stay honest. Details: [Testing](07-testing.md).
 - [ ] `saveState`/`restore` cover what the screen would hate to lose, and `restore` tolerates an old shape.
 - [ ] Every asserted node has a `<appId>:<element>` test tag.
 - [ ] No string is hard-coded in one language.
-- [ ] Colours and type come from `AppTheme`; no `Color(0xFF…)` in the app.
+- [ ] Drawn with `ui-kit`; colours and type come from `Kit`; no `Color(0xFF…)` in the app.
 - [ ] `class XContractTest : AppContractTest(XApp())` exists and passes.
 - [ ] At least one `runAppTest` that drives the main gesture.
 - [ ] `./gradlew :apps:x:desktopTest` and `./gradlew checkDependencyRules` are green.
