@@ -15,13 +15,14 @@ this document follows from that.
 |---|---|---|
 | `core` | the contract, runtime interfaces, registry, handler, events, activation model, the `Superizer` ports | — |
 | `ui-theme` | design tokens only | `core` |
-| `ui` | widgets, the scaffold, the host screens, the shell | `core`, `ui-theme` |
+| `ui-kit` | the component kit: shadcn/ui-style components, light and dark theme, Lucide icons | — |
+| `ui` | the scaffold, the host screens, the shell; the old widgets, deprecated in favour of `ui-kit` | `core`, `ui-theme`, `ui-kit` |
 | `host` | service implementations, platform `actual`s, activation service, push routing, stores | `core` |
 | `testing` | `FakeAppRuntime`, `runAppTest`, `AppContractTest` | `core`, `ui` |
-| `apps/test-app` | the bench app: one card per runtime service | `core`, `ui-theme`, `ui`, `testing` |
+| `apps/test-app` | the bench app: one card per runtime service | `core`, `ui-theme`, `ui-kit`, `ui`, `testing` |
 | `fixture` | the smallest possible host, so the library can prove itself without a product | all of the above |
 
-**An app depends on `core`, `ui-theme` and `ui`. Never on `host`, never on a host, never on another
+**An app depends on `core`, `ui-theme` and `ui` (which brings `ui-kit`). Never on `host`, never on a host, never on another
 app.**
 
 Two edges deserve their reason spelled out:

@@ -33,10 +33,10 @@ import cx.m42.superizer.Superizer
 import cx.m42.superizer.activation.ActivationResult
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.AppButton
-import cx.m42.superizer.ui.components.AppTextField
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
+import cx.m42.superizer.kit.Input
 import cx.m42.superizer.ui.i18n.HostStrings
 import cx.m42.superizer.ui.i18n.hostStrings
 import kotlinx.coroutines.launch
@@ -128,7 +128,7 @@ public fun ActivateScreen(
 
         Text(text = strings.activatePromoLabel, style = tokens.label, color = tokens.muted)
         Spacer(Modifier.height(6.dp))
-        AppTextField(
+        Input(
             value = promo,
             onValueChange = { promo = it; error = null },
             placeholder = strings.activatePromoLabel,
@@ -149,10 +149,10 @@ public fun ActivateScreen(
         // The camera reads the same text the field below takes, and it goes the same way — through
         // `fromQr` — straight away: pointing at a code is the whole gesture.
         if (superizer.activation.canScan) {
-            AppButton(
+            Button(
                 text = strings.activateScan,
-                size = ButtonSize.Default,
-                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Lg,
+                variant = ButtonVariant.Outline,
                 modifier = Modifier.fillMaxWidth().testTag("activate:scan"),
                 onClick = {
                     scope.launch {
@@ -165,13 +165,13 @@ public fun ActivateScreen(
             )
             Spacer(Modifier.height(10.dp))
         }
-        AppTextField(
+        Input(
             value = payload,
             onValueChange = { payload = it; error = null },
             placeholder = strings.activateQrLabel,
             label = strings.activateQrLabel,
             singleLine = false,
-            minHeight = 120.dp,
+            minLines = 4,
             modifier = Modifier.testTag("activate:qr"),
         )
 
@@ -193,9 +193,9 @@ public fun ActivateScreen(
         }
 
         Spacer(Modifier.height(20.dp))
-        AppButton(
+        Button(
             text = strings.activateApply,
-            size = ButtonSize.Default,
+            size = ButtonSize.Lg,
             modifier = Modifier.fillMaxWidth().testTag("activate:apply"),
             onClick = {
                 scope.launch {

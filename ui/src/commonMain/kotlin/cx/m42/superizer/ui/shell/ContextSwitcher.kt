@@ -62,11 +62,14 @@ import cx.m42.superizer.ContextStatus
 import cx.m42.superizer.HostContext
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.CheckIcon
-import cx.m42.superizer.ui.components.Divider
-import cx.m42.superizer.ui.components.Monogram
-import cx.m42.superizer.ui.components.PlusIcon
-import cx.m42.superizer.ui.components.SettingsIcon
+import com.composables.icons.lucide.Check
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Plus
+import com.composables.icons.lucide.Settings
+import cx.m42.superizer.kit.Avatar
+import cx.m42.superizer.kit.AvatarShape
+import cx.m42.superizer.kit.Icon
+import cx.m42.superizer.kit.Separator
 import cx.m42.superizer.ui.platform.SystemBackHandler
 
 /*
@@ -103,7 +106,7 @@ internal fun ContextRow(
             .testTag("context:row"),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Monogram(title = title, size = 40.dp)
+        ContextMark(title, 40.dp)
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -234,21 +237,27 @@ internal fun BoxScope.ContextSheet(
             val adds = port.addScreens
             val manage = port.manageScreen
             if (adds.isNotEmpty() || manage != null) {
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+                Separator(modifier = Modifier.padding(vertical = 8.dp))
             }
             adds.forEachIndexed { index, screen ->
                 val tag = if (index == 0) "context:add" else "context:add-${screen.id}"
                 ActionRow(label = screen.title(langTag), tag = tag, onClick = { onOpen(screen) }) { tint ->
-                    PlusIcon(tint)
+                    Icon(Lucide.Plus, contentDescription = null, tint = tint)
                 }
             }
             manage?.let { screen ->
                 ActionRow(label = screen.title(langTag), tag = "context:manage", onClick = { onOpen(screen) }) { tint ->
-                    SettingsIcon(tint)
+                    Icon(Lucide.Settings, contentDescription = null, tint = tint)
                 }
             }
         }
     }
+}
+
+/** A context's mark: its initials on the primary fill, square-ish so it does not read as a person. */
+@Composable
+private fun ContextMark(title: String, size: androidx.compose.ui.unit.Dp) {
+    Avatar(name = title, size = size, shape = AvatarShape.Square, fill = AppTheme.primary, contentColor = AppTheme.primaryForeground)
 }
 
 /** The height of one row, for scrolling the sheet to the context in force. */
@@ -274,7 +283,7 @@ private fun ContextItem(context: HostContext, selected: Boolean, nested: Boolean
             Box(modifier = Modifier.width(2.dp).size(width = 2.dp, height = 28.dp).background(tokens.border))
             Spacer(Modifier.width(10.dp))
         }
-        Monogram(title = context.title, size = if (nested) 28.dp else 40.dp)
+        ContextMark(context.title, if (nested) 28.dp else 40.dp)
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -303,7 +312,7 @@ private fun ContextItem(context: HostContext, selected: Boolean, nested: Boolean
         }
         if (selected) {
             Spacer(Modifier.width(8.dp))
-            CheckIcon(tokens.foreground)
+            Icon(Lucide.Check, contentDescription = null, tint = tokens.foreground)
         }
     }
 }

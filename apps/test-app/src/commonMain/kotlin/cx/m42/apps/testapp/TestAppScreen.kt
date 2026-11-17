@@ -22,12 +22,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.AppButton
-import cx.m42.superizer.ui.components.AppTextField
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
-import cx.m42.superizer.ui.components.Section
-import cx.m42.superizer.ui.components.ToggleRow
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
+import cx.m42.superizer.kit.Input
+import cx.m42.superizer.kit.ItemGroup
+import cx.m42.superizer.kit.SwitchItem
 import kotlinx.serialization.json.Json
 
 /**
@@ -69,14 +69,14 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             Spacer(Modifier.height(8.dp))
             events.asReversed().forEach { Mono(it) }
             Spacer(Modifier.height(8.dp))
-            AppButton(strings.closeMe, onClick = instance::close, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.closeMe, onClick = instance::close, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("state", strings.state) {
             val note by instance.note.collectAsState()
             Text(text = strings.stateHint, style = tokens.footnote, color = tokens.muted)
             Spacer(Modifier.height(6.dp))
-            AppTextField(
+            Input(
                 value = note,
                 onValueChange = { instance.note.value = it },
                 placeholder = strings.state,
@@ -89,7 +89,7 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             val launches by instance.launches.collectAsState()
             Mono("launches = $launches")
             Spacer(Modifier.height(8.dp))
-            AppButton(strings.clear, onClick = instance::clearStorage, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.clear, onClick = instance::clearStorage, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("network", strings.network) {
@@ -98,13 +98,13 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             Mono("online = $online")
             if (ping != null) Mono(ping.orEmpty())
             Spacer(Modifier.height(8.dp))
-            AppButton(strings.ping, onClick = instance::ping, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.ping, onClick = instance::ping, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("analytics", strings.analytics) {
             Text(text = strings.analyticsHint, style = tokens.footnote, color = tokens.muted)
             Spacer(Modifier.height(8.dp))
-            AppButton(strings.sendEvent, onClick = instance::sendEvent, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.sendEvent, onClick = instance::sendEvent, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("navigation", strings.navigation) {
@@ -112,11 +112,11 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             if (error != null) Text(text = error.orEmpty(), style = tokens.mono, color = tokens.danger)
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AppButton(strings.openCalculator, onClick = instance::openCalculatorScientific, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
-                AppButton(strings.openUnknown, onClick = instance::openUnknownApp, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+                Button(strings.openCalculator, onClick = instance::openCalculatorScientific, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+                Button(strings.openUnknown, onClick = instance::openUnknownApp, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
             }
             Spacer(Modifier.height(8.dp))
-            AppButton(strings.openSettings, onClick = { instance.runtime.navigation.openSettings() }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.openSettings, onClick = { instance.runtime.navigation.openSettings() }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("services", strings.services) {
@@ -132,7 +132,7 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             Mono("secrets.keys = $keys")
             Mono("diagnostics = ${findings.map { "${it.code}:${it.status}" }}")
             Spacer(Modifier.height(8.dp))
-            AppButton(strings.storeSecret, onClick = instance::storeSecret, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.storeSecret, onClick = instance::storeSecret, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("keyring", strings.keyring) {
@@ -145,7 +145,7 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             }
             signed?.let { Mono(it) }
             Spacer(Modifier.height(8.dp))
-            AppButton(strings.signWithKey, onClick = instance::signWithKey, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.signWithKey, onClick = instance::signWithKey, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("locale", strings.locale) {
@@ -155,7 +155,7 @@ internal fun TestAppScreen(instance: TestAppInstance) {
         }
 
         Card("haptics", strings.haptics) {
-            AppButton(strings.tick, onClick = { instance.runtime.haptics.tick() }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+            Button(strings.tick, onClick = { instance.runtime.haptics.tick() }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
         }
 
         Card("push", strings.push) {
@@ -168,7 +168,7 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             Mono("subscriptions = $subscriptions")
             Mono("last = ${last?.let { "topic=${it.topic} data=${it.data} link=${it.link}" } ?: "—"}")
             Spacer(Modifier.height(8.dp))
-            AppTextField(
+            Input(
                 value = topic,
                 onValueChange = { topic = it },
                 placeholder = "topic",
@@ -177,9 +177,9 @@ internal fun TestAppScreen(instance: TestAppInstance) {
             )
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AppButton(strings.subscribe, onClick = { instance.subscribe(topic) }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
-                AppButton(strings.unsubscribe, onClick = { instance.unsubscribe(topic) }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
-                AppButton(strings.permission, onClick = instance::requestPushPermission, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+                Button(strings.subscribe, onClick = { instance.subscribe(topic) }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+                Button(strings.unsubscribe, onClick = { instance.unsubscribe(topic) }, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
+                Button(strings.permission, onClick = instance::requestPushPermission, size = ButtonSize.Sm, variant = ButtonVariant.Secondary)
             }
         }
 
@@ -190,8 +190,8 @@ internal fun TestAppScreen(instance: TestAppInstance) {
 
         Card("veto", strings.veto) {
             val blocked by instance.blockClose.collectAsState()
-            ToggleRow(
-                label = strings.blockClose,
+            SwitchItem(
+                title = strings.blockClose,
                 checked = blocked,
                 onCheckedChange = { instance.blockClose.value = it },
             )
@@ -202,7 +202,8 @@ internal fun TestAppScreen(instance: TestAppInstance) {
 
 @Composable
 private fun Card(tag: String, title: String, content: @Composable () -> Unit) {
-    Section(title = title, modifier = Modifier.testTag("test-app:section-$tag")) {
+    // The gaps the host's own groups have, so the bench app sits on the page the way they do.
+    ItemGroup(title = title, modifier = Modifier.testTag("test-app:section-$tag").padding(horizontal = 12.dp).padding(bottom = 20.dp)) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) { content() }
     }
 }

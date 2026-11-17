@@ -16,9 +16,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.Text
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.AppButton
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
 import cx.m42.superizer.ui.i18n.hostStrings
 
 /**
@@ -48,14 +48,14 @@ public fun HostErrorScreen(
         )
         Spacer(Modifier.height(24.dp))
         Row {
-            AppButton(
+            Button(
                 text = hostStrings.errorBack,
                 onClick = onBack,
                 variant = ButtonVariant.Outline,
-                size = ButtonSize.Default,
+                size = ButtonSize.Lg,
             )
             Spacer(Modifier.width(12.dp))
-            AppButton(text = hostStrings.errorRetry, onClick = onRetry, size = ButtonSize.Default)
+            Button(text = hostStrings.errorRetry, onClick = onRetry, size = ButtonSize.Lg)
         }
     }
 }

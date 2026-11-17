@@ -1,3 +1,7 @@
+// The glyphs here are deprecated in favour of Lucide through ui-kit; AppIconGlyph, which draws an app's
+// contract icon, is not, and still uses them.
+@file:Suppress("DEPRECATION")
+
 package cx.m42.superizer.ui.components
 
 import androidx.compose.foundation.Canvas
@@ -33,6 +37,7 @@ import kotlin.math.sin
  */
 
 /** The nominal box an icon is drawn in. Call sites override it; the proportions never change. */
+@Deprecated("Use cx.m42.superizer.kit.KitIconSize.", ReplaceWith("KitIconSize", "cx.m42.superizer.kit.KitIconSize"))
 public val IconSize: Dp = 20.dp
 
 /** Stroke width as a fraction of the box, so a glyph keeps its weight at any size. */
@@ -77,12 +82,30 @@ private fun DrawScope.box(s: IconScope, tint: Color, l: Float, t: Float, r: Floa
 }
 
 /** The burger that opens the menu: three evenly spaced rules. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Menu.",
+    ReplaceWith(
+        "Icon(Lucide.Menu, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Menu",
+    ),
+)
 @Composable
 public fun BurgerIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s -> listOf(0.26f, 0.5f, 0.74f).forEach { y -> line(s, tint, 0.14f, y, 0.86f, y) } }
 }
 
 /** A left-pointing chevron for the back affordance. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.ChevronLeft.",
+    ReplaceWith(
+        "Icon(Lucide.ChevronLeft, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.ChevronLeft",
+    ),
+)
 @Composable
 public fun BackIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -96,6 +119,15 @@ public fun BackIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** A cog, for the settings page. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Settings.",
+    ReplaceWith(
+        "Icon(Lucide.Settings, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Settings",
+    ),
+)
 @Composable
 public fun SettingsIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -114,6 +146,15 @@ public fun SettingsIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** A tick, for the chosen row of a list of choices. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Check.",
+    ReplaceWith(
+        "Icon(Lucide.Check, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Check",
+    ),
+)
 @Composable
 public fun CheckIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -127,6 +168,15 @@ public fun CheckIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** The backspace arrow on a calculator's ⌫ key. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Delete.",
+    ReplaceWith(
+        "Icon(Lucide.Delete, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Delete",
+    ),
+)
 @Composable
 public fun BackspaceIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -145,6 +195,15 @@ public fun BackspaceIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** A plus, for the tile on Home that leads to the catalog (D48). */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Plus.",
+    ReplaceWith(
+        "Icon(Lucide.Plus, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Plus",
+    ),
+)
 @Composable
 public fun PlusIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -154,6 +213,15 @@ public fun PlusIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** Four tiles — Home, and the screen the drawer leads back to. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.LayoutGrid.",
+    ReplaceWith(
+        "Icon(Lucide.LayoutGrid, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.LayoutGrid",
+    ),
+)
 @Composable
 public fun AppsIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -165,6 +233,15 @@ public fun AppsIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** A QR code, reduced to its three finder squares — the part a person recognises. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.QrCode.",
+    ReplaceWith(
+        "Icon(Lucide.QrCode, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.QrCode",
+    ),
+)
 @Composable
 public fun QrIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -179,6 +256,15 @@ public fun QrIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** A five-pointed star, outlined: Premium, or anything else a host wants to call special. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Star.",
+    ReplaceWith(
+        "Icon(Lucide.Star, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Star",
+    ),
+)
 @Composable
 public fun StarIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -201,6 +287,15 @@ public fun StarIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** A calculator: a body, a display and two rows of keys. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Calculator.",
+    ReplaceWith(
+        "Icon(Lucide.Calculator, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Calculator",
+    ),
+)
 @Composable
 public fun CalculatorIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->
@@ -213,6 +308,15 @@ public fun CalculatorIcon(tint: Color, size: Dp = IconSize) {
 }
 
 /** Currency: a circle with the bar of a generic monetary glyph through it. */
+@Deprecated(
+    "Use cx.m42.superizer.kit.Icon with Lucide.Banknote.",
+    ReplaceWith(
+        "Icon(Lucide.Banknote, contentDescription = null, size = size, tint = tint)",
+        "cx.m42.superizer.kit.Icon",
+        "com.composables.icons.lucide.Lucide",
+        "com.composables.icons.lucide.Banknote",
+    ),
+)
 @Composable
 public fun CurrencyIcon(tint: Color, size: Dp = IconSize) {
     Icon(size) { s ->

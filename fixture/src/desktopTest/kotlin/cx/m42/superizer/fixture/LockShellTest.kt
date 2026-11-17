@@ -47,7 +47,7 @@ import cx.m42.superizer.runtime.InstanceRuntime
 import cx.m42.superizer.runtime.LocalAppRuntime
 import cx.m42.superizer.runtime.Platform
 import cx.m42.superizer.testing.FakeDeviceAuthenticator
-import cx.m42.superizer.ui.components.AppButton
+import cx.m42.superizer.kit.Button
 import java.nio.file.Files
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -351,7 +351,7 @@ class LockShellTest {
      * row at all for an app with no lock.
      */
     @Test
-    fun theProtectionSectionWithEveryPolicy() = androidx.compose.ui.test.runDesktopComposeUiTest(width = 824, height = 1830) {
+    fun theProtectionSectionWithEveryPolicy() = androidx.compose.ui.test.v2.runDesktopComposeUiTest(width = 824, height = 1830) {
         val superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)) {
             host(HostInfo("Fixture", "0.1.0", "dev", Platform.Desktop, SuperizerContract.VERSION, debug = true))
             register(SafeApp())
@@ -465,7 +465,7 @@ private class OpenerApp : SuperizerApp<Unit>() {
             val scope = androidx.compose.runtime.rememberCoroutineScope()
             val app = LocalAppRuntime.current
             Column {
-                AppButton(
+                Button(
                     text = "Open the safe",
                     onClick = { scope.launch { app.navigation.openApp(AppId("safe")) } },
                     modifier = Modifier.testTag("opener:open-safe"),
@@ -495,7 +495,7 @@ private class HoldApp : SuperizerApp<Unit>() {
         override fun Content() {
             val app = LocalAppRuntime.current
             Column {
-                AppButton(
+                Button(
                     text = "Decrypt",
                     onClick = {
                         app.service(SecretHold.Key)!!.holding(true)

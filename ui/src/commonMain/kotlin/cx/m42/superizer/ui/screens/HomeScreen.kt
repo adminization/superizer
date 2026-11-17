@@ -31,11 +31,13 @@ import com.composeunstyled.Text
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.AppButton
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Plus
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
+import cx.m42.superizer.kit.Icon
 import cx.m42.superizer.ui.components.AppIconGlyph
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
-import cx.m42.superizer.ui.components.PlusIcon
 import cx.m42.superizer.ui.i18n.hostStrings
 
 /**
@@ -76,11 +78,11 @@ public fun HomeScreen(
                 textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(16.dp))
-            AppButton(
+            Button(
                 text = hostStrings.addApp,
                 onClick = onAdd,
                 variant = ButtonVariant.Default,
-                size = ButtonSize.Default,
+                size = ButtonSize.Lg,
                 modifier = Modifier.testTag("home:add"),
             )
         }
@@ -197,7 +199,7 @@ private fun AddTile(onAdd: () -> Unit, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(modifier = Modifier.fillMaxWidth().aspectRatio(1.6f), contentAlignment = Alignment.Center) {
-            PlusIcon(tokens.muted, size = 40.dp)
+            Icon(Lucide.Plus, contentDescription = null, size = 40.dp, tint = tokens.muted)
         }
         Text(
             text = hostStrings.addApp,

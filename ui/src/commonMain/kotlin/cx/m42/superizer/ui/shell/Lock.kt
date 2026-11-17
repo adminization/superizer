@@ -28,10 +28,10 @@ import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.lock.AuthAvailability
 import cx.m42.superizer.lock.AuthOutcome
 import cx.m42.superizer.theme.AppTheme
-import cx.m42.superizer.ui.components.AppButton
+import cx.m42.superizer.kit.Button
+import cx.m42.superizer.kit.ButtonSize
+import cx.m42.superizer.kit.ButtonVariant
 import cx.m42.superizer.ui.components.AppIconGlyph
-import cx.m42.superizer.ui.components.ButtonSize
-import cx.m42.superizer.ui.components.ButtonVariant
 import cx.m42.superizer.ui.i18n.hostStrings
 import kotlinx.coroutines.launch
 
@@ -80,10 +80,10 @@ internal fun LockCurtain(
         Spacer(Modifier.height(4.dp))
         Text(text = strings.lockedHint, style = tokens.footnote, color = tokens.muted, textAlign = TextAlign.Center)
         Spacer(Modifier.height(24.dp))
-        AppButton(
+        Button(
             text = strings.unlock,
             onClick = { scope.launch { ask() } },
-            size = ButtonSize.Default,
+            size = ButtonSize.Lg,
             modifier = Modifier.testTag("shell:unlock"),
         )
         problem?.let {
@@ -129,7 +129,7 @@ internal fun UnprotectedBanner(lock: AppLockPort, availability: AuthAvailability
         )
         if (availability == AuthAvailability.NoScreenLock) {
             Spacer(Modifier.width(12.dp))
-            AppButton(
+            Button(
                 text = strings.setUpScreenLock,
                 onClick = { lock.openDeviceSettings() },
                 variant = ButtonVariant.Outline,

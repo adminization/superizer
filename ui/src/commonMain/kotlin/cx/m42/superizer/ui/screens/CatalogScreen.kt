@@ -24,10 +24,12 @@ import com.composeunstyled.Text
 import cx.m42.superizer.app.AppId
 import cx.m42.superizer.app.SuperizerApp
 import cx.m42.superizer.theme.AppTheme
+import com.composables.icons.lucide.Check
+import com.composables.icons.lucide.Lucide
+import cx.m42.superizer.kit.Icon
+import cx.m42.superizer.kit.ItemSeparator
 import cx.m42.superizer.ui.components.AppIconGlyph
-import cx.m42.superizer.ui.components.CheckIcon
-import cx.m42.superizer.ui.components.RowDivider
-import cx.m42.superizer.ui.components.Section
+import cx.m42.superizer.ui.components.HostGroup
 import cx.m42.superizer.ui.i18n.hostStrings
 
 /**
@@ -70,9 +72,9 @@ public fun CatalogScreen(
         )
         // Registration order, grouped the way Home groups: the host decides what comes first.
         apps.groupBy { it.metadata.category }.forEach { (category, inGroup) ->
-            Section(title = category ?: hostStrings.ungrouped) {
+            HostGroup(title = category ?: hostStrings.ungrouped) {
                 inGroup.forEachIndexed { index, app ->
-                    if (index > 0) RowDivider()
+                    if (index > 0) ItemSeparator()
                     CatalogRow(
                         app = app,
                         langTag = langTag,
@@ -117,6 +119,6 @@ private fun CatalogRow(
             }
             if (selected) Text(text = hostStrings.onHome, style = tokens.footnote, color = tokens.muted)
         }
-        if (selected) CheckIcon(tokens.foreground)
+        if (selected) Icon(Lucide.Check, contentDescription = null, tint = tokens.foreground)
     }
 }

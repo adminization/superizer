@@ -246,7 +246,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 superizer-core = { module = "cx.m42.superizer:core", version.ref = "superizer" }
 superizer-ui-theme = { module = "cx.m42.superizer:ui-theme", version.ref = "superizer" }
-superizer-ui = { module = "cx.m42.superizer:ui", version.ref = "superizer" }
+superizer-ui = { module = "cx.m42.superizer:ui", version.ref = "superizer" }   # brings ui-kit
+superizer-ui-kit = { module = "cx.m42.superizer:ui-kit", version.ref = "superizer" }
 superizer-host = { module = "cx.m42.superizer:host", version.ref = "superizer" }
 superizer-testing = { module = "cx.m42.superizer:testing", version.ref = "superizer" }
 superizer-test-app = { module = "cx.m42.superizer.apps:test-app", version = "1.0.0" }

@@ -120,3 +120,13 @@ internal class BackClaim(enabled: Boolean, var onBack: () -> Unit) {
 
 /** Provided around an open app's `Content()` only: the host's own screens and the drawer stay out of it. */
 internal val LocalBackChain = staticCompositionLocalOf<BackChain?> { null }
+
+/**
+ * True inside an open app whose host draws the way back itself — the shell's arrow, which goes through
+ * [SystemBackHandler]. An app that draws its own «Back» for a screen standing on another one draws it
+ * only where this is false: under a test harness, or a host without the arrow. Two ways back on one
+ * screen are one too many.
+ */
+public val hostDrawsBack: Boolean
+    @Composable
+    get() = LocalBackChain.current != null

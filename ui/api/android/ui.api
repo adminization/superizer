@@ -27,9 +27,7 @@ public final class cx/m42/superizer/ui/components/ButtonVariant : java/lang/Enum
 public final class cx/m42/superizer/ui/components/ComposableSingletons$AppScaffoldKt {
 	public static final field INSTANCE Lcx/m42/superizer/ui/components/ComposableSingletons$AppScaffoldKt;
 	public fun <init> ()V
-	public final fun getLambda$-1013826200$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$1143458750$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$895078435$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class cx/m42/superizer/ui/components/IconsKt {
@@ -81,6 +79,8 @@ public final class cx/m42/superizer/ui/components/WidgetsKt {
 	public static final fun Section (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 	public static final fun Switch (ZLjava/lang/String;Landroidx/compose/runtime/Composer;I)V
 	public static final fun ToggleRow (Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun toKit (Lcx/m42/superizer/ui/components/ButtonSize;)Lcx/m42/superizer/kit/ButtonSize;
+	public static final fun toKit (Lcx/m42/superizer/ui/components/ButtonVariant;)Lcx/m42/superizer/kit/ButtonVariant;
 }
 
 public final class cx/m42/superizer/ui/i18n/DiagnosticsWordsKt {
@@ -181,6 +181,7 @@ public final class cx/m42/superizer/ui/i18n/HostStringsKt {
 public final class cx/m42/superizer/ui/platform/BackHandlerKt {
 	public static final fun ScreenSteps (ILandroidx/compose/runtime/Composer;I)V
 	public static final fun SystemBackHandler (ZLkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
+	public static final fun getHostDrawsBack (Landroidx/compose/runtime/Composer;I)Z
 }
 
 public final class cx/m42/superizer/ui/platform/RecentsPreview_androidKt {
@@ -220,12 +221,6 @@ public final class cx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitche
 	public fun <init> ()V
 	public final fun getLambda$-1123850247$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-2090437091$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
-}
-
-public final class cx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShellKt {
-	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ComposableSingletons$SuperizerShellKt;
-	public fun <init> ()V
-	public final fun getLambda$-1261979799$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public abstract interface class cx/m42/superizer/ui/shell/ShellDestination {

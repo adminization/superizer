@@ -116,10 +116,11 @@ test: `libs.superizer.testing`, `libs.compose.ui.test`, `compose.desktop.current
 - No top bar, no drawer, no global modal: the host draws the frame. Veto a close with
   `onCloseRequested` and let the host ask.
 - Every asserted node has a `testTag("<app-id>:<element>")`. Never assert on text.
-- No hard-coded strings in one language, no `Color(0xFF…)` — read `AppTheme` and your own string
+- No hard-coded strings in one language, no `Color(0xFF…)` — read `Kit.colors` and your own string
   tables.
-- Use the widgets in `cx.m42.superizer.ui.components` (`AppButton`, `AppTextField`, `Section`,
-  `ChoiceRow`, `ToggleRow`, `Switch`, `Divider`, `RowDivider`, `IconButton`).
+- Draw with the kit, `cx.m42.superizer.kit` (`Text`, `Button`, `IconButton`, `Input`, `Field`, `Card`,
+  `Badge`, `Alert`, `Tabs`, `ItemGroup`, `Item`, `SwitchItem`, `ChoiceItem`, `Icon` with `Lucide.*`).
+  The widgets in `cx.m42.superizer.ui.components` are deprecated: never use them in a new app.
 - Time comes from `runtime.clock`, never from the platform.
 - Declare in the manifest exactly the deep links, push topics and required services you use.
 

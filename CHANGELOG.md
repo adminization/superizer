@@ -3,6 +3,35 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.9.0
+
+A component kit, and the old widgets deprecated in its favour. No contract change, and the ABI of
+the existing modules only grows: nothing that compiled against 0.8.2 stops compiling, it warns.
+
+- New module `ui-kit` (`cx.m42.superizer:ui-kit`, package `cx.m42.superizer.kit`): shadcn/ui-style
+  components on `compose.foundation` alone, with a light and a dark theme (`KitTheme`, `Kit.colors`,
+  `Kit.typography`, `Kit.spacing`, `Kit.shapes`) and Lucide icons. `Text`, `Icon`, `Button`,
+  `IconButton`, `Card`, `Badge`, `Alert`, `Input`, `Field`, `Switch`, `Checkbox`, `ItemGroup`, `Item`,
+  `SwitchItem`, `ChoiceItem`, `ItemSeparator`, `Tabs`, `Avatar`, `Separator`, `Progress`, `Spinner`,
+  `Skeleton`. It depends on nothing of Superizer's; `ui` exports it.
+- Deprecated, unchanged: `AppButton`, `ButtonVariant`, `ButtonSize`, `IconButton`, `AppTextField`,
+  `Section`, `ChoiceRow`, `ToggleRow`, `Switch`, `Divider`, `RowDivider`, `Monogram`, the glyphs
+  (`BurgerIcon` … `CurrencyIcon`) and `IconSize`. Each deprecation names its replacement, and where the
+  call maps one to one the IDE offers it as a quick fix; 06 has the whole table ("Moving to ui-kit").
+  They are removed in a later major release.
+- `ButtonVariant.toKit()` and `ButtonSize.toKit()`, themselves deprecated: the bridge `AppButton`'s
+  quick fix goes through so a button keeps its variant.
+- Not deprecated: `AppTheme`/`Tokens`, `AppScaffold`, `MenuEntry`, the shell, the host screens,
+  `AppIconGlyph`.
+- The shell, the host screens, the scaffold's top bar and the bench apps are drawn with the kit now.
+  What a person sees moves a little: buttons are 48 dp (`ButtonSize.Lg`) instead of 60, a group's
+  rows sit in a bordered card, the menu and back buttons and the glyphs in the menu are Lucide's, and
+  the confirm-to-close dialog's destructive button is filled red. Every `testTag` stays where it was.
+- `hostDrawsBack` (`ui.platform`): true inside an open app whose host draws the back arrow, so an app
+  draws its own «Back» only where there is none.
+- `IconButton` has a second form with a content slot, for a glyph that is not an `ImageVector` (an
+  app's `AppIconGlyph`); the slot draws in `LocalContentColor`.
+
 ## 0.8.2
 
 Files for apps: a folder of each app's own that the person sees, files over HTTP as bytes, and the camera behind
