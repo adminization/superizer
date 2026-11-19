@@ -24,6 +24,8 @@ Source: <https://github.com/adminization/superizer>.
 | 9 | [Recipes](09-recipes.md) | Cookbook: config from a payload, a Settings block, offline cache, opening another app, hidden apps, custom icons, optional services. |
 | 10 | [New-app prompt template](10-new-app-prompt.md) | A fill-in-the-blanks brief to give an agent: "build app X that does Y, Z". |
 | 11 | [Troubleshooting](11-troubleshooting.md) | Every rejection reason, every dropped push, and what each one actually means. |
+| 12 | [Building UI with `ui-kit`](12-ui-kit.md) | Where the kit comes from (shadcn/ui, RikkaUI, shadcn-multiplatform), the theme, how a screen is put together, what stays out of the kit, and how to add a component. **Read before drawing any screen, in an app or a host.** |
+| 13 | [UI guidelines](13-ui-guidelines.md) | What a finished product screen is, on a phone, a tablet and a desktop window: window classes, navigation, the eight screen templates, the status dictionary, the colour norm, forms, the "screen is done" checklist. *Draft, ahead of the code.* |
 
 ## The shortest possible summary
 

@@ -3,7 +3,10 @@ package cx.m42.superizer.ui.shell
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import cx.m42.superizer.ThemeMode
+import cx.m42.superizer.kit.KitAccent
 import cx.m42.superizer.kit.KitTheme
+import cx.m42.superizer.kit.KitTypography
+import cx.m42.superizer.kit.kitTypography
 import cx.m42.superizer.theme.DarkTokens
 import cx.m42.superizer.theme.LightTokens
 import cx.m42.superizer.theme.SuperizerTheme
@@ -18,6 +21,15 @@ import cx.m42.superizer.ui.platform.WindowAppearance
  */
 @Composable
 public fun HostTheme(mode: ThemeMode, content: @Composable () -> Unit) {
+    HostTheme(mode, KitAccent.Graphite, kitTypography(), content)
+}
+
+/**
+ * [HostTheme] in the person's [accent] and with the host's [typography] — the font reaches inside the
+ * apps, which the first form never let it do (the kit's default typography replaced it).
+ */
+@Composable
+public fun HostTheme(mode: ThemeMode, accent: KitAccent, typography: KitTypography, content: @Composable () -> Unit) {
     // Told to the platform before the system is asked: on iOS a forced style is what
     // isSystemInDarkTheme reads next, and System hands the device's answer back.
     WindowAppearance(mode)
@@ -27,6 +39,6 @@ public fun HostTheme(mode: ThemeMode, content: @Composable () -> Unit) {
         ThemeMode.System -> isSystemInDarkTheme()
     }
     SuperizerTheme(tokens = if (dark) DarkTokens else LightTokens) {
-        KitTheme(dark = dark, content = content)
+        KitTheme(dark = dark, accent = accent, typography = typography, content = content)
     }
 }

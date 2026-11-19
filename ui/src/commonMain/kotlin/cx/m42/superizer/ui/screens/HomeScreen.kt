@@ -154,6 +154,8 @@ private fun AppTile(
             .padding(4.dp)
             .clip(RoundedCornerShape(tokens.radius))
             .background(tokens.background)
+            // In the dark set the card and the page are one colour: the line is what keeps the tile a tile.
+            .border(1.dp, tokens.border, RoundedCornerShape(tokens.radius))
             .combinedClickable(
                 role = Role.Button,
                 onLongClickLabel = hostStrings.removeFromHome,

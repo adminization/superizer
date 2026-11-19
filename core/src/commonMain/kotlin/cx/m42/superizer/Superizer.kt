@@ -156,7 +156,25 @@ public interface HostSettingsPort {
 
     /** Remembered on this device; the whole tree repaints on the next frame. */
     public fun chooseTheme(mode: ThemeMode) {}
+
+    /**
+     * The accent colour in effect, by its id (`KitAccent.id` of the kit: "violet", "blue"…): the
+     * person's choice, else the host's default. Null — the kit's own graphite, the look before
+     * accents existed.
+     */
+    public val accent: StateFlow<String?> get() = NoAccent
+
+    /** Remembered on this device, as [chooseTheme] is. Null goes back to the host's default. */
+    public fun chooseAccent(id: String?) {}
+
+    /**
+     * True when the host lets the person pick an accent — Settings shows the picker only then, so a
+     * host that never thought about accents keeps the Settings screen it had.
+     */
+    public val offersAccent: Boolean get() = false
 }
+
+private val NoAccent: StateFlow<String?> = kotlinx.coroutines.flow.MutableStateFlow(null)
 
 /** How the host is drawn: as the device is set (the default), or always light, or always dark. */
 public enum class ThemeMode { System, Light, Dark }

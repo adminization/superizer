@@ -6,6 +6,17 @@
 // - Show declarations: true
 
 // Library unique name: <cx.m42.superizer.apps:test-app>
+final class cx.m42.apps.testapp/KitGalleryApp : cx.m42.superizer.app/SuperizerApp<kotlin/Unit> { // cx.m42.apps.testapp/KitGalleryApp|null[0]
+    constructor <init>() // cx.m42.apps.testapp/KitGalleryApp.<init>|<init>(){}[0]
+
+    final val configSpec // cx.m42.apps.testapp/KitGalleryApp.configSpec|{}configSpec[0]
+        final fun <get-configSpec>(): cx.m42.superizer.app/AppConfigSpec<kotlin/Unit> // cx.m42.apps.testapp/KitGalleryApp.configSpec.<get-configSpec>|<get-configSpec>(){}[0]
+    final val manifest // cx.m42.apps.testapp/KitGalleryApp.manifest|{}manifest[0]
+        final fun <get-manifest>(): cx.m42.superizer.app/AppManifest // cx.m42.apps.testapp/KitGalleryApp.manifest.<get-manifest>|<get-manifest>(){}[0]
+
+    final fun launch(cx.m42.superizer.runtime/InstanceRuntime, kotlin/Unit): cx.m42.superizer.app/AppInstance // cx.m42.apps.testapp/KitGalleryApp.launch|launch(cx.m42.superizer.runtime.InstanceRuntime;kotlin.Unit){}[0]
+}
+
 final class cx.m42.apps.testapp/SecretTestApp : cx.m42.superizer.app/SuperizerApp<cx.m42.apps.testapp/SecretTestConfig> { // cx.m42.apps.testapp/SecretTestApp|null[0]
     constructor <init>() // cx.m42.apps.testapp/SecretTestApp.<init>|<init>(){}[0]
 
@@ -98,6 +109,7 @@ final class cx.m42.apps.testapp/TestConfig { // cx.m42.apps.testapp/TestConfig|n
     }
 }
 
+final val cx.m42.apps.testapp/cx_m42_apps_testapp_KitGalleryApp$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_KitGalleryApp$stableprop|#static{}cx_m42_apps_testapp_KitGalleryApp$stableprop[0]
 final val cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestApp$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestApp$stableprop|#static{}cx_m42_apps_testapp_SecretTestApp$stableprop[0]
 final val cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig$stableprop|#static{}cx_m42_apps_testapp_SecretTestConfig$stableprop[0]
 final val cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig_$serializer$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig_$serializer$stableprop|#static{}cx_m42_apps_testapp_SecretTestConfig_$serializer$stableprop[0]
@@ -105,6 +117,7 @@ final val cx.m42.apps.testapp/cx_m42_apps_testapp_TestApp$stableprop // cx.m42.a
 final val cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig$stableprop|#static{}cx_m42_apps_testapp_TestConfig$stableprop[0]
 final val cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig_$serializer$stableprop // cx.m42.apps.testapp/cx_m42_apps_testapp_TestConfig_$serializer$stableprop|#static{}cx_m42_apps_testapp_TestConfig_$serializer$stableprop[0]
 
+final fun cx.m42.apps.testapp/cx_m42_apps_testapp_KitGalleryApp$stableprop_getter(): kotlin/Int // cx.m42.apps.testapp/cx_m42_apps_testapp_KitGalleryApp$stableprop_getter|cx_m42_apps_testapp_KitGalleryApp$stableprop_getter(){}[0]
 final fun cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestApp$stableprop_getter(): kotlin/Int // cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestApp$stableprop_getter|cx_m42_apps_testapp_SecretTestApp$stableprop_getter(){}[0]
 final fun cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig$stableprop_getter(): kotlin/Int // cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig$stableprop_getter|cx_m42_apps_testapp_SecretTestConfig$stableprop_getter(){}[0]
 final fun cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig_$serializer$stableprop_getter(): kotlin/Int // cx.m42.apps.testapp/cx_m42_apps_testapp_SecretTestConfig_$serializer$stableprop_getter|cx_m42_apps_testapp_SecretTestConfig_$serializer$stableprop_getter(){}[0]

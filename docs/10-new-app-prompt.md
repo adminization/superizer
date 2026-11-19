@@ -121,6 +121,7 @@ test: `libs.superizer.testing`, `libs.compose.ui.test`, `compose.desktop.current
 - Draw with the kit, `cx.m42.superizer.kit` (`Text`, `Button`, `IconButton`, `Input`, `Field`, `Card`,
   `Badge`, `Alert`, `Tabs`, `ItemGroup`, `Item`, `SwitchItem`, `ChoiceItem`, `Icon` with `Lucide.*`).
   The widgets in `cx.m42.superizer.ui.components` are deprecated: never use them in a new app.
+  Read `docs/12-ui-kit.md` before drawing the first screen.
 - Time comes from `runtime.clock`, never from the platform.
 - Declare in the manifest exactly the deep links, push topics and required services you use.
 

@@ -53,6 +53,7 @@ public object HostKeys {
     public const val LANGUAGE: String = "host.language"
     public const val HAPTICS: String = "host.haptics"
     public const val THEME: String = "host.theme"
+    public const val ACCENT: String = "host.accent"
     public const val UNLOCKED: String = "host.unlocked"
     public const val HOME: String = "host.home"
     public const val SESSION: String = "host.session"

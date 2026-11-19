@@ -1,3 +1,38 @@
+public final class cx/m42/apps/testapp/ComposableSingletons$KitGalleryScreenKt {
+	public static final field INSTANCE Lcx/m42/apps/testapp/ComposableSingletons$KitGalleryScreenKt;
+	public fun <init> ()V
+	public final fun getLambda$-1083236009$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-1156659116$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1181488301$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1279308039$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-2023422934$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-2059579694$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-2102262716$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-363556335$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-415835058$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-475690308$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-594419942$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-679573667$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1512560951$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1860206385$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$497910185$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$539364243$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$706444141$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$744343481$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$761011798$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$771192993$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$902273765$cx_m42_superizer_apps_test_app_release ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class cx/m42/apps/testapp/KitGalleryApp : cx/m42/superizer/app/SuperizerApp {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun getConfigSpec ()Lcx/m42/superizer/app/AppConfigSpec;
+	public fun getManifest ()Lcx/m42/superizer/app/AppManifest;
+	public synthetic fun launch (Lcx/m42/superizer/runtime/InstanceRuntime;Ljava/lang/Object;)Lcx/m42/superizer/app/AppInstance;
+	public fun launch (Lcx/m42/superizer/runtime/InstanceRuntime;Lkotlin/Unit;)Lcx/m42/superizer/app/AppInstance;
+}
+
 public final class cx/m42/apps/testapp/SecretTestApp : cx/m42/superizer/app/SuperizerApp {
 	public static final field $stable I
 	public static final field Companion Lcx/m42/apps/testapp/SecretTestApp$Companion;

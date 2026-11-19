@@ -23,6 +23,14 @@ import com.composeunstyled.Text
 import cx.m42.superizer.HostScreen
 import cx.m42.superizer.Superizer
 import cx.m42.superizer.ThemeMode
+import cx.m42.superizer.kit.Kit
+import cx.m42.superizer.kit.KitAccent
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import cx.m42.superizer.app.LockPolicy
 import cx.m42.superizer.lock.AppLockPort
 import cx.m42.superizer.lock.AuthAvailability
@@ -62,6 +70,7 @@ public fun SettingsScreen(
     val langTag by superizer.settings.langTag.collectAsState()
     val haptics by superizer.settings.haptics.collectAsState()
     val theme by superizer.settings.theme.collectAsState()
+    val accent by superizer.settings.accent.collectAsState()
     val sections by superizer.handler.settingsSections.collectAsState()
     val unlocked by superizer.unlocked.collectAsState()
     val lock by superizer.lock.state.collectAsState()
@@ -101,6 +110,14 @@ public fun SettingsScreen(
                     onClick = { superizer.settings.chooseTheme(mode) },
                 )
             }
+        }
+
+        if (superizer.settings.offersAccent) HostGroup(title = hostStrings.settingsAccent, hint = hostStrings.settingsAccentHint, modifier = Modifier.testTag("settings:accent")) {
+            AccentPicker(
+                selected = KitAccent.byId(accent) ?: KitAccent.Graphite,
+                name = hostStrings::settingsAccentName,
+                onPick = { superizer.settings.chooseAccent(it.id) },
+            )
         }
 
         HostGroup(title = hostStrings.settingsHaptics, hint = hostStrings.settingsHapticsHint) {
@@ -355,3 +372,32 @@ private fun BuildRow(superizer: Superizer, onOpenServiceMenu: () -> Unit) {
 }
 
 private const val TAPS_TO_SERVICE_MENU = 7
+
+/** The accents as swatches in a row, the chosen one ringed and named under the row. */
+@Composable
+private fun AccentPicker(selected: KitAccent, name: (String) -> String, onPick: (KitAccent) -> Unit) {
+    val dark = Kit.colors.isDark
+    androidx.compose.foundation.layout.Column(
+        Modifier.fillMaxWidth().padding(horizontal = Kit.spacing.lg, vertical = Kit.spacing.md),
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(Kit.spacing.sm),
+    ) {
+        androidx.compose.foundation.layout.Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(Kit.spacing.sm)) {
+            KitAccent.entries.forEach { accent ->
+                val on = accent == selected
+                androidx.compose.foundation.layout.Box(
+                    Modifier
+                        .size(44.dp)
+                        .clip(Kit.shapes.full)
+                        .border(2.dp, if (on) accent.swatch(dark) else androidx.compose.ui.graphics.Color.Transparent, Kit.shapes.full)
+                        .selectable(on, role = androidx.compose.ui.semantics.Role.RadioButton) { onPick(accent) }
+                        .semantics { contentDescription = name(accent.id) }
+                        .testTag("settings:accent-${accent.id}")
+                        .padding(5.dp)
+                        .clip(Kit.shapes.full)
+                        .background(accent.swatch(dark)),
+                )
+            }
+        }
+        cx.m42.superizer.kit.Text(name(selected.id), variant = cx.m42.superizer.kit.TextVariant.Muted)
+    }
+}

@@ -99,6 +99,11 @@ public class AppHandler(
     public val settingsSections: StateFlow<List<Pair<AppId, @Composable (AppRuntime) -> Unit>>>
         get() = _settingsSections.asStateFlow()
 
+    private val _badges = MutableStateFlow<Map<AppId, String>>(emptyMap())
+
+    /** The marks apps set beside themselves in the menu (`AppSetupContext.badge`); absent — none. */
+    public val badges: StateFlow<Map<AppId, String>> get() = _badges.asStateFlow()
+
     private class Enabled(
         val runtime: AppRuntime,
         val scope: CoroutineScope,
@@ -313,24 +318,35 @@ public class AppHandler(
     }
 
     /**
+     * True: an app open at the last stop comes back on start however long ago that was — a till left
+     * open in the evening is the till in the morning — only without its state once that is a day old.
+     * False, the default: a day later nothing comes back and Home opens, as it always did. Set by the
+     * host before the shell is drawn.
+     */
+    public var reopenAfterExpiry: Boolean = false
+
+    /**
      * After a process death — or simply after a restart, because the three platforms cannot
      * reliably tell those apart (question 14 in 09). A snapshot older than a day is dropped: nobody
-     * comes back the next morning expecting yesterday's half-typed sum.
+     * comes back the next morning expecting yesterday's half-typed sum — and with it the app, unless
+     * the host asked for [reopenAfterExpiry]. An app the person closed themselves (back to Home) left
+     * no snapshot, so Home is what opens.
      */
     public suspend fun restoreLastSession(): Result<AppSession>? {
         val snapshot = snapshots.load() ?: return null
-        if (clock.now() - snapshot.savedAt > SNAPSHOT_TTL_MS) {
+        if (registry.get(snapshot.appId) == null) {
             snapshots.clear()
             return null
         }
-        if (registry.get(snapshot.appId) == null) {
+        val fresh = clock.now() - snapshot.savedAt <= SNAPSHOT_TTL_MS
+        if (!fresh && !reopenAfterExpiry) {
             snapshots.clear()
             return null
         }
         // Not `force`: a snapshot is yesterday's screen, not an activation. A hidden app that was
         // locked again in between (the Service Menu, a reset) must not walk back in through it —
         // the restore fails like any other launch of a locked app, and the snapshot goes with it.
-        val restored = launch(snapshot.appId, snapshot.config, snapshot.state)
+        val restored = launch(snapshot.appId, snapshot.config, if (fresh) snapshot.state else null)
         if (restored.isFailure) snapshots.clear()
         return restored
     }
@@ -457,6 +473,22 @@ public class AppHandler(
         override fun deepLink(path: String, toConfig: (params: Map<String, String>) -> AppConfig) {
             slot.deepLinks[path] = toConfig
             slot.disposers += Disposable { slot.deepLinks.remove(path) }
+        }
+
+        override fun badge(value: StateFlow<String?>) {
+            if (registry.isSecret(id)) {
+                slot.runtime.logger.warn("badge ignored: a secret app has no mark in the menu")
+                return
+            }
+            val job = slot.scope.launch {
+                value.collect { mark ->
+                    _badges.value = if (mark.isNullOrEmpty()) _badges.value - id else _badges.value + (id to mark)
+                }
+            }
+            slot.disposers += Disposable {
+                job.cancel()
+                _badges.value = _badges.value - id
+            }
         }
 
         override fun listener(handler: suspend (event: SuperizerEvent) -> Unit) {

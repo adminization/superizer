@@ -263,6 +263,38 @@ class AppHandlerTest {
     }
 
     @Test
+    fun afterADayTheAppComesBackButNotItsHalfTypedStateWhenTheHostAsks(): TestResult = handlerTest { f ->
+        // The till left open in the evening is the till in the morning; yesterday's sum is not.
+        val app = ProbeApp()
+        f.registry.register(app)
+        f.handler.enableAll()
+        f.handler.reopenAfterExpiry = true
+        f.snapshots.save(
+            SessionSnapshot(AppId("probe"), AppConfig.Empty, buildJsonObject { put("entry", JsonPrimitive("99")) }, 1_700_000_000_000),
+        )
+        f.advance(hours = 25)
+
+        val restored = f.handler.restoreLastSession()
+        advanceUntilIdle()
+
+        assertNotNull(restored)
+        assertTrue(restored.isSuccess)
+        assertEquals(AppId("probe"), f.handler.current.value?.app?.id)
+        assertTrue((app.lastInstance as ProbeInstance).entry != "99")
+    }
+
+    @Test
+    fun anAppClosedBackToHomeIsNotReopenedOnTheNextStart(): TestResult = handlerTest { f ->
+        f.registry.register(ProbeApp())
+        f.handler.enableAll()
+        f.handler.launch(AppId("probe"))
+        f.handler.close()
+        advanceUntilIdle()
+
+        assertNull(f.handler.restoreLastSession())
+    }
+
+    @Test
     fun aSnapshotOfAnAppLockedAgainSinceIsDroppedNotRestored(): TestResult = runTest {
         // The snapshot is yesterday's screen, not an activation: an app put back behind its
         // activation in between (the Service Menu, a reset) does not walk back in through it.

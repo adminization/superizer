@@ -45,7 +45,28 @@ event ring buffer.
 | `lifecycle(value: StateFlow<HostLifecycle>)` | `PlatformLifecycle.state` | drive foreground/background by hand in a test |
 | `contexts(port: ContextPort)` | `ContextPort.Single` | what the host is pointed at — servers, accounts — and the switcher at the top of the drawer. See below. |
 | `qrScanner(scan: suspend () -> String?)` | none | the camera behind Activate's scan button. Since 0.8.2 apps get it too, as `QrScanner`. |
+| `accent(default: String?, picker: Boolean = true)` (0.11) | graphite, no picker | the accent the host starts with (`"violet"` — a `KitAccent.id`) and whether Settings lets the person pick another |
+| `reopenLastApp()` (0.11) | off | the app open at the last stop comes back on start however long ago — its state only within a day. Off: a day-old session is dropped and Home opens |
 | `appFolders(root: String?)` | the platform's | where each app's `AppFolder` goes: `<root>/<app id>`. Unset: `<documents>/<host name>` on desktop, the host's Documents on iOS, its external files dir on Android, none on the web. `null` offers no folders. See below. |
+
+### The shell's layout (0.11)
+
+`SuperizerShell(superizer)` draws the drawer at any width, as it always has. A host that runs on
+tablets and desktops asks for more:
+
+```kotlin
+SuperizerShell(superizer, Modifier, swipeBack = true, layout = ShellLayout.Adaptive, typography = kitTypography(Inter))
+```
+
+| Window | Between apps | An `AppWidth.Adaptive` app | A `Capped` app (default) |
+|---|---|---|---|
+| `Compact` | the drawer (icons, categories, marks) | full width, the host's bar | a phone's column, the host's bar |
+| `Medium` | a rail, 84 dp | full width, **no** host bar — the app's `PageHeader` with crumbs | a 480 dp column, the host's bar |
+| `Expanded` | a sidebar, 264 dp | the same | the same |
+
+An app says it can be wide through `AppInstance.layout` (`AppLayout(width, upTitle)`); a mark beside
+it in the menu comes from `AppSetupContext.badge(flow)`. `typography` reaches the apps — the font of
+the first form never did.
 
 A complete example is in [Getting started §3.4](01-getting-started.md#34-the-host-itself--commonmainmyhostkt).
 
@@ -123,9 +144,9 @@ snapshot there — and comes back when the context does.
 |---|---|
 | Home — the chosen tiles, "+" to the catalog, long press to remove | `ui`, driven by `Superizer.home` |
 | All Apps — the catalog; a tap adds to Home or takes off | `ui`, driven by `registry.visible(unlocked)` |
-| The drawer — Home, every app on Home, All Apps, plus the footer | `AppScaffold` |
+| The drawer — Home, every app on Home, All Apps, plus the footer; with `ShellLayout.Adaptive` also the rail and the sidebar | `AppScaffold`, `ShellFrame` |
 | The context switcher — a row atop the drawer and a sheet, when the host has contexts | `SuperizerShell` + `ContextPort` |
-| Settings — language, appearance (system / light / dark), haptics, **a block per app**, about, the 7-tap door | `SettingsScreen` + `handler.settingsSections` |
+| Settings — language, appearance (system / light / dark), accent (when offered), haptics, **a block per app**, about, the 7-tap door | `SettingsScreen` + `handler.settingsSections` |
 | Activate — promo code and QR text | `ActivateScreen` + `ActivationPort` |
 | The Service Menu | `ServiceMenuScreen` + `DiagnosticsPort` |
 | The app container, the error screen, the veto dialog | `SuperizerShell` |

@@ -59,6 +59,19 @@ public interface HostStrings {
     public val settingsThemeSystem: String get() = "System"
     public val settingsThemeLight: String get() = "Light"
     public val settingsThemeDark: String get() = "Dark"
+    /** The accent picker; its options are named by [settingsAccentName]. */
+    public val settingsAccent: String get() = "Accent colour"
+    public val settingsAccentHint: String get() = "Buttons, the selected item and charts"
+    /** The name of the accent stored as [id] (`KitAccent.id`). */
+    public fun settingsAccentName(id: String): String = when (id) {
+        "graphite" -> "Graphite"
+        "violet" -> "Violet"
+        "blue" -> "Blue"
+        "green" -> "Green"
+        "orange" -> "Orange"
+        "pink" -> "Pink"
+        else -> id
+    }
     public val settingsAbout: String
     public fun settingsBuild(value: String): String
 
@@ -272,6 +285,17 @@ internal object HostStringsRu : HostStrings {
     override val settingsThemeSystem = "Системное"
     override val settingsThemeLight = "Светлое"
     override val settingsThemeDark = "Тёмное"
+    override val settingsAccent = "Акцентный цвет"
+    override val settingsAccentHint = "Кнопки, выбранный пункт и графики"
+    override fun settingsAccentName(id: String) = when (id) {
+        "graphite" -> "Графит"
+        "violet" -> "Фиолетовый"
+        "blue" -> "Синий"
+        "green" -> "Зелёный"
+        "orange" -> "Оранжевый"
+        "pink" -> "Розовый"
+        else -> id
+    }
     override val settingsAbout = "О приложении"
     override fun settingsBuild(value: String) = "Сборка $value"
 

@@ -256,7 +256,7 @@ internal fun BoxScope.ContextSheet(
 
 /** A context's mark: its initials on the primary fill, square-ish so it does not read as a person. */
 @Composable
-private fun ContextMark(title: String, size: androidx.compose.ui.unit.Dp) {
+internal fun ContextMark(title: String, size: androidx.compose.ui.unit.Dp) {
     Avatar(name = title, size = size, shape = AvatarShape.Square, fill = AppTheme.primary, contentColor = AppTheme.primaryForeground)
 }
 

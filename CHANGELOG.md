@@ -3,6 +3,56 @@
 Versions are the library's; `contractVersion` is separate and moves only when the app contract
 changes incompatibly. A release that bumps one does not automatically bump the other.
 
+## 0.11.0
+
+An adaptive shell and the page kit to fill it: phone, tablet and desktop from one menu. No contract
+change; the ABI only grows, and a host that does not ask for the new layout, the accent or the
+reopening gets the shell it had — checked against the whole suite, Settings included. Naming: the
+kit's package grew (`Page`, `Panel`, `Dialog`, `Menu`, `Chip`, `Tone`…); a star import of it next to
+another star import with the same names is ambiguous — import by name.
+
+- `ui-kit`, the window: `WindowClass` (`Compact` < 600 dp ≤ `Medium` < 1000 dp ≤ `Expanded`, by the
+  width given, never the platform), `LocalWindowClass`, `WindowClassProvider`, `byWindow(…)`.
+- `ui-kit`, the accent: `KitAccent` (Graphite — the look so far — Violet, Blue, Green, Orange, Pink),
+  `KitPalette` (`canvas`, `sidebar`, `brand`, `onBrand`, `brandSoft`, `onBrandSoft`, `brandBorder`,
+  `chart`) as `Kit.palette`, `kitPalette(accent, dark)`, `KitColors.withAccent(accent)` and a
+  `KitTheme(dark, accent, …)` form. `KitTextStyles` (`caption`, `overline`, `label`, `number`,
+  `metric`, `display`, `monoSmall`) as `Kit.textStyles`. `Tone` with `color()`, `textColor()`,
+  `softColor()`; `Modifier.kitClickable(…)`.
+- `ui-kit`, pages: `Page`/`PageWidth`, `PageHeader`/`Crumb`, `SectionTitle`, `Panel`, `Grid`,
+  `DataTable`/`TableColumn`, `ActionBar`; `Chip`, `LineTabs`, `ChoiceTile`, `StepIndicator`,
+  `QtyStepper`; `StatusDot`, `StatusBadge`, `Pill`; `IconTile`, `NameMark`, `Kbd`, `CopyValue`,
+  `FactRow`, `EmptyState`, `Notice`, `Stat`, `Terminal`; `Sparkline`, `BarChart`, `Ring`, `Meter`,
+  `ShareBar`, `meterTone`; overlays `Modal`, `Dialog`, `DialogActions`, `ConfirmDialog`, `SideSheet`,
+  `Menu`/`MenuItem`/`MenuSeparator`/`MenuLabel`, `Select`/`SelectOption`, `ToastState`/`ToastHost`.
+  Overlays are `Popup`s, the same on all four platforms; a dialog and a select become bottom sheets on
+  `Compact`.
+- `ui-kit`, `AppSections`/`SectionItem`: navigation *inside* one app — a bottom bar on a phone, tabs
+  under the `PageHeader` in a wider window (the header draws them). The host's navigation stays the host's.
+- `core`: `AppInstance.layout: StateFlow<AppLayout>` — `AppWidth.Capped` (default, the phone's
+  column) or `Adaptive` (the whole width), and `upTitle`, where the app's own back leads.
+  `AppSetupContext.badge(StateFlow<String?>)` — a mark beside the app in the menu, kept while it is
+  closed; `AppHandler.badges`. Secret apps get none.
+- `core`: `HostScreen.wide` — a host screen that lays out its own column gets the whole pane instead of
+  the 480 dp one (a sign-in flow with the brand beside the form on a desktop). Default `false`.
+- `core`: with `reopenLastApp()` the app open at the last stop comes back on start however long ago
+  that was, its saved state only within a day. Without it, as before: a day-old session is dropped.
+  An app closed back to Home leaves nothing either way, so Home opens.
+- `core`/`host`: the accent is a setting — `HostSettingsPort.accent` / `chooseAccent(id)` /
+  `offersAccent` (defaults, so other implementations compile), stored under `HostKeys.ACCENT`.
+  `Superizer.build { accent("violet") }` sets the host's starting accent and offers the «Акцентный
+  цвет» / Accent colour picker in Settings; a host that does not call it has neither.
+- `core`/`host`: `AppHandler.reopenAfterExpiry`, `Superizer.build { reopenLastApp() }`.
+- `ui`: `SuperizerShell(superizer, modifier, swipeBack, layout, typography)` and `ShellLayout`
+  (`Drawer`, the default, or `Adaptive`). Adaptive: the drawer on `Compact`; on `Medium` a rail
+  (the context's mark, the apps as icons, settings at the foot); on `Expanded` a sidebar (the context
+  switcher, the apps with icons, `category` groups and badges, the footer); the drawer of a phone lists
+  the same items with icons and marks. An `Adaptive` app is not capped at 480 dp and, on `Medium` and
+  `Expanded`, heads its own page — the shell draws no bar over it, its `PageHeader` shows crumbs. The
+  content's `LocalWindowClass` is the class of the area the app gets (a capped app is `Compact`).
+- `ui`: `HostTheme(mode, accent, typography)` — the host's font reaches inside the apps now, which
+  the first form never let it do. `AppIconGlyph` knows `AppIcon.Named("home")`.
+
 ## 0.10.0
 
 A component kit, and the old widgets deprecated in its favour. No contract change, and the ABI of

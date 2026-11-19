@@ -314,7 +314,8 @@ Use [the kit](06-ui-api.md#0-the-kit-cxm42superizerkit) — `Text`, `Button`, `I
 `Card`, `Badge`, `Alert`, `Tabs`, `ItemGroup` with `Item`, `SwitchItem` and `ChoiceItem`, `Icon` with
 Lucide. An app built out of them looks like it belongs, in this host and in any other. The widgets
 in `ui.components` (`AppButton`, `AppTextField`, `Section`, …) are deprecated; the guide maps each
-to its replacement.
+to its replacement. How a screen is put together from the kit, which component for which need, and
+what stays out of it: [Building UI with `ui-kit`](12-ui-kit.md).
 
 ### Test tags
 

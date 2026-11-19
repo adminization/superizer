@@ -170,6 +170,9 @@ public class SuperizerBuilder internal constructor() {
     internal var folderRoot: String? = null
     internal var foldersOff: Boolean = false
     internal var idleLimitMs: Long = DEFAULT_IDLE_LIMIT_MS
+    internal var defaultAccent: String? = null
+    internal var accentPicker: Boolean = false
+    internal var reopenLastApp: Boolean = false
     internal var pushServer: String? = null
     internal var deviceApi: DeviceApi? = null
     internal var pushControl: PushControl = PlatformPushControl
@@ -334,6 +337,24 @@ public class SuperizerBuilder internal constructor() {
     public fun languages(vararg options: LanguageOption, fallback: String = "en") {
         languages = options.toList()
         fallbackLanguage = fallback
+    }
+
+    /**
+     * The accent this host starts with — `KitAccent.id` of the kit: "violet" — and whether Settings
+     * lets the person pick another. Without this call: the kit's graphite and no picker, as before.
+     */
+    public fun accent(default: String?, picker: Boolean = true) {
+        defaultAccent = default
+        accentPicker = picker
+    }
+
+    /**
+     * The app open at the last stop comes back on start however long ago that was — a till left open
+     * in the evening is the till in the morning — though its state only within a day. Without this
+     * call a day-old session is dropped and Home opens, as before.
+     */
+    public fun reopenLastApp() {
+        reopenLastApp = true
     }
 
     public fun clock(value: Clock) {
@@ -540,7 +561,10 @@ internal class SuperizerHost(
         handler.forgetSnapshot(id)
     }
 
-    private val localeService = AppLocaleService(builder.languages, builder.fallbackLanguage)
+    private val localeService = AppLocaleService(builder.languages, builder.fallbackLanguage).apply {
+        accentPicker = builder.accentPicker
+        defaultAccent = builder.defaultAccent
+    }
     override val settings: HostSettingsPort = localeService
     override val haptics: HapticsService = PlatformHaptics(localeService.haptics)
 
@@ -617,7 +641,7 @@ internal class SuperizerHost(
         clock = builder.clock,
         scope = scope,
         unlocked = { unlockStore.unlocked.value },
-    )
+    ).apply { reopenAfterExpiry = builder.reopenLastApp }
 
     override val activation: ActivationPort = ActivationService(
         registry = registry,

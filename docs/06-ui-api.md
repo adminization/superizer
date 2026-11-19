@@ -33,13 +33,18 @@ fun kitTypography(fontFamily: FontFamily = FontFamily.Default): KitTypography
 `warning`, `info` (the blue of "this needs a person"), `border`, `input`, `ring`, `scrim`. The greys
 are `LightTokens`' own, so a screen drawn with the kit sits next to the shell without a seam.
 
-The shell does not call `KitTheme`, and an app does not either: without it the kit draws in
-`LightKitColors` with the default font, which is what the shell looks like. A host that wants a font
-or the dark set for its apps wraps `SuperizerShell` in `KitTheme(...)` once; the shell's own chrome
-still reads `Tokens` until it moves to the kit.
+An app does not call `KitTheme`: `SuperizerShell` wraps everything it shows in `HostTheme(mode)`,
+which gives `AppTheme` and the kit the light or dark set the person chose in Settings. A host's own
+screen outside the shell wraps itself in `HostTheme(mode)` too. Outside Superizer's `ui` entirely,
+call `KitTheme` once at the root; without it the kit draws in `LightKitColors` with the default font.
 
-On the web Compose has no system fonts: a host with Russian text passes a family that has Cyrillic
-to `kitTypography(...)` (Inter from its resources, say).
+On the web Compose has no system fonts: text needs a family passed to `kitTypography(...)` (Inter
+from resources, say; for Russian it must have Cyrillic). `HostTheme` calls `KitTheme` with the
+default typography, so a `KitTheme(typography = …)` *around* `SuperizerShell` is overridden inside
+it. Today a font reaches the kit only in a tree the host themes itself.
+
+How to put a screen together, where the kit comes from and how to add a component:
+[Building UI with `ui-kit`](12-ui-kit.md).
 
 | Component | What it is |
 |---|---|

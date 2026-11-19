@@ -36,6 +36,13 @@ public interface HostScreen {
     /** Whether the window must be kept out of screenshots while this is shown (an import wizard, T10). */
     public val secure: Boolean get() = false
 
+    /**
+     * True: the screen gets the whole pane and lays out its own column — a sign-in flow with the
+     * brand beside the form on a desktop. False, the default: a column of at most 480 dp, centred,
+     * as every other destination.
+     */
+    public val wide: Boolean get() = false
+
     @Composable
     public fun Content(superizer: Superizer, back: () -> Unit, open: (HostScreen) -> Unit)
 }

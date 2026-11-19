@@ -9,14 +9,21 @@ public final class cx/m42/superizer/host/AnonymousAuth : cx/m42/superizer/runtim
 public final class cx/m42/superizer/host/AppLocaleService : cx/m42/superizer/HostSettingsPort, cx/m42/superizer/runtime/LocaleService {
 	public static final field $stable I
 	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
+	public fun chooseAccent (Ljava/lang/String;)V
 	public fun chooseLanguage (Ljava/lang/String;)V
 	public fun chooseTheme (Lcx/m42/superizer/ThemeMode;)V
+	public fun getAccent ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getAccentPicker ()Z
+	public final fun getDefaultAccent ()Ljava/lang/String;
 	public fun getHaptics ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun getLangTag ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun getLanguages ()Ljava/util/List;
+	public fun getOffersAccent ()Z
 	public fun getTheme ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun pick (Ljava/util/Map;Ljava/lang/Object;)Ljava/lang/Object;
 	public final fun refreshFromDevice ()V
+	public final fun setAccentPicker (Z)V
+	public final fun setDefaultAccent (Ljava/lang/String;)V
 	public fun setHaptics (Z)V
 	public final fun useForTesting (Ljava/lang/String;)V
 }
@@ -80,6 +87,8 @@ public final class cx/m42/superizer/host/ServiceRegistry {
 
 public final class cx/m42/superizer/host/SuperizerBuilder {
 	public static final field $stable I
+	public final fun accent (Ljava/lang/String;Z)V
+	public static synthetic fun accent$default (Lcx/m42/superizer/host/SuperizerBuilder;Ljava/lang/String;ZILjava/lang/Object;)V
 	public final fun activateBanner (Lcx/m42/superizer/ActivateBanner;)V
 	public final fun activateEntry (Lcx/m42/superizer/ActivateEntry;)V
 	public final fun appFolders (Ljava/lang/String;)V
@@ -109,6 +118,7 @@ public final class cx/m42/superizer/host/SuperizerBuilder {
 	public final fun pushServer (Ljava/lang/String;)V
 	public final fun qrScanner (Lkotlin/jvm/functions/Function1;)V
 	public final fun register (Lcx/m42/superizer/app/SuperizerApp;)V
+	public final fun reopenLastApp ()V
 	public final fun scheme (Ljava/lang/String;)V
 	public final fun secretBackgroundLimit (J)V
 	public final fun secretVault (Lcx/m42/superizer/secrets/SecretVault;)V
@@ -611,6 +621,7 @@ public final class cx/m42/superizer/host/storage/HomeStore {
 
 public final class cx/m42/superizer/host/storage/HostKeys {
 	public static final field $stable I
+	public static final field ACCENT Ljava/lang/String;
 	public static final field BACKUP_AT Ljava/lang/String;
 	public static final field HAPTICS Ljava/lang/String;
 	public static final field HEARTBEAT Ljava/lang/String;

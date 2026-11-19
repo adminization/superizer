@@ -632,3 +632,25 @@ private fun MenuRow(entry: MenuEntry, onDismiss: () -> Unit) {
             .padding(horizontal = 12.dp, vertical = 14.dp),
     )
 }
+
+/**
+ * The swipe back of [AppScaffold] without its drawer: the screen follows a finger from the right edge and uncovers
+ * the picture of the one under it. The phone frame of the shell's chrome (`ShellChrome`) has a bottom bar instead of a
+ * drawer, and the same way back as every other frame.
+ */
+@Composable
+internal fun SwipeBackFrame(onSwipeBack: (() -> Unit)?, content: @Composable () -> Unit) {
+    val drawer = rememberDrawerState {}
+    val scope = rememberCoroutineScope()
+    val swipe = remember(scope) { SwipeBackState(scope) }
+    SideEffect { swipe.onSwipeBack = onSwipeBack }
+    val previews = LocalBackPreviews.current
+    val recording = if (previews != null) rememberGraphicsLayer() else null
+    SideEffect { previews?.layer = recording }
+    Box(Modifier.fillMaxSize().swipeBack(swipe, closed = { true }).background(AppTheme.menuBackground)) {
+        val uncovered = previews?.uncovered
+        if (swipe.offsetPx < 0f && uncovered != null) UncoveredScreen(uncovered, swipe)
+        // `fullscreen`: the frame inside clears the system bars itself.
+        ContentSheet(drawer = drawer, swipe = swipe, recording = recording, fullscreen = true, content = content)
+    }
+}

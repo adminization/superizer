@@ -209,7 +209,22 @@ public fun KitTheme(
     shapes: KitShapes = KitShapes(),
     content: @Composable () -> Unit,
 ) {
+    KitThemeOf(colors, kitPalette(KitAccent.Graphite, colors.isDark), typography, spacing, shapes, content)
+}
+
+/** What both `KitTheme`s provide; the accent one passes its own palette. */
+@Composable
+internal fun KitThemeOf(
+    colors: KitColors,
+    palette: KitPalette,
+    typography: KitTypography,
+    spacing: KitSpacing,
+    shapes: KitShapes,
+    content: @Composable () -> Unit,
+) {
     CompositionLocalProvider(
+        LocalKitPalette provides palette,
+        LocalKitTextStyles provides kitTextStyles(typography),
         LocalKitColors provides colors,
         LocalKitTypography provides typography,
         LocalKitSpacing provides spacing,

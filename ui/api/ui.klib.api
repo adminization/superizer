@@ -33,6 +33,17 @@ final enum class cx.m42.superizer.ui.components/ButtonVariant : kotlin/Enum<cx.m
     final fun values(): kotlin/Array<cx.m42.superizer.ui.components/ButtonVariant> // cx.m42.superizer.ui.components/ButtonVariant.values|values#static(){}[0]
 }
 
+final enum class cx.m42.superizer.ui.shell/ShellLayout : kotlin/Enum<cx.m42.superizer.ui.shell/ShellLayout> { // cx.m42.superizer.ui.shell/ShellLayout|null[0]
+    enum entry Adaptive // cx.m42.superizer.ui.shell/ShellLayout.Adaptive|null[0]
+    enum entry Drawer // cx.m42.superizer.ui.shell/ShellLayout.Drawer|null[0]
+
+    final val entries // cx.m42.superizer.ui.shell/ShellLayout.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<cx.m42.superizer.ui.shell/ShellLayout> // cx.m42.superizer.ui.shell/ShellLayout.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): cx.m42.superizer.ui.shell/ShellLayout // cx.m42.superizer.ui.shell/ShellLayout.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<cx.m42.superizer.ui.shell/ShellLayout> // cx.m42.superizer.ui.shell/ShellLayout.values|values#static(){}[0]
+}
+
 abstract interface cx.m42.superizer.ui.i18n/HostStrings { // cx.m42.superizer.ui.i18n/HostStrings|null[0]
     abstract val activate // cx.m42.superizer.ui.i18n/HostStrings.activate|{}activate[0]
         abstract fun <get-activate>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.activate.<get-activate>|<get-activate>(){}[0]
@@ -186,6 +197,10 @@ abstract interface cx.m42.superizer.ui.i18n/HostStrings { // cx.m42.superizer.ui
         abstract fun <get-unprotectedNoScreenLock>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.unprotectedNoScreenLock.<get-unprotectedNoScreenLock>|<get-unprotectedNoScreenLock>(){}[0]
     abstract val unprotectedPlatform // cx.m42.superizer.ui.i18n/HostStrings.unprotectedPlatform|{}unprotectedPlatform[0]
         abstract fun <get-unprotectedPlatform>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.unprotectedPlatform.<get-unprotectedPlatform>|<get-unprotectedPlatform>(){}[0]
+    open val settingsAccent // cx.m42.superizer.ui.i18n/HostStrings.settingsAccent|{}settingsAccent[0]
+        open fun <get-settingsAccent>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.settingsAccent.<get-settingsAccent>|<get-settingsAccent>(){}[0]
+    open val settingsAccentHint // cx.m42.superizer.ui.i18n/HostStrings.settingsAccentHint|{}settingsAccentHint[0]
+        open fun <get-settingsAccentHint>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.settingsAccentHint.<get-settingsAccentHint>|<get-settingsAccentHint>(){}[0]
     open val settingsTheme // cx.m42.superizer.ui.i18n/HostStrings.settingsTheme|{}settingsTheme[0]
         open fun <get-settingsTheme>(): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.settingsTheme.<get-settingsTheme>|<get-settingsTheme>(){}[0]
     open val settingsThemeDark // cx.m42.superizer.ui.i18n/HostStrings.settingsThemeDark|{}settingsThemeDark[0]
@@ -199,6 +214,7 @@ abstract interface cx.m42.superizer.ui.i18n/HostStrings { // cx.m42.superizer.ui
     abstract fun settingsBuild(kotlin/String): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.settingsBuild|settingsBuild(kotlin.String){}[0]
     abstract fun unlockPrompt(kotlin/String): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.unlockPrompt|unlockPrompt(kotlin.String){}[0]
     abstract fun version(kotlin/String): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.version|version(kotlin.String){}[0]
+    open fun settingsAccentName(kotlin/String): kotlin/String // cx.m42.superizer.ui.i18n/HostStrings.settingsAccentName|settingsAccentName(kotlin.String){}[0]
 }
 
 sealed interface cx.m42.superizer.ui.shell/ShellDestination { // cx.m42.superizer.ui.shell/ShellDestination|null[0]
@@ -216,13 +232,16 @@ sealed interface cx.m42.superizer.ui.shell/ShellDestination { // cx.m42.superize
     }
 
     final class App : cx.m42.superizer.ui.shell/ShellDestination { // cx.m42.superizer.ui.shell/ShellDestination.App|null[0]
-        constructor <init>(cx.m42.superizer.app/AppId) // cx.m42.superizer.ui.shell/ShellDestination.App.<init>|<init>(cx.m42.superizer.app.AppId){}[0]
+        constructor <init>(cx.m42.superizer.app/AppId, cx.m42.superizer.app/AppId? = ...) // cx.m42.superizer.ui.shell/ShellDestination.App.<init>|<init>(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppId?){}[0]
 
+        final val from // cx.m42.superizer.ui.shell/ShellDestination.App.from|{}from[0]
+            final fun <get-from>(): cx.m42.superizer.app/AppId? // cx.m42.superizer.ui.shell/ShellDestination.App.from.<get-from>|<get-from>(){}[0]
         final val id // cx.m42.superizer.ui.shell/ShellDestination.App.id|{}id[0]
             final fun <get-id>(): cx.m42.superizer.app/AppId // cx.m42.superizer.ui.shell/ShellDestination.App.id.<get-id>|<get-id>(){}[0]
 
         final fun component1(): cx.m42.superizer.app/AppId // cx.m42.superizer.ui.shell/ShellDestination.App.component1|component1(){}[0]
-        final fun copy(cx.m42.superizer.app/AppId = ...): cx.m42.superizer.ui.shell/ShellDestination.App // cx.m42.superizer.ui.shell/ShellDestination.App.copy|copy(cx.m42.superizer.app.AppId){}[0]
+        final fun component2(): cx.m42.superizer.app/AppId? // cx.m42.superizer.ui.shell/ShellDestination.App.component2|component2(){}[0]
+        final fun copy(cx.m42.superizer.app/AppId = ..., cx.m42.superizer.app/AppId? = ...): cx.m42.superizer.ui.shell/ShellDestination.App // cx.m42.superizer.ui.shell/ShellDestination.App.copy|copy(cx.m42.superizer.app.AppId;cx.m42.superizer.app.AppId?){}[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.ui.shell/ShellDestination.App.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // cx.m42.superizer.ui.shell/ShellDestination.App.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // cx.m42.superizer.ui.shell/ShellDestination.App.toString|toString(){}[0]
@@ -276,6 +295,12 @@ sealed interface cx.m42.superizer.ui.shell/ShellDestination { // cx.m42.superize
         final fun toString(): kotlin/String // cx.m42.superizer.ui.shell/ShellDestination.Home.toString|toString(){}[0]
     }
 
+    final object More : cx.m42.superizer.ui.shell/ShellDestination { // cx.m42.superizer.ui.shell/ShellDestination.More|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.ui.shell/ShellDestination.More.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // cx.m42.superizer.ui.shell/ShellDestination.More.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // cx.m42.superizer.ui.shell/ShellDestination.More.toString|toString(){}[0]
+    }
+
     final object ServiceMenu : cx.m42.superizer.ui.shell/ShellDestination { // cx.m42.superizer.ui.shell/ShellDestination.ServiceMenu|null[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // cx.m42.superizer.ui.shell/ShellDestination.ServiceMenu.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // cx.m42.superizer.ui.shell/ShellDestination.ServiceMenu.hashCode|hashCode(){}[0]
@@ -305,6 +330,50 @@ final class cx.m42.superizer.ui.components/MenuEntry { // cx.m42.superizer.ui.co
     final fun toString(): kotlin/String // cx.m42.superizer.ui.components/MenuEntry.toString|toString(){}[0]
 }
 
+final class cx.m42.superizer.ui.shell/ShellChrome { // cx.m42.superizer.ui.shell/ShellChrome|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Int = ..., kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? = ..., kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? = ..., kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? = ..., kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? = ..., kotlin/Function4<cx.m42.superizer.ui.shell/ShellScope, kotlin/Boolean, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? = ..., kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? = ..., kotlin/Function1<kotlin/String, kotlin/String> = ..., kotlin/Function1<kotlin/String, kotlin/String>? = ..., cx.m42.superizer.app/AppIcon? = ..., kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? = ...) // cx.m42.superizer.ui.shell/ShellChrome.<init>|<init>(kotlin.Int;kotlin.Int;kotlin.Function3<cx.m42.superizer.ui.shell.ShellScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function3<cx.m42.superizer.ui.shell.ShellScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function3<cx.m42.superizer.ui.shell.ShellScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function3<cx.m42.superizer.ui.shell.ShellScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<cx.m42.superizer.ui.shell.ShellScope,kotlin.Boolean,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function3<cx.m42.superizer.ui.shell.ShellScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function1<kotlin.String,kotlin.String>;kotlin.Function1<kotlin.String,kotlin.String>?;cx.m42.superizer.app.AppIcon?;kotlin.Function3<cx.m42.superizer.ui.shell.ShellScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?){}[0]
+
+    final val barItems // cx.m42.superizer.ui.shell/ShellChrome.barItems|{}barItems[0]
+        final fun <get-barItems>(): kotlin/Int // cx.m42.superizer.ui.shell/ShellChrome.barItems.<get-barItems>|<get-barItems>(){}[0]
+    final val barTrailing // cx.m42.superizer.ui.shell/ShellChrome.barTrailing|{}barTrailing[0]
+        final fun <get-barTrailing>(): kotlin/Function4<cx.m42.superizer.ui.shell/ShellScope, kotlin/Boolean, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? // cx.m42.superizer.ui.shell/ShellChrome.barTrailing.<get-barTrailing>|<get-barTrailing>(){}[0]
+    final val home // cx.m42.superizer.ui.shell/ShellChrome.home|{}home[0]
+        final fun <get-home>(): kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? // cx.m42.superizer.ui.shell/ShellChrome.home.<get-home>|<get-home>(){}[0]
+    final val homeIcon // cx.m42.superizer.ui.shell/ShellChrome.homeIcon|{}homeIcon[0]
+        final fun <get-homeIcon>(): cx.m42.superizer.app/AppIcon? // cx.m42.superizer.ui.shell/ShellChrome.homeIcon.<get-homeIcon>|<get-homeIcon>(){}[0]
+    final val homeTitle // cx.m42.superizer.ui.shell/ShellChrome.homeTitle|{}homeTitle[0]
+        final fun <get-homeTitle>(): kotlin/Function1<kotlin/String, kotlin/String>? // cx.m42.superizer.ui.shell/ShellChrome.homeTitle.<get-homeTitle>|<get-homeTitle>(){}[0]
+    final val more // cx.m42.superizer.ui.shell/ShellChrome.more|{}more[0]
+        final fun <get-more>(): kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? // cx.m42.superizer.ui.shell/ShellChrome.more.<get-more>|<get-more>(){}[0]
+    final val moreTitle // cx.m42.superizer.ui.shell/ShellChrome.moreTitle|{}moreTitle[0]
+        final fun <get-moreTitle>(): kotlin/Function1<kotlin/String, kotlin/String> // cx.m42.superizer.ui.shell/ShellChrome.moreTitle.<get-moreTitle>|<get-moreTitle>(){}[0]
+    final val navFooter // cx.m42.superizer.ui.shell/ShellChrome.navFooter|{}navFooter[0]
+        final fun <get-navFooter>(): kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? // cx.m42.superizer.ui.shell/ShellChrome.navFooter.<get-navFooter>|<get-navFooter>(){}[0]
+    final val navHeader // cx.m42.superizer.ui.shell/ShellChrome.navHeader|{}navHeader[0]
+        final fun <get-navHeader>(): kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? // cx.m42.superizer.ui.shell/ShellChrome.navHeader.<get-navHeader>|<get-navHeader>(){}[0]
+    final val notice // cx.m42.superizer.ui.shell/ShellChrome.notice|{}notice[0]
+        final fun <get-notice>(): kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? // cx.m42.superizer.ui.shell/ShellChrome.notice.<get-notice>|<get-notice>(){}[0]
+    final val railFooter // cx.m42.superizer.ui.shell/ShellChrome.railFooter|{}railFooter[0]
+        final fun <get-railFooter>(): kotlin/Function3<cx.m42.superizer.ui.shell/ShellScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>? // cx.m42.superizer.ui.shell/ShellChrome.railFooter.<get-railFooter>|<get-railFooter>(){}[0]
+    final val railItems // cx.m42.superizer.ui.shell/ShellChrome.railItems|{}railItems[0]
+        final fun <get-railItems>(): kotlin/Int // cx.m42.superizer.ui.shell/ShellChrome.railItems.<get-railItems>|<get-railItems>(){}[0]
+}
+
+final class cx.m42.superizer.ui.shell/ShellScope { // cx.m42.superizer.ui.shell/ShellScope|null[0]
+    final val openApp // cx.m42.superizer.ui.shell/ShellScope.openApp|{}openApp[0]
+        final fun <get-openApp>(): kotlin/Function1<cx.m42.superizer.app/AppId, kotlin/Unit> // cx.m42.superizer.ui.shell/ShellScope.openApp.<get-openApp>|<get-openApp>(){}[0]
+    final val openCatalog // cx.m42.superizer.ui.shell/ShellScope.openCatalog|{}openCatalog[0]
+        final fun <get-openCatalog>(): kotlin/Function0<kotlin/Unit> // cx.m42.superizer.ui.shell/ShellScope.openCatalog.<get-openCatalog>|<get-openCatalog>(){}[0]
+    final val openContexts // cx.m42.superizer.ui.shell/ShellScope.openContexts|{}openContexts[0]
+        final fun <get-openContexts>(): kotlin/Function0<kotlin/Unit> // cx.m42.superizer.ui.shell/ShellScope.openContexts.<get-openContexts>|<get-openContexts>(){}[0]
+    final val openHome // cx.m42.superizer.ui.shell/ShellScope.openHome|{}openHome[0]
+        final fun <get-openHome>(): kotlin/Function0<kotlin/Unit> // cx.m42.superizer.ui.shell/ShellScope.openHome.<get-openHome>|<get-openHome>(){}[0]
+    final val openScreen // cx.m42.superizer.ui.shell/ShellScope.openScreen|{}openScreen[0]
+        final fun <get-openScreen>(): kotlin/Function1<cx.m42.superizer/HostScreen, kotlin/Unit> // cx.m42.superizer.ui.shell/ShellScope.openScreen.<get-openScreen>|<get-openScreen>(){}[0]
+    final val openSettings // cx.m42.superizer.ui.shell/ShellScope.openSettings|{}openSettings[0]
+        final fun <get-openSettings>(): kotlin/Function0<kotlin/Unit> // cx.m42.superizer.ui.shell/ShellScope.openSettings.<get-openSettings>|<get-openSettings>(){}[0]
+}
+
 final val cx.m42.superizer.ui.components/IconSize // cx.m42.superizer.ui.components/IconSize|{}IconSize[0]
     final fun <get-IconSize>(): androidx.compose.ui.unit/Dp // cx.m42.superizer.ui.components/IconSize.<get-IconSize>|<get-IconSize>(){}[0]
 final val cx.m42.superizer.ui.components/LocalDrawerDismiss // cx.m42.superizer.ui.components/LocalDrawerDismiss|{}LocalDrawerDismiss[0]
@@ -322,13 +391,16 @@ final val cx.m42.superizer.ui.i18n/hostStrings // cx.m42.superizer.ui.i18n/hostS
     final fun <get-hostStrings>(androidx.compose.runtime/Composer?, kotlin/Int): cx.m42.superizer.ui.i18n/HostStrings // cx.m42.superizer.ui.i18n/hostStrings.<get-hostStrings>|<get-hostStrings>(androidx.compose.runtime.Composer?;kotlin.Int){}[0]
 final val cx.m42.superizer.ui.platform/hostDrawsBack // cx.m42.superizer.ui.platform/hostDrawsBack|{}hostDrawsBack[0]
     final fun <get-hostDrawsBack>(androidx.compose.runtime/Composer?, kotlin/Int): kotlin/Boolean // cx.m42.superizer.ui.platform/hostDrawsBack.<get-hostDrawsBack>|<get-hostDrawsBack>(androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellChrome$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellChrome$stableprop|#static{}cx_m42_superizer_ui_shell_ShellChrome$stableprop[0]
 final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Activate$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Activate$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_Activate$stableprop[0]
 final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_App$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_App$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_App$stableprop[0]
 final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Catalog$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Catalog$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_Catalog$stableprop[0]
 final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Home$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Home$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_Home$stableprop[0]
 final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Host$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Host$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_Host$stableprop[0]
+final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_More$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_More$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_More$stableprop[0]
 final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_ServiceMenu$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_ServiceMenu$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_ServiceMenu$stableprop[0]
 final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Settings$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Settings$stableprop|#static{}cx_m42_superizer_ui_shell_ShellDestination_Settings$stableprop[0]
+final val cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellScope$stableprop // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellScope$stableprop|#static{}cx_m42_superizer_ui_shell_ShellScope$stableprop[0]
 
 final fun (cx.m42.superizer.ui.components/ButtonSize).cx.m42.superizer.ui.components/toKit(): cx.m42.superizer.kit/ButtonSize // cx.m42.superizer.ui.components/toKit|toKit@cx.m42.superizer.ui.components.ButtonSize(){}[0]
 final fun (cx.m42.superizer.ui.components/ButtonVariant).cx.m42.superizer.ui.components/toKit(): cx.m42.superizer.kit/ButtonVariant // cx.m42.superizer.ui.components/toKit|toKit@cx.m42.superizer.ui.components.ButtonVariant(){}[0]
@@ -367,12 +439,18 @@ final fun cx.m42.superizer.ui.screens/HomeScreen(kotlin.collections/List<cx.m42.
 final fun cx.m42.superizer.ui.screens/HostErrorScreen(kotlin/Function0<kotlin/Unit>, kotlin/Function0<kotlin/Unit>, androidx.compose.ui/Modifier?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // cx.m42.superizer.ui.screens/HostErrorScreen|HostErrorScreen(kotlin.Function0<kotlin.Unit>;kotlin.Function0<kotlin.Unit>;androidx.compose.ui.Modifier?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun cx.m42.superizer.ui.screens/ServiceMenuScreen(cx.m42.superizer/Superizer, kotlin/Function1<cx.m42.superizer.app/AppId, kotlin/Unit>, androidx.compose.ui/Modifier?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // cx.m42.superizer.ui.screens/ServiceMenuScreen|ServiceMenuScreen(cx.m42.superizer.Superizer;kotlin.Function1<cx.m42.superizer.app.AppId,kotlin.Unit>;androidx.compose.ui.Modifier?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
 final fun cx.m42.superizer.ui.screens/SettingsScreen(cx.m42.superizer/Superizer, kotlin/Function0<kotlin/Unit>, androidx.compose.ui/Modifier?, kotlin/Function1<cx.m42.superizer/HostScreen, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // cx.m42.superizer.ui.screens/SettingsScreen|SettingsScreen(cx.m42.superizer.Superizer;kotlin.Function0<kotlin.Unit>;androidx.compose.ui.Modifier?;kotlin.Function1<cx.m42.superizer.HostScreen,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun cx.m42.superizer.ui.shell/HostTheme(cx.m42.superizer/ThemeMode, cx.m42.superizer.kit/KitAccent, cx.m42.superizer.kit/KitTypography, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int) // cx.m42.superizer.ui.shell/HostTheme|HostTheme(cx.m42.superizer.ThemeMode;cx.m42.superizer.kit.KitAccent;cx.m42.superizer.kit.KitTypography;kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
 final fun cx.m42.superizer.ui.shell/HostTheme(cx.m42.superizer/ThemeMode, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int) // cx.m42.superizer.ui.shell/HostTheme|HostTheme(cx.m42.superizer.ThemeMode;kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun cx.m42.superizer.ui.shell/SuperizerShell(cx.m42.superizer/Superizer, androidx.compose.ui/Modifier, kotlin/Boolean, cx.m42.superizer.ui.shell/ShellLayout, cx.m42.superizer.kit/KitTypography, androidx.compose.runtime/Composer?, kotlin/Int) // cx.m42.superizer.ui.shell/SuperizerShell|SuperizerShell(cx.m42.superizer.Superizer;androidx.compose.ui.Modifier;kotlin.Boolean;cx.m42.superizer.ui.shell.ShellLayout;cx.m42.superizer.kit.KitTypography;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun cx.m42.superizer.ui.shell/SuperizerShell(cx.m42.superizer/Superizer, androidx.compose.ui/Modifier, kotlin/Boolean, cx.m42.superizer.ui.shell/ShellLayout, cx.m42.superizer.kit/KitTypography, cx.m42.superizer.ui.shell/ShellChrome?, androidx.compose.runtime/Composer?, kotlin/Int) // cx.m42.superizer.ui.shell/SuperizerShell|SuperizerShell(cx.m42.superizer.Superizer;androidx.compose.ui.Modifier;kotlin.Boolean;cx.m42.superizer.ui.shell.ShellLayout;cx.m42.superizer.kit.KitTypography;cx.m42.superizer.ui.shell.ShellChrome?;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
 final fun cx.m42.superizer.ui.shell/SuperizerShell(cx.m42.superizer/Superizer, androidx.compose.ui/Modifier?, kotlin/Boolean, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // cx.m42.superizer.ui.shell/SuperizerShell|SuperizerShell(cx.m42.superizer.Superizer;androidx.compose.ui.Modifier?;kotlin.Boolean;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellChrome$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellChrome$stableprop_getter|cx_m42_superizer_ui_shell_ShellChrome$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Activate$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Activate$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_Activate$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_App$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_App$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_App$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Catalog$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Catalog$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_Catalog$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Home$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Home$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_Home$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Host$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Host$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_Host$stableprop_getter(){}[0]
+final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_More$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_More$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_More$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_ServiceMenu$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_ServiceMenu$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_ServiceMenu$stableprop_getter(){}[0]
 final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Settings$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellDestination_Settings$stableprop_getter|cx_m42_superizer_ui_shell_ShellDestination_Settings$stableprop_getter(){}[0]
+final fun cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellScope$stableprop_getter(): kotlin/Int // cx.m42.superizer.ui.shell/cx_m42_superizer_ui_shell_ShellScope$stableprop_getter|cx_m42_superizer_ui_shell_ShellScope$stableprop_getter(){}[0]

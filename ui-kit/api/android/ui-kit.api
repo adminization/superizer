@@ -58,6 +58,41 @@ public final class cx/m42/superizer/kit/ButtonVariant : java/lang/Enum {
 	public static fun values ()[Lcx/m42/superizer/kit/ButtonVariant;
 }
 
+public final class cx/m42/superizer/kit/ChartsKt {
+	public static final fun BarChart-DDuSU3M (Ljava/util/List;Ljava/util/List;Landroidx/compose/ui/Modifier;FJLjava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Meter-1qNOong (FLandroidx/compose/ui/Modifier;Landroidx/compose/ui/graphics/Color;FLjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Ring-pMuDFJQ (FLandroidx/compose/ui/Modifier;FFJLjava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ShareBar-942rkJo (Ljava/util/List;Landroidx/compose/ui/Modifier;FLjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Sparkline-T042LqI (Ljava/util/List;Landroidx/compose/ui/Modifier;JZLjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun meterTone (F)Lcx/m42/superizer/kit/Tone;
+}
+
+public final class cx/m42/superizer/kit/ComposableSingletons$ChartsKt {
+	public static final field INSTANCE Lcx/m42/superizer/kit/ComposableSingletons$ChartsKt;
+	public fun <init> ()V
+	public final fun getLambda$-958188601$cx_m42_superizer_ui_kit_release ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class cx/m42/superizer/kit/ComposableSingletons$SelectionKt {
+	public static final field INSTANCE Lcx/m42/superizer/kit/ComposableSingletons$SelectionKt;
+	public fun <init> ()V
+	public final fun getLambda$-1896983555$cx_m42_superizer_ui_kit_release ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class cx/m42/superizer/kit/Crumb {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlin/jvm/functions/Function0;
+	public final fun copy (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Lcx/m42/superizer/kit/Crumb;
+	public static synthetic fun copy$default (Lcx/m42/superizer/kit/Crumb;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lcx/m42/superizer/kit/Crumb;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/kit/DisplayKt {
 	public static final fun Avatar-iv-I9-Q (Ljava/lang/String;Landroidx/compose/ui/Modifier;FLcx/m42/superizer/kit/AvatarShape;JJLandroidx/compose/runtime/Composer;II)V
 	public static final fun Badge (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcx/m42/superizer/kit/BadgeVariant;ZLandroidx/compose/runtime/Composer;II)V
@@ -95,6 +130,25 @@ public final class cx/m42/superizer/kit/Kit {
 	public final fun getShapes (Landroidx/compose/runtime/Composer;I)Lcx/m42/superizer/kit/KitShapes;
 	public final fun getSpacing (Landroidx/compose/runtime/Composer;I)Lcx/m42/superizer/kit/KitSpacing;
 	public final fun getTypography (Landroidx/compose/runtime/Composer;I)Lcx/m42/superizer/kit/KitTypography;
+}
+
+public final class cx/m42/superizer/kit/KitAccent : java/lang/Enum {
+	public static final field Blue Lcx/m42/superizer/kit/KitAccent;
+	public static final field Companion Lcx/m42/superizer/kit/KitAccent$Companion;
+	public static final field Graphite Lcx/m42/superizer/kit/KitAccent;
+	public static final field Green Lcx/m42/superizer/kit/KitAccent;
+	public static final field Orange Lcx/m42/superizer/kit/KitAccent;
+	public static final field Pink Lcx/m42/superizer/kit/KitAccent;
+	public static final field Violet Lcx/m42/superizer/kit/KitAccent;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getId ()Ljava/lang/String;
+	public final fun swatch-vNxB06k (Z)J
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/kit/KitAccent;
+	public static fun values ()[Lcx/m42/superizer/kit/KitAccent;
+}
+
+public final class cx/m42/superizer/kit/KitAccent$Companion {
+	public final fun byId (Ljava/lang/String;)Lcx/m42/superizer/kit/KitAccent;
 }
 
 public final class cx/m42/superizer/kit/KitColors {
@@ -161,6 +215,32 @@ public final class cx/m42/superizer/kit/KitColors {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class cx/m42/superizer/kit/KitPalette {
+	public static final field $stable I
+	public synthetic fun <init> (JJJJJJJLjava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-0d7_KjU ()J
+	public final fun component2-0d7_KjU ()J
+	public final fun component3-0d7_KjU ()J
+	public final fun component4-0d7_KjU ()J
+	public final fun component5-0d7_KjU ()J
+	public final fun component6-0d7_KjU ()J
+	public final fun component7-0d7_KjU ()J
+	public final fun component8 ()Ljava/util/List;
+	public final fun copy-MZa7t-8 (JJJJJJJLjava/util/List;)Lcx/m42/superizer/kit/KitPalette;
+	public static synthetic fun copy-MZa7t-8$default (Lcx/m42/superizer/kit/KitPalette;JJJJJJJLjava/util/List;ILjava/lang/Object;)Lcx/m42/superizer/kit/KitPalette;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBrand-0d7_KjU ()J
+	public final fun getBrandBorder-0d7_KjU ()J
+	public final fun getBrandSoft-0d7_KjU ()J
+	public final fun getCanvas-0d7_KjU ()J
+	public final fun getChart ()Ljava/util/List;
+	public final fun getOnBrand-0d7_KjU ()J
+	public final fun getOnBrandSoft-0d7_KjU ()J
+	public final fun getSidebar-0d7_KjU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/kit/KitShapes {
 	public static final field $stable I
 	public synthetic fun <init> (FILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -198,6 +278,30 @@ public final class cx/m42/superizer/kit/KitSpacing {
 	public final fun getXl-D9Ej5fM ()F
 	public final fun getXs-D9Ej5fM ()F
 	public final fun getXxl-D9Ej5fM ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/kit/KitTextStyles {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;)V
+	public final fun component1 ()Landroidx/compose/ui/text/TextStyle;
+	public final fun component2 ()Landroidx/compose/ui/text/TextStyle;
+	public final fun component3 ()Landroidx/compose/ui/text/TextStyle;
+	public final fun component4 ()Landroidx/compose/ui/text/TextStyle;
+	public final fun component5 ()Landroidx/compose/ui/text/TextStyle;
+	public final fun component6 ()Landroidx/compose/ui/text/TextStyle;
+	public final fun component7 ()Landroidx/compose/ui/text/TextStyle;
+	public final fun copy (Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;)Lcx/m42/superizer/kit/KitTextStyles;
+	public static synthetic fun copy$default (Lcx/m42/superizer/kit/KitTextStyles;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;Landroidx/compose/ui/text/TextStyle;ILjava/lang/Object;)Lcx/m42/superizer/kit/KitTextStyles;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCaption ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getDisplay ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getLabel ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getMetric ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getMonoSmall ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getNumber ()Landroidx/compose/ui/text/TextStyle;
+	public final fun getOverline ()Landroidx/compose/ui/text/TextStyle;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -245,12 +349,132 @@ public final class cx/m42/superizer/kit/KitTypography {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class cx/m42/superizer/kit/LayoutKt {
+	public static final fun ActionBar (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun DataTable-hGBTI10 (Ljava/util/List;Ljava/util/List;Landroidx/compose/ui/Modifier;FLkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Grid-TN_CM5M (ILandroidx/compose/ui/Modifier;FLjava/util/List;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Page (Lcx/m42/superizer/kit/PageWidth;Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun PageHeader (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Panel-gMrHQkA (Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Lkotlin/jvm/functions/Function3;ZLkotlin/jvm/functions/Function0;FLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SectionTitle (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/kit/OverlaysKt {
+	public static final fun ConfirmDialog (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Dialog-GmEhDVc (Lkotlin/jvm/functions/Function0;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Lcx/m42/superizer/kit/Tone;FLjava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun DialogActions (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ZZZLandroidx/compose/runtime/Composer;II)V
+	public static final fun Menu-hGBTI10 (ZLkotlin/jvm/functions/Function0;ZFLkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun MenuItem (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/graphics/vector/ImageVector;ZZLjava/lang/String;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun MenuLabel (Ljava/lang/String;Landroidx/compose/runtime/Composer;I)V
+	public static final fun MenuSeparator (Landroidx/compose/runtime/Composer;I)V
+	public static final fun Modal (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;I)V
+	public static final fun Select (Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/graphics/vector/ImageVector;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun SideSheet (Lkotlin/jvm/functions/Function0;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ToastHost (Landroidx/compose/foundation/layout/BoxScope;Lcx/m42/superizer/kit/ToastState;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberToastState (JLandroidx/compose/runtime/Composer;II)Lcx/m42/superizer/kit/ToastState;
+}
+
+public final class cx/m42/superizer/kit/PageWidth : java/lang/Enum {
+	public static final field Default Lcx/m42/superizer/kit/PageWidth;
+	public static final field Narrow Lcx/m42/superizer/kit/PageWidth;
+	public static final field Wide Lcx/m42/superizer/kit/PageWidth;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getMax-D9Ej5fM ()F
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/kit/PageWidth;
+	public static fun values ()[Lcx/m42/superizer/kit/PageWidth;
+}
+
+public final class cx/m42/superizer/kit/PaletteKt {
+	public static final fun KitTheme (ZLcx/m42/superizer/kit/KitAccent;Lcx/m42/superizer/kit/KitTypography;Lcx/m42/superizer/kit/KitSpacing;Lcx/m42/superizer/kit/KitShapes;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun getLocalKitPalette ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getPalette (Lcx/m42/superizer/kit/Kit;Landroidx/compose/runtime/Composer;I)Lcx/m42/superizer/kit/KitPalette;
+	public static final fun kitPalette (Lcx/m42/superizer/kit/KitAccent;Z)Lcx/m42/superizer/kit/KitPalette;
+	public static final fun withAccent (Lcx/m42/superizer/kit/KitColors;Lcx/m42/superizer/kit/KitAccent;)Lcx/m42/superizer/kit/KitColors;
+}
+
+public final class cx/m42/superizer/kit/SectionItem {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;)Lcx/m42/superizer/kit/SectionItem;
+	public static synthetic fun copy$default (Lcx/m42/superizer/kit/SectionItem;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/kit/SectionItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBadge ()Ljava/lang/String;
+	public final fun getIcon ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/kit/SectionsKt {
+	public static final fun AppSections (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/kit/SelectOption {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/kit/SelectOption;
+	public static synthetic fun copy$default (Lcx/m42/superizer/kit/SelectOption;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/kit/SelectOption;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHint ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/kit/SelectionKt {
+	public static final fun Chip (Ljava/lang/String;ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Ljava/lang/Integer;Lcx/m42/superizer/kit/Tone;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ChoiceTile-hGBTI10 (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;FLkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun LineTabs (Ljava/util/List;ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun QtyStepper (ILkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;IILjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun StepIndicator (Ljava/util/List;ILandroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class cx/m42/superizer/kit/SeparatorOrientation : java/lang/Enum {
 	public static final field Horizontal Lcx/m42/superizer/kit/SeparatorOrientation;
 	public static final field Vertical Lcx/m42/superizer/kit/SeparatorOrientation;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/kit/SeparatorOrientation;
 	public static fun values ()[Lcx/m42/superizer/kit/SeparatorOrientation;
+}
+
+public final class cx/m42/superizer/kit/StatusKt {
+	public static final fun Pill (Ljava/lang/String;Lcx/m42/superizer/kit/Tone;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/runtime/Composer;II)V
+	public static final fun StatusBadge (Ljava/lang/String;Lcx/m42/superizer/kit/Tone;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun StatusDot-6a0pyJM (Lcx/m42/superizer/kit/Tone;Landroidx/compose/ui/Modifier;FLandroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/kit/SurfacesKt {
+	public static final fun CopyValue-cd68TDI (Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Ljava/lang/String;JLkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun EmptyState (Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun FactRow (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;ZZLjava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun IconTile-942rkJo (Landroidx/compose/ui/graphics/vector/ImageVector;Lcx/m42/superizer/kit/Tone;FLandroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Kbd (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public static final fun NameMark-DzVHIIc (Ljava/lang/String;FLandroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun Notice (Lcx/m42/superizer/kit/Tone;Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Stat (Ljava/lang/String;Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Landroidx/compose/ui/graphics/vector/ImageVector;Lcx/m42/superizer/kit/Tone;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun Terminal-zX9VqPk (Ljava/lang/String;Landroidx/compose/ui/Modifier;ZLjava/lang/String;Landroidx/compose/ui/unit/Dp;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class cx/m42/superizer/kit/TableColumn {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;FLandroidx/compose/ui/unit/Dp;ZLkotlin/jvm/functions/Function3;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;FLandroidx/compose/ui/unit/Dp;ZLkotlin/jvm/functions/Function3;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAlignEnd ()Z
+	public final fun getCell ()Lkotlin/jvm/functions/Function3;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getWeight ()F
+	public final fun getWidth-lTKBWiU ()Landroidx/compose/ui/unit/Dp;
 }
 
 public final class cx/m42/superizer/kit/TabsKt {
@@ -261,6 +485,12 @@ public final class cx/m42/superizer/kit/TextKt {
 	public static final fun Icon-xfPyhaw (Landroidx/compose/ui/graphics/vector/ImageVector;Ljava/lang/String;Landroidx/compose/ui/Modifier;FJLandroidx/compose/runtime/Composer;II)V
 	public static final fun Text-h-EmoxA (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcx/m42/superizer/kit/TextVariant;JLandroidx/compose/ui/text/style/TextAlign;IILandroidx/compose/ui/text/TextStyle;Landroidx/compose/runtime/Composer;II)V
 	public static final fun getKitIconSize ()F
+}
+
+public final class cx/m42/superizer/kit/TextStylesKt {
+	public static final fun getLocalKitTextStyles ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getTextStyles (Lcx/m42/superizer/kit/Kit;Landroidx/compose/runtime/Composer;I)Lcx/m42/superizer/kit/KitTextStyles;
+	public static final fun kitTextStyles (Lcx/m42/superizer/kit/KitTypography;)Lcx/m42/superizer/kit/KitTextStyles;
 }
 
 public final class cx/m42/superizer/kit/TextVariant : java/lang/Enum {
@@ -277,5 +507,79 @@ public final class cx/m42/superizer/kit/TextVariant : java/lang/Enum {
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/kit/TextVariant;
 	public static fun values ()[Lcx/m42/superizer/kit/TextVariant;
+}
+
+public final class cx/m42/superizer/kit/Toast {
+	public static final field $stable I
+	public fun <init> (JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/kit/Tone;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/kit/Tone;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lcx/m42/superizer/kit/Tone;
+	public final fun copy (JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/kit/Tone;)Lcx/m42/superizer/kit/Toast;
+	public static synthetic fun copy$default (Lcx/m42/superizer/kit/Toast;JLjava/lang/String;Ljava/lang/String;Lcx/m42/superizer/kit/Tone;ILjava/lang/Object;)Lcx/m42/superizer/kit/Toast;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDetail ()Ljava/lang/String;
+	public final fun getId ()J
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getTone ()Lcx/m42/superizer/kit/Tone;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class cx/m42/superizer/kit/ToastState {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (J)V
+	public synthetic fun <init> (JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun dismiss (Lcx/m42/superizer/kit/Toast;)V
+	public final fun getDurationMillis ()J
+	public final fun getToasts ()Ljava/util/List;
+	public final fun show (Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/kit/Tone;)V
+	public static synthetic fun show$default (Lcx/m42/superizer/kit/ToastState;Ljava/lang/String;Ljava/lang/String;Lcx/m42/superizer/kit/Tone;ILjava/lang/Object;)V
+}
+
+public final class cx/m42/superizer/kit/Tone : java/lang/Enum {
+	public static final field Brand Lcx/m42/superizer/kit/Tone;
+	public static final field Danger Lcx/m42/superizer/kit/Tone;
+	public static final field Muted Lcx/m42/superizer/kit/Tone;
+	public static final field Neutral Lcx/m42/superizer/kit/Tone;
+	public static final field Running Lcx/m42/superizer/kit/Tone;
+	public static final field Success Lcx/m42/superizer/kit/Tone;
+	public static final field Warn Lcx/m42/superizer/kit/Tone;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/kit/Tone;
+	public static fun values ()[Lcx/m42/superizer/kit/Tone;
+}
+
+public final class cx/m42/superizer/kit/ToneKt {
+	public static final fun color (Lcx/m42/superizer/kit/Tone;Landroidx/compose/runtime/Composer;I)J
+	public static final fun kitClickable-W5ElYj0 (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/graphics/Shape;ZZILkotlin/jvm/functions/Function0;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun kitClickable-W5ElYj0$default (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/graphics/Shape;ZZILkotlin/jvm/functions/Function0;ILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun softColor (Lcx/m42/superizer/kit/Tone;Landroidx/compose/runtime/Composer;I)J
+	public static final fun textColor (Lcx/m42/superizer/kit/Tone;Landroidx/compose/runtime/Composer;I)J
+}
+
+public final class cx/m42/superizer/kit/WindowClass : java/lang/Enum {
+	public static final field Compact Lcx/m42/superizer/kit/WindowClass;
+	public static final field Companion Lcx/m42/superizer/kit/WindowClass$Companion;
+	public static final field Expanded Lcx/m42/superizer/kit/WindowClass;
+	public static final field Medium Lcx/m42/superizer/kit/WindowClass;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/kit/WindowClass;
+	public static fun values ()[Lcx/m42/superizer/kit/WindowClass;
+}
+
+public final class cx/m42/superizer/kit/WindowClass$Companion {
+	public final fun getExpandedFrom-D9Ej5fM ()F
+	public final fun getMediumFrom-D9Ej5fM ()F
+	public final fun of-0680j_4 (F)Lcx/m42/superizer/kit/WindowClass;
+}
+
+public final class cx/m42/superizer/kit/WindowKt {
+	public static final fun WindowClassProvider (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun byWindow (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/Object;
+	public static final fun getLocalWindowClass ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 

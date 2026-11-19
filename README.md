@@ -19,8 +19,9 @@ or [`docs/`](docs/) in a checkout — [getting started from scratch](docs/01-get
 [the architecture](docs/02-architecture.md), [writing an app](docs/03-app-guide.md), a reference for
 [`core`](docs/04-core-api.md), [`host`](docs/05-host-api.md) and [`ui`](docs/06-ui-api.md),
 [testing](docs/07-testing.md), [activation, deep links and push](docs/08-activation-routing-push.md),
-[recipes](docs/09-recipes.md), a [brief to hand an agent](docs/10-new-app-prompt.md), and
-[troubleshooting](docs/11-troubleshooting.md). What follows here is the two-minute version.
+[recipes](docs/09-recipes.md), a [brief to hand an agent](docs/10-new-app-prompt.md),
+[troubleshooting](docs/11-troubleshooting.md), and [building UI with `ui-kit`](docs/12-ui-kit.md)
+(the components every app and host screen is drawn with). What follows here is the two-minute version.
 
 ## Writing an app
 

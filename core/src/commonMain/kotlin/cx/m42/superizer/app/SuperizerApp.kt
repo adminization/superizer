@@ -106,6 +106,13 @@ public abstract class AppInstance {
     public open val chrome: StateFlow<AppChrome> get() = DefaultChrome
 
     /**
+     * How this app wants to be laid out by an adaptive host: as wide as the window allows, and where
+     * its "back" leads. Observable for the same reason [chrome] is. A host without an adaptive shell
+     * ignores it; an app that does not override it is laid out as before — in a phone's column.
+     */
+    public open val layout: StateFlow<AppLayout> get() = DefaultLayout
+
+    /**
      * The host is about to close this app — back at the root, another app opened, the process
      * going away. Return false to veto (a form with unsaved edits) and the host asks the user.
      */
@@ -128,6 +135,7 @@ public abstract class AppInstance {
 
     private companion object {
         val DefaultChrome: StateFlow<AppChrome> = MutableStateFlow(AppChrome())
+        val DefaultLayout: StateFlow<AppLayout> = MutableStateFlow(AppLayout())
     }
 }
 
@@ -147,6 +155,31 @@ public data class AppChrome(
     val fullscreen: Boolean = false,
 )
 
+/** How wide an app may be drawn. */
+public enum class AppWidth {
+    /** A phone's column, centred: the app was written for a phone and has not said otherwise. */
+    Capped,
+
+    /**
+     * The whole width the host gives it. The app lays itself out by the window class (`ui-kit`'s
+     * `LocalWindowClass`) and keeps its text readable with a page width of its own.
+     */
+    Adaptive,
+}
+
+/**
+ * What an app tells an adaptive host about its layout — kept apart from [AppChrome] so that type
+ * never changes.
+ */
+public data class AppLayout(
+    val width: AppWidth = AppWidth.Capped,
+    /**
+     * Where the app's own "back" leads, in words — «Orders» while a record of an order is open. The
+     * host writes it beside its arrow, or as a breadcrumb where it draws no bar. Null: no words.
+     */
+    val upTitle: String? = null,
+)
+
 /**
  * Given to [SuperizerApp.setup]. Everything declared through it is owned by the handler and torn
  * down in reverse order on disable — Adminizer's disposers, in Kotlin.
@@ -164,6 +197,13 @@ public interface AppSetupContext {
 
     /** Host events, delivered on the app-level scope whether or not a screen is open. */
     public fun listener(handler: suspend (event: SuperizerEvent) -> Unit)
+
+    /**
+     * A short mark beside the app in the host's menu — «8» new orders — that stays while the app is
+     * closed. Null or empty: no mark. Collected until the app is disabled. A secret app gets none:
+     * a number beside it would tell that it is there. A host that predates badges ignores it.
+     */
+    public fun badge(value: StateFlow<String?>) {}
 }
 
 /** Undoes one thing [SuperizerApp.setup] registered. Collected by the handler, run in reverse. */

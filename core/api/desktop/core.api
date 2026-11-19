@@ -97,11 +97,13 @@ public abstract interface class cx/m42/superizer/HostScreen {
 	public abstract fun Content (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
 	public abstract fun getId ()Ljava/lang/String;
 	public fun getSecure ()Z
+	public fun getWide ()Z
 	public abstract fun title (Ljava/lang/String;)Ljava/lang/String;
 }
 
 public final class cx/m42/superizer/HostScreen$DefaultImpls {
 	public static fun getSecure (Lcx/m42/superizer/HostScreen;)Z
+	public static fun getWide (Lcx/m42/superizer/HostScreen;)Z
 }
 
 public abstract interface class cx/m42/superizer/HostSection {
@@ -111,17 +113,23 @@ public abstract interface class cx/m42/superizer/HostSection {
 }
 
 public abstract interface class cx/m42/superizer/HostSettingsPort {
+	public fun chooseAccent (Ljava/lang/String;)V
 	public abstract fun chooseLanguage (Ljava/lang/String;)V
 	public fun chooseTheme (Lcx/m42/superizer/ThemeMode;)V
+	public fun getAccent ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getHaptics ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getLangTag ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun getLanguages ()Ljava/util/List;
+	public fun getOffersAccent ()Z
 	public fun getTheme ()Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun setHaptics (Z)V
 }
 
 public final class cx/m42/superizer/HostSettingsPort$DefaultImpls {
+	public static fun chooseAccent (Lcx/m42/superizer/HostSettingsPort;Ljava/lang/String;)V
 	public static fun chooseTheme (Lcx/m42/superizer/HostSettingsPort;Lcx/m42/superizer/ThemeMode;)V
+	public static fun getAccent (Lcx/m42/superizer/HostSettingsPort;)Lkotlinx/coroutines/flow/StateFlow;
+	public static fun getOffersAccent (Lcx/m42/superizer/HostSettingsPort;)Z
 	public static fun getTheme (Lcx/m42/superizer/HostSettingsPort;)Lkotlinx/coroutines/flow/StateFlow;
 }
 
@@ -532,6 +540,7 @@ public abstract class cx/m42/superizer/app/AppInstance {
 	public fun dispose ()V
 	public fun getCanSaveBeforeClose ()Z
 	public fun getChrome ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun getLayout ()Lkotlinx/coroutines/flow/StateFlow;
 	public fun onBackground ()V
 	public fun onClose ()V
 	public fun onCloseRequested (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -540,6 +549,22 @@ public abstract class cx/m42/superizer/app/AppInstance {
 	public fun restore (Lkotlinx/serialization/json/JsonObject;)V
 	public fun saveBeforeClose (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun saveState ()Lkotlinx/serialization/json/JsonObject;
+}
+
+public final class cx/m42/superizer/app/AppLayout {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcx/m42/superizer/app/AppWidth;Ljava/lang/String;)V
+	public synthetic fun <init> (Lcx/m42/superizer/app/AppWidth;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcx/m42/superizer/app/AppWidth;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lcx/m42/superizer/app/AppWidth;Ljava/lang/String;)Lcx/m42/superizer/app/AppLayout;
+	public static synthetic fun copy$default (Lcx/m42/superizer/app/AppLayout;Lcx/m42/superizer/app/AppWidth;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/app/AppLayout;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUpTitle ()Ljava/lang/String;
+	public final fun getWidth ()Lcx/m42/superizer/app/AppWidth;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class cx/m42/superizer/app/AppManifest {
@@ -671,10 +696,23 @@ public final class cx/m42/superizer/app/AppProtection$Companion {
 }
 
 public abstract interface class cx/m42/superizer/app/AppSetupContext {
+	public fun badge (Lkotlinx/coroutines/flow/StateFlow;)V
 	public abstract fun deepLink (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public abstract fun getRuntime ()Lcx/m42/superizer/runtime/AppRuntime;
 	public abstract fun listener (Lkotlin/jvm/functions/Function2;)V
 	public abstract fun settingsSection (Lkotlin/jvm/functions/Function3;)V
+}
+
+public final class cx/m42/superizer/app/AppSetupContext$DefaultImpls {
+	public static fun badge (Lcx/m42/superizer/app/AppSetupContext;Lkotlinx/coroutines/flow/StateFlow;)V
+}
+
+public final class cx/m42/superizer/app/AppWidth : java/lang/Enum {
+	public static final field Adaptive Lcx/m42/superizer/app/AppWidth;
+	public static final field Capped Lcx/m42/superizer/app/AppWidth;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/app/AppWidth;
+	public static fun values ()[Lcx/m42/superizer/app/AppWidth;
 }
 
 public abstract interface class cx/m42/superizer/app/Disposable {
@@ -2139,7 +2177,9 @@ public final class cx/m42/superizer/registry/AppHandler {
 	public final fun enable-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun enableAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun forgetSnapshot-HNJm7k8 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getBadges ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun getCurrent ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getReopenAfterExpiry ()Z
 	public final fun getSettingsSections ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun getStates ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun isEnabled-GGaiHfc (Ljava/lang/String;)Z
@@ -2147,6 +2187,7 @@ public final class cx/m42/superizer/registry/AppHandler {
 	public static synthetic fun launch-fFNU3Z4$default (Lcx/m42/superizer/registry/AppHandler;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun observeLifecycle ()V
 	public final fun restoreLastSession-CmtIpJM (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setReopenAfterExpiry (Z)V
 }
 
 public final class cx/m42/superizer/registry/AppRegistry {

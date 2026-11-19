@@ -188,6 +188,29 @@ public class AppLocaleService(
         SafePrefs.put(HostKeys.THEME, mode.name.lowercase())
     }
 
+    /**
+     * The accent this host starts with, until the person picks another in Settings — RestoApp's violet.
+     * Null keeps the kit's graphite. Set it once, before the shell is drawn.
+     */
+    public var defaultAccent: String? = null
+        set(value) {
+            field = value
+            _accent.value = SafePrefs.get(HostKeys.ACCENT) ?: value
+        }
+
+    /** Offer the accent picker in Settings; the builder's `accent(…, picker)` sets it. */
+    public var accentPicker: Boolean = false
+
+    override val offersAccent: Boolean get() = accentPicker
+
+    private val _accent = MutableStateFlow(SafePrefs.get(HostKeys.ACCENT))
+    override val accent: StateFlow<String?> get() = _accent.asStateFlow()
+
+    override fun chooseAccent(id: String?) {
+        if (id == null) SafePrefs.remove(HostKeys.ACCENT) else SafePrefs.put(HostKeys.ACCENT, id)
+        _accent.value = id ?: defaultAccent
+    }
+
     /** Pins a language for a test, bypassing both the device and the stored choice. */
     public fun useForTesting(tag: String) {
         _langTag.value = tag

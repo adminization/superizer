@@ -1,5 +1,7 @@
 package cx.m42.superizer.ui.shell
 
+import cx.m42.superizer.kit.KitAccent
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -36,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -95,7 +98,8 @@ import kotlinx.coroutines.launch
  */
 public sealed interface ShellDestination {
     public data object Home : ShellDestination
-    public data class App(val id: AppId) : ShellDestination
+    /** An app; [from] — the app whose link opened it, which its first screen goes back to. */
+    public data class App(val id: AppId, val from: AppId? = null) : ShellDestination
     /** All apps — where a tile is added to Home or taken off (D48). */
     public data class Catalog(val from: ShellDestination) : ShellDestination
     public data class Settings(val from: ShellDestination) : ShellDestination
@@ -104,6 +108,9 @@ public sealed interface ShellDestination {
 
     /** One of the host's own screens (07 §2.4): the shell draws the frame, [screen] the content. */
     public data class Host(val screen: HostScreen, val from: ShellDestination) : ShellDestination
+
+    /** «Ещё» of a host's own chrome ([ShellChrome]): the apps that did not fit the bar. */
+    public data object More : ShellDestination
 }
 
 private enum class NavDirection { Forward, Back }
@@ -124,6 +131,34 @@ private val MaxContentWidth = 480.dp
  */
 @Composable
 public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, swipeBack: Boolean = false) {
+    SuperizerShell(superizer, modifier, swipeBack, ShellLayout.Drawer, cx.m42.superizer.kit.kitTypography())
+}
+
+/**
+ * [SuperizerShell] with a [layout] — [ShellLayout.Adaptive] draws the menu as a rail or a sidebar in a
+ * wide window — and the host's [typography], which reaches the apps as well as the shell.
+ */
+@Composable
+public fun SuperizerShell(
+    superizer: Superizer,
+    modifier: Modifier,
+    swipeBack: Boolean,
+    layout: ShellLayout,
+    typography: cx.m42.superizer.kit.KitTypography,
+) {
+    SuperizerShell(superizer, modifier, swipeBack, layout, typography, null)
+}
+
+/** [SuperizerShell] with the host's own [chrome] over the adaptive layout — see [ShellChrome]. */
+@Composable
+public fun SuperizerShell(
+    superizer: Superizer,
+    modifier: Modifier,
+    swipeBack: Boolean,
+    layout: ShellLayout,
+    typography: cx.m42.superizer.kit.KitTypography,
+    chrome: ShellChrome?,
+) {
     val langTag by superizer.settings.langTag.collectAsState()
     val unlocked by superizer.unlocked.collectAsState()
     val home by superizer.home.collectAsState()
@@ -200,7 +235,10 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
     LaunchedEffect(superizer) {
         superizer.commands.collect { command ->
             when (command) {
-                is cx.m42.superizer.ShellCommand.OpenApp -> go(ShellDestination.App(command.id))
+                // An app opened by another one's link: its first screen has the way back to that one.
+                is cx.m42.superizer.ShellCommand.OpenApp -> go(
+                    ShellDestination.App(command.id, from = (destination as? ShellDestination.App)?.id?.takeIf { it != command.id }),
+                )
                 cx.m42.superizer.ShellCommand.OpenSettings -> go(ShellDestination.Settings(destination))
                 cx.m42.superizer.ShellCommand.Close -> goBack(ShellDestination.Home)
             }
@@ -225,7 +263,8 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
     val onHome = home.mapNotNull { id -> visible.firstOrNull { it.id == id } }
 
     val themeMode by superizer.settings.theme.collectAsState()
-    HostTheme(themeMode) {
+    val accentId by superizer.settings.accent.collectAsState()
+    HostTheme(themeMode, KitAccent.byId(accentId) ?: KitAccent.Graphite, typography) {
         CompositionLocalProvider(LocalHostStrings provides strings) {
 
             // Back means what the top bar's arrow means. Registered above the screens, so an open
@@ -237,6 +276,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                     is ShellDestination.Settings -> goBack(here.from)
                     is ShellDestination.Activate -> goBack(here.from)
                     ShellDestination.ServiceMenu -> goBack(ShellDestination.Home)
+                    ShellDestination.More -> goBack(ShellDestination.Home)
                     is ShellDestination.Host -> goBack(here.from)
                     is ShellDestination.App -> scope.launch { closeCurrent { goBack(ShellDestination.Home) } }
                     ShellDestination.Home -> Unit
@@ -246,7 +286,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
             val menu = buildList {
                 add(
                     MenuEntry(
-                        label = strings.home,
+                        label = chrome?.homeTitle?.invoke(langTag) ?: strings.home,
                         onClick = {
                             scope.launch { closeCurrent { goBack(ShellDestination.Home) } }
                         },
@@ -304,6 +344,72 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                 )
             }
 
+            // The same menu as items with icons, groups and marks, for the rail and the sidebar.
+            val badges by superizer.handler.badges.collectAsState()
+            val at = destination
+            val navItems = buildList {
+                add(
+                    NavItem(
+                        label = chrome?.homeTitle?.invoke(langTag) ?: strings.home, icon = chrome?.homeIcon ?: cx.m42.superizer.app.AppIcon.Named("home"), group = null, badge = null,
+                        selected = at is ShellDestination.Home, enabled = at !is ShellDestination.Home, tag = "shell:nav-home",
+                        onClick = { scope.launch { closeCurrent { goBack(ShellDestination.Home) } } },
+                    ),
+                )
+                onHome.forEach { app ->
+                    add(
+                        NavItem(
+                            label = app.metadata.title.resolve(langTag), icon = app.metadata.icon, group = app.metadata.category,
+                            badge = badges[app.id], selected = (at as? ShellDestination.App)?.id == app.id,
+                            enabled = (at as? ShellDestination.App)?.id != app.id, tag = "shell:nav-${app.id.value}",
+                            onClick = { scope.launch { open(app.id) } },
+                        ),
+                    )
+                }
+                // A console's apps are the ones the server gave: there is nothing to add from a catalog.
+                if (chrome == null) add(
+                    NavItem(
+                        label = strings.allApps, icon = cx.m42.superizer.app.AppIcon.Named("apps"), group = null, badge = null,
+                        selected = at is ShellDestination.Catalog, enabled = at !is ShellDestination.Catalog, tag = "shell:nav-catalog",
+                        onClick = { go(ShellDestination.Catalog(destination)) },
+                    ),
+                )
+            }
+            val railHeader: (@Composable () -> Unit)? = if (switchable) {
+                {
+                    Box(
+                        Modifier.clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
+                            .clickable { picking = true }
+                            .testTag("shell:rail-context"),
+                    ) { ContextMark(currentContext?.title ?: superizer.hostInfo.name, 40.dp) }
+                }
+            } else {
+                null
+            }
+            // The width is measured, not subcomposed: a BoxWithConstraints at the root recomposes the
+            // whole shell under it with every measure, and the idle clock of a locked app never ran out.
+            val density = androidx.compose.ui.platform.LocalDensity.current
+            val windowInfo = androidx.compose.ui.platform.LocalWindowInfo.current
+            var rootWidth by remember { mutableStateOf(with(density) { windowInfo.containerSize.width.toDp() }) }
+            Box(Modifier.fillMaxSize().onSizeChanged { rootWidth = with(density) { it.width.toDp() } }) {
+            CompositionLocalProvider(cx.m42.superizer.kit.LocalWindowClass provides cx.m42.superizer.kit.WindowClass.of(rootWidth)) {
+            val shellScope = remember(superizer) {
+                ShellScope(
+                    openHome = { scope.launch { closeCurrent { goBack(ShellDestination.Home) } } },
+                    openApp = { id -> scope.launch { open(id) } },
+                    openSettings = { go(ShellDestination.Settings(destination)) },
+                    openScreen = { screen -> go(ShellDestination.Host(screen, destination)) },
+                    openContexts = { closeDrawer = {}; picking = true },
+                    openCatalog = { go(ShellDestination.Catalog(destination)) },
+                )
+            }
+            val moreItem = chrome?.let {
+                NavItem(
+                    label = it.moreTitle(langTag), icon = cx.m42.superizer.app.AppIcon.Named("more"), group = null, badge = null,
+                    selected = at is ShellDestination.More, enabled = at !is ShellDestination.More, tag = "shell:nav-more",
+                    onClick = { scope.launch { closeCurrent { go(ShellDestination.More) } } },
+                )
+            }
+            CompositionLocalProvider(LocalShellNav provides ShellNav(layout, navItems, railHeader, chrome, shellScope.takeIf { chrome != null }, moreItem, currentContext?.title ?: superizer.hostInfo.name)) {
             Box(
                 modifier = modifier
                     .fillMaxSize()
@@ -328,7 +434,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                     },
                 ) { where ->
                     when (where) {
-                        ShellDestination.Home -> AppScaffold(
+                        ShellDestination.Home -> ShellFrame(
                             // Home is the context's own: its name on the bar, its address under it.
                             title = currentContext?.title ?: superizer.hostInfo.name,
                             subtitle = currentContext?.subtitle,
@@ -336,8 +442,11 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                             onHaptic = haptic,
                             footer = footer,
                             header = header,
+                            root = true,
+                            // The host's own Home heads its page itself, as a wide app does.
+                            bar = chrome?.home == null,
                         ) {
-                            Capped {
+                            Capped(capped = chrome?.home == null) {
                                 Column(modifier = Modifier.fillMaxSize()) {
                                     // The host's lines first (D179): a status of Unsafe or worse is
                                     // on Home until it is fixed, above everything else there.
@@ -345,7 +454,8 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                                         banner.Content(superizer) { screen -> go(ShellDestination.Host(screen, ShellDestination.Home)) }
                                     }
                                     Box(modifier = Modifier.weight(1f)) {
-                                        HomeScreen(
+                                        val ownHome = chrome?.home
+                                        if (ownHome != null) shellScope.ownHome() else HomeScreen(
                                             apps = onHome,
                                             langTag = langTag,
                                             onOpen = { id -> scope.launch { open(id) } },
@@ -357,7 +467,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                             }
                         }
 
-                        is ShellDestination.Catalog -> AppScaffold(
+                        is ShellDestination.Catalog -> ShellFrame(
                             title = strings.allApps,
                             menu = menu,
                             onBack = { goBack(where.from) },
@@ -388,11 +498,20 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                             footer = footer,
                             header = header,
                             swipeBack = swipeBack,
-                            onBack = { scope.launch { closeCurrent { goBack(ShellDestination.Home) } } },
+                            cameFrom = where.from != null,
+                            onBack = {
+                                scope.launch {
+                                    val from = where.from
+                                    closeCurrent {
+                                        if (from != null && superizer.handler.launch(from).isSuccess) goBack(ShellDestination.App(from))
+                                        else goBack(ShellDestination.Home)
+                                    }
+                                }
+                            },
                             onRetry = { scope.launch { superizer.handler.launch(where.id, force = true) } },
                         )
 
-                        is ShellDestination.Settings -> AppScaffold(
+                        is ShellDestination.Settings -> ShellFrame(
                             title = strings.settings,
                             menu = menu,
                             onBack = { goBack(where.from) },
@@ -409,7 +528,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                             }
                         }
 
-                        is ShellDestination.Activate -> AppScaffold(
+                        is ShellDestination.Activate -> ShellFrame(
                             title = superizer.activateEntry?.title(langTag) ?: strings.activate,
                             menu = menu,
                             onBack = { goBack(where.from) },
@@ -436,7 +555,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                             }
                         }
 
-                        is ShellDestination.Host -> AppScaffold(
+                        is ShellDestination.Host -> ShellFrame(
                             title = where.screen.title(langTag),
                             menu = menu,
                             onBack = { goBack(where.from) },
@@ -447,7 +566,7 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                             // An import wizard is kept out of screenshots (T10); the flag goes with
                             // the screen, so leaving it takes the flag off again.
                             SecureWindow(active = where.screen.secure)
-                            Capped {
+                            Capped(capped = !where.screen.wide) {
                                 Box(modifier = Modifier.fillMaxSize().testTag("host:${where.screen.id}")) {
                                     where.screen.Content(
                                         superizer,
@@ -458,7 +577,19 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                             }
                         }
 
-                        ShellDestination.ServiceMenu -> AppScaffold(
+                        ShellDestination.More -> ShellFrame(
+                            title = chrome?.moreTitle(langTag) ?: strings.allApps,
+                            menu = menu,
+                            onHaptic = haptic,
+                            footer = footer,
+                            header = header,
+                            root = true,
+                            bar = false,
+                        ) {
+                            Capped(capped = false) { MoreScreen(chrome?.moreTitle(langTag) ?: strings.allApps, currentContext?.title) }
+                        }
+
+                        ShellDestination.ServiceMenu -> ShellFrame(
                             title = strings.serviceMenu,
                             menu = menu,
                             onBack = { goBack(ShellDestination.Home) },
@@ -536,6 +667,9 @@ public fun SuperizerShell(superizer: Superizer, modifier: Modifier = Modifier, s
                     )
                 }
             }
+            }
+            }
+            }
         }
     }
 }
@@ -557,8 +691,12 @@ private fun Modifier.reportingTouches(superizer: Superizer): Modifier = pointerI
 /** D36: every destination's content sits in a column of at most [MaxContentWidth], centred. */
 @Composable
 private fun Capped(capped: Boolean = true, content: @Composable () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-        Box(modifier = Modifier.widthIn(max = if (capped) MaxContentWidth else Dp.Unspecified).fillMaxSize()) { content() }
+    // Outside a capped column — the page's colour, so a screen painted with it (Home, Settings) does not
+    // stand as a grey band on the window's white.
+    val outside = if (capped) Modifier.background(cx.m42.superizer.theme.AppTheme.pageBackground) else Modifier
+    Box(modifier = Modifier.fillMaxSize().then(outside), contentAlignment = Alignment.TopCenter) {
+        // The content's window class is the class of the column it gets, not of the window around it.
+        cx.m42.superizer.kit.WindowClassProvider(Modifier.widthIn(max = if (capped) MaxContentWidth else Dp.Unspecified).fillMaxSize()) { content() }
     }
 }
 
@@ -580,12 +718,18 @@ private fun AppContainer(
     swipeBack: Boolean,
     onBack: () -> Unit,
     onRetry: () -> Unit,
+    /** Opened by another app's link: back from the first screen is back to that app, not the bar's business. */
+    cameFrom: Boolean = false,
 ) {
     val session by superizer.handler.current.collectAsState()
     val states by superizer.handler.states.collectAsState()
     val lock by superizer.lock.state.collectAsState()
     val open: AppSession? = session?.takeIf { it.app.id == id }
     val chrome: AppChrome? = open?.let { it.instance.chrome.collectAsState().value }
+    val appLayout = open?.let { it.instance.layout.collectAsState().value }
+    val adaptiveShell = LocalShellNav.current.layout == ShellLayout.Adaptive
+    // An app that said it can be wide is, in an adaptive shell; on a desktop it then heads its own page.
+    val wide = adaptiveShell && appLayout?.width == cx.m42.superizer.app.AppWidth.Adaptive
 
     val app = superizer.registry.get(id)
     val fallbackTitle = app?.metadata?.title?.resolve(langTag) ?: id.value
@@ -609,7 +753,7 @@ private fun AppContainer(
     // The curtain and the error screen are the host's, and they need its frame to get out by.
     val fullscreen = (chrome?.fullscreen ?: askedFullscreen) && !covered && states[id] != AppState.Failed
     CompositionLocalProvider(LocalBackPreviews provides backPreviews.takeIf { pictured }) {
-    AppScaffold(
+    ShellFrame(
         // The app's own title can be what it is hiding — the 2FA app titles an account's page with
         // the account — so under the curtain the bar says only which app this is.
         title = if (covered) fallbackTitle else chrome?.title ?: fallbackTitle,
@@ -623,8 +767,13 @@ private fun AppContainer(
         footer = footer,
         header = header,
         fullscreen = fullscreen,
+        // A wide app heads its own page wherever there is a rail or a sidebar; on a phone the bar is the way back.
+        bar = !(wide && cx.m42.superizer.kit.LocalWindowClass.current != cx.m42.superizer.kit.WindowClass.Compact),
+        upTitle = if (covered || !backChain.active) null else appLayout?.upTitle,
+        // At its first screen an app is a destination of the bar: back from there is the bar's business.
+        root = !backChain.active && !cameFrom && states[id] != AppState.Failed,
     ) {
-        Capped(capped = !fullscreen) {
+        Capped(capped = !fullscreen && !wide) {
             when {
                 // D31: a failed launch is the host's screen to draw. The app is not involved —
                 // it may not even have been constructed.
@@ -660,6 +809,18 @@ private fun AppContainer(
 private fun ShellFooter(superizer: Superizer, onActivate: () -> Unit, onSettings: () -> Unit) {
     val tokens = AppTheme
     val dismiss = LocalDrawerDismiss.current
+    if (LocalRailFooter.current) {
+        // In the rail: the actions stacked, no build stamp — it is one tap away in Settings.
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            IconButton(Lucide.Settings, contentDescription = hostStrings.settings, onClick = { dismiss(); onSettings() })
+            val entry = superizer.activateEntry
+            val langTag by superizer.settings.langTag.collectAsState()
+            IconButton(contentDescription = entry?.title(langTag) ?: hostStrings.activate, onClick = { dismiss(); onActivate() }) {
+                if (entry != null) AppIconGlyph(entry.icon, LocalContentColor.current) else Icon(Lucide.QrCode, contentDescription = null)
+            }
+        }
+        return
+    }
     Column {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),

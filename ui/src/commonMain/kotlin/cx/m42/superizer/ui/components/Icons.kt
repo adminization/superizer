@@ -4,6 +4,9 @@
 
 package cx.m42.superizer.ui.components
 
+import com.composables.icons.lucide.Ellipsis
+import com.composables.icons.lucide.House
+import com.composables.icons.lucide.Lucide as KitLucide
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -346,6 +349,9 @@ public fun AppIconGlyph(icon: AppIcon, tint: Color, size: Dp = IconSize, fallbac
             "qr" -> QrIcon(tint, size)
             "star" -> StarIcon(tint, size)
             "settings" -> SettingsIcon(tint, size)
+            // The adaptive shell's own destinations, drawn with the kit's Lucide set.
+            "home" -> cx.m42.superizer.kit.Icon(KitLucide.House, contentDescription = null, size = size, tint = tint)
+            "more" -> cx.m42.superizer.kit.Icon(com.composables.icons.lucide.Lucide.Ellipsis, contentDescription = null, size = size, tint = tint)
             else -> LetterIcon(fallbackLetter, tint, size)
         }
 

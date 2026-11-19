@@ -142,7 +142,15 @@ public fun Alert(
     ) {
         if (icon != null) Icon(icon, contentDescription = null, size = 18.dp, tint = accent, modifier = Modifier.padding(top = 1.dp))
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            CompositionLocalProvider(LocalContentColor provides if (variant == AlertVariant.Default) c.onCard else accent) {
+            // The title in the tone's text colour, not its raw hue: amber on white is not readable.
+            val titleColor = when (variant) {
+                AlertVariant.Default -> c.onCard
+                AlertVariant.Destructive -> Tone.Danger.textColor()
+                AlertVariant.Success -> Tone.Success.textColor()
+                AlertVariant.Warning -> Tone.Warn.textColor()
+                AlertVariant.Info -> Tone.Running.textColor()
+            }
+            CompositionLocalProvider(LocalContentColor provides titleColor) {
                 Text(title, variant = TextVariant.Small)
             }
             if (description != null) Text(description, variant = TextVariant.Muted)

@@ -49,11 +49,13 @@ import cx.m42.superizer.runtime.Platform
 import cx.m42.superizer.testing.FakeDeviceAuthenticator
 import cx.m42.superizer.kit.Button
 import java.nio.file.Files
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,7 +78,17 @@ class LockShellTest {
     private val device = FakeDeviceAuthenticator(answer = AuthOutcome.Cancelled)
     private val lifecycle = MutableStateFlow(HostLifecycle.Foreground)
 
-    private fun host(idleMillis: Long? = null): Superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)) {
+    // Every host of a test is cancelled after it: the idle timers of earlier tests must not compete for
+    // the one timer thread with this test's, which the 5-second waits below used to lose under load.
+    private val scopes = mutableListOf<CoroutineScope>()
+
+    @AfterTest
+    fun cancelHosts() {
+        scopes.forEach { it.cancel() }
+        scopes.clear()
+    }
+
+    private fun host(idleMillis: Long? = null): Superizer = Superizer.build(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined).also { scopes += it }) {
         idleMillis?.let { idleLimit(it) }
         host(HostInfo("Fixture", "0.1.0", "dev", Platform.Desktop, SuperizerContract.VERSION, debug = true))
         scheme("superizer")
@@ -249,7 +261,7 @@ class LockShellTest {
         onNodeWithTag("safe:secret").assertIsDisplayed()
 
         // The host's delay ends on another thread, so wait for the whole of what it does.
-        waitUntil(timeoutMillis = 5_000) {
+        waitUntil(timeoutMillis = 20_000) {
             superizer.handler.current.value == null && !superizer.lock.state.value.open
         }
         waitForIdle()
@@ -288,7 +300,7 @@ class LockShellTest {
         onNodeWithTag("hold:secret").assertIsDisplayed()
         assertTrue(device.prompts.isEmpty(), "holding asks nothing")
 
-        waitUntil(timeoutMillis = 5_000) { superizer.lock.state.value.covers(AppId("hold")) }
+        waitUntil(timeoutMillis = 20_000) { superizer.lock.state.value.covers(AppId("hold")) }
         waitForIdle()
         onNodeWithTag("shell:lock").assertIsDisplayed()
         onNodeWithTag("hold:secret").assertDoesNotExist()

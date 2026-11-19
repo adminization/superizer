@@ -147,6 +147,8 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getSetUpScreenLock ()Ljava/lang/String;
 	public abstract fun getSettings ()Ljava/lang/String;
 	public abstract fun getSettingsAbout ()Ljava/lang/String;
+	public fun getSettingsAccent ()Ljava/lang/String;
+	public fun getSettingsAccentHint ()Ljava/lang/String;
 	public abstract fun getSettingsHaptics ()Ljava/lang/String;
 	public abstract fun getSettingsHapticsHint ()Ljava/lang/String;
 	public abstract fun getSettingsLanguage ()Ljava/lang/String;
@@ -169,16 +171,20 @@ public abstract interface class cx/m42/superizer/ui/i18n/HostStrings {
 	public abstract fun getUnprotectedNoScreenLock ()Ljava/lang/String;
 	public abstract fun getUnprotectedPlatform ()Ljava/lang/String;
 	public abstract fun lockGrace (J)Ljava/lang/String;
+	public fun settingsAccentName (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun settingsBuild (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun unlockPrompt (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun version (Ljava/lang/String;)Ljava/lang/String;
 }
 
 public final class cx/m42/superizer/ui/i18n/HostStrings$DefaultImpls {
+	public static fun getSettingsAccent (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
+	public static fun getSettingsAccentHint (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
 	public static fun getSettingsTheme (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
 	public static fun getSettingsThemeDark (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
 	public static fun getSettingsThemeLight (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
 	public static fun getSettingsThemeSystem (Lcx/m42/superizer/ui/i18n/HostStrings;)Ljava/lang/String;
+	public static fun settingsAccentName (Lcx/m42/superizer/ui/i18n/HostStrings;Ljava/lang/String;)Ljava/lang/String;
 }
 
 public final class cx/m42/superizer/ui/i18n/HostStringsKt {
@@ -227,6 +233,12 @@ public final class cx/m42/superizer/ui/screens/SettingsScreenKt {
 	public static final fun SettingsScreen (Lcx/m42/superizer/Superizer;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
+public final class cx/m42/superizer/ui/shell/ComposableSingletons$AdaptiveFrameKt {
+	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ComposableSingletons$AdaptiveFrameKt;
+	public fun <init> ()V
+	public final fun getLambda$-1582784430$cx_m42_superizer_ui_release ()Lkotlin/jvm/functions/Function2;
+}
+
 public final class cx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitcherKt {
 	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitcherKt;
 	public fun <init> ()V
@@ -235,7 +247,27 @@ public final class cx/m42/superizer/ui/shell/ComposableSingletons$ContextSwitche
 }
 
 public final class cx/m42/superizer/ui/shell/HostThemeKt {
+	public static final fun HostTheme (Lcx/m42/superizer/ThemeMode;Lcx/m42/superizer/kit/KitAccent;Lcx/m42/superizer/kit/KitTypography;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
 	public static final fun HostTheme (Lcx/m42/superizer/ThemeMode;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class cx/m42/superizer/ui/shell/ShellChrome {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (IILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcx/m42/superizer/app/AppIcon;Lkotlin/jvm/functions/Function3;)V
+	public synthetic fun <init> (IILkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcx/m42/superizer/app/AppIcon;Lkotlin/jvm/functions/Function3;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBarItems ()I
+	public final fun getBarTrailing ()Lkotlin/jvm/functions/Function4;
+	public final fun getHome ()Lkotlin/jvm/functions/Function3;
+	public final fun getHomeIcon ()Lcx/m42/superizer/app/AppIcon;
+	public final fun getHomeTitle ()Lkotlin/jvm/functions/Function1;
+	public final fun getMore ()Lkotlin/jvm/functions/Function3;
+	public final fun getMoreTitle ()Lkotlin/jvm/functions/Function1;
+	public final fun getNavFooter ()Lkotlin/jvm/functions/Function3;
+	public final fun getNavHeader ()Lkotlin/jvm/functions/Function3;
+	public final fun getNotice ()Lkotlin/jvm/functions/Function3;
+	public final fun getRailFooter ()Lkotlin/jvm/functions/Function3;
+	public final fun getRailItems ()I
 }
 
 public abstract interface class cx/m42/superizer/ui/shell/ShellDestination {
@@ -255,11 +287,14 @@ public final class cx/m42/superizer/ui/shell/ShellDestination$Activate : cx/m42/
 
 public final class cx/m42/superizer/ui/shell/ShellDestination$App : cx/m42/superizer/ui/shell/ShellDestination {
 	public static final field $stable I
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-eVupTzA ()Ljava/lang/String;
-	public final fun copy-GGaiHfc (Ljava/lang/String;)Lcx/m42/superizer/ui/shell/ShellDestination$App;
-	public static synthetic fun copy-GGaiHfc$default (Lcx/m42/superizer/ui/shell/ShellDestination$App;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$App;
+	public final fun component2-oQ6rsvY ()Ljava/lang/String;
+	public final fun copy-SDhx7zQ (Ljava/lang/String;Ljava/lang/String;)Lcx/m42/superizer/ui/shell/ShellDestination$App;
+	public static synthetic fun copy-SDhx7zQ$default (Lcx/m42/superizer/ui/shell/ShellDestination$App;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcx/m42/superizer/ui/shell/ShellDestination$App;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFrom-oQ6rsvY ()Ljava/lang/String;
 	public final fun getId-eVupTzA ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -299,6 +334,14 @@ public final class cx/m42/superizer/ui/shell/ShellDestination$Host : cx/m42/supe
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class cx/m42/superizer/ui/shell/ShellDestination$More : cx/m42/superizer/ui/shell/ShellDestination {
+	public static final field $stable I
+	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ShellDestination$More;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class cx/m42/superizer/ui/shell/ShellDestination$ServiceMenu : cx/m42/superizer/ui/shell/ShellDestination {
 	public static final field $stable I
 	public static final field INSTANCE Lcx/m42/superizer/ui/shell/ShellDestination$ServiceMenu;
@@ -319,7 +362,27 @@ public final class cx/m42/superizer/ui/shell/ShellDestination$Settings : cx/m42/
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class cx/m42/superizer/ui/shell/ShellLayout : java/lang/Enum {
+	public static final field Adaptive Lcx/m42/superizer/ui/shell/ShellLayout;
+	public static final field Drawer Lcx/m42/superizer/ui/shell/ShellLayout;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcx/m42/superizer/ui/shell/ShellLayout;
+	public static fun values ()[Lcx/m42/superizer/ui/shell/ShellLayout;
+}
+
+public final class cx/m42/superizer/ui/shell/ShellScope {
+	public static final field $stable I
+	public final fun getOpenApp ()Lkotlin/jvm/functions/Function1;
+	public final fun getOpenCatalog ()Lkotlin/jvm/functions/Function0;
+	public final fun getOpenContexts ()Lkotlin/jvm/functions/Function0;
+	public final fun getOpenHome ()Lkotlin/jvm/functions/Function0;
+	public final fun getOpenScreen ()Lkotlin/jvm/functions/Function1;
+	public final fun getOpenSettings ()Lkotlin/jvm/functions/Function0;
+}
+
 public final class cx/m42/superizer/ui/shell/SuperizerShellKt {
 	public static final fun SuperizerShell (Lcx/m42/superizer/Superizer;Landroidx/compose/ui/Modifier;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun SuperizerShell (Lcx/m42/superizer/Superizer;Landroidx/compose/ui/Modifier;ZLcx/m42/superizer/ui/shell/ShellLayout;Lcx/m42/superizer/kit/KitTypography;Landroidx/compose/runtime/Composer;I)V
+	public static final fun SuperizerShell (Lcx/m42/superizer/Superizer;Landroidx/compose/ui/Modifier;ZLcx/m42/superizer/ui/shell/ShellLayout;Lcx/m42/superizer/kit/KitTypography;Lcx/m42/superizer/ui/shell/ShellChrome;Landroidx/compose/runtime/Composer;I)V
 }
 
